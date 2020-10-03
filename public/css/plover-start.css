@@ -1,0 +1,60 @@
+body {
+    background-color: gray;
+    margin: 0 auto;
+}
+
+
+/* Chat box */ 
+
+.panel-default {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    width: 80%;
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-top: 120px;
+    height: 45vh;
+    max-height: 500px;
+    border: white 2px solid;
+    position: relative;
+    padding-bottom: 100px;
+    font-size: 18px;
+}
+
+.input-group {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    bottom: 2px;
+    left: 2px;
+    width: 98%;
+    max-width: 998px;
+    background-color: black;
+    padding: 2px;
+}
+
+.chat-input {
+width: 90%;
+}
+
+.message-output-box {
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+    height: 100%;
+    overflow-anchor: none;
+}
+
+
+
+/* message display */
+.displayed-description {
+    margin-left: 20px;
+    margin-top: -8px;
+    color: rgb(245, 252, 181);
+}
+
+#anchor {
+    overflow-anchor: auto;
+    height: 1px;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "rpg",
+  "version": "1.0.0",
+  "description": "RPG MUD for Project 2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n-lambert/rpg65535.git"
+  },
+  "author": "Nancy Lambert-Brown, Plover Brown, Talia Vasquez, Nick Konzen",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/n-lambert/rpg65535/issues"
+  },
+  "homepage": "https://github.com/n-lambert/rpg65535#readme",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.1.0",
+    "mocha": "^8.1.3",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.4",
+    "sequelize": "^6.3.5"
+  }
+}
