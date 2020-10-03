@@ -1,2 +1,2 @@
-# Diner-At-The-Edge-of-Copyright
+# Inn-At-The-Edge-of-Copyright
 
