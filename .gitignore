@@ -4,3 +4,4 @@ pubnub.js
 config.json
 .env
 package-lock.json
+configcomments.js
