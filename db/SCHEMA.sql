@@ -32,8 +32,8 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`players` (
 CREATE TABLE `heroku_dd2cb150d033ed5`.`locations` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `locationName` VARCHAR(45) NOT NULL,
-  `locationDayDescription` VARCHAR(400) NOT NULL,
-  `locationNightDescription` VARCHAR(400) NOT NULL,
+  `locationDayDescription` VARCHAR(400) NULL,
+  `locationNightDescription` VARCHAR(400) NULL,
   `exitN` VARCHAR(45) NULL,
   `exitE` VARCHAR(45) NULL,
   `exitS` VARCHAR(45) NULL,
@@ -116,7 +116,7 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`items` (
 
 CREATE TABLE `heroku_dd2cb150d033ed5`.`inventory` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `character_id` BIGINT NOT NULL,
+  `locator_id` VARCHAR(45) NOT NULL,
   `item_id` BIGINT NOT NULL,
   `quantity` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
