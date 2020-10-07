@@ -1,30 +1,40 @@
 {
-  "name": "rpg",
+  "name": "inn-at-the-edge-of-copyright",
   "version": "1.0.0",
-  "description": "RPG MUD for Project 2",
+  "description": "RPG MUD",
   "main": "server.js",
+  "directories": {
+    "test": "tests"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "watch": "nodemon server.js",
+    "db:create": "sequelize-cli db:create"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/n-lambert/rpg65535.git"
+    "url": "git+https://github.com/n-lambert/Inn-At-The-Edge-of-Copyright.git"
   },
-  "author": "Nancy Lambert-Brown, Plover Brown, Talia Vasquez, Nick Konzen",
-  "license": "GPL-3.0-or-later",
+  "keywords": [
+    "RPG",
+    "MUD"
+  ],
+  "author": "Nancy Nancy Lambert-Brown, Plover Brown, Talia Vasquez, Nick Konzen",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/n-lambert/rpg65535/issues"
+    "url": "https://github.com/n-lambert/Inn-At-The-Edge-of-Copyright/issues"
   },
-  "homepage": "https://github.com/n-lambert/rpg65535#readme",
+  "homepage": "https://github.com/n-lambert/Inn-At-The-Edge-of-Copyright#readme",
   "dependencies": {
     "chai": "^4.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "mocha": "^8.1.3",
-    "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.4",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0"
   }
 }
