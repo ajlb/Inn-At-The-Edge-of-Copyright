@@ -18,6 +18,7 @@
   "homepage": "https://github.com/n-lambert/rpg65535#readme",
   "dependencies": {
     "chai": "^4.2.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "mocha": "^8.1.3",
