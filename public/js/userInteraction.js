@@ -1,3 +1,11 @@
+//VARIABLES
+let currentLocation;
+let currentExits;
+let isDay = true;
+let userRecentCommands = [];
+
+
+
 //HELPER FUNCTIONS
 
 //determine if a string begins with any of an array of other strings
@@ -11,7 +19,7 @@ function doesThisStartWithThose(thisThing, those) {
   }
   
   //single value startWith() that tests for space or equal value
-  function startStartWith(thing, stringy) {
+  function startsWithOrIs(thing, stringy) {
     if (stringy.toLowerCase().startsWith(`${thing} `) || ((stringy.toLowerCase().startsWith(thing)) && (stringy.length === thing.length))){
       return true
     }
@@ -56,93 +64,92 @@ function doesThisStartWithThose(thisThing, those) {
   function describeThis(text) {
     $("#anchor").before(`<p class="displayed-description">${text}</p>`);
   }
-  
-  function compileExits(locationName){
-    let exits = "Exits: ";
-    for (let exitIndex in woodsWalk.location[locationName].exits) {
-      if (!(woodsWalk.location[locationName].exits[exitIndex] === "none") && !(woodsWalk.location[locationName].exits[exitIndex]===undefined)) {
-        exits += `${exitIndex}, `;
-      }
-    }
-    return exits;
-  }
-  
-  
-  
-  
-  
-  
-  //MID-LEVEL FUNCTIONS
-  
-  //write the messages out to the chat box
-  displayMessage = function(messageType, aMessage) {
-    console.log(aMessage);
-    $("#anchor").before(`<p class="displayed-message">${aMessage.publisher}: ${aMessage.message.text}</p>`);
-    updateScroll();
-  }
-  
-  //publish text to pubnub server as a message
-  function publishMessage(value){
-    pubnub.publish({
-      channel: channel,
-      message: {"text":value},
-      },
-  
-      function(status, response) {
-        console.log("Publishing from submit button event");
-        if (status.error) {
-          console.log(status);
-          console.log(response);
-        }
-      }
-    );
-  }
 
-  //Srolling
+
+  //MID LEVEL FUNCTIONS
+
+  //Scrolling
 function updateScroll(){
     $(".message-output-box").scrollTop($(".message-output-box")[0].scrollHeight)  
   }
   
+//find and compile exits
+function compileExits(locationData){
+  let possibleExits = {};
+  for (const prop in locationData){
+    if (prop.startsWith("exit")) {
+      possibleExits[prop.replace("exit", "")] = locationData[prop];
+    }
+  }
+  return possibleExits
+}
+
+//show exits
+function printExits(exitObject){
+  let possibleDirections = "";
+  for (const exit in exitObject){
+    if (!(exitObject[exit] == null)) {
+      console.log(exit);
+      possibleDirections += exit + ", ";
+    } else {
+      console.log("not" + exit);
+    }
+  }
+  if (possibleDirections.length > 0){
+    describeThis(`Exits: ${possibleDirections}`);
+  } else {
+    describeThis("No visible exits.")
+  }
+}
+
+//show room description
+function printLocationDescription(locationData){
+  if (isDay){
+    describeThis(locationData.locationDayDescription);
+  } else {
+    describeThis(locationData.locationNightDescription);
+  }
+}
 
 
 
 
 
+//HIGH LEVEL FUNCTIONS
 
-
-
-
-
-
-
-
-
-
-
-//begin chatroom
 
 //MOVE TO A NEW ROOM, AND GET A NEW CHAT
 const newLocation = function(direction) {
-
+  let locationIndex;
     // give this chatroom the correct id
     if (direction === "start") {
-      locationIndex = "Empty-Room-At-The-Inn";
-      $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">In: ${locationIndex.replace(/-/g, " ")}</p>`);
-      //below: display description
-      //$("#anchor").before(`<p class="displayed-description">${woodsWalk.location[locationIndex].descriptions["light"]}</p>`);
-      //compile exits
-      //describeThis(availableExits);
-      updateScroll();
-    } else if (!(woodsWalk.location[locationIndex].exits[direction] === "none") && !(woodsWalk.location[locationIndex].exits[direction] === undefined)) {
-      //unsubscribe from previous room
-      //set locationIndex to next location
-      locationIndex = woodsWalk.location[locationIndex].exits[direction];
-      $("#anchor").before(`<p class="displayed-message">You moved ${shortDirections[direction]}</p>`);
-      $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">In: ${locationIndex.replace(/ /g, " ")}</p>`);
-      describeThis(woodsWalk.location[locationIndex].descriptions["light"]);
-      let availableExits = compileExits(locationIndex);
-      describeThis(availableExits);
-      updateScroll();
+      //set currentLocation, and pass to pubnub as locationIndex
+      getLocation(1).then(function(data){
+        currentLocation = data;
+        locationIndex = data.locationName.replace(/ /g, "-");
+        $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
+
+        printLocationDescription(currentLocation);
+        currentExits = compileExits(currentLocation);
+        printExits(currentExits);
+
+        updateScroll();
+      });
+      
+    } else if (!(currentExits[direction] == null)) {
+      //set currentLocation, and pass to pubnub as locationIndex
+      getLocation(currentExits[direction]).then(function(data){
+        currentLocation = data;
+        currentExits = compileExits(currentLocation);
+        locationIndex = data.locationName.replace(/ /g, "-");
+
+        $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
+
+        printLocationDescription(currentLocation);
+        printExits(currentExits);
+
+        updateScroll();
+      })
   
     } else {
       logThis("There's no exit at " + direction);
@@ -166,6 +173,48 @@ const newLocation = function(direction) {
     init();
   
   };
-  
+
+
+  //RESPOND TO USER INPUT
+$("#submit-button").click(function(event) {
+  event.preventDefault();
+
+  //log, then clear input value
+  let value = $(".chat-input").val();
+  console.log(value);
+  $(".chat-input").val("");
+  userRecentCommands.push(value);
+
+  if (value.startsWith("move ")){
+    newLocation(value.split(" ")[1]);
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   //INITIALIZE PAGE
   newLocation("start");

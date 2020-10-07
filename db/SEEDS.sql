@@ -25,10 +25,10 @@ VALUES
 ("look", "You look around you", "When you type a look command word with nothing after it, you will look around your location, seeing the description, possible exits, and items nearby.", "look (l), look around", "look around", "You look around. \n An Empty Room: \n Four bare, white walls surround you. A simple bed and a chest are the room's only furniture. A wooden door leads west.");
 
 
-INSERT INTO locations (locationName, locationDescription, exitN, exitE, exitS, exitW, locationInventory)
-VALUES ("Pumpkin Patch Center", "You are at the heart of a pumpkin patch. Though on the vine, and uncarved, the pumpkins you see out of the corners of your vision seem to be leering evilly at you, like jack-o-lanterns.", 11, 21, 31, 41, "PumpkinPatchCenterInventory"),
-("Pumpkin Patch North", "The pumpkin patch stretches the the east, west and south of you. The pumpkins surrounding you are craggy and crooked, and the longer you look at them, the creepier they seem.", Null, 51, 1, 61, "PumpkinPatchNorthInventory"),
-("Pumpkin Patch East", "The pumpkin patch stretches to the north, west, and south of you. The pumpkins around you a unnervingly creepy. Uncarverd pumpkins shouldn't be creepy, should they?", 51, Null, 71, 1, "PumpkinPatchEastInventory");
+INSERT INTO locations (locationName, locationDayDescription, exitN, exitE, exitS, exitW)
+VALUES ("Pumpkin Patch Center", "You are at the heart of a pumpkin patch. Though on the vine, and uncarved, the pumpkins you see out of the corners of your vision seem to be leering evilly at you, like jack-o-lanterns.", 11, 21, 31, 41),
+("Pumpkin Patch North", "The pumpkin patch stretches the the east, west and south of you. The pumpkins surrounding you are craggy and crooked, and the longer you look at them, the creepier they seem.", Null, 51, 1, 61),
+("Pumpkin Patch East", "The pumpkin patch stretches to the north, west, and south of you. The pumpkins around you a unnervingly creepy. Uncarverd pumpkins shouldn't be creepy, should they?", 51, Null, 71, 1);
 
 
 INSERT INTO quests (questTitle, Line1, Line2, Hint1, XPorItem, reward, completionItem)
