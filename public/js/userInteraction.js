@@ -1,9 +1,11 @@
 //VARIABLES
+const DIRECTIONWORDS = {N:["n", "north"], E:["e", "east"], S:["s", "south"], W:["w", "west"]};
 let currentLocation;
 let currentExits;
 let isDay = true;
 let userRecentCommands = [];
-
+let actionData = {};
+let actionCalls = {};
 
 
 //HELPER FUNCTIONS
@@ -73,6 +75,17 @@ function updateScroll(){
     $(".message-output-box").scrollTop($(".message-output-box")[0].scrollHeight)  
   }
   
+//set up action words for parsing user input
+function setActionCalls(){
+  getActions().then(function(data){
+    actionData = data;
+
+    for (const action of data) {
+      actionCalls[action.actionName] = action.waysToCall.split(", ");
+    }
+  });
+}
+
 //find and compile exits
 function compileExits(locationData){
   let possibleExits = {};
@@ -91,8 +104,6 @@ function printExits(exitObject){
     if (!(exitObject[exit] == null)) {
       console.log(exit);
       possibleDirections += exit + ", ";
-    } else {
-      console.log("not" + exit);
     }
   }
   if (possibleDirections.length > 0){
@@ -111,7 +122,21 @@ function printLocationDescription(locationData){
   }
 }
 
-
+//react to input beginning with a move word
+function parseMove(value){
+  value = takeTheseOffThat(actionCalls.move, value);
+  let success = false;
+  for (const direction in DIRECTIONWORDS){
+    if (DIRECTIONWORDS[direction].includes(value.toLowerCase())){
+      success = true;
+      newLocation(direction);
+    }
+  }
+  if (!success){
+    logThis(`You can't move '${value}'! For help, type 'help move'.`)
+    updateScroll();
+  }
+}
 
 
 
@@ -153,6 +178,7 @@ const newLocation = function(direction) {
   
     } else {
       logThis("There's no exit at " + direction);
+      updateScroll();
     }
   
     // set channel off of locationIndex channel
@@ -185,8 +211,8 @@ $("#submit-button").click(function(event) {
   $(".chat-input").val("");
   userRecentCommands.push(value);
 
-  if (value.startsWith("move ")){
-    newLocation(value.split(" ")[1]);
+  if (doesThisStartWithThose(value, actionCalls.move)){
+    parseMove(value);
   }
 });
 
@@ -218,3 +244,4 @@ $("#submit-button").click(function(event) {
 
   //INITIALIZE PAGE
   newLocation("start");
+  setActionCalls();

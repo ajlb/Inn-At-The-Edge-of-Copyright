@@ -15,14 +15,16 @@ INSERT INTO actions (actionName, function, selfDescription, roomDescription)
 VALUES ("get", "getItem()", "You pick up a ", " picks up a "),
 ("look", "lookAround()", "You look around.", " glances around."),
 ("drop", "dropItem()", "You drop a ", " drops a "),
-("inventory", "checkInventory()", Null, Null); 
+("inventory", "checkInventory()", Null, Null),
+("move", "newLocation()", "You go ", " goes ");
 
 
 INSERT INTO help (commandName, commandBriefDescription, commandLongDescription, waysToCall, exampleCall, exampleResult)
 VALUES
 ("get", "Pick up an item.", "When you type a get command word followed by an item in your location that is free to pick up, you will add it to your inventory. If the item isn't free to pick up, you will get a result of 'You can't pick that up!'", "get (g), pick up, grab, take", "get the mushroom", "You pick up a mushroom."),
 ("drop", "Drop an item.", "When you type a drop command word followed by an item in your inventory, you will drop it into your location.", "drop (d), discard", "drop mushroom", "You drop a mushroom."),
-("look", "You look around you", "When you type a look command word with nothing after it, you will look around your location, seeing the description, possible exits, and items nearby.", "look (l), look around", "look around", "You look around. \n An Empty Room: \n Four bare, white walls surround you. A simple bed and a chest are the room's only furniture. A wooden door leads west.");
+("look", "You look around you", "When you type a look command word with nothing after it, you will look around your location, seeing the description, possible exits, and items nearby.", "look (l), look around", "look around", "You look around. \n An Empty Room: \n Four bare, white walls surround you. A simple bed and a chest are the room's only furniture. A wooden door leads west."),
+("move", "You move through an available exit.", "When you type a move command word followed by an available exit from your location, you will move in that direction.", "move (m), go, walk", "move north", "You go north");
 
 
 INSERT INTO locations (locationName, locationDayDescription, exitN, exitE, exitS, exitW)
