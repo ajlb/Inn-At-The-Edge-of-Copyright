@@ -102,7 +102,6 @@ function printExits(exitObject){
   let possibleDirections = "";
   for (const exit in exitObject){
     if (!(exitObject[exit] == null)) {
-      console.log(exit);
       possibleDirections += exit + ", ";
     }
   }
@@ -211,7 +210,7 @@ $("#submit-button").click(function(event) {
   $(".chat-input").val("");
   userRecentCommands.push(value);
 
-  if (doesThisStartWithThose(value, actionCalls.move)){
+  if (doesThisStartWithThose(value, actionCalls.move)) {
     parseMove(value);
   }
 });
