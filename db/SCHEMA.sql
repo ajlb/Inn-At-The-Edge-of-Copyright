@@ -32,8 +32,8 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`players` (
 CREATE TABLE `heroku_dd2cb150d033ed5`.`locations` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `locationName` VARCHAR(45) NOT NULL,
-  `locationDayDescription` VARCHAR(400) NULL,
-  `locationNightDescription` VARCHAR(400) NULL,
+  `dayDescription` VARCHAR(400) NULL,
+  `nightDescription` VARCHAR(400) NULL,
   `exitN` VARCHAR(45) NULL,
   `exitE` VARCHAR(45) NULL,
   `exitS` VARCHAR(45) NULL,
@@ -110,7 +110,11 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`items` (
   `twoHands` TINYINT NOT NULL DEFAULT 0,
   `edible` TINYINT NOT NULL DEFAULT 0,
   `healthEffect` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `WISeffect` INT NOT NULL DEFAULT 0,
+  `STReffect` INT NOT NULL DEFAULT 0,
+  `DEXeffect` INT NOT NULL DEFAULT 0,
+  `HPeffect` INT NOT NULL DEFAULT 0,
+ PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
 
@@ -119,6 +123,7 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`inventory` (
   `locator_id` VARCHAR(45) NOT NULL,
   `item_id` BIGINT NOT NULL,
   `quantity` BIGINT NOT NULL,
+  `currentlyEquipped` TINYINT NOT NULL DEFAULT 0
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
