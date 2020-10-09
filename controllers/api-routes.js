@@ -6,24 +6,32 @@ const item = require("../models/item");
 
 
 module.exports = function (app) {
+    //find location based on id
     app.get("/api/locations/:id", function(req, res){
         models.location.findOne({where: {id: req.params.id}}).then(function(data){
             res.json(data);
+        }).catch(function(e){
+            console.log(e)
         });
     });
+    //find all actions (to be used once at page init, data written to variable)
     app.get("/api/actions/", function(req, res){
         models.action.findAll({}).then(function(data){
             res.json(data);
+        }).catch(function(e){
+            console.log(e)
         });
     });
+    //find one action matching action name
     app.get("/api/actions/:actionName", function(req, res){
         models.action.findOne({where: {actionName: req.params.actionName}}).then(function(data){
             res.json(data);
+        }).catch(function(e){
+            console.log(e)
         });
     });
+    //get inventory for Player, Location, or Item
     app.get("/api/inventory/:locatorID", function(req, res){
-        //insert logic for items inner join on item ID = inventory.item_id
-        console.log("In api-routes: " + req.params.locatorID);
         models.inventory.findAll({
             where: {
                 locator_id:req.params.locatorID,
@@ -33,6 +41,14 @@ module.exports = function (app) {
             res.json(data);
         }).catch(function(e){
             console.log(e);
+        });
+    });
+    //find player data
+    app.get("/api/players/:name", function(req, res){
+        models.player.findOne({where: {characterName:req.params.name}}).then(function(data){
+            res.json(data);
+        }).catch(function(e){
+            console.log(e)
         });
     });
 };

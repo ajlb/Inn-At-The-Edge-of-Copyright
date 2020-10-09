@@ -62,10 +62,12 @@ function doesThisStartWithThose(thisThing, those) {
   
   function logThis(text) {
     $("#anchor").before(`<p class="displayed-message">${text}</p>`);
+    updateScroll();
   }
   
   function describeThis(text) {
     $("#anchor").before(`<p class="displayed-description">${text}</p>`);
+    updateScroll();
   }
 
 
@@ -140,23 +142,47 @@ function parseMove(value){
 
 //react to input beginning with inventory
 function parseInventory(CharacterLocationItemID){
-  if (CharacterLocationItemID.toLowerCase() === "character"){
-    thisUser = pubnub.getUUID();
-    //Insert call to get player info and retrieve players.id
-    //let userID = data.id;
-    //let userID = "P" + userID;
-    //getInventory(userID).then(function(data))
-  } else if (CharacterLocationItemID.toLowerCase() === "location"){
-    let locationID = "L" + currentLocation.id;
-    getInventory(locationID).then(function(data){
-      let locationInventory = [];
-      for (const item of data){
-        locationInventory.push(`${item.quantity} ${pluralize(item.item.itemName, item.quantity)}`);
-      }
-      currentLocationInventory = locationInventory;
-      describeThis(`You see: ${currentLocationInventory.join(", ")}`);
-    });
-  }
+  return new Promise(function(resolve, reject){
+    //Character Inventory
+    if (CharacterLocationItemID.toLowerCase() === "character"){
+      thisUser = pubnub.getUUID();
+      console.log(thisUser);
+      getPlayerData(thisUser).then(function(data){
+        let userID = "P" + data.id;
+        console.log(userID);
+        getInventory(userID).then(function(data){
+          let personalInventory = [];
+          for (const item of data){
+            personalInventory.push(`${item.quantity} ${pluralize(item.item.itemName, item.quantity)}`);
+          }
+          logThis(`Your inventory: <br> ${personalInventory.join("<br>")}`)
+          resolve(personalInventory);
+        });
+      });
+      //Location Inventory
+    } else if (CharacterLocationItemID.toLowerCase() === "location"){
+      let locationID = "L" + currentLocation.id;
+      getInventory(locationID).then(function(data){
+        let locationInventory = [];
+        for (const item of data){
+          locationInventory.push(`${item.quantity} ${pluralize(item.item.itemName, item.quantity)}`);
+        }
+        currentLocationInventory = locationInventory;
+        describeThis(`You see: ${currentLocationInventory.join(", ")}`);
+        resolve(currentLocationInventory);
+      });
+      //Item Inventory
+    } else if (CharacterLocationItemID.startsWith("I")) {
+      getInventory(CharacterLocationItemID).then(function(data){
+        //Check this once there's an item with inventory
+        let itemInventory = [];
+        for (const item of data){
+          itemInventory.push(`${item.quantity} ${pluralize(item.item.itemName, item.quantity)}`)
+        }
+        resolve(itemInventory);
+      })
+    }    
+  })
 
 }
 
@@ -235,6 +261,8 @@ $("#submit-button").click(function(event) {
 
   if (doesThisStartWithThose(value, actionCalls.move)) {
     parseMove(value);
+  } else if (doesThisStartWithThose(value, actionCalls.inventory)){
+    parseInventory("Character");
   }
 });
 

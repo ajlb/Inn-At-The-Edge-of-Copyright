@@ -26,8 +26,16 @@ function getActions() {
 
 function getInventory(idString) {
     return new Promise(function(resolve, reject){
-        console.log("In apiCalls: " + idString);
         $.get("/api/inventory/" + idString, function(data){
+            console.log(data);
+            resolve(data);
+        });
+    });
+}
+
+function getPlayerData(idNumber) {
+    return new Promise(function(resolve, reject){
+        $.get("/api/players/" + idNumber, function(data){
             console.log(data);
             resolve(data);
         });
