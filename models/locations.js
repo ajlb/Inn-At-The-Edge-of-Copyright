@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   };
   location.init({
     locationName: DataTypes.STRING,
-    locationDayDescription: DataTypes.STRING,
-    locationNightDescription: DataTypes.STRING,
+    dayDescription: DataTypes.STRING,
+    nightDescription: DataTypes.STRING,
     exitN: DataTypes.INTEGER,
     exitE: DataTypes.INTEGER,
     exitS: DataTypes.INTEGER,

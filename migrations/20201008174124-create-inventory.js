@@ -1,33 +1,24 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('locations', {
+    await queryInterface.createTable('inventories', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      locationName: {
+      locator_id: {
         type: Sequelize.STRING
       },
-      dayDescription: {
-        type: Sequelize.STRING
-      },
-      nightDescription: {
-        type: Sequelize.STRING
-      },
-      exitN: {
+      itemId: {
         type: Sequelize.INTEGER
       },
-      exitE: {
+      quantity: {
         type: Sequelize.INTEGER
       },
-      exitS: {
-        type: Sequelize.INTEGER
-      },
-      exitW: {
-        type: Sequelize.INTEGER
+      currentlyEquipped: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +31,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('locations');
+    await queryInterface.dropTable('inventories');
   }
 };

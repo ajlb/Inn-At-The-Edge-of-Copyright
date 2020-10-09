@@ -9,6 +9,7 @@ const db = require("./models");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
+app.use('/scripts', express.static(__dirname + '/node_modules/pluralize/'));
 app.set("view engine", "handlebars");
 app.engine("handlebars", handlebars({ defaultLayout: "main" }));
 

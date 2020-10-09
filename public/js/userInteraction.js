@@ -2,6 +2,7 @@
 const DIRECTIONWORDS = {N:["n", "north"], E:["e", "east"], S:["s", "south"], W:["w", "west"]};
 let currentLocation;
 let currentExits;
+let currentLocationInventory;
 let isDay = true;
 let userRecentCommands = [];
 let actionData = {};
@@ -115,9 +116,9 @@ function printExits(exitObject){
 //show room description
 function printLocationDescription(locationData){
   if (isDay){
-    describeThis(locationData.locationDayDescription);
+    describeThis(locationData.dayDescription);
   } else {
-    describeThis(locationData.locationNightDescription);
+    describeThis(locationData.nightDescription);
   }
 }
 
@@ -135,6 +136,28 @@ function parseMove(value){
     logThis(`You can't move '${value}'! For help, type 'help move'.`)
     updateScroll();
   }
+}
+
+//react to input beginning with inventory
+function parseInventory(CharacterLocationItemID){
+  if (CharacterLocationItemID.toLowerCase() === "character"){
+    thisUser = pubnub.getUUID();
+    //Insert call to get player info and retrieve players.id
+    //let userID = data.id;
+    //let userID = "P" + userID;
+    //getInventory(userID).then(function(data))
+  } else if (CharacterLocationItemID.toLowerCase() === "location"){
+    let locationID = "L" + currentLocation.id;
+    getInventory(locationID).then(function(data){
+      let locationInventory = [];
+      for (const item of data){
+        locationInventory.push(`${item.quantity} ${pluralize(item.item.itemName, item.quantity)}`);
+      }
+      currentLocationInventory = locationInventory;
+      describeThis(`You see: ${currentLocationInventory.join(", ")}`);
+    });
+  }
+
 }
 
 
