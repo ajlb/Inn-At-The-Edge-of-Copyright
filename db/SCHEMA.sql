@@ -15,16 +15,16 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`players` (
   `inventory` TINYINT NOT NULL DEFAULT 0,
   `backstory` TEXT NULL,
   `description` VARCHAR(450) NULL,
-  `headSlot` INT NULL DEFAULT NULL,
-  `neckSlot` INT NULL DEFAULT NULL,
-  `torsoSlot` INT NULL DEFAULT NULL,
-  `rightHandSlot` INT NULL DEFAULT NULL,
-  `leftHandSlot` INT NULL DEFAULT NULL,
-  `legsSlot` INT NULL DEFAULT NULL,
-  `feetSlot` INT NULL DEFAULT NULL,
-  `ringSlot` INT NULL DEFAULT NULL,
-  `handsSlot` INT NULL DEFAULT NULL,
-  `twoHands` INT NULL DEFAULT NULL,
+  `headSlot` INT NOT NULL DEFAULT 0,
+  `neckSlot` INT NOT NULL DEFAULT 0,
+  `torsoSlot` INT NOT NULL DEFAULT 0,
+  `rightHandSlot` INT NOT NULL DEFAULT 0,
+  `leftHandSlot` INT NOT NULL DEFAULT 0,
+  `legsSlot` INT NOT NULL DEFAULT 0,
+  `feetSlot` INT NOT NULL DEFAULT 0,
+  `ringSlot` INT NOT NULL DEFAULT 0,
+  `handsSlot` INT NOT NULL DEFAULT 0,
+  `twoHands` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
@@ -34,10 +34,10 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`locations` (
   `locationName` VARCHAR(45) NOT NULL,
   `dayDescription` VARCHAR(400) NULL,
   `nightDescription` VARCHAR(400) NULL,
-  `exitN` VARCHAR(45) NULL,
-  `exitE` VARCHAR(45) NULL,
-  `exitS` VARCHAR(45) NULL,
-  `exitW` VARCHAR(45) NULL,
+  `exitN` INT NULL,
+  `exitE` INT NULL,
+  `exitS` INT NULL,
+  `exitW` INT NULL,
   `region` VARCHAR(450) NULL
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
@@ -55,21 +55,11 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`weather` (
 CREATE TABLE `heroku_dd2cb150d033ed5`.`actions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `actionName` VARCHAR(45) NOT NULL,
-  `function` VARCHAR(45) NULL,
-  `selfDescription` VARCHAR(200) NULL,
-  `roomDescription` VARCHAR(200) NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
-
-
-CREATE TABLE `heroku_dd2cb150d033ed5`.`help` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `commandName` VARCHAR(45) NOT NULL,
-  `commandBriefDescription` VARCHAR(45) NOT NULL,
-  `commandLongDescription` VARCHAR(300) NOT NULL,
-  `waysToCall` VARCHAR(200) NOT NULL,
-  `exampleCall` VARCHAR(45) NOT NULL,
-  `exampleResult` VARCHAR(100) NOT NULL,
+  `commandBriefDescription` VARCHAR(750) NOT NULL,
+  `commandLongDescription` VARCHAR(750) NOT NULL,
+  `waysToCall` VARCHAR(450) NOT NULL,
+  `exampleCall` VARCHAR(450) NOT NULL,
+  `exampleResult` VARCHAR(450) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
@@ -77,18 +67,12 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`help` (
 CREATE TABLE `heroku_dd2cb150d033ed5`.`quests` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `questTitle` VARCHAR(45) NOT NULL,
-  `Line1` VARCHAR(400) NOT NULL,
-  `Line2` VARCHAR(400) NULL,
-  `Line3` VARCHAR(400) NULL,
-  `Line4` VARCHAR(400) NULL,
-  `Line5` VARCHAR(400) NULL,
-  `questToken` BIGINT NULL,
-  `Hint1` VARCHAR(400) NOT NULL,
-  `Hint2` VARCHAR(400) NULL,
-  `Hint3` VARCHAR(400) NULL,
+  `dialogue` TEXT NOT NULL,
+  `hints` VARCHAR(400) NOT NULL,
   `XPorItem` TINYINT NOT NULL,
   `reward` BIGINT NOT NULL,
   `completionItem` BIGINT NOT NULL,
+  `questToken` BIGINT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 

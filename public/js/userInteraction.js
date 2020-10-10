@@ -97,7 +97,7 @@ function doesThisStartWithThose(thisThing, those) {
 
 
 
-  
+
 
 
   //MID LEVEL FUNCTIONS
@@ -263,13 +263,24 @@ function dropItem(value){
   });
 }
 
-//reach to input beginning with look command
+//react to input beginning with look command
 function lookAround(value){
   logThis(`You look around.`)
   printLocationDescription(currentLocation);
   printExits(currentExits);
   parseInventory("Location");
 }
+
+//function react to input beginning with speak command
+function speak(value){
+  console.log(value);
+}
+
+
+
+
+
+
 
 
 
@@ -354,7 +365,7 @@ $("#submit-button").click(function(event) {
     lookAround(value);
   } else if (doesThisStartWithThose(value, actionCalls.drop)){
     dropItem(value);
-  }
+  } else if (doesThisStartWithThose(value, actionCalls.speak))
 });
 
 
