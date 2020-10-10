@@ -29,20 +29,50 @@ module.exports = (sequelize, DataTypes) => {
     inventory: DataTypes.INTEGER,
     backstory: DataTypes.STRING,
     description: DataTypes.STRING,
-    headSlot: DataTypes.INTEGER,
-    neckSlot: DataTypes.INTEGER,
-    torsoSlot: DataTypes.INTEGER,
-    rightHandSlot: DataTypes.INTEGER,
-    rightHandSlot: DataTypes.INTEGER,
-    leftHandSlot: DataTypes.INTEGER,
-    legsSlot: DataTypes.INTEGER,
-    feetSlot: DataTypes.INTEGER,
-    ringSlot: DataTypes.INTEGER,
-    handsSlot: DataTypes.INTEGER,
-    twoHands: DataTypes.INTEGER
+    headSlot: {
+      type: DataTypes.BOOLEAN,
+      DefaultValue: 0,
+    },
+    neckSlot: {
+      type: DataTypes.BOOLEAN,
+      DefaultValue: 0,
+    },
+    torsoSlot: {
+      type: DataTypes.BOOLEAN,
+      DefaultValue: 0,
+    },
+    rightHandSlot: {
+      type: DataTypes.BOOLEAN,
+      DefaultValue: 0,
+    },
+    leftHandSlot: {
+      type: DataTypes.BOOLEAN,
+      DefaultValue: 0,
+    },
+    legsSlot: {
+      type: DataTypes.BOOLEAN,
+      DefaultValue: 0,
+    },
+    feetSlot: {
+      type: DataTypes.BOOLEAN,
+      DefaultValue: 0,
+    },
+    ringSlot: {
+      type: DataTypes.BOOLEAN,
+      DefaultValue: 0,
+    },
+    handsSlot: {
+      type: DataTypes.BOOLEAN,
+      DefaultValue: 0,
+    },
+    twoHands: {
+      type: DataTypes.BOOLEAN,
+      DefaultValue: 0,
+    },
   }, {
     sequelize,
     modelName: 'player',
+    timestamps: false
   });
   return player;
 };

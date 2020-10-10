@@ -1,10 +1,10 @@
 //VARIABLES
 const DIRECTIONWORDS = {N:["n", "north"], E:["e", "east"], S:["s", "south"], W:["w", "west"]};
 const ARTICLES = ["the", "a", "an"];
-let currentLocation;
-let currentExits;
-let currentLocationId;
-let currentLocationInventory;
+let currentLocation; //holds all data for current location
+let currentExits; //easily accessible exit data
+let currentLocationId; //location ID prefixed with "L"
+let currentLocationInventory; //inventory of this location
 let isDay = true;
 let userRecentCommands = [];
 let actionData = {};
@@ -95,6 +95,9 @@ function doesThisStartWithThose(thisThing, those) {
 
 
 
+
+
+  
 
 
   //MID LEVEL FUNCTIONS
