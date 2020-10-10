@@ -1,3 +1,5 @@
+USE `heroku_dd2cb150d033ed5`;
+
 INSERT INTO heroku_dd2cb150d033ed5.weather (weatherCondition, dayDescription, nightDescription)
 VALUES
 ("clear sky", "The sun shines bright in the sky above you, with nary a cloud in sight.", "The moon shines bright above you in the star-splashed night sky."),
@@ -58,13 +60,14 @@ VALUES ("collar", "a red collar with a silver buckle. It has pictures of fish on
 
 INSERT INTO players (email, `password`, characterName, isLiving, isNPC, WIS, DEX, STR, HP, race, class, inventory, backstory, description, headSlot, neckSlot, torsoSlot, rightHandSlot, leftHandSlot, legsSlot, feetSlot, ringSlot, handsSlot, twoHands)
 VALUES
+
 ("moop@mop.com", "verysecure", "Magical Mr. Mistoffelees", True, True, 10, 10, 10, 50, "Cat", "Wizard", True, "Magical Mr. Mistoffelees has lived in the inn since he showed up as a young cat. He came in one morning when the innkeeper opened the door, and never left.", "A black and white tuxedo cat with short hair, and a slight notch in their right ear", 0, 121, 0, 1, 0, 0, 0, 0, 0, 0),("moop@mop.com", "verysecure", "Crazy Cat Lady", True, True, 10, 10, 10, 50, "Cat", "Wizard", True, "The Crazy Cat Lady came to live in the woods in the distant past. Nobody quite remembers. She is covered with patchy gray tufts of fur, and her tail looks like she just got struck by lightning. Her pupils are unevenly dilated, and she seems to stare right through you.", "A humanoid cat with patchy gray fur, and unevenly dilated eyes.", 0, 121, 0, 1, 0, 0, 0, 0, 0, 0);
 
 
 INSERT INTO inventories (locator_id, itemId, quantity, currentlyEquipped)
 VALUES ("P1", 121, 1, 1),
 ("L11", 81, 1, 0),
-("L1", 91, 2, 0),
+("L1", 91, 2, 0),	 
 ("L1", 81, 1, 0),
 ("P11", 81, 1, 1),
 ("P11", 111, 4, 0),

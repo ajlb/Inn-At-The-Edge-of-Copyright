@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS `heroku_dd2cb150d033ed5`;
+
+CREATE DATABASE `heroku_dd2cb150d033ed5`;
