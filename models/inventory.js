@@ -17,10 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     locator_id: DataTypes.STRING,
     itemId: DataTypes.INTEGER,
     quantity: DataTypes.INTEGER,
-    currentlyEquipped: DataTypes.BOOLEAN,
+    currentlyEquipped: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'inventory',
+    timestamps: false
   });
   return inventory;
 };
