@@ -159,7 +159,7 @@ function updateScroll(){
 function actionGetObject(inputValue) {
   //remove extraneous text
   inputValue = takeTheseOffThat(interactionWords.get, inputValue);
-  inputValue = takeTheseOffThat(["a ", "the "], inputValue);
+  inputValue = takeTheseOffThat(["a ", "the ", "an "], inputValue);
   console.log("Getting a " + inputValue);
   //check if item is here
   let objectIndex = woodsWalk.location[locationIndex].items.findIndex(item => item.name === inputValue);

@@ -18,15 +18,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       currentlyEquipped: {
-        type: Sequelize.BOOLEAN
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.BOOLEAN,
+        defaultValue: 0
       }
     });
   },

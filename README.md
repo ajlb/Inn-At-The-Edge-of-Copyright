@@ -4,3 +4,4 @@ An RPG MUD where all the long forgotten NPCs, lost socks and mishandled airline 
 
 
 
+Uses: Pluralize, Dotenv, Express, Express-handlebars, MySQL2, Nodemon, Sequelize, Sequelize-cli
