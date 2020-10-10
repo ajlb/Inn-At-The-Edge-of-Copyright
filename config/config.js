@@ -15,7 +15,7 @@ require("dotenv").config();
 //         : defaultValue;
 // }
 
-const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = process.env;
+const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, PUB_KEY, SUB_KEY } = process.env;
 
 module.exports =
 {
@@ -42,5 +42,9 @@ module.exports =
         "host": DB_HOST,
         "port": DB_PORT,
         "dialect": "mysql"
+    },
+    "pubnub": {
+        "publishKey": PUB_KEY,
+        "subscribeKey": SUB_KEY
     }
 };
