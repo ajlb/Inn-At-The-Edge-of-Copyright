@@ -3,35 +3,33 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  
-    class item extends Model {
+  class player extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      item.hasMany(models.inventory, {as: "Stuff"})
+      // define association here
     }
   };
-  item.init({
-    itemName: {
-      type: DataTypes.STRING,
-    },      
-    description: {
-      type: DataTypes.STRING,
-    },      
-      category: {
-      type: DataTypes.STRING,
-    },      
-      inventory: {
-      type: DataTypes.BOOLEAN,
-      DefaultValue: 0,
-    },
-    inventorySize: {
-      type: DataTypes.STRING,
-    },
-      headSlot: {
+  player.init({
+    email: DataTypes.STRING,
+    password: DataTypes.STRING,
+    characterName: DataTypes.STRING,
+    isLiving: DataTypes.BOOLEAN,
+    isNPC: DataTypes.BOOLEAN,
+    WIS: DataTypes.INTEGER,
+    DEX: DataTypes.INTEGER,
+    STR: DataTypes.INTEGER,
+    HP: DataTypes.INTEGER,
+    race: DataTypes.STRING,
+    class: DataTypes.STRING,
+    abilities: DataTypes.STRING,
+    inventory: DataTypes.INTEGER,
+    backstory: DataTypes.STRING,
+    description: DataTypes.STRING,
+    headSlot: {
       type: DataTypes.BOOLEAN,
       DefaultValue: 0,
     },
@@ -71,34 +69,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       DefaultValue: 0,
     },
-    edible: {
-      type: DataTypes.BOOLEAN,
-      DefaultValue: 0,
-    },
-    healthEffect:{
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    WISeffect: {
-      type: DataTypes.INTEGER,
-      DefaultValue: 0,
-    },
-    STReffect: {
-      type: DataTypes.INTEGER,
-      DefaultValue: 0,
-    },
-    DEXeffect: {
-      type: DataTypes.INTEGER,
-      DefaultValue: 0,
-    },
-    HPeffect: {
-      type: DataTypes.INTEGER,
-      DefaultValue: 0,
-    }
-    }, {
+  }, {
     sequelize,
-    modelName: 'item',
+    modelName: 'player',
     timestamps: false
   });
-  return item;
+  return player;
 };
