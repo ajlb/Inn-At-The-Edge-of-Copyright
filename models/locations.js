@@ -14,14 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   location.init({
-    locationName: DataTypes.STRING,
-    dayDescription: DataTypes.STRING,
-    nightDescription: DataTypes.STRING,
+    locationName: DataTypes.STRING(750),
+    dayDescription: DataTypes.STRING(750),
+    nightDescription: DataTypes.STRING(750),
     exitN: DataTypes.INTEGER,
     exitE: DataTypes.INTEGER,
     exitS: DataTypes.INTEGER,
     exitW: DataTypes.INTEGER,
-    region: DataTypes.STRING,
+    region: DataTypes.STRING(750),
   }, {
     sequelize,
     modelName: 'location',

@@ -9,10 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       characterName: {
         type: Sequelize.STRING
@@ -36,22 +36,22 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       race: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       class: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       abilities: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       inventory: {
         type: Sequelize.INTEGER
       },
       backstory: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       headSlot: {
         type: Sequelize.INTEGER,
