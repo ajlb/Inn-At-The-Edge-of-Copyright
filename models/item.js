@@ -16,20 +16,20 @@ module.exports = (sequelize, DataTypes) => {
   };
   item.init({
     itemName: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(750),
     },      
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(750),
     },      
       category: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(750),
     },      
       inventory: {
       type: DataTypes.BOOLEAN,
       DefaultValue: 0,
     },
     inventorySize: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(750),
     },
       headSlot: {
       type: DataTypes.BOOLEAN,

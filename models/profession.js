@@ -14,22 +14,23 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   profession.init({
-    className: DataTypes.STRING,
-    description: DataTypes.STRING,
+    className: DataTypes.STRING(750),
+    description: DataTypes.STRING(750),
     specialItem: DataTypes.INTEGER,
-    level1Ability: DataTypes.STRING,
-    level2Ability: DataTypes.STRING,
-    level3Ability: DataTypes.STRING,
-    level4Ability: DataTypes.STRING,
-    level5Ability: DataTypes.STRING,
-    level6Ability: DataTypes.STRING,
-    level7Ability: DataTypes.STRING,
-    level8Ability: DataTypes.STRING,
-    level9Ability: DataTypes.STRING,
-    level10Ability: DataTypes.STRING
+    level1Ability: DataTypes.STRING(750),
+    level2Ability: DataTypes.STRING(750),
+    level3Ability: DataTypes.STRING(750),
+    level4Ability: DataTypes.STRING(750),
+    level5Ability: DataTypes.STRING(750),
+    level6Ability: DataTypes.STRING(750),
+    level7Ability: DataTypes.STRING(750),
+    level8Ability: DataTypes.STRING(750),
+    level9Ability: DataTypes.STRING(750),
+    level10Ability: DataTypes.STRING(750)
   }, {
     sequelize,
     modelName: 'profession',
+    timestamps: false
   });
   return profession;
 };

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   inventory.init({
-    locator_id: DataTypes.STRING,
+    locator_id: DataTypes.STRING(750),
     itemId: DataTypes.INTEGER,
     quantity: DataTypes.INTEGER,
     currentlyEquipped: DataTypes.INTEGER,

@@ -14,16 +14,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   quest.init({
-    questTitle: DataTypes.STRING,
+    questTitle: DataTypes.STRING(750),
     dialogue: DataTypes.TEXT,
-    hints: DataTypes.STRING,
+    hints: DataTypes.STRING(750),
     XPorItem: DataTypes.BOOLEAN,
     completionItem: DataTypes.INTEGER,
-    questToken: DataTypes.INTEGER
+    questToken: DataTypes.INTEGER,
+    reward: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'quest',
-    timestamps: false,
+    timestamps: false
   });
   return quest;
 };
