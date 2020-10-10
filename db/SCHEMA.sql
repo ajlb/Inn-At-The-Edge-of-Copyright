@@ -32,21 +32,21 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`players` (
 CREATE TABLE `heroku_dd2cb150d033ed5`.`locations` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `locationName` VARCHAR(45) NOT NULL,
-  `dayDescription` VARCHAR(400) NULL,
-  `nightDescription` VARCHAR(400) NULL,
-  `exitN` VARCHAR(45) NULL,
-  `exitE` VARCHAR(45) NULL,
-  `exitS` VARCHAR(45) NULL,
-  `exitW` VARCHAR(45) NULL,
+  `dayDescription` VARCHAR(750) NULL,
+  `nightDescription` VARCHAR(750) NULL,
+  `exitN` INT NULL,
+  `exitE` INT NULL,
+  `exitS` INT NULL,
+  `exitW` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
 
 CREATE TABLE `heroku_dd2cb150d033ed5`.`weather` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `weatherCondition` VARCHAR(20) NOT NULL,
-  `dayDescription` VARCHAR(100) NULL,
-  `nightDescription` VARCHAR(100) NULL,
+  `weatherCondition` VARCHAR(45) NOT NULL,
+  `dayDescription` VARCHAR(750) NULL,
+  `nightDescription` VARCHAR(750) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
@@ -68,7 +68,7 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`help` (
   `commandLongDescription` VARCHAR(300) NOT NULL,
   `waysToCall` VARCHAR(200) NOT NULL,
   `exampleCall` VARCHAR(45) NOT NULL,
-  `exampleResult` VARCHAR(100) NOT NULL,
+  `exampleResult` VARCHAR(750) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
@@ -94,8 +94,9 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`quests` (
 
 CREATE TABLE `heroku_dd2cb150d033ed5`.`items` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `itemName` VARCHAR(45), NOT NULL,
+  `itemName` VARCHAR(45) NOT NULL,
   `description` VARCHAR(200) NOT NULL,
+  `category` VARCHAR(100) NOT NULL,
   `inventory` TINYINT NOT NULL DEFAULT 0,
   `inventorySize` BIGINT NULL DEFAULT NULL,
   `headSlot` TINYINT NOT NULL DEFAULT 0,
@@ -123,7 +124,7 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`inventory` (
   `locator_id` VARCHAR(45) NOT NULL,
   `item_id` BIGINT NOT NULL,
   `quantity` BIGINT NOT NULL,
-  `currentlyEquipped` TINYINT NOT NULL DEFAULT 0
+  `currentlyEquipped` TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
