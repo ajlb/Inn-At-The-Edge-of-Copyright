@@ -42,5 +42,9 @@ module.exports =
         "host": DB_HOST,
         "port": DB_PORT,
         "dialect": "mysql"
+    },
+    "pubnub": {
+        "publishKey": PUB_KEY,
+        "subscribeKey": SUB_KEY
     }
 };
