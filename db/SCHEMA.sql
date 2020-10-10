@@ -38,6 +38,7 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`locations` (
   `exitE` VARCHAR(45) NULL,
   `exitS` VARCHAR(45) NULL,
   `exitW` VARCHAR(45) NULL,
+  `region` VARCHAR(450) NULL
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 

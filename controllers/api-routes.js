@@ -1,9 +1,9 @@
 const express = require("express");
 const handlebars = require("express-handlebars");
-const { json } = require("sequelize");
+const { json, Sequelize } = require("sequelize");
 const models = require("../models");
 const item = require("../models/item");
-
+const Op = Sequelize.Op;
 
 module.exports = function (app) {
     //find location based on id
@@ -38,6 +38,39 @@ module.exports = function (app) {
                 currentlyEquipped: 0},
             include: {model: models.item}
         }).then(function(data){
+            res.json(data);
+        }).catch(function(e){
+            console.log(e);
+        });
+    });
+    //Update inventory quantity by amount specified
+    app.put("/api/inventory/", function(req, res){
+
+        let wheres = {
+            locator_id: req.body.locator_id,
+            itemId: req.body.itemId
+        };
+        models.inventory.increment(`quantity`, {
+            where: wheres,
+            by: req.body.change,
+        }).then(function(data){
+            res.json(data);
+        }).catch(function(e){
+            console.log(e);
+        });
+    });
+    //delete all items with quantity: 0 and currentlyEquipped: False
+    app.delete("/api/inventory/", function(req, res){
+        models.inventory.destroy({where: {
+            quantity:{[Op.lte]:0},
+        }}).then(function(data){
+            res.json(data);
+        }).catch(function(e){
+            console.log(e);
+        });
+    });
+    app.post('/api/inventory/', function(req, res){
+        models.inventory.create(req.body).then(function(data){
             res.json(data);
         }).catch(function(e){
             console.log(e);

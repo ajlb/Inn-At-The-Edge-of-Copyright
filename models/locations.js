@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     exitE: DataTypes.INTEGER,
     exitS: DataTypes.INTEGER,
     exitW: DataTypes.INTEGER,
+    region: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'location',
