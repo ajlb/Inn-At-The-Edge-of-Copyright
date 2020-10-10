@@ -58,8 +58,8 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`actions` (
   `commandBriefDescription` VARCHAR(750) NOT NULL,
   `commandLongDescription` VARCHAR(750) NOT NULL,
   `waysToCall` VARCHAR(450) NOT NULL,
-  `exampleCall` VARCHAR(450) NOT NULL,
-  `exampleResult` VARCHAR(450) NOT NULL,
+  `exampleCall` VARCHAR(450),
+  `exampleResult` VARCHAR(450),
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
@@ -104,7 +104,7 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`items` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
 
-CREATE TABLE `heroku_dd2cb150d033ed5`.`inventory` (
+CREATE TABLE `heroku_dd2cb150d033ed5`.`inventories` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `locator_id` VARCHAR(45) NOT NULL,
   `item_id` BIGINT NOT NULL,
