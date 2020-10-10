@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class quest extends Model {
+  class weather extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,17 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  quest.init({
-    questTitle: DataTypes.STRING,
-    dialogue: DataTypes.TEXT,
-    hints: DataTypes.STRING,
-    XPorItem: DataTypes.BOOLEAN,
-    completionItem: DataTypes.INTEGER,
-    questToken: DataTypes.INTEGER
+  weather.init({
+    weatherCondition: DataTypes.STRING,
+    dayDescription: DataTypes.STRING,
+    nightDescription: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'quest',
+    modelName: 'weather',
     timestamps: false,
   });
-  return quest;
+  return weather;
 };
