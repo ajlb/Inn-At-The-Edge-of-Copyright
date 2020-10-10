@@ -65,7 +65,7 @@ VALUES
 
 
 
-INSERT INTO inventories (locator_id, itemId, quantity, currentlyEquipped)
+INSERT INTO inventories (locator_id, item_id, quantity, currentlyEquipped)
 VALUES ("P1", 121, 1, 1),
 ("L11", 81, 1, 0),
 ("L1", 91, 2, 0),	 
