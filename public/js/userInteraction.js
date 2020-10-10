@@ -24,88 +24,88 @@ function doesThisStartWithThose(thisThing, those) {
     return false
   }
   
-  //single value startWith() that tests for space or equal value
-  function startsWithOrIs(thing, stringy) {
-    if (stringy.toLowerCase().startsWith(`${thing} `) || ((stringy.toLowerCase().startsWith(thing)) && (stringy.length === thing.length))){
-      return true
-    }
-    return false
+//single value startWith() that tests for space or equal value
+function startsWithOrIs(thing, stringy) {
+  if (stringy.toLowerCase().startsWith(`${thing} `) || ((stringy.toLowerCase().startsWith(thing)) && (stringy.length === thing.length))){
+    return true
   }
-  
-  //slice off any string from an array that is found at the beginning of another string
-  function takeTheseOffThat(these, that) {
-    for (let thing of these) {
-      if (that.toLowerCase().startsWith(thing)) {
-        return that.slice(thing.length).trim();
+  return false
+}
+
+//slice off any string from an array that is found at the beginning of another string
+function takeTheseOffThat(these, that) {
+  for (let thing of these) {
+    if (that.toLowerCase().startsWith(thing)) {
+      return that.slice(thing.length).trim();
+    }
+  }
+
+  return that;
+}
+
+//see if a string is equal to any of the strings in an array
+function doesThisEqualThat(thisThing, that) {
+  for (let thing of that) {
+    if (thisThing.toLowerCase().trim() === thing) {
+      return true;
+    }
+  }
+  return false;
+}
+
+//return alias for words with multiple ways to type them
+function parseAlternateWords(thisThing, objecty) {
+  for (let thing in objecty) {
+    if (thisThing.toLowerCase().trim() === objecty[thing]) {
+      return thing;
+    }
+  }
+  return thisThing;
+}
+
+function logThis(text) {
+  $("#anchor").before(`<p class="displayed-message">${text}</p>`);
+  updateScroll();
+}
+
+function describeThis(text) {
+  $("#anchor").before(`<p class="displayed-description">${text}</p>`);
+  updateScroll();
+}
+
+function findMatchByItemNameAndChangeQuantity(value, data, target, amount){
+  return new Promise(function(resolve, reject){
+    for (const thing of data){
+      //increase quantity if match found
+      if (thing.item.itemName.toLowerCase() === value.toLowerCase()){
+        changeItemQuantity(thing.itemId, target, amount);
+        scrubInventory();
+        resolve(true);
+      }
+      console.log(target);
+      if (target.startsWith("P") && (amount > 0)){
+        logThis(`You pick up ${amount} ${pluralize(value, amount)}.`)
+      } else if (target.startsWith("P") && (amount < 0)){
+        console.log("PLAYER DROP");
+        logThis(`You drop ${Math.abs(amount)} ${pluralize(value, Math.abs(amount))}.`)
       }
     }
-  
-    return that;
-  }
-  
-  //see if a string is equal to any of the strings in an array
-  function doesThisEqualThat(thisThing, that) {
-    for (let thing of that) {
-      if (thisThing.toLowerCase().trim() === thing) {
-        return true;
-      }
-    }
-    return false;
-  }
-  
-  //return alias for words with multiple ways to type them
-  function parseAlternateWords(thisThing, objecty) {
-    for (let thing in objecty) {
-      if (thisThing.toLowerCase().trim() === objecty[thing]) {
-        return thing;
-      }
-    }
-    return thisThing;
-  }
-  
-  function logThis(text) {
-    $("#anchor").before(`<p class="displayed-message">${text}</p>`);
-    updateScroll();
-  }
-  
-  function describeThis(text) {
-    $("#anchor").before(`<p class="displayed-description">${text}</p>`);
-    updateScroll();
-  }
-
-  function findMatchByItemNameAndChangeQuantity(value, data, target, amount){
-    return new Promise(function(resolve, reject){
-      for (const thing of data){
-        //increase quantity if match found
-        if (thing.item.itemName.toLowerCase() === value.toLowerCase()){
-          changeItemQuantity(thing.itemId, target, amount);
-          scrubInventory();
-          resolve(true);
-        }
-        console.log(target);
-        if (target.startsWith("P") && (amount > 0)){
-          logThis(`You pick up ${amount} ${pluralize(value, amount)}.`)
-        } else if (target.startsWith("P") && (amount < 0)){
-          console.log("PLAYER DROP");
-          logThis(`You drop ${Math.abs(amount)} ${pluralize(value, Math.abs(amount))}.`)
-        }
-      }
-    });
-  }
+  });
+}
 
 
 
 
 
-  
 
 
-  //MID LEVEL FUNCTIONS
 
-  //Scrolling
+//MID LEVEL FUNCTIONS
+
+//Scrolling
 function updateScroll(){
     $(".message-output-box").scrollTop($(".message-output-box")[0].scrollHeight)  
-  }
+}
   
 //get user Id from pubnub, then put into string for searching inventories
 function setUserInventoryId(){
@@ -263,13 +263,24 @@ function dropItem(value){
   });
 }
 
-//reach to input beginning with look command
+//react to input beginning with look command
 function lookAround(value){
   logThis(`You look around.`)
   printLocationDescription(currentLocation);
   printExits(currentExits);
   parseInventory("Location");
 }
+
+//function react to input beginning with speak command
+function speak(value){
+  console.log(value);
+}
+
+
+
+
+
+
 
 
 
@@ -279,59 +290,58 @@ function lookAround(value){
 //MOVE TO A NEW ROOM, AND GET A NEW CHAT
 const newLocation = function(direction) {
   let locationIndex;
-    // give this chatroom the correct id
-    if (direction === "start") {
-      //set currentLocation, and pass to pubnub as locationIndex
-      getLocation(1).then(function(data){
-        currentLocation = data;
-        currentLocationId = "L" + currentLocation.id;
-        locationIndex = data.locationName.replace(/ /g, "-");
-        $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
+  // give this chatroom the correct id
+  if (direction === "start") {
+    //set currentLocation, and pass to pubnub as locationIndex
+    getLocation(1).then(function(data){
+      currentLocation = data;
+      currentLocationId = "L" + currentLocation.id;
+      locationIndex = data.locationName.replace(/ /g, "-");
+      $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
 
-        printLocationDescription(currentLocation);
-        currentExits = compileExits(currentLocation);
-        printExits(currentExits);
+      printLocationDescription(currentLocation);
+      currentExits = compileExits(currentLocation);
+      printExits(currentExits);
 
-        updateScroll();
-      });
-      
-    } else if (!(currentExits[direction] == null)) {
-      //set currentLocation, and pass to pubnub as locationIndex
-      getLocation(currentExits[direction]).then(function(data){
-        currentLocation = data;
-        currentExits = compileExits(currentLocation);
-        locationIndex = data.locationName.replace(/ /g, "-");
+      updateScroll();
+    });
+    
+  } else if (!(currentExits[direction] == null)) {
+    //set currentLocation, and pass to pubnub as locationIndex
+    getLocation(currentExits[direction]).then(function(data){
+      currentLocation = data;
+      currentExits = compileExits(currentLocation);
+      locationIndex = data.locationName.replace(/ /g, "-");
 
-        $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
+      $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
 
-        printLocationDescription(currentLocation);
-        printExits(currentExits);
+      printLocationDescription(currentLocation);
+      printExits(currentExits);
 
-        updateScroll();
-      })
-  
-    } else {
-      logThis("There's no exit at " + direction);
-    }
-  
-    // set channel off of locationIndex channel
-    const id = locationIndex;
-    channel = 'oo-chat-' + id;
-    console.log("In Room ID: " + id);
-  
-    // this function is fired when Chatroom() is called
-    //it unsubscribes from previous rooms, and subscribes to the new room
-    const init = function() {
-  
-      pubnub.unsubscribeAll();
-      console.log("subscribing");
-      pubnub.subscribe({channels: [channel]});
-  
-    };//end init
-  
-    init();
-  
-  };
+      updateScroll();
+    })
+
+  } else {
+    logThis("There's no exit at " + direction);
+  }
+
+  // set channel off of locationIndex channel
+  const id = locationIndex;
+  channel = 'oo-chat-' + id;
+  console.log("In Room ID: " + id);
+
+  // this function is fired when Chatroom() is called
+  //it unsubscribes from previous rooms, and subscribes to the new room
+  const init = function() {
+
+    pubnub.unsubscribeAll();
+    console.log("subscribing");
+    pubnub.subscribe({channels: [channel]});
+
+  };//end init
+
+  init();
+}
 
 
   //RESPOND TO USER INPUT
@@ -354,6 +364,8 @@ $("#submit-button").click(function(event) {
     lookAround(value);
   } else if (doesThisStartWithThose(value, actionCalls.drop)){
     dropItem(value);
+  } else if (doesThisStartWithThose(value, actionCalls.speak)){
+    
   }
 });
 
