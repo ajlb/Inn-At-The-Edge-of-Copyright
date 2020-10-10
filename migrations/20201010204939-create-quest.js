@@ -9,13 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       questTitle: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       dialogue: {
         type: Sequelize.TEXT
       },
       hints: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       XPorItem: {
         type: Sequelize.BOOLEAN
@@ -26,13 +26,8 @@ module.exports = {
       questToken: {
         type: Sequelize.INTEGER
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+      reward: {
+        type: Sequelize.INTEGER
       }
     });
   },
