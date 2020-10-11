@@ -9,13 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       locationName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       dayDescription: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       nightDescription: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       exitN: {
         type: Sequelize.INTEGER,
@@ -34,7 +34,7 @@ module.exports = {
         allowNull: true
       },
       region: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       }
     });
   },

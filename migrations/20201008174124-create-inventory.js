@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       locator_id: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       itemId: {
         type: Sequelize.INTEGER

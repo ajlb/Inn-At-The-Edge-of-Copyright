@@ -72,15 +72,17 @@ VALUES ("collar", "a red collar with a silver buckle. It has pictures of fish on
 
 INSERT INTO players (email, `password`, characterName, isLiving, isNPC, WIS, DEX, STR, HP, race, class, inventory, backstory, description, headSlot, neckSlot, torsoSlot, rightHandSlot, leftHandSlot, legsSlot, feetSlot, ringSlot, handsSlot, twoHands)
 VALUES
-    ("moop@mop.com", "verysecure", "Felix", True, True, 10, 10, 10, 50, "Cat", "Rogue", True, "Felix has lived in the inn since he showed up as a young cat. He came in one morning when the innkeeper opened the door, and never left.", "A black and white cat with short hair, and a slight notch in their right ear", 0, 121, 0, 0, 0, 0, 0, 0, 0, 0);
+    (Null, "verysecure", "Magical Mr. Mistofelees", True, True, 10, 10, 10, 50, "Cat", "Mage", True, "Felix has lived in the inn since he showed up as a young cat. He came in one morning when the innkeeper opened the door, and never left.", "A black and white cat with short hair, and a slight notch in their right ear", 0, 121, 0, 0, 0, 0, 0, 0, 0, 0),
+    (Null, "superPass", "Grizibella", True, True, 10, 10, 10, 50, "Cat", "Mage", True, "Grizibella has been in the forest since 1981, and keeps a very fine, if unusual, house there. She will occassionally talk to travelers.", "A humanoid cat person covered with long matted gray hair that seems to have fallen out in tufts from a few locations.", 0,0,0,0,0,0,0,0,0,0);
 
 
 
-INSERT INTO inventories (locator_id, item_id, quantity, currentlyEquipped)
-VALUES ("P1", 121, 1, 1),
-("L11", 81, 1, 0),
-("L1", 91, 2, 0),	 
-("L1", 81, 1, 0),
-("P11", 81, 1, 1),
-("P11", 111, 4, 0),
-("P11", 91, 1, 0);
+INSERT INTO inventories (locator_id, itemId, quantity, currentlyEquipped)
+VALUES ("P1", 61, 1, 1),
+("L1102", 1, 1, 0),
+("P11", 11, 2, 0),	 
+("P11", 1, 1, 0),
+("L1101", 1, 1, 1),
+("L1101", 31, 4, 0),
+("L1102", 11, 1, 0);
+
