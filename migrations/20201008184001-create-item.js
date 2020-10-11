@@ -9,20 +9,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       itemName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       category: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       inventory: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0
       },
       inventorySize: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(750),
         defaultValue: 0
       },
       headSlot: {

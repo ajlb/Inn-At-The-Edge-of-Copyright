@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   weather.init({
-    weatherCondition: DataTypes.STRING,
-    dayDescription: DataTypes.STRING,
-    nightDescription: DataTypes.STRING
+    weatherCondition: DataTypes.STRING(750),
+    dayDescription: DataTypes.STRING(750),
+    nightDescription: DataTypes.STRING(750)
   }, {
     sequelize,
     modelName: 'weather',

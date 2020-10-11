@@ -9,21 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       weatherCondition: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       dayDescription: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       nightDescription: {
-        type: Sequelize.STRING
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.STRING(750)
       }
     });
   },
