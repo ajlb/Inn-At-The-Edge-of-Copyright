@@ -30,7 +30,7 @@ INSERT INTO locations
     (id,locationName, dayDescription, nightDescription, exitN, exitE, exitS, exitW, region)
 VALUES
     (1101, "Pumpkin Patch Center", "You are at the heart of a pumpkin patch. Though on the vine, and uncarved, the pumpkins you see out of the corners of your vision seem to be leering evilly at you, like jack-o-lanterns.", Null, 1102, 1103, 1109, 1105, "Halloween"),
-    (1102, "Pumpkin Patch North", "The pumpkin patch stretches to the east, west and south of you. The pumpkins surrounding you are craggy and crooked, and the longer you look at them, the creepier they seem.", Null, 1110, 1106, 1101, 1107, "Halloween"),
+    (1102, "Pumpkin Patch North", "The pumpkin patch stretches to the east, west and south of you. A large, dark hole sits carved into the ground to the north. The pumpkins surrounding you are craggy and crooked, and the longer you look at them, the creepier they seem.", Null, 1110, 1106, 1101, 1107, "Halloween"),
     (1103, "Pumpkin Patch East", "The pumpkin patch stretches to the north, west, and south of you. The pumpkins around you a unnervingly creepy. Uncarverd pumpkins shouldn't be creepy, should they?", Null, 1106, Null, 1109, 1101, "Halloween"),
     (1104, "Pumpkin Patch South", "The pumpkin patch stretches to the east, west, and north of you. The patch seems dark somehow even in the day. Shadows seem to take the shape of creatures watching you.", Null, Null, 1109, Null, 1108, "Halloween"),
     (1105, "Pumpkin Patch West", "The pumpkin patch stretches to the north, east, and south of you. The pumpkins clustered around you seem to be pressing closer, making what should be an open field feel alarmingly claustrophobic.", Null, 1107, 1101, 1108, Null, "Halloween"),
@@ -38,16 +38,16 @@ VALUES
     (1107, "Pumpkin Patch Northwest", "The pumpkin patch surrounds you to the east and south, and the path to the Haunted Forest beckons toward the north. The pumpkin patch radiates a sinister feeling, and the path north feels equally foreboding. You feel trapped.", Null, 1112, 1102, 1105, Null, "Halloween"),
     (1109, "Pumpkin Patch Entrance", "The pumpkin patch surrounds you to the north and west. and you can see the inn to the south. The pumpkins closest to the inn look plump and cheery, but as the patch grows more dense to the northwest, it seems to emanate menace and warning.", Null, 1101, 1103, 1011, 1104, "Halloween"),
     (1108, "Pumpkin Patch Southwest", "The pumpkin patch surrounds you to the north and east, leaving you corned against a tall fence backed by dark and impenetrable forest. The patch seems darker than you think the day should be, and what should be ordinary pumpkins are radiating ominous threat. Your pulse starts to quicken as your instincts pick up on predatory intent.", Null, 1105, 1104, Null, Null, "Halloween"),
-    (1110, "Rabbit Hole", Null, Null, Null, 1111, 1102, Null, "Halloween"),
-    (1111, "South Tunnel", Null, Null, 1127, Null, Null, 1110, "Halloween"),
+    (1110, "Rabbit Hole", "The dark rabbit hole smells like wet earth as the sunlight from above leaves a spotlight on the ground below you. The tunnel continues to the east.", Null, Null, 1111, 1102, Null, "Halloween"),
+    (1111, "South Tunnel", "The tunnel stretches to the north and west. To the north, the damp earth of the tunnel gives way to solid gray stone.", "The tunnel stretches to the north and west. To the north, the damp earth of the tunnel gives way to solid gray stone.", 1127, Null, Null, 1110, "Halloween"),
     (1112, "Path to Haunted Forest", Null, Null, 1123, Null, 1107, Null, "Halloween"),
-    (1127, "West Tunnel", Null, Null, 1118, Null, 1111, 1113, "Halloween"),
-    (1113, "East Tunnel", Null, Null, Null, 1127, 1114, 1115, "Halloween"),
-    (1114, "Cavetown Ruins", Null, Null, 1113, Null, Null, Null, "Halloween"),
-    (1115, "Crystal Cavern", Null, Null, 1116, 1113, Null, Null, "Halloween"),
-    (1116, "Raging River", Null, Null, Null, 1117, 1115, 1119, "Halloween"),
-    (1117, "Cavern Lake", Null, Null, Null, 1118, Null, 1116, "Halloween"),
-    (1118, "Surface Elevator", Null, Null, Null, 1210, 1127, 1218, "Halloween"),
+    (1127, "West Tunnel", "The tunnel splits, stretching to the north, south, and west.", "The tunnel splits, stretching to the north, south, and west.", 1118, Null, 1111, 1113, "Halloween"),
+    (1113, "East Tunnel", "The tunnel continues to the west. To the south, the ruins of an ancient cavetown lay scattered on the cave floor.", "The tunnel continues to the west. To the south, the ruins of an ancient cavetown lay scattered on the cave floor.", Null, 1127, 1114, 1115, "Halloween"),
+    (1114, "Cavetown Ruins", "The ruins of old wood and stone buildings sit crumbling on the cave floor.", "The ruins of old wood and stone buildings sit crumbling on the cave floor.", 1113, Null, Null, Null, "Halloween"),
+    (1115, "Crystal Cavern", "The Cavern is littered with glowing crystals of various colors that illuminate the cavern walls. The tunnel continues to the north and to the east. To the north you can hear flowing water.", "The Cavern is littered with glowing crystals of various colors that illuminate the cavern walls. The tunnel continues to the north and to the east. To the north you can hear flowing water.", 1116, 1113, Null, Null, "Halloween"),
+    (1116, "Raging River", "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though the slippery rock surrounding the river could lead elsewhere.", "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though the slippery rock surrounding the river could lead elsewhere.", Null, 1117, 1115, 1119, "Halloween"),
+    (1117, "Cavern Lake", "A large, still pool of water glows an eerie shade of blue, the light reflecting off the cavern walls making the ceiling sparkle like the night sky. The tunnel continues to the east and to the west.", "A large, still pool of water glows an eerie shade of blue, the light reflecting off the cavern walls making the ceiling sparkle like the night sky. The tunnel continues to the east and to the west.", Null, 1118, Null, 1116, "Halloween"),
+    (1118, "Surface Elevator", "A rickety wooden elevator sits along the north wall seemlingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.", "A rickety wooden elevator sits along the north wall seemlingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.", 1218, Null, 1127, 1117, "Halloween"),
     (1123, "Tree Tunnel South", Null, Null, 1122, Null, 1112, Null, "Halloween"),
     (1122, "Tree Tunnel North", Null, Null, 1121, Null, 1123, Null, "Halloween"),
     (1121, "Large Clearing", Null, Null, 1124, 1120, 1122, 1126, "Halloween"),
@@ -96,7 +96,14 @@ VALUES
     (1308, "Crater's Rim", Null, Null, Null, Null, Null, 1307, "Mountain"),
     (1309, "Mountain Trail South", Null, Null, 1307, Null, 1310, 1311, "Mountain"),
     (1310, "Cliff's Edge", Null, Null, 1309, Null, 1401, Null, "Mountain"),
-    (1311, "Gentle Slope East", Null, Null, Null, 1309, Null, 1302, "Mountain");
+    (1311, "Gentle Slope East", Null, Null, Null, 1309, Null, 1302, "Mountain"),
+    (1401, "Entrance to Cloud City", Null, Null, 1310, Null, 1402, Null, "Cloud City"),
+    (1402, "Sky Pond", Null, Null, Null, 1401, Null, 1403, "Cloud City"),
+    (1403, "Sky Ruins", Null, Null, Null, 1402, 1404, Null, "Cloud City"),
+    (1404, "Sky Poppy Field", Null, Null, 1403, Null, 1405, Null, "Cloud City"),
+    (1405, "Mystery Button", Null, Null, 1404, 1406, Null, Null, "Cloud City"),
+    (1406, "Sky Fishing Hole", Null, Null, Null, 1407, Null, 1405, "Cloud City"),
+    (1407, "Fairy Godfather's Sky Hut", Null, Null, Null, Null, Null, 1406, "Cloud City");
 
 
 INSERT INTO quests (questTitle, dialogue, hints, XPorItem, reward, completionItem, questToken)
@@ -120,12 +127,12 @@ VALUES ("collar", "a red collar with a silver buckle. It has pictures of fish on
 
 INSERT INTO players (email, `password`, characterName, isLiving, isNPC, WIS, DEX, STR, HP, race, class, inventory, backstory, description, headSlot, neckSlot, torsoSlot, rightHandSlot, leftHandSlot, legsSlot, feetSlot, ringSlot, handsSlot, twoHands)
 VALUES
-    (Null, "verysecure", "Magical Mr. Mistofelees", True, True, 10, 10, 10, 50, "Cat", "Mage", True, "Felix has lived in the inn since he showed up as a young cat. He came in one morning when the innkeeper opened the door, and never left.", "A black and white cat with short hair, and a slight notch in their right ear", 0, 121, 0, 0, 0, 0, 0, 0, 0, 0),
-    (Null, "superPass", "Grizibella", True, True, 10, 10, 10, 50, "Cat", "Mage", True, "Grizibella has been in the forest since 1981, and keeps a very fine, if unusual, house there. She will occassionally talk to travelers.", "A humanoid cat person covered with long matted gray hair that seems to have fallen out in tufts from a few locations.", 0,0,0,0,0,0,0,0,0,0);
+    ("email@email.com", "verysecure", "Magical Mr. Mistofelees", True, True, 10, 10, 10, 50, "Cat", "Mage", True, "Felix has lived in the inn since he showed up as a young cat. He came in one morning when the innkeeper opened the door, and never left.", "A black and white cat with short hair, and a slight notch in their right ear", 0, 121, 0, 0, 0, 0, 0, 0, 0, 0),
+    ("sampleemail@email.com", "superPass", "Grizibella", True, True, 10, 10, 10, 50, "Cat", "Mage", True, "Grizibella has been in the forest since 1981, and keeps a very fine, if unusual, house there. She will occassionally talk to travelers.", "A humanoid cat person covered with long matted gray hair that seems to have fallen out in tufts from a few locations.", 0,0,0,0,0,0,0,0,0,0);
 
 
 
-INSERT INTO inventories (locator_id, itemId, quantity, currentlyEquipped)
+INSERT INTO inventories (locator_id, item_id, quantity, currentlyEquipped)
 VALUES ("P1", 61, 1, 1),
 ("L1102", 1, 1, 0),
 ("P11", 11, 2, 0),	 

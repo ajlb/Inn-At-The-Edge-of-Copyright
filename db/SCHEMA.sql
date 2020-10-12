@@ -2,7 +2,7 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`players` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(320) NOT NULL,
   `password` VARCHAR(200) NOT NULL,
-  `characterName` VARCHAR(20) NOT NULL,
+  `characterName` VARCHAR(45) NOT NULL,
   `isLiving` TINYINT NOT NULL DEFAULT 1,
   `isNPC` TINYINT NOT NULL DEFAULT 0,
   `WIS` INT NOT NULL DEFAULT 0,
