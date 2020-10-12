@@ -346,6 +346,12 @@ function speak(value){
   publishMessage(value);
 }
 
+//function react to input beginning with emote command
+function emote(value){
+  value = takeTheseOffThat(actionCalls.emote, value);
+  publishDescription(value);
+}
+
 
 function wearItem(value){
   value = takeTheseOffThat(actionCalls.wear, value);
@@ -499,6 +505,8 @@ $("#submit-button").click(function(event) {
     wearItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.remove)){
     removeItem(value);
+  } else if (doesThisStartWithThose(value, actionCalls.emote)){
+    emote(value);
   }
 });
 
