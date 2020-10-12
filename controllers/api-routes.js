@@ -7,25 +7,30 @@ const Op = Sequelize.Op;
 const passport = require("../config/passport");
 
 module.exports = function (app) {
-    //log in
-    app.post("/api/login", passport.authenticate("local"), function(req, res) {
-        console.log("You signed in!");
-        res.json(req.player);
-    });
 
+      // Route for getting some data about our user to be used client side
+  app.get("/api/user_data", function(req, res) {
+    if (!req.user) {
+      // The user is not logged in, send back an empty object
+      res.json({});
+    } else {
+      // Otherwise send back the user's email and id
+      // Sending back a password, even a hashed password, isn't a good idea
+      res.json({
+        characterName: req.user.characterName
+      });
+    }
+  });
+
+  
     //sign up
-    app.post("/api/signup", function(req, res){
+    app.post("/signup", function(req, res){
         models.player.create(req.body).then(function(){
             console.log("You signed up!");
-            res.status(307).json(data);
+            res.redirect(307, "/play");
         }).catch(e=>res.status(401).json(e))
     });
 
-    //log out
-    app.get("/logout", function(req, res){
-        req.logout();
-        console.log("Logged out?");
-    });
 
     //find location based on id
     app.get("/api/locations/:id", function(req, res){
