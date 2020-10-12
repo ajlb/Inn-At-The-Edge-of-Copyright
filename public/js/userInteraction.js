@@ -10,10 +10,7 @@ let userRecentCommands = [];
 let actionData = {};
 let actionCalls = {};
 let currentUserId;
-//for log on purposes
-let loggedIn = false;
-let characterEntered = false;
-let passwordEntered = false;
+
 
 
 //HELPER FUNCTIONS
@@ -114,38 +111,7 @@ function createCharacter(){
   logThis("I'm not made yet!");
 }
 
-//respond to user log in text
-function respondToLogin(value){
-  if (!(characterEntered)){
-    if (value.toLowerCase() === "sign up"){
-      createCharacter();
-    } else {
-      characterEntered = value;
-      logThis("Please enter your password: ")
-    }
-  } else if (!(passwordEntered)){
-    passwordEntered = value;
-    getPlayerData(characterEntered).then(function(data){
-      try {
-        if (data.password === passwordEntered){
-          logThis(" ");
-          logThis("Welcome to the Inn!");
-          logThis(" ");
-          loggedIn = true;
-          createConnection(characterEntered);
-          newLocation("start");
-          setActionCalls();
-          setUserInventoryId();
-        } else {
-          logThis("That didn't match the password we have on record. For help recovering your account, please email us at innattheedgeofcopyright@gmail.com");
-        }
-      } catch (e) {
-        console.log(e);
-        logThis("I'm sorry, we have no record of that character. For help recovering your account, please email us at innattheedgeofcopyright@gmail.com")
-      }
-    });
-  }
-}
+
 
   
 //get user Id from pubnub, then put into string for searching inventories
@@ -331,14 +297,7 @@ function speak(value){
 //HIGH LEVEL FUNCTIONS
 
 
-//LOG IN
-function userLogin(){
-  return new Promise(function(resolve, reject){
-    logThis("Welcome to the Inn At The Edge of Copyright!");
-    logThis(" ")
-    logThis("Please enter you character name, or type 'sign up' if you don't have a character.");
-  })
-}
+
 
 
 
@@ -410,9 +369,7 @@ $("#submit-button").click(function(event) {
   $(".chat-input").val("");
   userRecentCommands.push(value);
 
-  if (!(loggedIn)){
-    respondToLogin(value);
-  } else if (doesThisStartWithThose(value, actionCalls.move)) {
+  if (doesThisStartWithThose(value, actionCalls.move)) {
     parseMove(value);
   } else if (doesThisStartWithThose(value, actionCalls.inventory)){
     parseInventory("Player");
@@ -433,26 +390,5 @@ $("#submit-button").click(function(event) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //INITIALIZE PAGE
-
-  userLogin()
+//PAGE INIT
+setActionCalls();

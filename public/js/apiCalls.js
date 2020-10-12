@@ -89,16 +89,25 @@ function addItemToInventory(item, location, amount){
 }
 
 function loginPlayer(characterName, password){
-    $.post("/api/login", {characterName: characterName, password:password}).then(function(data){
-        console.log(data);
+    $.post("/login", {characterName: characterName, password:password}).then(function(data){
+        window.location.replace("/play");
     }).catch(e=>console.log(e));
 }
 
 function signupPlayer(characterName, password){
-    $.post("/api/signup", {
+    $.post("/signup", {
         characterName: characterName,
         password:password
     }).then(function(data){
         console.log(data);
-    }).catch(e=>console.log(e));
+    }).catch(e => console.log(e));
+}
+
+function getPlayerFromLoginInfo(){
+    return new Promise(function(resolve, reject){
+        $.get("/api/user_data").then(function(data) {
+            console.log(data);
+            resolve(data);
+        }).catch(e => reject(e));
+    })
 }
