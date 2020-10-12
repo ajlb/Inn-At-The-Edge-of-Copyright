@@ -34,7 +34,7 @@ function getCharacterName(value){
 
 
 
-
+//interpret user text
 $("#submit-button").click(function(event) {
     event.preventDefault();
 

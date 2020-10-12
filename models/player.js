@@ -25,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
+    level: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
+    },
+    XP: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
     isLiving: DataTypes.BOOLEAN,
     isNPC: DataTypes.BOOLEAN,
     WIS: DataTypes.INTEGER,
