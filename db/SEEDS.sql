@@ -85,7 +85,18 @@ VALUES
     (1216, "Special Item Store", Null, Null, Null, 1220, Null, Null, "Country and Town"),
     (1217, "Town North", Null, Null, Null, Null, 1214, 1219, "Country and Town"),
     (1218, "Haunted Shack", Null, Null, Null, Null, Null, 1118, "Country and Town"),
-    (1219, "Wishing Well", Null, Null, Null, 1217, Null, 1218, "Country and Town");
+    (1219, "Wishing Well", Null, Null, Null, 1217, Null, 1218, "Country and Town"),
+    (1301, "Steep Hike West", Null, Null, Null, 1303, Null, 1205, "Mountain"),
+    (1302, "Gentle Slope West", Null, Null, Null, 1311, Null, 1206, "Mountain"),
+    (1303, "Steep Hike East", Null, Null, Null, 1304, 1306, 1301, "Mountain"),
+    (1304, "Mountain Trail North", Null, Null, 1305, Null, 1307, 1303, "Mountain"),
+    (1305, "Girl's Bathroom", Null, Null, Null, Null, 1304, Null, "Mountain"),
+    (1306, "Waterfall", Null, Null, 1303, Null, Null, Null, "Mountain"),
+    (1307, "Mountain Trail Center", Null, Null, 1304, 1308, 1309, Null, "Mountain"),
+    (1308, "Crater's Rim", Null, Null, Null, Null, Null, 1307, "Mountain"),
+    (1309, "Mountain Trail South", Null, Null, 1307, Null, 1310, 1311, "Mountain"),
+    (1310, "Cliff's Edge", Null, Null, 1309, Null, 1401, Null, "Mountain"),
+    (1311, "Gentle Slope East", Null, Null, Null, 1309, Null, 1302, "Mountain");
 
 
 INSERT INTO quests (questTitle, dialogue, hints, XPorItem, reward, completionItem, questToken)
