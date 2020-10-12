@@ -66,7 +66,26 @@ VALUES
     (1010, "Library", Null, Null, Null, 1003, 1004, Null, "The Inn"),
     (1005, "Front Yard", Null, Null, 1003, 1201, 1006, 1004, "The Inn"),
     (1006, "Shed", Null, Null, 1005, Null, Null, Null, "The Inn"),
-    (1001, "Start Room", Null, Null, Null, 1002, Null, Null, "The Inn");
+    (1001, "Start Room", Null, Null, Null, 1002, Null, Null, "The Inn"),
+    (1201, "Crossroads", Null, Null, 1203, 1204, 1202, 1105, "Country and Town"),
+    (1203, "North Country Lane", Null, Null, 1208, Null, 1201, Null, "Country and Town"),
+    (1202, "South Country Lane", Null, Null, 1201, Null, 1207, Null, "Country and Town"),
+    (1204, "Meadow Path", Null, Null, Null, 1205, Null, 1201, "Country and Town"),
+    (1205, "Creek Bridge", Null, Null, Null, 1301, 1206, 1204, "Country and Town"),
+    (1206, "Pond's Edge", Null, Null, 1205, 1302, Null, Null, "Country and Town"),
+    (1207, "Sky Cannon", Null, Null, 1202, 1403, Null, Null, "Country and Town"),
+    (1208, "Town Southwest", Null, Null, 1220, 1209, 1203, Null, "Country and Town"),
+    (1209, "Town Southeast", Null, Null, 1211, Null, Null, 1208, "Country and Town"),
+    (1210, "Item Store", Null, Null, Null, 1212, Null, 1220, "Country and Town"),
+    (1211, "Town East", Null, Null, 1214, Null, 1209, 1212, "Country and Town"),
+    (1212, "Garden", Null, Null, Null, 1211, Null, 1210, "Country and Town"),
+    (1213, "Town Northwest", Null, Null, Null, 1214, 1220, 1216, "Country and Town"),
+    (1214, "Town Northeast", Null, Null, 1217, 1215, 1211, 1213, "Country and Town"),
+    (1215, "River's Edge", Null, Null, Null, Null, Null, 1214, "Country and Town"),
+    (1216, "Special Item Store", Null, Null, Null, 1220, Null, Null, "Country and Town"),
+    (1217, "Town North", Null, Null, Null, Null, 1214, 1219, "Country and Town"),
+    (1218, "Haunted Shack", Null, Null, Null, Null, Null, 1118, "Country and Town"),
+    (1219, "Wishing Well", Null, Null, Null, 1217, Null, 1218, "Country and Town");
 
 
 INSERT INTO quests (questTitle, dialogue, hints, XPorItem, reward, completionItem, questToken)
