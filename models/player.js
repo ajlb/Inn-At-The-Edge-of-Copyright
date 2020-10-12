@@ -1,4 +1,5 @@
 'use strict';
+const bcrypt = require("bcryptjs");
 const {
   Model
 } = require('sequelize');
@@ -14,21 +15,36 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   player.init({
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    characterName: DataTypes.STRING,
+    email: DataTypes.STRING(750),
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    characterName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    level: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
+    },
+    XP: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
     isLiving: DataTypes.BOOLEAN,
     isNPC: DataTypes.BOOLEAN,
     WIS: DataTypes.INTEGER,
     DEX: DataTypes.INTEGER,
     STR: DataTypes.INTEGER,
     HP: DataTypes.INTEGER,
-    race: DataTypes.STRING,
-    class: DataTypes.STRING,
-    abilities: DataTypes.STRING,
+    race: DataTypes.STRING(750),
+    class: DataTypes.STRING(750),
+    abilities: DataTypes.STRING(750),
     inventory: DataTypes.INTEGER,
-    backstory: DataTypes.STRING,
-    description: DataTypes.STRING,
+    backstory: DataTypes.STRING(750),
+    description: DataTypes.STRING(750),
     headSlot: {
       type: DataTypes.BOOLEAN,
       DefaultValue: 0,
@@ -73,6 +89,14 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'player',
     timestamps: false
+  });
+
+  player.prototype.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.password);
+  };
+
+  player.addHook("beforeCreate", function(user) {
+    user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
   });
   return player;
 };

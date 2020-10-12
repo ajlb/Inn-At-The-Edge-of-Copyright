@@ -9,10 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       raceName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       STRbonus: {
         type: Sequelize.INTEGER

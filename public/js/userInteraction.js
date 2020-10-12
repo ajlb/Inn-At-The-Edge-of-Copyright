@@ -12,6 +12,7 @@ let actionCalls = {};
 let currentUserId;
 
 
+
 //HELPER FUNCTIONS
 
 //determine if a string begins with any of an array of other strings
@@ -75,25 +76,29 @@ function describeThis(text) {
 
 function findMatchByItemNameAndChangeQuantity(value, data, target, amount){
   return new Promise(function(resolve, reject){
+    let wasItIn;
+    if (target.startsWith("P") && (amount > 0)){
+      logThis(`You pick up ${amount} ${pluralize(value, amount)}.`)
+    } else if (target.startsWith("L") && (amount > 0)){
+      logThis(`You drop ${Math.abs(amount)} ${pluralize(value, Math.abs(amount))}.`)
+    }
     for (const thing of data){
       //increase quantity if match found
       if (thing.item.itemName.toLowerCase() === value.toLowerCase()){
         changeItemQuantity(thing.itemId, target, amount);
         scrubInventory();
+        wasItIn = true;
         resolve(true);
       }
-      console.log(target);
-      if (target.startsWith("P") && (amount > 0)){
-        logThis(`You pick up ${amount} ${pluralize(value, amount)}.`)
-      } else if (target.startsWith("P") && (amount < 0)){
-        console.log("PLAYER DROP");
-        logThis(`You drop ${Math.abs(amount)} ${pluralize(value, Math.abs(amount))}.`)
-      }
     }
+    resolve(false);
   });
 }
 
-
+//Scrolling
+function updateScroll(){
+  $(".message-output-box").scrollTop($(".message-output-box")[0].scrollHeight)  
+}
 
 
 
@@ -102,10 +107,12 @@ function findMatchByItemNameAndChangeQuantity(value, data, target, amount){
 
 //MID LEVEL FUNCTIONS
 
-//Scrolling
-function updateScroll(){
-    $(".message-output-box").scrollTop($(".message-output-box")[0].scrollHeight)  
+function createCharacter(){
+  logThis("I'm not made yet!");
 }
+
+
+
   
 //get user Id from pubnub, then put into string for searching inventories
 function setUserInventoryId(){
@@ -219,6 +226,8 @@ function parseInventory(PlayerLocationItemID){
 function getItem(value){
   value = takeTheseOffThat(actionCalls.get, value);
   value = takeTheseOffThat(ARTICLES, value);
+  let itemId;
+  findItemId(value).then(data=>itemId=data.id);
   //check if item is in location
   getInventory(currentLocationId).then(function(data){
    findMatchByItemNameAndChangeQuantity(value, data, currentLocationId, -1).then(function(roomResult){
@@ -226,9 +235,8 @@ function getItem(value){
        //get user inventory to check for item in inv
        getInventory(currentUserId).then(function(userInvData){
          findMatchByItemNameAndChangeQuantity(value, userInvData, currentUserId, 1).then(function(result){
-           if (!(result)){
-             addItemToInventory(value, currentUserId, 1);
-             console.log("added item");
+           if (!result){
+             addItemToInventory(itemId, currentUserId, 1);
              return "added item to Inventory"
            }//if findMatch... returned true for user
          });//end findMatch... for user
@@ -244,7 +252,8 @@ function getItem(value){
 function dropItem(value){
   value = takeTheseOffThat(actionCalls.drop, value);
   value = takeTheseOffThat(ARTICLES, value);
-  
+  let itemId;
+  findItemId(value).then(data=>itemId=data.id);
   //check if user has it
   getInventory(currentUserId).then(function(userInventory){
     findMatchByItemNameAndChangeQuantity(value, userInventory, currentUserId, -1).then(function(userHas){
@@ -252,7 +261,7 @@ function dropItem(value){
         getInventory(currentLocationId).then(function(locationInventory){
           findMatchByItemNameAndChangeQuantity(value, locationInventory, currentLocationId, 1).then(function(locationHad){
             if (!(locationHad)){
-              addItemToInventory(value, currentLocationId, 1);
+              addItemToInventory(itemId, currentLocationId, 1);
             }
           });
         });
@@ -273,7 +282,8 @@ function lookAround(value){
 
 //function react to input beginning with speak command
 function speak(value){
-  console.log(value);
+  value = takeTheseOffThat(actionCalls.speak, value);
+  publishMessage(value);
 }
 
 
@@ -287,13 +297,18 @@ function speak(value){
 //HIGH LEVEL FUNCTIONS
 
 
+
+
+
+
+
 //MOVE TO A NEW ROOM, AND GET A NEW CHAT
 const newLocation = function(direction) {
   let locationIndex;
   // give this chatroom the correct id
   if (direction === "start") {
     //set currentLocation, and pass to pubnub as locationIndex
-    getLocation(1).then(function(data){
+    getLocation(1101).then(function(data){
       currentLocation = data;
       currentLocationId = "L" + currentLocation.id;
       locationIndex = data.locationName.replace(/ /g, "-");
@@ -365,7 +380,7 @@ $("#submit-button").click(function(event) {
   } else if (doesThisStartWithThose(value, actionCalls.drop)){
     dropItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.speak)){
-    
+    speak(value);
   }
 });
 
@@ -375,27 +390,5 @@ $("#submit-button").click(function(event) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //INITIALIZE PAGE
-  newLocation("start");
-  setActionCalls();
-  setUserInventoryId();
+//PAGE INIT
+setActionCalls();

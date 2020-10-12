@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   races.init({
-    raceName: DataTypes.STRING,
-    description: DataTypes.STRING,
+    raceName: DataTypes.STRING(750),
+    description: DataTypes.STRING(750),
     STRbonus: DataTypes.INTEGER,
     DEXbonus: DataTypes.INTEGER,
     WISbonus: DataTypes.INTEGER,

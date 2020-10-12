@@ -17,6 +17,14 @@ module.exports = {
       characterName: {
         type: Sequelize.STRING
       },
+      level: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1
+      },
+      XP: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
       isLiving: {
         type: Sequelize.BOOLEAN
       },

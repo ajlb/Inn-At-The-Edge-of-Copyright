@@ -9,43 +9,43 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       className: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       specialItem: {
         type: Sequelize.INTEGER
       },
       level1Ability: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       level2Ability: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       level3Ability: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       level4Ability: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       level5Ability: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       level6Ability: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       level7Ability: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       level8Ability: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       level9Ability: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       level10Ability: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(750)
       },
       createdAt: {
         allowNull: false,
