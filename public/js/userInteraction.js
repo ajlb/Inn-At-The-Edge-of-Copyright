@@ -1,6 +1,10 @@
+
+
 //VARIABLES
 const DIRECTIONWORDS = {N:["n", "north"], E:["e", "east"], S:["s", "south"], W:["w", "west"]};
 const ARTICLES = ["the", "a", "an"];
+const MULTIPLES = ["set", "pair", "box", "bag"];
+const VOWELS = ["a", "e", "i", "o", "u"];
 let currentLocation; //holds all data for current location
 let currentExits; //easily accessible exit data
 let currentLocationId; //location ID prefixed with "L"
@@ -9,6 +13,7 @@ let isDay = true;
 let userRecentCommands = [];
 let actionData = {};
 let actionCalls = {};
+let currentUserData;
 let currentUserId;
 
 
@@ -18,7 +23,9 @@ let currentUserId;
 //determine if a string begins with any of an array of other strings
 function doesThisStartWithThose(thisThing, those) {
     for (let thing of those) {
-      if (thisThing.toLowerCase().startsWith(thing)) {
+      if (thisThing.toLowerCase().startsWith(thing) && (thing.length > 1)) {
+        return true
+      } else if (thisThing.split(" ")[0].toLowerCase() === thing.toLowerCase()){
         return true
       }
     }
@@ -74,13 +81,46 @@ function describeThis(text) {
   updateScroll();
 }
 
+
+function findItemProperty(data){
+  return new Promise(function(resolve, reject){
+    for (const property in data){
+      if (property.endsWith("Slot") && (data[property] === true)){
+        resolve(property);
+      } 
+    }
+  });
+}
+
+function findMatchByItemName(value, data){
+  return new Promise(function(resolve, reject){
+  for (const item of data){
+    if (item.item.itemName.toLowerCase() === value.toLowerCase()){
+      resolve(true);
+    }
+  }
+  resolve(false);
+  });
+}
+
+function findMatchByItemIdInObject(itemId, data){
+  return new Promise(function(resolve, reject){
+  for (const slot in data){
+    if (data[slot] === itemId){
+      resolve(itemId);
+    }
+  }
+  resolve(false);
+  });
+}
+
 function findMatchByItemNameAndChangeQuantity(value, data, target, amount){
   return new Promise(function(resolve, reject){
     let wasItIn;
     if (target.startsWith("P") && (amount > 0)){
-      logThis(`You pick up ${amount} ${pluralize(value, amount)}.`)
+      logThis(`You pick up ${insertArticleSingleValue(value)}.`)
     } else if (target.startsWith("L") && (amount > 0)){
-      logThis(`You drop ${Math.abs(amount)} ${pluralize(value, Math.abs(amount))}.`)
+      logThis(`You drop ${insertArticleSingleValue(value)}.`)
     }
     for (const thing of data){
       //increase quantity if match found
@@ -101,9 +141,23 @@ function updateScroll(){
 }
 
 
+//only pluralize things that don't start with multiples words
+function pluralizeAppropriateWords(itemName, itemQuantity){
+  if (doesThisStartWithThose(itemName, MULTIPLES)){
+    return itemName;
+  } else{
+    return pluralize(itemName, itemQuantity);
+  }
+}
 
 
-
+function insertArticleSingleValue(value){
+  if (doesThisStartWithThose(value, VOWELS)){
+    return `an ${value}`;
+  } else {
+    return `a ${value}`;
+  }
+}
 
 //MID LEVEL FUNCTIONS
 
@@ -118,6 +172,7 @@ function createCharacter(){
 function setUserInventoryId(){
   thisUser = pubnub.getUUID();
   getPlayerData(thisUser).then(function(data){
+    currentUserData = data;
     currentUserId = "P" + data.id;
   });
 }
@@ -187,12 +242,14 @@ function parseMove(value){
 //react to input beginning with inventory
 function parseInventory(PlayerLocationItemID){
   return new Promise(function(resolve, reject){
+    scrubInventory();
     //Player Inventory
     if (PlayerLocationItemID.toLowerCase() === "player"){
       getInventory(currentUserId).then(function(data){
         let personalInventory = [];
         for (const item of data){
-          personalInventory.push(`${item.quantity} ${pluralize(item.item.itemName, item.quantity)}`);
+          //check if item is in a set, and if not, pluralize
+          personalInventory.push(`${item.quantity} ${pluralizeAppropriateWords(item.item.itemName, item.quantity)}`);
         }
         logThis(`Your inventory: <br> ${personalInventory.join("<br>")}`)
         resolve(personalInventory);
@@ -202,7 +259,8 @@ function parseInventory(PlayerLocationItemID){
       getInventory(currentLocationId).then(function(data){
         let locationInventory = [];
         for (const item of data){
-          locationInventory.push(`${item.quantity} ${pluralize(item.item.itemName, item.quantity)}`);
+          //check if item is in a set, and if not, pluralize
+          locationInventory.push(`${item.quantity} ${pluralizeAppropriateWords(item.item.itemName, item.quantity)}`);
         }
         currentLocationInventory = locationInventory;
         describeThis(`You see: ${currentLocationInventory.join(", ")}`);
@@ -214,7 +272,8 @@ function parseInventory(PlayerLocationItemID){
         //Check this once there's an item with inventory
         let itemInventory = [];
         for (const item of data){
-          itemInventory.push(`${item.quantity} ${pluralize(item.item.itemName, item.quantity)}`)
+          //check if item is in a set, and if not, pluralize
+          itemInventory.push(`${item.quantity} ${pluralizeAppropriateWords(item.item.itemName, item.quantity)}`)
         }
         resolve(itemInventory);
       });
@@ -227,7 +286,7 @@ function getItem(value){
   value = takeTheseOffThat(actionCalls.get, value);
   value = takeTheseOffThat(ARTICLES, value);
   let itemId;
-  findItemId(value).then(data=>itemId=data.id);
+  findItemData(value).then(data=>itemId=data.id);
   //check if item is in location
   getInventory(currentLocationId).then(function(data){
    findMatchByItemNameAndChangeQuantity(value, data, currentLocationId, -1).then(function(roomResult){
@@ -253,7 +312,7 @@ function dropItem(value){
   value = takeTheseOffThat(actionCalls.drop, value);
   value = takeTheseOffThat(ARTICLES, value);
   let itemId;
-  findItemId(value).then(data=>itemId=data.id);
+  findItemData(value).then(data=>itemId=data.id);
   //check if user has it
   getInventory(currentUserId).then(function(userInventory){
     findMatchByItemNameAndChangeQuantity(value, userInventory, currentUserId, -1).then(function(userHas){
@@ -274,6 +333,7 @@ function dropItem(value){
 
 //react to input beginning with look command
 function lookAround(value){
+  scrubInventory();
   logThis(`You look around.`)
   printLocationDescription(currentLocation);
   printExits(currentExits);
@@ -285,6 +345,60 @@ function speak(value){
   value = takeTheseOffThat(actionCalls.speak, value);
   publishMessage(value);
 }
+
+
+function wearItem(value){
+  value = takeTheseOffThat(actionCalls.wear, value);
+  value = takeTheseOffThat(ARTICLES, value);
+
+  getInventory(currentUserId).then(function(data){
+    findMatchByItemName(value, data).then(function(found){
+      if (found){
+        let itemId;
+        findItemData(value).then(function(data){
+          itemId=data.id;
+          findItemProperty(data).then(function(itemSlot){
+            changeIsEquipped(itemId, currentUserId, 1).then(function(changesuccess){
+              console.log(itemSlot);
+              fillPlayerInvSlot(itemId, parseInt(currentUserId.slice(1,currentUserId.length)), itemSlot).then(function(data){
+                logThis(`You put on ${insertArticleSingleValue(value)}.`);
+              })
+            })
+          })
+        });
+      } else {
+        logThis(`You don't have any ${pluralize(value, 4)} to wear!`);
+      }
+    })
+  })
+}
+
+function removeItem(value){
+  value = takeTheseOffThat(actionCalls.remove, value);
+  value = takeTheseOffThat(ARTICLES, value);
+  locateEquippedItems(currentUserData.id).then(function(userEquipment){
+    let itemId;
+    findItemData(value).then(function(itemData){
+      itemId = itemData.id;
+      findMatchByItemIdInObject(itemId, userEquipment).then(function(itemMatch){
+        if (itemMatch){
+          console.log("Found a match");
+          findItemProperty(itemData).then(itemSlot=>{
+            changeIsEquipped(itemId, currentUserId, -1).then(success=>{
+              fillPlayerInvSlot(null, currentUserData.id, itemSlot).then(data=>{
+                logThis(`You take off ${insertArticleSingleValue(value)}.`);
+              })
+            })
+          })
+        } else {
+          logThis(`You don't have ${insertArticleSingleValue(value)} to take off!`);
+        }
+      })
+    })
+  })
+}
+
+
 
 
 
@@ -381,6 +495,10 @@ $("#submit-button").click(function(event) {
     dropItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.speak)){
     speak(value);
+  } else if (doesThisStartWithThose(value, actionCalls.wear)){
+    wearItem(value);
+  } else if (doesThisStartWithThose(value, actionCalls.remove)){
+    removeItem(value);
   }
 });
 

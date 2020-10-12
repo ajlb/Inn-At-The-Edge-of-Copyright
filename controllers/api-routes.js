@@ -69,13 +69,44 @@ module.exports = function (app) {
             console.log(e);
         });
     });
+    //Put item into player equipment slot
+    app.put("/api/playerEquipment/", function(req, res){
+        let wheres = {
+            id: req.body.characterId
+        };
+        let whats = {};
+        whats[req.body.slotName] = req.body.itemId;
+        console.log(whats);
+        models.player.update(whats, { 
+            where: wheres,
+        }).then(function(data){
+            res.json(data);
+        }).catch(function(e){
+            console.log(e);
+        });
+    });
     //Update inventory quantity by amount specified
-    app.put("/api/inventory/", function(req, res){
+    app.put("/api/inventory/quantity/", function(req, res){
         let wheres = {
             locator_id: req.body.locator_id,
             itemId: req.body.itemId
         };
         models.inventory.increment(`quantity`, {
+            where: wheres,
+            by: req.body.change,
+        }).then(function(data){
+            res.json(data);
+        }).catch(function(e){
+            console.log(e);
+        });
+    });
+    //Update inventory currentlyEquipped by amount specified
+    app.put("/api/inventory/isEquipped/", function(req, res){
+        let wheres = {
+            locator_id: req.body.locator_id,
+            itemId: req.body.itemId
+        };
+        models.inventory.increment(`currentlyEquipped`, {
             where: wheres,
             by: req.body.change,
         }).then(function(data){
@@ -111,6 +142,11 @@ module.exports = function (app) {
     });
     app.get("/api/items/:id", function(req, res){
         models.item.findOne({where: {itemName: req.params.id}}).then(function(data){
+            res.json(data);
+        }).catch(e=>console.log(e));
+    });
+    app.get("/api/playerEquipment/:id", function(req, res){
+        models.player.findOne({attributes: ['headSlot', 'neckSlot', 'torsoSlot', 'rightHandSlot', 'leftHandSlot', 'legsSlot', 'feetSlot', 'ringSlot', 'handsSlot', 'twoHands'], where: {id: req.params.id}}).then(function(data){
             res.json(data);
         }).catch(e=>console.log(e));
     })
