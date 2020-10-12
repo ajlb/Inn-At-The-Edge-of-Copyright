@@ -37,7 +37,18 @@ VALUES
     (1106, "Pumpkin Patch Northeast", "The pumpkin patch surrounds you to the west and south. The pumpkins here give of an ineffible feeling of sadness, and you feel tears prick the corners of your eyes.", Null, Null, Null, 1103, 1102, "Halloween"),
     (1107, "Pumpkin Patch Northwest", "The pumpkin patch surrounds you to the east and south, and the path to the Haunted Forest beckons toward the north. The pumpkin patch radiates a sinister feeling, and the path north feels equally foreboding. You feel trapped.", Null, 1112, 1102, 1105, Null, "Halloween"),
     (1109, "Pumpkin Patch Entrance", "The pumpkin patch surrounds you to the north and west. and you can see the inn to the south. The pumpkins closest to the inn look plump and cheery, but as the patch grows more dense to the northwest, it seems to emanate menace and warning.", Null, 1101, 1103, 1011, 1104, "Halloween"),
-    (1108, "Pumpkin Patch Southwest", "The pumpkin patch surrounds you to the north and east, leaving you corned against a tall fence backed by dark and impenetrable forest. The patch seems darker than you think the day should be, and what should be ordinary pumpkins are radiating ominous threat. Your pulse starts to quicken as your instincts pick up on predatory intent.", Null, 1105, 1104, Null, Null, "Halloween");
+    (1108, "Pumpkin Patch Southwest", "The pumpkin patch surrounds you to the north and east, leaving you corned against a tall fence backed by dark and impenetrable forest. The patch seems darker than you think the day should be, and what should be ordinary pumpkins are radiating ominous threat. Your pulse starts to quicken as your instincts pick up on predatory intent.", Null, 1105, 1104, Null, Null, "Halloween"),
+    (1011, "Path to Pumpkin Patch", Null, Null, 1109, 1009, 1103, Null, "The Inn"),
+    (1009, "Inn Garden", Null, Null, Null, 1008, 1007, 1011, "The Inn"),
+    (1008, "Backyard", Null, Null, Null, Null, 1007, 1009, "The Inn"),
+    (1007, "Inn Kitchen", Null, Null, 1009, 1008, 1003, Null, "The Inn"),
+    (1003, "Inn Lobby", Null, Null, 1007, 1005, 1004, 1010, "The Inn"),
+    (1004, "Inn Laundry Room", Null, Null, 1003, 1005, Null, 1010, "The Inn"),
+    (1002, "Hallway", Null, Null, Null, 1003, Null, Null, "The Inn"),
+    (1010, "Library", Null, Null, Null, 1003, 1004, Null, "The Inn"),
+    (1005, "Front Yard", Null, Null, 1003, 1201, 1006, 1004, "The Inn"),
+    (1006, "Shed", Null, Null, 1005, Null, Null, Null, "The Inn"),
+    (1001, "Start Room", Null, Null, Null, 1002, Null, Null, "The Inn");
 
 
 INSERT INTO quests (questTitle, dialogue, hints, XPorItem, reward, completionItem, questToken)
@@ -74,3 +85,4 @@ VALUES ("P1", 61, 1, 1),
 ("L1101", 1, 1, 1),
 ("L1101", 31, 4, 0),
 ("L1102", 11, 1, 0);
+
