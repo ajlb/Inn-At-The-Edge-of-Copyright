@@ -96,7 +96,14 @@ VALUES
     (1308, "Crater's Rim", Null, Null, Null, Null, Null, 1307, "Mountain"),
     (1309, "Mountain Trail South", Null, Null, 1307, Null, 1310, 1311, "Mountain"),
     (1310, "Cliff's Edge", Null, Null, 1309, Null, 1401, Null, "Mountain"),
-    (1311, "Gentle Slope East", Null, Null, Null, 1309, Null, 1302, "Mountain");
+    (1311, "Gentle Slope East", Null, Null, Null, 1309, Null, 1302, "Mountain"),
+    (1401, "Entrance to Cloud City", Null, Null, 1310, Null, 1402, Null, "Cloud City"),
+    (1402, "Sky Pond", Null, Null, Null, 1401, Null, 1403, "Cloud City"),
+    (1403, "Sky Ruins", Null, Null, Null, 1402, 1404, Null, "Cloud City"),
+    (1404, "Sky Poppy Field", Null, Null, 1403, Null, 1405, Null, "Cloud City"),
+    (1405, "Mystery Button", Null, Null, 1404, 1406, Null, Null, "Cloud City"),
+    (1406, "Sky Fishing Hole", Null, Null, Null, 1407, Null, 1405, "Cloud City"),
+    (1407, "Fairy Godfather's Sky Hut", Null, Null, Null, Null, Null, 1406, "Cloud City");
 
 
 INSERT INTO quests (questTitle, dialogue, hints, XPorItem, reward, completionItem, questToken)
