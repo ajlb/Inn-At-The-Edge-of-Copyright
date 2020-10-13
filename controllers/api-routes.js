@@ -167,12 +167,17 @@ module.exports = function (app) {
             res.json("Error")
         });
     });
-    app.put("/api/playerStats", function(req, res){
+    app.put("/api/playerStats/", function(req, res){
         models.player.increment(req.body.stat, {where: {characterName: req.body.characterName}, by: req.body.amount}).then(function(data){
             res.json(data);
         }).catch(e => reject(e));
     });
-    app.put("/api/playerLocation", function(req, res){
+    app.get("/api/playerStats/:id", function(req, res){
+        models.player.findOne({attributes: ['DEX', 'STR', 'WIS', 'HP', 'level', 'xp'], where: {characterName: req.params.id}}).then(function(data){
+            res.json(data);
+        }).catch(e => console.log(e));
+    })
+    app.put("/api/playerLocation/", function(req, res){
         models.player.update({lastLocation: req.body.lastLocation}, {where: {characterName: req.body.characterName}}).then(function(data){
             res.json(data);
         }).catch(e => reject(e));

@@ -404,7 +404,37 @@ function removeItem(value) {
 
 
 
+function parseStats(){
+  getStats(currentUserData.characterName).then(stats => {
+    let title = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0STATS\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
+    let dashes = "---------------------";
+    $("#anchor").before(`<p class="displayed-stat">${title}</p>`);
+    $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
 
+      for (const item in stats) {
+        let string = "\xa0\xa0\xa0\xa0";
+        if (item.length === 3) {
+          string += `\xa0${item}\xa0\xa0\xa0|\xa0\xa0`;
+          statValue = parseInt(stats[item]);
+          $("#anchor").before(`<p class="displayed-stat">${string}<span id="three">${statValue}</span></p>`);
+        } else if (item.length == 2) {
+          string += `\xa0${item.toUpperCase()}\xa0\xa0\xa0\xa0\xa0|\xa0\xa0`;
+          if (item === "HP"){
+            statValue = parseInt(stats[item]);
+            $("#anchor").before(`<p class="displayed-stat">${string}<span id="hp">${statValue}</span></p>`);
+          } else {
+            statValue = parseInt(stats[item]);
+            $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
+          }
+        } else {
+          string += `${item}\xa0\xa0\xa0|\xa0\xa0`;
+          statValue = parseInt(stats[item]);
+          $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
+        }
+      }
+      $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
+  })
+}
 
 
 
@@ -497,7 +527,9 @@ $("#submit-button").click(function (event) {
     speak(value);
   } else if (doesThisStartWithThose(value, actionCalls.look)){
     lookAround(value);
-  } else if (doesThisStartWithThose(value, actionCalls.get)){
+  } else if (juggleTime) {
+    logThis("You should probably stop juggling first.");
+  }else if (doesThisStartWithThose(value, actionCalls.get)){
     getItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.drop)){
     dropItem(value);
@@ -509,6 +541,8 @@ $("#submit-button").click(function (event) {
     emote(value);
   } else if (doesThisStartWithThose(value, actionCalls.juggle)){
     juggle(value);
+  } else if (doesThisStartWithThose(value, actionCalls.stats)){
+    parseStats();
   }
 });
 

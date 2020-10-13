@@ -156,7 +156,7 @@ function incrementStat(stat, amount, characterName){
     return new Promise(function(resolve, reject){
         let queryBody = {stat: stat, amount:amount, characterName:characterName};
         $.ajax({
-            url: "/api/playerStats",
+            url: "/api/playerStats/",
             method: "PUT",
             data:queryBody
         }).catch(e => reject(e));
@@ -165,7 +165,7 @@ function incrementStat(stat, amount, characterName){
 
 function getStats(userName){
     return new Promise(function(resolve, reject){
-        $.get("/api/playerStats" + userName).then(function(data){
+        $.get("/api/playerStats/" + userName).then(function(data){
             resolve(data);
         }).catch(e => reject(e));
     });
@@ -173,11 +173,9 @@ function getStats(userName){
 
 function rememberLocation(userName, locationId){
     return new Promise(function(resolve, reject){
-        console.log(typeof locationId);
         let queryBody = {characterName: userName, lastLocation: parseInt(locationId)};
-        console.log(queryBody);
         $.ajax({
-            url: "/api/playerLocation",
+            url: "/api/playerLocation/",
             method: "PUT",
             data: queryBody,
         }).then(function(data){
