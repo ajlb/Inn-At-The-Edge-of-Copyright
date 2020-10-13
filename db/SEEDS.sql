@@ -24,7 +24,8 @@ VALUES
 ("wear", "You put on a wearable item.", "When you type a wear command followed by a valid item in your inventory, you will put it on if you're not already wearing something there.", "wear, put on, don", "wear green socks", "You put on green socks."),
 ("remove", "You take off an item you are wearing.", "When you type a remove command followed by an item you are wearing, you will take it off and add it to your inventory.", "take off, remove, doff", "remove green socks", "You take off green socks."),
 ("stats", "You call up your character stats.", "When you type stats, you will see a list of your stats and their values.", "stats", Null, Null),
-("juggle", "You juggle something.", "When you type juggle, followed by a number, followed by an appropriate item, you will attempt to juggle that number of those items if you have them.", "juggle", Null, Null);
+("juggle", "You juggle something.", "When you type juggle, followed by a number, followed by an appropriate item, you will attempt to juggle that number of those items if you have them.", "juggle", Null, Null),
+("emote", "you describe an action", "When you type an emote command word followed by text, the result will be displayed to the room as an action of your character.", "/me, emote", "/me leans against a tree", "[Character] leans against a tree");
 
 INSERT INTO locations
     (id,locationName, dayDescription, nightDescription, exitN, exitE, exitS, exitW, region)
