@@ -14,7 +14,7 @@ let actionCalls = {};
 let currentUserData;
 let currentUserId;
 
-
+let position = "standing";
 
 //HELPER FUNCTIONS
 
@@ -223,17 +223,21 @@ function printLocationDescription(locationData) {
 
 //react to input beginning with a move word
 function parseMove(value) {
-  value = takeTheseOffThat(actionCalls.move, value);
-  let success = false;
-  for (const direction in DIRECTIONWORDS) {
-    if (DIRECTIONWORDS[direction].includes(value.toLowerCase())) {
-      success = true;
-      newLocation(direction);
+  if (position === "standing"){
+    value = takeTheseOffThat(actionCalls.move, value);
+    let success = false;
+    for (const direction in DIRECTIONWORDS) {
+      if (DIRECTIONWORDS[direction].includes(value.toLowerCase())) {
+        success = true;
+        newLocation(direction);
+      }
     }
-  }
-  if (!success) {
-    logThis(`You can't move '${value}'! For help, type 'help move'.`)
-    updateScroll();
+    if (!success) {
+      logThis(`You can't move '${value}'! For help, type 'help move'.`)
+      updateScroll();
+    }
+  } else {
+    logThis("You'll need to stand up for that!")
   }
 }
 
@@ -437,8 +441,23 @@ function parseStats(){
 }
 
 
+function sleep(){
+  if (position === "laying"){
+    logThis("You fall into a deep slumber");
+    pubnub.unsubscribeAll();
+    publishDescription("falls asleep.");
+  } else {
+    logThis("You'll need to lie down for that!");
+  }
+}
 
-
+function wake(){
+  publishDescription("opens their eyes");
+  const id = locationIndex;
+  channel = 'oo-chat-' + id;
+  console.log("In Room ID: " + id);
+  pubnub.subscribe({ channels: [channel] });
+}
 
 
 
@@ -543,6 +562,12 @@ $("#submit-button").click(function (event) {
     juggle(value);
   } else if (doesThisStartWithThose(value, actionCalls.stats)){
     parseStats();
+  }else if (doesThisStartWithThose(value, actionCalls.sleep)){
+    sleep();
+  }else if (doesThisStartWithThose(value, actionCalls.wake)){
+    wake();
+  }else if (doesThisStartWithThose(value, actionCalls.position)){
+    sitStandLay();
   }
 });
 
