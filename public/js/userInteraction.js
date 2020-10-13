@@ -14,7 +14,7 @@ let actionCalls = {};
 let currentUserData;
 let currentUserId;
 
-
+let position = "standing";
 
 //HELPER FUNCTIONS
 
@@ -90,14 +90,14 @@ function findItemProperty(data) {
   });
 }
 
-function findMatchByItemName(value, data) {
-  return new Promise(function (resolve, reject) {
-    for (const item of data) {
-      if (item.item.itemName.toLowerCase() === value.toLowerCase()) {
-        resolve(true);
-      }
+function findMatchByItemName(value, data){
+  return new Promise(function(resolve, reject){
+  for (const item of data){
+    if (item.item.itemName.toLowerCase() === value.toLowerCase()){
+      resolve(item);
     }
-    resolve(false);
+  }
+  resolve(false);
   });
 }
 
@@ -165,10 +165,13 @@ function insertArticleSingleValue(value) {
 
 //get user Id from pubnub, then put into string for searching inventories
 function setUserInventoryId() {
-  thisUser = pubnub.getUUID();
-  getPlayerData(thisUser).then(function (data) {
-    currentUserData = data;
-    currentUserId = "P" + data.id;
+  return new Promise(function(resolve, reject){
+    getPlayerData(thisUser).then(function (data) {
+      thisUser = pubnub.getUUID();
+      currentUserData = data;
+      currentUserId = "P" + data.id;
+      resolve(currentUserData);
+  })
   });
 }
 
@@ -220,17 +223,21 @@ function printLocationDescription(locationData) {
 
 //react to input beginning with a move word
 function parseMove(value) {
-  value = takeTheseOffThat(actionCalls.move, value);
-  let success = false;
-  for (const direction in DIRECTIONWORDS) {
-    if (DIRECTIONWORDS[direction].includes(value.toLowerCase())) {
-      success = true;
-      newLocation(direction);
+  if (position === "standing"){
+    value = takeTheseOffThat(actionCalls.move, value);
+    let success = false;
+    for (const direction in DIRECTIONWORDS) {
+      if (DIRECTIONWORDS[direction].includes(value.toLowerCase())) {
+        success = true;
+        newLocation(direction);
+      }
     }
-  }
-  if (!success) {
-    logThis(`You can't move '${value}'! For help, type 'help move'.`)
-    updateScroll();
+    if (!success) {
+      logThis(`You can't move '${value}'! For help, type 'help move'.`)
+      updateScroll();
+    }
+  } else {
+    logThis("You'll need to stand up for that!")
   }
 }
 
@@ -401,11 +408,56 @@ function removeItem(value) {
 
 
 
+function parseStats(){
+  getStats(currentUserData.characterName).then(stats => {
+    let title = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0STATS\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
+    let dashes = "---------------------";
+    $("#anchor").before(`<p class="displayed-stat">${title}</p>`);
+    $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
+
+      for (const item in stats) {
+        let string = "\xa0\xa0\xa0\xa0";
+        if (item.length === 3) {
+          string += `\xa0${item}\xa0\xa0\xa0|\xa0\xa0`;
+          statValue = parseInt(stats[item]);
+          $("#anchor").before(`<p class="displayed-stat">${string}<span id="three">${statValue}</span></p>`);
+        } else if (item.length == 2) {
+          string += `\xa0${item.toUpperCase()}\xa0\xa0\xa0\xa0\xa0|\xa0\xa0`;
+          if (item === "HP"){
+            statValue = parseInt(stats[item]);
+            $("#anchor").before(`<p class="displayed-stat">${string}<span id="hp">${statValue}</span></p>`);
+          } else {
+            statValue = parseInt(stats[item]);
+            $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
+          }
+        } else {
+          string += `${item}\xa0\xa0\xa0|\xa0\xa0`;
+          statValue = parseInt(stats[item]);
+          $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
+        }
+      }
+      $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
+  })
+}
 
 
+function sleep(){
+  if (position === "laying"){
+    logThis("You fall into a deep slumber");
+    pubnub.unsubscribeAll();
+    publishDescription("falls asleep.");
+  } else {
+    logThis("You'll need to lie down for that!");
+  }
+}
 
-
-
+function wake(){
+  publishDescription("opens their eyes");
+  const id = locationIndex;
+  channel = 'oo-chat-' + id;
+  console.log("In Room ID: " + id);
+  pubnub.subscribe({ channels: [channel] });
+}
 
 
 
@@ -421,14 +473,13 @@ function removeItem(value) {
 const newLocation = function (direction) {
   let locationIndex;
   // give this chatroom the correct id
-  if (direction === "start") {
+  if (direction == "start") {
     //set currentLocation, and pass to pubnub as locationIndex
-    getLocation(1101).then(function (data) {
+    getLocation(currentUserData.lastLocation).then(function (data) {
       currentLocation = data;
       currentLocationId = "L" + currentLocation.id;
       locationIndex = data.locationName.replace(/ /g, "-");
       $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
-
       printLocationDescription(currentLocation);
       currentExits = compileExits(currentLocation);
       printExits(currentExits);
@@ -442,6 +493,7 @@ const newLocation = function (direction) {
       currentLocation = data;
       currentExits = compileExits(currentLocation);
       locationIndex = data.locationName.replace(/ /g, "-");
+      rememberLocation(currentUserData.characterName, currentLocation.id);
 
       $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
 
@@ -486,22 +538,36 @@ $("#submit-button").click(function (event) {
 
   if (doesThisStartWithThose(value, actionCalls.move)) {
     parseMove(value);
-  } else if (doesThisStartWithThose(value, actionCalls.inventory)) {
+  } else if (value.toLowerCase() === "stop juggling"){
+    stopJuggling();
+  } else if (doesThisStartWithThose(value, actionCalls.inventory)){
     parseInventory("Player");
-  } else if (doesThisStartWithThose(value, actionCalls.get)) {
-    getItem(value);
-  } else if (doesThisStartWithThose(value, actionCalls.look)) {
-    lookAround(value);
-  } else if (doesThisStartWithThose(value, actionCalls.drop)) {
-    dropItem(value);
-  } else if (doesThisStartWithThose(value, actionCalls.speak)) {
+  } else if (doesThisStartWithThose(value, actionCalls.speak)){
     speak(value);
-  } else if (doesThisStartWithThose(value, actionCalls.wear)) {
+  } else if (doesThisStartWithThose(value, actionCalls.look)){
+    lookAround(value);
+  } else if (juggleTime) {
+    logThis("You should probably stop juggling first.");
+  }else if (doesThisStartWithThose(value, actionCalls.get)){
+    getItem(value);
+  } else if (doesThisStartWithThose(value, actionCalls.drop)){
+    dropItem(value);
+  } else if (doesThisStartWithThose(value, actionCalls.wear)){
     wearItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.remove)) {
     removeItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.emote)) {
     emote(value);
+  } else if (doesThisStartWithThose(value, actionCalls.juggle)){
+    juggle(value);
+  } else if (doesThisStartWithThose(value, actionCalls.stats)){
+    parseStats();
+  }else if (doesThisStartWithThose(value, actionCalls.sleep)){
+    sleep();
+  }else if (doesThisStartWithThose(value, actionCalls.wake)){
+    wake();
+  }else if (doesThisStartWithThose(value, actionCalls.position)){
+    sitStandLay();
   }
 });
 

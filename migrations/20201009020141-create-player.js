@@ -32,13 +32,13 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       WIS: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(4,2)
       },
       DEX: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(4,2)
       },
       STR: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(4,2)
       },
       HP: {
         type: Sequelize.INTEGER
@@ -54,6 +54,10 @@ module.exports = {
       },
       inventory: {
         type: Sequelize.INTEGER
+      },
+      lastLocation: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1003
       },
       backstory: {
         type: Sequelize.STRING(750)
