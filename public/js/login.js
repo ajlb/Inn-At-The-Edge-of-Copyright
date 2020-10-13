@@ -1,4 +1,5 @@
 let characterEntered = false;
+let passwordEntered = false;
 let userRecentCommands = [];
 
 
@@ -24,7 +25,7 @@ function userLogin(){
 //assign value to characterEntered or start character creation
 function getCharacterName(value){
     if (value.toLowerCase() === "sign up"){
-        createCharacter();
+        $.get("/newPlayer");
     } else {
         characterEntered = value;
         logThis("Please enter your password: ")
@@ -46,9 +47,16 @@ $("#submit-button").click(function(event) {
 
     if (!(characterEntered)){
         getCharacterName(value);
+    } else if (!(passwordEntered)){
+        passwordEntered = value;
+        loginPlayer(characterEntered, passwordEntered);
     } else {
-        loginPlayer(characterEntered, value)
-    } 
+        if (value.toLowerCase() === "yes" || value.toLowerCase() === "y"){
+            passwordEntered = false;
+            characterEntered = false;
+            userLogin();
+        }
+    }
 });
   
   

@@ -35,14 +35,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     isLiving: DataTypes.BOOLEAN,
     isNPC: DataTypes.BOOLEAN,
-    WIS: DataTypes.INTEGER,
-    DEX: DataTypes.INTEGER,
-    STR: DataTypes.INTEGER,
+    WIS: DataTypes.DECIMAL(4,2),
+    DEX: DataTypes.DECIMAL(4,2),
+    STR: DataTypes.DECIMAL(4,2),
     HP: DataTypes.INTEGER,
     race: DataTypes.STRING(750),
     class: DataTypes.STRING(750),
     abilities: DataTypes.STRING(750),
     inventory: DataTypes.INTEGER,
+    lastLocation: {
+      type:DataTypes.INTEGER,
+      defaultValue: 1003
+    },
     backstory: DataTypes.STRING(750),
     description: DataTypes.STRING(750),
     headSlot: {
