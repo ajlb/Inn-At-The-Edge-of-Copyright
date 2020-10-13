@@ -164,3 +164,11 @@ function incrementStat(stat, amount, characterName){
         }).catch(e => reject(e));
     });
 }
+
+function getStats(userName){
+    return new Promise(function(resolve, reject){
+        $.get("/api/playerStats" + userName).then(function(data){
+            resolve(data);
+        }).catch(e => reject(e));
+    })
+}

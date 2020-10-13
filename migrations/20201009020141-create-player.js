@@ -55,6 +55,10 @@ module.exports = {
       inventory: {
         type: Sequelize.INTEGER
       },
+      lastLocation: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1003
+      },
       backstory: {
         type: Sequelize.STRING(750)
       },

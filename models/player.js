@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
     class: DataTypes.STRING(750),
     abilities: DataTypes.STRING(750),
     inventory: DataTypes.INTEGER,
+    lastLocation: {
+      type:DataTypes.INTEGER,
+      defaultValue: 1003
+    },
     backstory: DataTypes.STRING(750),
     description: DataTypes.STRING(750),
     headSlot: {

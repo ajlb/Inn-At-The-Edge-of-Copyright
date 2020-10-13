@@ -165,10 +165,13 @@ function insertArticleSingleValue(value) {
 
 //get user Id from pubnub, then put into string for searching inventories
 function setUserInventoryId() {
-  thisUser = pubnub.getUUID();
-  getPlayerData(thisUser).then(function (data) {
-    currentUserData = data;
-    currentUserId = "P" + data.id;
+  return new Promise(function(resolve, reject){
+    getPlayerData(thisUser).then(function (data) {
+      thisUser = pubnub.getUUID();
+      currentUserData = data;
+      currentUserId = "P" + data.id;
+      resolve(currentUserData);
+  })
   });
 }
 
@@ -421,9 +424,9 @@ function removeItem(value) {
 const newLocation = function (direction) {
   let locationIndex;
   // give this chatroom the correct id
-  if (direction === "start") {
+  if (direction == "1003") {
     //set currentLocation, and pass to pubnub as locationIndex
-    getLocation(1101).then(function (data) {
+    getLocation(1003).then(function (data) {
       currentLocation = data;
       currentLocationId = "L" + currentLocation.id;
       locationIndex = data.locationName.replace(/ /g, "-");
