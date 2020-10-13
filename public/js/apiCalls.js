@@ -1,3 +1,4 @@
+const { query } = require("express");
 
 
 function getLocation(locationID) {
@@ -152,4 +153,15 @@ function locateEquippedItems(playerId){
             resolve(data);
         }).catch(e => reject(e));
     })
+}
+
+function incrementStat(stat, amount, characterName){
+    return new Promise(function(resolve, reject){
+        let queryBody = {stat: stat, amount:amount, characterName:characterName};
+        $.ajax({
+            url: "/api/playerStats",
+            method: "PUT",
+            data:queryBody
+        }).catch(e => reject(e));
+    });
 }

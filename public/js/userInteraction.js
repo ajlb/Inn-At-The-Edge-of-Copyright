@@ -96,7 +96,7 @@ function findMatchByItemName(value, data){
   return new Promise(function(resolve, reject){
   for (const item of data){
     if (item.item.itemName.toLowerCase() === value.toLowerCase()){
-      resolve(true);
+      resolve(item);
     }
   }
   resolve(false);
@@ -491,22 +491,26 @@ $("#submit-button").click(function(event) {
 
   if (doesThisStartWithThose(value, actionCalls.move)) {
     parseMove(value);
+  } else if (value.toLowerCase() === "stop juggling"){
+    stopJuggling();
   } else if (doesThisStartWithThose(value, actionCalls.inventory)){
     parseInventory("Player");
-  } else if (doesThisStartWithThose(value, actionCalls.get)){
-    getItem(value);
-  } else if (doesThisStartWithThose(value, actionCalls.look)){
-    lookAround(value);
-  } else if (doesThisStartWithThose(value, actionCalls.drop)){
-    dropItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.speak)){
     speak(value);
+  } else if (doesThisStartWithThose(value, actionCalls.look)){
+    lookAround(value);
+  } else if (doesThisStartWithThose(value, actionCalls.get)){
+    getItem(value);
+  } else if (doesThisStartWithThose(value, actionCalls.drop)){
+    dropItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.wear)){
     wearItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.remove)){
     removeItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.emote)){
     emote(value);
+  } else if (doesThisStartWithThose(value, actionCalls.juggle)){
+    juggle(value);
   }
 });
 

@@ -32,13 +32,13 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       WIS: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(5,2)
       },
       DEX: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(5,2)
       },
       STR: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(5,2)
       },
       HP: {
         type: Sequelize.INTEGER
