@@ -1,4 +1,3 @@
-const { query } = require("express");
 
 
 function getLocation(locationID) {

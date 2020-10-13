@@ -18,7 +18,9 @@ function juggle(value){
             if (typeof num === "number" && num > 2){  
                 getInventory(currentUserId).then(userInventory => {
                     findMatchByItemName(pluralize(target, 1), userInventory).then(matchSuccess=>{
-                        if (matchSuccess && (matchSuccess.quantity >= num)){
+                        if (((currentUserData.DEX*2)/(num**2))<2){
+                            logThis('That may be too many objects for you to juggle.')
+                        } else if (matchSuccess && (matchSuccess.quantity >= num)){
                             publishDescription(`starts juggling ${num} ${target}.`)
                             juggledItem = pluralize(target, 1);
                             setTimeout(continueJuggle(num, target), 4000);
