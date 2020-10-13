@@ -16,16 +16,19 @@ VALUES
 INSERT INTO actions (actionName, commandBriefDescription, commandLongDescription, waysToCall, exampleCall, exampleResult)
 VALUES
 ("get", "Pick up an item", "When you type a get command word followed by an item in your location that is free to pick up, you will add it to your inventory. If the item isn't free to pick up, you will get a result of 'You can't pick that up!'", "get, g, pick up, grab", "You pick up a ", " picks up a "),
-("look", "You look around you.", "When you type a look command word with nothing after it, you will look around your location, seeing the description, possible exits, and items nearby.", "You look around.", "look, l, look around", " glances around."),
+("look", "You look around you.", "When you type a look command word with nothing after it, you will look around your location, seeing the description, possible exits, and items nearby.", "look, l, look around", "You look around.", " glances around."),
 ("drop", "You drop an item", "When you type a drop command word followed by an item in your inventory, you will drop it into your location.", "drop, d, discard", "You drop a ", " drops a "),
 ("inventory", "You check your inventory", "When you type an inventory command, you will recieve a list of all items in your inventory", "inventory, i, check inventory", "inventory", "You have 3 mushrooms, 1 branch, and a frog."),
 ("move", "You move through an exit", "When you type a move command word followed by an available exit from your location, you will move in that direction.", "move, m, go, walk", "You go ", " goes "),
-("speak", "You speak.", "When you type a speak command word followed by other text, your other text will be spoken aloud to your location. For yelling, see yell.", "speak, s, talk, t, chat, c, say", "say Hello!", "character: Hello!"),
+("speak", "You speak.", "When you type a speak command word followed by other text, your other text will be spoken aloud to your location. For yelling, see yell.", "speak, say, talk, chat, s, t, c", "say Hello!", "character: Hello!"),
 ("wear", "You put on a wearable item.", "When you type a wear command followed by a valid item in your inventory, you will put it on if you're not already wearing something there.", "wear, put on, don", "wear green socks", "You put on green socks."),
 ("remove", "You take off an item you are wearing.", "When you type a remove command followed by an item you are wearing, you will take it off and add it to your inventory.", "take off, remove, doff", "remove green socks", "You take off green socks."),
 ("stats", "You call up your character stats.", "When you type stats, you will see a list of your stats and their values.", "stats", Null, Null),
 ("juggle", "You juggle something.", "When you type juggle, followed by a number, followed by an appropriate item, you will attempt to juggle that number of those items if you have them.", "juggle", Null, Null),
-("emote", "you describe an action", "When you type an emote command word followed by text, the result will be displayed to the room as an action of your character.", "/me, emote", "/me leans against a tree", "[Character] leans against a tree");
+("emote", "you describe an action", "When you type an emote command word followed by text, the result will be displayed to the room as an action of your character.", "/me, emote", "/me leans against a tree", "[Character] leans against a tree"),
+("sleep", "You go to sleep", "When you type a sleep command while lying down, you will go to sleep and recover HP, but you will not be able to see or hear around you. If you are attacked, you will automatically wake up.", "go to sleep, sleep", "sleep", "You fall into a deep slumber."),
+("wake", "You wake up", "When you type a wake command while sleeping, you will wake up.", "wake up, wake, awake, awaken", "wake up", "You wake up."),
+("position", "You change position.", "When you type a position command, you will move from your current position into the new one.", "stand up, stand, sit down, sit, lay down, lay, lie down, lie", "stand up", "You stand up.");
 
 INSERT INTO locations
     (id,locationName, dayDescription, nightDescription, exitN, exitE, exitS, exitW, region)
@@ -41,7 +44,7 @@ VALUES
     (1108, "Pumpkin Patch Southwest", "The pumpkin patch surrounds you to the north and east, leaving you corned against a tall fence backed by dark and impenetrable forest. The patch seems darker than you think the day should be, and what should be ordinary pumpkins are radiating ominous threat. Your pulse starts to quicken as your instincts pick up on predatory intent.", Null, 1105, 1104, Null, Null, "Halloween"),
     (1110, "Rabbit Hole", "The dark rabbit hole smells like wet earth as the sunlight from above leaves a spotlight on the ground below you. The tunnel continues to the east.", Null, Null, 1111, 1102, Null, "Halloween"),
     (1111, "South Tunnel", "The tunnel stretches to the north and west. To the north, the damp earth of the tunnel gives way to solid gray stone.", "The tunnel stretches to the north and west. To the north, the damp earth of the tunnel gives way to solid gray stone.", 1127, Null, Null, 1110, "Halloween"),
-    (1112, "Path to Haunted Forest", Null, Null, 1123, Null, 1107, Null, "Halloween"),
+    (1112, "Path to Haunted Forest", "The Pumpkin Patch to the south gives way to a long dark tree tunnel to the north.", "The Pumpkin Patch to the south gives way to a long dark tree tunnel to the north.", 1123, Null, 1107, Null, "Halloween"),
     (1127, "West Tunnel", "The tunnel splits, stretching to the north, south, and west.", "The tunnel splits, stretching to the north, south, and west.", 1118, Null, 1111, 1113, "Halloween"),
     (1113, "East Tunnel", "The tunnel continues to the west. To the south, the ruins of an ancient cavetown lay scattered on the cave floor.", "The tunnel continues to the west. To the south, the ruins of an ancient cavetown lay scattered on the cave floor.", Null, 1127, 1114, 1115, "Halloween"),
     (1114, "Cavetown Ruins", "The ruins of old wood and stone buildings sit crumbling on the cave floor.", "The ruins of old wood and stone buildings sit crumbling on the cave floor.", 1113, Null, Null, Null, "Halloween"),
@@ -54,9 +57,9 @@ VALUES
     (1121, "Large Clearing", "The large clearing you've entered is interrupted by the dark treeline at its perimeter. The path splits four ways, leading north, south, east, and west.", "The large clearing you've entered is interrupted by the dark treeline at its perimeter. The path splits four ways, leading north, south, east, and west.", 1124, 1120, 1122, 1126, "Halloween"),
     (1120, "The Seven Stones", "The small clearing you've entered is littered with small pebbles. Seven large stones surround you in a neat circle covered in stranger marks and symbols. To path you are on continues to the north and to the west.", "The small clearing you've entered is littered with small pebbles. Seven large stones surround you in a neat circle covered in stranger marks and symbols. To path you are on continues to the north and to the west.", 1119, Null, Null, 1121, "Halloween"),
     (1119, "Murky Pond", "You've found yourself on the shore of a murky green pond of which no source of water can be seen. Dark trees line the far side of the pond. A path of dirt expands to the south.", "You've found yourself on the shore of a murky green pond of which no source of water can be seen. Dark trees line the far side of the pond. A path of dirt expands to the south.", Null, Null, 1120, Null, "Halloween"),
-    (1124, "The Elder Trees", Null, Null, Null, 1125, 1121, Null, "Halloween"),
-    (1125, "The Great Tree", Null, Null, Null, Null, Null, 1124, "Halloween"),
-    (1126, "Crazy Cat Lady's Shack", Null, Null, Null, 1121, Null, Null, "Halloween"),
+    (1124, "The Elder Trees", "The grove of trees surrounding you is full of large, ancient trees that loom over you. They seem to be keeping you under a watchful eye. The path continues to the west and to the south.", "The grove of trees surrounding you is full of large, ancient trees that loom over you. They seem to be keeping you under a watchful eye. The path continues to the west and to the south.", Null, 1125, 1121, Null, "Halloween"),
+    (1125, "The Great Tree", "The thick dark fog shrouding your environment slowly parts to reveal an impossibly large tree leering above you. The mist in the air seems to whisper about the impossible age of the great tree for the tree will outlive us all. Upon its wide trunk, you can makeup an ancient face that seems eerily familiar...", "The thick dark fog shrouding your environment slowly parts to reveal an impossibly large tree leering above you. The mist in the air seems to whisper about the impossible age of the great tree for the tree will outlive us all. Upon its wide trunk, you can makeup an ancient face that seems eerily familiar...", Null, Null, Null, 1124, "Halloween"),
+    (1126, "Crazy Cat Lady's Shack", "Although worn on the outside, the inside of the shack you've entered is finely decorated and well-kept, though quite flashy and a bit out-dated. In the corner next to the crackling fireplace you notice a slightly-grizzled looking cat-like person rocking their chair back and forth.", "Although worn on the outside, the inside of the shack you've entered is finely decorated and well-kept, though quite flashy and a bit out-dated. In the corner next to the crackling fireplace you notice a slightly-grizzled looking cat-like person rocking their chair back and forth.", Null, 1121, Null, Null, "Halloween"),
     (1011, "Path to Pumpkin Patch", Null, Null, 1109, 1009, 1103, Null, "The Inn"),
     (1009, "Inn Garden", Null, Null, Null, 1008, 1007, 1011, "The Inn"),
     (1008, "Backyard", Null, Null, Null, Null, 1007, 1009, "The Inn"),
@@ -113,17 +116,17 @@ VALUES ("Find my missing sock.", "I'm pretty sure I put it in the washing machin
 
 INSERT INTO items (itemName, `description`, category, torsoSlot, legsSlot, feetSlot)
 VALUES
-("branch", "a dry, brown branch", "nature", Null, Null, Null),
-("mushroom", "a small, white mushroom with a round top", "nature", Null, Null, Null),
-("sock", "a lone argyle sock, blue and yellow", "household", Null, Null, Null),
-("pumpkin pie", "a whole pumpkin pie! It smells like autumn", "food", Null, Null, Null),
-("collar", "A red collar with a silver buckle. It has pictures of fish on it.", "clothing", Null, Null, Null),
-("leather gloves", "nice leather gloves. They look protective.", "armor", Null, Null, Null);
-("blue shirt", "a simple blue linen shirt, good for warm weather", "clothing", 1, Null, Null),
-("fancy shirt", "a fancy white linen shirt with detail in many colors along all the edges", "clothing", 1, Null, Null),
-("brown pants", "a pair of simple brown linen pants, excellent for warm weather", "clothing", Null, 1, Null),
-("fancy slacks", "a pair of fancy pressed black slacks, made of fine wool", "clothing", Null, 1, Null),
-("green socks", "a pair of green cotton socks", "clothing", Null, Null, 1);
+("branch", "a dry, brown branch", "nature", 0, 0, 0),
+("mushroom", "a small, white mushroom with a round top", "nature", 0, 0, 0),
+("sock", "a lone argyle sock, blue and yellow", "household", 0, 0, 0),
+("pumpkin pie", "a whole pumpkin pie! It smells like autumn", "food", 0, 0, 0),
+("collar", "A red collar with a silver buckle. It has pictures of fish on it.", "clothing", 0, 0, 0),
+("leather gloves", "nice leather gloves. They look protective.", "armor", 0, 0, 0),
+("blue shirt", "a simple blue linen shirt, good for warm weather", "clothing", 1, 0, 0),
+("fancy shirt", "a fancy white linen shirt with detail in many colors along all the edges", "clothing", 1, 0, 0),
+("brown pants", "a pair of simple brown linen pants, excellent for warm weather", "clothing", 0, 1, 0),
+("fancy slacks", "a pair of fancy pressed black slacks, made of fine wool", "clothing", 0, 1, 0),
+("green socks", "a pair of green cotton socks", "clothing", 0, 0, 1);
 
 UPDATE items SET HPeffect = 10 WHERE itemName = "leather gloves";
 
