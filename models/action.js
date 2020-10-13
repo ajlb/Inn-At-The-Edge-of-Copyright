@@ -15,9 +15,6 @@ module.exports = (sequelize, DataTypes) => {
   };
   action.init({
     actionName: DataTypes.STRING(750),
-    function: DataTypes.STRING(750),
-    selfDescription: DataTypes.STRING(750),
-    roomDescription: DataTypes.STRING(750),
     commandBriefDescription: DataTypes.STRING(750),
     commandLongDescription: DataTypes.STRING(750),
     waysToCall: DataTypes.STRING(750),
