@@ -424,14 +424,13 @@ function removeItem(value) {
 const newLocation = function (direction) {
   let locationIndex;
   // give this chatroom the correct id
-  if (direction == "1003") {
+  if (direction == "start") {
     //set currentLocation, and pass to pubnub as locationIndex
-    getLocation(1003).then(function (data) {
+    getLocation(currentUserData.lastLocation).then(function (data) {
       currentLocation = data;
       currentLocationId = "L" + currentLocation.id;
       locationIndex = data.locationName.replace(/ /g, "-");
       $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
-
       printLocationDescription(currentLocation);
       currentExits = compileExits(currentLocation);
       printExits(currentExits);
@@ -445,6 +444,7 @@ const newLocation = function (direction) {
       currentLocation = data;
       currentExits = compileExits(currentLocation);
       locationIndex = data.locationName.replace(/ /g, "-");
+      rememberLocation(currentUserData.characterName, currentLocation.id);
 
       $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
 

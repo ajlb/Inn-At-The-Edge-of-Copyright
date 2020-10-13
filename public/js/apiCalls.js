@@ -1,5 +1,3 @@
-
-
 function getLocation(locationID) {
     return new Promise(function(resolve, reject){
         $.get("/api/locations/" + locationID, function(data){
@@ -170,5 +168,20 @@ function getStats(userName){
         $.get("/api/playerStats" + userName).then(function(data){
             resolve(data);
         }).catch(e => reject(e));
-    })
+    });
+}
+
+function rememberLocation(userName, locationId){
+    return new Promise(function(resolve, reject){
+        console.log(typeof locationId);
+        let queryBody = {characterName: userName, lastLocation: parseInt(locationId)};
+        console.log(queryBody);
+        $.ajax({
+            url: "/api/playerLocation",
+            method: "PUT",
+            data: queryBody,
+        }).then(function(data){
+            resolve(data);
+        }).catch(e => reject(e));
+    });
 }
