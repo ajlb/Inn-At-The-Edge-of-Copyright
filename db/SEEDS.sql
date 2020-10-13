@@ -116,17 +116,17 @@ VALUES ("Find my missing sock.", "I'm pretty sure I put it in the washing machin
 
 INSERT INTO items (itemName, `description`, category, torsoSlot, legsSlot, feetSlot)
 VALUES
-("branch", "a dry, brown branch", "nature", Null, Null, Null),
-("mushroom", "a small, white mushroom with a round top", "nature", Null, Null, Null),
-("sock", "a lone argyle sock, blue and yellow", "household", Null, Null, Null),
-("pumpkin pie", "a whole pumpkin pie! It smells like autumn", "food", Null, Null, Null),
-("collar", "A red collar with a silver buckle. It has pictures of fish on it.", "clothing", Null, Null, Null),
-("leather gloves", "nice leather gloves. They look protective.", "armor", Null, Null, Null);
-("blue shirt", "a simple blue linen shirt, good for warm weather", "clothing", 1, Null, Null),
-("fancy shirt", "a fancy white linen shirt with detail in many colors along all the edges", "clothing", 1, Null, Null),
-("brown pants", "a pair of simple brown linen pants, excellent for warm weather", "clothing", Null, 1, Null),
-("fancy slacks", "a pair of fancy pressed black slacks, made of fine wool", "clothing", Null, 1, Null),
-("green socks", "a pair of green cotton socks", "clothing", Null, Null, 1);
+("branch", "a dry, brown branch", "nature", 0, 0, 0),
+("mushroom", "a small, white mushroom with a round top", "nature", 0, 0, 0),
+("sock", "a lone argyle sock, blue and yellow", "household", 0, 0, 0),
+("pumpkin pie", "a whole pumpkin pie! It smells like autumn", "food", 0, 0, 0),
+("collar", "A red collar with a silver buckle. It has pictures of fish on it.", "clothing", 0, 0, 0),
+("leather gloves", "nice leather gloves. They look protective.", "armor", 0, 0, 0),
+("blue shirt", "a simple blue linen shirt, good for warm weather", "clothing", 1, 0, 0),
+("fancy shirt", "a fancy white linen shirt with detail in many colors along all the edges", "clothing", 1, 0, 0),
+("brown pants", "a pair of simple brown linen pants, excellent for warm weather", "clothing", 0, 1, 0),
+("fancy slacks", "a pair of fancy pressed black slacks, made of fine wool", "clothing", 0, 1, 0),
+("green socks", "a pair of green cotton socks", "clothing", 0, 0, 1);
 
 UPDATE items SET HPeffect = 10 WHERE itemName = "leather gloves";
 
