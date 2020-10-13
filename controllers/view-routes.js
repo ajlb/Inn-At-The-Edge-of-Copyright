@@ -25,4 +25,9 @@ module.exports = function (app) {
     app.get("/play", isAuthenticated, function(req, res){
         res.render('play', {});
     });
+
+    //new Player
+    app.get("/newPlayer", function(req, res) {
+        res.render('newplayer', {});
+    });
 };
