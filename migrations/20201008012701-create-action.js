@@ -11,15 +11,6 @@ module.exports = {
       actionName: {
         type: Sequelize.STRING(750)
       },
-      function: {
-        type: Sequelize.STRING(750)
-      },
-      selfDescription: {
-        type: Sequelize.STRING(750)
-      },
-      roomDescription: {
-        type: Sequelize.STRING(750)
-      },
       commandBriefDescription: {
         type: Sequelize.STRING(750)
       },

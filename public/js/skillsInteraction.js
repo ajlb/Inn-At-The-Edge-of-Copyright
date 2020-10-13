@@ -54,11 +54,15 @@ function continueJuggle(num, target){
 
 function stopJuggling(dropped){
     clearInterval(juggleTime);
-    if (dropped){
-        publishDescription(`drops their ${pluralize(juggledItem, 3)} and scrambles around after them.`)
-        incrementStat('DEX', 0.25, currentUserData.characterName);
+    if (!(juggleTime)){
+        logThis("You're not juggling!");
     } else {
-        publishDescription(`stops juggling.`)
+        if (dropped){
+            publishDescription(`drops their ${pluralize(juggledItem, 3)} and scrambles around after them.`)
+            incrementStat('DEX', 0.25, currentUserData.characterName);
+        } else {
+            publishDescription(`stops juggling.`)
+        }
+        juggleTime = false;
     }
-    juggleTime = false;
 }

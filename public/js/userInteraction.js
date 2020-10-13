@@ -20,6 +20,8 @@ let position = "standing";
 
 //determine if a string begins with any of an array of other strings
 function doesThisStartWithThose(thisThing, those) {
+  console.log(thisThing);
+  console.log(those);
   for (let thing of those) {
     if (thisThing.toLowerCase().startsWith(thing) && (thing.length > 1)) {
       return true
@@ -453,13 +455,25 @@ function sleep(){
 
 function wake(){
   publishDescription("opens their eyes");
-  const id = locationIndex;
+  const id = currentLocation.locationName.replace(/ /g, "-");
   channel = 'oo-chat-' + id;
   console.log("In Room ID: " + id);
   pubnub.subscribe({ channels: [channel] });
+  logThis("You wake up.")
 }
 
-
+function sitStandLie(value){
+  if (value == "stand" || value == "stand up"){
+    position = "standing";
+    publishDescription("stands up.");
+  } else if (value == "sit" || value == "sit down"){
+    position = "sitting";
+    publishDescription("sits down.");
+  } else if (value == "lay" || value == "lay down" || value == "lie" || value == "lie down"){
+    position = "laying";
+    publishDescription("lies down.");
+  }
+}
 
 //HIGH LEVEL FUNCTIONS
 
@@ -567,7 +581,7 @@ $("#submit-button").click(function (event) {
   }else if (doesThisStartWithThose(value, actionCalls.wake)){
     wake();
   }else if (doesThisStartWithThose(value, actionCalls.position)){
-    sitStandLay();
+    sitStandLie(value);
   }
 });
 
