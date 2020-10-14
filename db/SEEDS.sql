@@ -28,7 +28,11 @@ VALUES
 ("emote", "you describe an action", "When you type an emote command word followed by text, the result will be displayed to the room as an action of your character.", "/me, emote", "/me leans against a tree", "[Character] leans against a tree"),
 ("sleep", "You go to sleep", "When you type a sleep command while lying down, you will go to sleep and recover HP, but you will not be able to see or hear around you. If you are attacked, you will automatically wake up.", "go to sleep, sleep", "sleep", "You fall into a deep slumber."),
 ("wake", "You wake up", "When you type a wake command while sleeping, you will wake up.", "wake up, wake, awake, awaken", "wake up", "You wake up."),
-("position", "You change position.", "When you type a position command, you will move from your current position into the new one.", "stand up, stand, sit down, sit, lay down, lay, lie down, lie", "stand up", "You stand up.");
+("position", "You change position.", "When you type a position command, you will move from your current position into the new one.", "stand up, stand, sit down, sit, lay down, lay, lie down, lie", "stand up", "You stand up."),
+("give", "give an item to someone", "When you type give followed by an item in your inventory, and someone else in your location, you will give the item to them.", "give", "give a mushroom to Grizabella", "[Character] gives a mushroom to Grizabella"),
+("quests", "see a list of active quests", "When you type quests, you will see a list of active quests for your character.", "quests", "quests", "[List of quests]"),
+("time", "check the time", "When you type time, you will get the current game time", "time, check time", "time", "It is 1:09pm"),
+("help", "check command usage", "When you type help, you will get a list of all game commands. When you type help followed by a game command, you will get that command's details.", "help", "help", "[list of commands]");
 
 INSERT INTO locations
     (id,locationName, dayDescription, nightDescription, exitN, exitE, exitS, exitW, region)
