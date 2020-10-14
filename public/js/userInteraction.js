@@ -522,7 +522,17 @@ function displayHelp(value){
 }
 
 
+function giveItem(value){
+  value = takeTheseOffThat(actionCalls.give, value);
+  value = takeTheseOffThat(ARTICLES, value);
+  value = value.split(" ");
+  let target = value.pop();
+  value = value.split(" ").
 
+  getInventory(currentUserId).then(userInv =>{
+    findMatchByItemNameAndChangeQuantity(value, userInv, )
+  })
+}
 
 //HIGH LEVEL FUNCTIONS
 
@@ -632,7 +642,7 @@ $("#submit-button").click(function (event) {
   } else if (doesThisStartWithThose(value, actionCalls.position)){
     sitStandLie(value);
   } else if (doesThisStartWithThose(value, actionCalls.give)){
-    give(value);
+    giveItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.help)){
     displayHelp(value);
   }
