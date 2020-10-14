@@ -15,13 +15,12 @@ let currentUserData;
 let currentUserId;
 
 let position = "standing";
+let sleepInterval;
 
 //HELPER FUNCTIONS
 
 //determine if a string begins with any of an array of other strings
 function doesThisStartWithThose(thisThing, those) {
-  console.log(thisThing);
-  console.log(those);
   for (let thing of those) {
     if (thisThing.toLowerCase().startsWith(thing) && (thing.length > 1)) {
       return true
@@ -416,18 +415,22 @@ function parseStats(){
     let dashes = "---------------------";
     $("#anchor").before(`<p class="displayed-stat">${title}</p>`);
     $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
-
+      let maxHP = stats.maxHP;
+      delete stats.maxHP;
       for (const item in stats) {
         let string = "\xa0\xa0\xa0\xa0";
         if (item.length === 3) {
           string += `\xa0${item}\xa0\xa0\xa0|\xa0\xa0`;
           statValue = parseInt(stats[item]);
-          $("#anchor").before(`<p class="displayed-stat">${string}<span id="three">${statValue}</span></p>`);
+          $("#anchor").before(`<p class="displayed-stat">${string}<span id="blue">${statValue}</span></p>`);
         } else if (item.length == 2) {
           string += `\xa0${item.toUpperCase()}\xa0\xa0\xa0\xa0\xa0|\xa0\xa0`;
-          if (item === "HP"){
+          if (item === "HP" && stats["HP"]<maxHP){
             statValue = parseInt(stats[item]);
-            $("#anchor").before(`<p class="displayed-stat">${string}<span id="hp">${statValue}</span></p>`);
+            $("#anchor").before(`<p class="displayed-stat">${string}<span id="red">${statValue}</span>/${maxHP}</p>`);
+          } else if (item === "HP" && stats["HP"]>=maxHP){
+            statValue = parseInt(stats[item]);
+            $("#anchor").before(`<p class="displayed-stat">${string}<span id="green">${statValue}</span>/${maxHP}</p>`);
           } else {
             statValue = parseInt(stats[item]);
             $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
@@ -439,6 +442,7 @@ function parseStats(){
         }
       }
       $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
+      updateScroll();
   })
 }
 
@@ -448,6 +452,15 @@ function sleep(){
     logThis("You fall into a deep slumber");
     pubnub.unsubscribeAll();
     publishDescription("falls asleep.");
+    let i=0;
+    sleepInterval = setInterval(function(){
+      getStats(currentUserData.characterName).then(stats =>{
+        if ((i > 1) && (stats.HP < stats.maxHP)){
+          incrementStat("HP", 1, currentUserData.characterName);
+        }
+        i++;
+      });
+    }, 5000);
   } else {
     logThis("You'll need to lie down for that!");
   }
@@ -455,6 +468,7 @@ function sleep(){
 
 function wake(){
   publishDescription("opens their eyes");
+  clearInterval(sleepInterval);
   const id = currentLocation.locationName.replace(/ /g, "-");
   channel = 'oo-chat-' + id;
   console.log("In Room ID: " + id);
