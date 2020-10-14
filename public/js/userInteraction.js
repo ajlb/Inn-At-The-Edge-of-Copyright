@@ -652,7 +652,6 @@ function findNewLocationData(direction) {
 //MOVE TO A NEW ROOM, AND GET A NEW CHAT
 const newLocation = function (direction) {
   // give this chatroom the correct id
-<<<<<<< HEAD
   findNewLocationData(direction).then(function () {
 
     // set channel off of locationIndex channel
@@ -685,30 +684,6 @@ const newLocation = function (direction) {
     };//end init
 
     init();
-=======
-  findNewLocationData(direction).then(function(){
-
-      // set channel off of locationIndex channel
-      const id = locationIndex;
-      channel = 'oo-chat-' + locationIndex;
-      console.log("In Room ID: " + locationIndex);
-
-      // this function is fired when Chatroom() is called
-      //it unsubscribes from previous rooms, and subscribes to the new room
-      const init = function () {
-
-        pubnub.unsubscribeAll();
-        console.log("subscribing");
-        pubnub.subscribe({
-          channels: [channel],
-          withPresence: true,
-        });
-
-
-      };//end init
-
-      init();
->>>>>>> master
   })
 }
 
