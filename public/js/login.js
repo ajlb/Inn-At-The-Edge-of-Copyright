@@ -5,12 +5,12 @@ let userRecentCommands = [];
 function showHideInput() {
     var x = document.getElementById("inputBar");
     if (x.type === "password") {
-      x.type = "text";
+        x.type = "text";
     } else {
-      x.type = "password";
+        x.type = "password";
     }
-  }
-  
+}
+
 
 //log to chatbox
 function logThis(text) {
@@ -19,12 +19,12 @@ function logThis(text) {
 }
 
 //Scrolling
-function updateScroll(){
-    $(".message-output-box").scrollTop($(".message-output-box")[0].scrollHeight)  
+function updateScroll() {
+    $(".message-output-box").scrollTop($(".message-output-box")[0].scrollHeight)
 }
 
 //LOG IN
-function userLogin(){
+function userLogin() {
     logThis("Welcome to the Inn At The Edge of Copyright!");
     logThis(" ")
     logThis(" ")
@@ -32,21 +32,18 @@ function userLogin(){
 }
 
 //assign value to characterEntered or start character creation
-function getCharacterName(value){
-    if (value.toLowerCase() === "sign up"){
+function getCharacterName(value) {
+    if (value.toLowerCase() === "sign up") {
         console.log("ok!");
-        $.get("/newplayer");
+        location.href = "/newPlayer";
     } else {
         characterEntered = value;
         logThis("Please enter your password: ")
     }
 }
 
-
-
-
 //interpret user text
-$("#submit-button").click(function(event) {
+$("#submit-button").click(function (event) {
     event.preventDefault();
 
     //log, then clear input value
@@ -55,23 +52,23 @@ $("#submit-button").click(function(event) {
     $(".chat-input").val("");
     userRecentCommands.push(value);
 
-    if (!(characterEntered)){
+    if (!(characterEntered)) {
         getCharacterName(value);
         showHideInput();
-    } else if (!(passwordEntered)){
+    } else if (!(passwordEntered)) {
         passwordEntered = value;
         loginPlayer(characterEntered, passwordEntered);
         showHideInput();
     } else {
-        if (value.toLowerCase() === "yes" || value.toLowerCase() === "y"){
+        if (value.toLowerCase() === "yes" || value.toLowerCase() === "y") {
             passwordEntered = false;
             characterEntered = false;
             userLogin();
         }
     }
 });
-  
-  
+
+
 
 //PAGE INIT
 

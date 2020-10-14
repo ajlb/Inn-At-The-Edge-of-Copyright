@@ -167,6 +167,7 @@ module.exports = function (app) {
             res.json("Error")
         });
     });
+
     app.put("/api/playerStats/", function(req, res){
         models.player.increment(req.body.stat, {where: {characterName: req.body.characterName}, by: req.body.amount}).then(function(data){
             res.json(data);

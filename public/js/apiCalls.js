@@ -125,12 +125,24 @@ function loginPlayer(characterName, password){
     });
 }
 
-function signupPlayer(characterName, password){
-    $.post("/signup", {
-        characterName: characterName,
-        password:password
-    }).then(function(data){
-    }).catch(e => console.log(e));
+function signupPlayer(name, password, stats, race, profession){
+    console.log(`creating ${ name } with ${ stats }`);
+    let newCharObject = {
+        characterName: name,
+        password: password,
+        WIS: stats.wis,
+        DEX: stats.dex,
+        STR: stats.str,
+        HP: stats.hp,
+        race: race,
+        class : profession,
+        description: `${ name } is a ${ race } ${ profession }`
+    }
+    return new Promise(function(resolve, reject){
+        $.post('/signup', newCharObject, function(data){
+            resolve(data);
+        });
+    });
 }
 
 function getPlayerFromLoginInfo(){
