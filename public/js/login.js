@@ -26,7 +26,7 @@ function userLogin(){
 function getCharacterName(value){
     if (value.toLowerCase() === "sign up"){
         console.log("ok!");
-        $.get("/newplayer");
+        $.get("/newPlayer");
     } else {
         characterEntered = value;
         logThis("Please enter your password: ")

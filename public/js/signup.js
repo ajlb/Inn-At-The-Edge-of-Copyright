@@ -1,17 +1,24 @@
 // Make sure we wait to attach our handlers until the DOM is fully loaded.
 $(function () {
-    var signUpForm = $("form.signup");
-    var checkIfPlayerAvailable = $("#validate")
+    var signUpForm = $("#submit-button");
+    var validateButton = $("#validate")
     var emailInput = $("input#Email");
     var passwordInput = $("input#Password");
-    var characterName = $("input#PlayerName")
+    var characterName = $("input#PlayerName");
+    var playerValidate = false;
 
     signUpForm.on("click", function (event) {
         event.preventDefault();
+        if (playerValidate === false) {
+            $.get("/newPlayer");
+        } else {
 
-    })
+        }
 
-    checkIfPlayerAvailable.on("click", function (event) {
+
+    });
+
+    validateButton.on("click", function (event) {
         // Make sure to preventDefault on a submit event.
         event.preventDefault();
 
@@ -27,6 +34,8 @@ $(function () {
         checkIfAvailable(newPlayer.player_name);
 
     });
+
+    
 
     function checkIfAvailable (characterName) {
         return new Promise( function (resolve, reject) {
@@ -59,6 +68,7 @@ $(function () {
             $("#alert").show();
             characterName.val("");
         } else if (msg === "Available"){
+            playerValidate = true;
             $("#alert .msg").text("That Name is Available");
             $("#alert").show();
             $("#continueSignUp").show();
