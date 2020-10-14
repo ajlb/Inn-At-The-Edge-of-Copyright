@@ -80,6 +80,9 @@ function describeThis(text) {
   updateScroll();
 }
 
+function listThis(text) {
+  $("#anchor").before(`<p class="displayed-stat">${text}</p>`);
+}
 
 function findItemProperty(data) {
   return new Promise(function (resolve, reject) {
@@ -489,6 +492,22 @@ function sitStandLie(value){
   }
 }
 
+
+function displayHelp(value){
+  if (value.toLowerCase() === "help"){
+    let title = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0HELP\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
+    let dashes = "---------------------";
+    listThis(title);
+    listThis(dashes);
+    for (action of actionData){
+      listThis(`${action.actionName}\xa0\xa0\xa0\xa0\xa0 --${action.commandBriefDescription}`)
+    }
+  }
+}
+
+
+
+
 //HIGH LEVEL FUNCTIONS
 
 
@@ -576,7 +595,7 @@ $("#submit-button").click(function (event) {
     lookAround(value);
   } else if (juggleTime) {
     logThis("You should probably stop juggling first.");
-  }else if (doesThisStartWithThose(value, actionCalls.get)){
+  } else if (doesThisStartWithThose(value, actionCalls.get)){
     getItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.drop)){
     dropItem(value);
@@ -590,12 +609,16 @@ $("#submit-button").click(function (event) {
     juggle(value);
   } else if (doesThisStartWithThose(value, actionCalls.stats)){
     parseStats();
-  }else if (doesThisStartWithThose(value, actionCalls.sleep)){
+  } else if (doesThisStartWithThose(value, actionCalls.sleep)){
     sleep();
-  }else if (doesThisStartWithThose(value, actionCalls.wake)){
+  } else if (doesThisStartWithThose(value, actionCalls.wake)){
     wake();
-  }else if (doesThisStartWithThose(value, actionCalls.position)){
+  } else if (doesThisStartWithThose(value, actionCalls.position)){
     sitStandLie(value);
+  } else if (doesThisStartWithThose(value, actionCalls.give)){
+    give(value);
+  } else if (doesThisStartWithThose(value, actionCalls.help)){
+    displayHelp(value);
   }
 });
 
