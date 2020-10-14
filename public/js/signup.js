@@ -92,7 +92,7 @@ $(function () {
             var name = characterName.val().trim();
             var pass = passwordInput.val().trim();
             var race = "human";
-            var profession = "accountant";
+            var profession = "sandwich-maker";
             console.log(stats);
             signupPlayer(name, pass, stats, race, profession)
 
