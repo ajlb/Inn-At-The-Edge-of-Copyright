@@ -13,6 +13,7 @@ let actionData = {};
 let actionCalls = {};
 let currentUserData;
 let currentUserId;
+let locationIndex;
 
 let position = "standing";
 let sleepInterval;
@@ -537,6 +538,48 @@ function giveItem(value){
 //HIGH LEVEL FUNCTIONS
 
 
+function findNewLocationData(direction){
+  return new Promise(function(resolve, reject){
+    if (direction == "start") {
+      //set currentLocation, and pass to pubnub as locationIndex
+      getLocation(currentUserData.lastLocation).then(function (data) {
+        currentLocation = data;
+        currentLocationId = "L" + currentLocation.id;
+        locationIndex = data.locationName.replace(/ /g, "-");
+        console.log(locationIndex);
+        $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
+        printLocationDescription(currentLocation);
+        currentExits = compileExits(currentLocation);
+        printExits(currentExits);
+  
+        updateScroll();
+        resolve();
+      });
+  
+    } else if (!(currentExits[direction] == null)) {
+      //set currentLocation, and pass to pubnub as locationIndex
+      getLocation(currentExits[direction]).then(function (data) {
+        currentLocation = data;
+        currentExits = compileExits(currentLocation);
+        locationIndex = data.locationName.replace(/ /g, "-");
+        console.log(locationIndex);
+        rememberLocation(currentUserData.characterName, currentLocation.id);
+  
+        $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
+  
+        printLocationDescription(currentLocation);
+        printExits(currentExits);
+  
+        updateScroll();
+        resolve();
+      })
+  
+    } else {
+      logThis("There's no exit at " + direction);
+      resolve();
+    }
+  })
+}
 
 
 
@@ -544,58 +587,40 @@ function giveItem(value){
 
 //MOVE TO A NEW ROOM, AND GET A NEW CHAT
 const newLocation = function (direction) {
-  let locationIndex;
   // give this chatroom the correct id
-  if (direction == "start") {
-    //set currentLocation, and pass to pubnub as locationIndex
-    getLocation(currentUserData.lastLocation).then(function (data) {
-      currentLocation = data;
-      currentLocationId = "L" + currentLocation.id;
-      locationIndex = data.locationName.replace(/ /g, "-");
-      $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
-      printLocationDescription(currentLocation);
-      currentExits = compileExits(currentLocation);
-      printExits(currentExits);
-
-      updateScroll();
-    });
-
-  } else if (!(currentExits[direction] == null)) {
-    //set currentLocation, and pass to pubnub as locationIndex
-    getLocation(currentExits[direction]).then(function (data) {
-      currentLocation = data;
-      currentExits = compileExits(currentLocation);
-      locationIndex = data.locationName.replace(/ /g, "-");
-      rememberLocation(currentUserData.characterName, currentLocation.id);
-
-      $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
-
-      printLocationDescription(currentLocation);
-      printExits(currentExits);
-
-      updateScroll();
-    })
-
-  } else {
-    logThis("There's no exit at " + direction);
-  }
-
-  // set channel off of locationIndex channel
-  const id = locationIndex;
-  channel = 'oo-chat-' + id;
-  console.log("In Room ID: " + id);
-
-  // this function is fired when Chatroom() is called
-  //it unsubscribes from previous rooms, and subscribes to the new room
-  const init = function () {
-
-    pubnub.unsubscribeAll();
-    console.log("subscribing");
-    pubnub.subscribe({ channels: [channel] });
-
-  };//end init
-
-  init();
+  findNewLocationData(direction).then(function(){
+    
+      // set channel off of locationIndex channel
+      const id = locationIndex;
+      channel = 'oo-chat-' + locationIndex;
+      console.log("In Room ID: " + locationIndex);
+    
+      // this function is fired when Chatroom() is called
+      //it unsubscribes from previous rooms, and subscribes to the new room
+      const init = function () {
+    
+        pubnub.unsubscribeAll();
+        console.log("subscribing");
+        pubnub.subscribe({ 
+          channels: [channel],
+          presence: function(data) {
+            // get notified when people join
+            if(data.action == "join") {
+              publishMessage$(`${data.uuid} enters.`)
+            }
+        
+            // and when they leave
+            if(data.action == "leave" || data.action == "timeout") {
+              publishMessage(`${data.uuid} exits.`)
+            }
+      
+          } 
+        });
+    
+      };//end init
+    
+      init();
+  })
 }
 
 
