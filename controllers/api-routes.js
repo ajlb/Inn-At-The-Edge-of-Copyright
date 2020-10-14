@@ -173,7 +173,7 @@ module.exports = function (app) {
         }).catch(e => reject(e));
     });
     app.get("/api/playerStats/:id", function(req, res){
-        models.player.findOne({attributes: ['DEX', 'STR', 'WIS', 'HP', 'level', 'xp'], where: {characterName: req.params.id}}).then(function(data){
+        models.player.findOne({attributes: ['DEX', 'STR', 'WIS', 'HP', 'maxHP', 'level', 'xp'], where: {characterName: req.params.id}}).then(function(data){
             res.json(data);
         }).catch(e => console.log(e));
     })

@@ -65,6 +65,7 @@ $(function () {
         } else {
             // something is wrong
             console.log('hmmm something went wrong')
+            console.log(msg);
         }
         
     }

@@ -43,6 +43,9 @@ module.exports = {
       HP: {
         type: Sequelize.INTEGER
       },
+      maxHP: {
+        type: Sequelize.INTEGER
+      },
       race: {
         type: Sequelize.STRING(750)
       },
