@@ -14,6 +14,7 @@ let actionCalls = {};
 let currentUserData;
 let currentUserId;
 let locationIndex;
+let locationOccupants;
 
 let position = "standing";
 let sleepInterval;
@@ -103,6 +104,17 @@ function findMatchByItemName(value, data) {
       }
     }
     resolve(false);
+  });
+}
+
+function findMatchByCharacterName(name) {
+  return new Promise(function (resolve, reject) {
+    let NPCList = currentLocation.NPCs.split(", ");
+    for (const NPC of NPCList) {
+      if (name === NPC) {
+        return (true);
+      }
+    }
   });
 }
 
@@ -224,6 +236,29 @@ function printLocationDescription(locationData) {
   } else {
     describeThis(locationData.nightDescription);
   }
+}
+
+//print who's online
+function parseWhosOnline() {
+  console.log(" inside parseWhosOnline()");
+  let string;
+  let occupants = [];
+  whosOnline().then(residents => {
+    console.log(residents);
+    locationOccupants = residents;
+    let locationKey = Object.keys(residents.channels)[0];
+    console.log(locationKey);
+    console.log(!(residents.channels[locationKey] === undefined));
+    console.log((residents.channels[locationKey].occupants.length > 0));
+    if (!(residents.channels[locationKey] === undefined) && (residents.channels[locationKey].occupants.length > 0)) {
+      string = "Also here: ";
+      for (const occupant of residents.channels[locationKey].occupants) {
+        occupants.push(occupant.uuid);
+      }
+      string += occupants.join(", ");
+      describeThis(string);
+    }
+  })
 }
 
 //react to input beginning with a move word
@@ -352,13 +387,17 @@ function speak(value) {
   if (value.startsWith('speak to') || value.startsWith('talk to')) {
     value = takeTheseOffThat(['speak to ', 'talk to '], value);
     let target = value.split(' ')[0];
-    isNPC(target).then(bool => {
-      if (bool) {
-        initNPC(target);
-      } else {
-        logThis('You cannot speak directly to ' + value);
-      }
-    })
+    findMatchByCharacterName(target)
+      .then(success => {
+        if (success) {
+          // runNPC()
+        }
+      })
+      .catch(failure => {
+        if (failure) {
+          logThis('You cannot speak directly to ' + target)
+        }
+      })
   } else {
     value = takeTheseOffThat(actionCalls.speak, value);
     publishMessage(value);
@@ -369,6 +408,12 @@ function speak(value) {
 function emote(value) {
   value = takeTheseOffThat(actionCalls.emote, value);
   publishDescription(value);
+}
+
+function tell(value) {
+  value = takeTheseOffThat(actionCalls.tell, value);
+  let NPC = value.split(" ")[0];
+
 }
 
 
@@ -563,9 +608,14 @@ function findNewLocationData(direction) {
         printLocationDescription(currentLocation);
         currentExits = compileExits(currentLocation);
         printExits(currentExits);
-
-        updateScroll();
-        resolve();
+        whosOnline().then(currentPlayers => {
+          console.log("we're checking who's online");
+          console.log(currentPlayers);
+          locationOccupants = currentPlayers;
+          parseWhosOnline(currentPlayers);
+          updateScroll();
+          resolve();
+        });
       });
 
     } else if (!(currentExits[direction] == null)) {
@@ -581,11 +631,13 @@ function findNewLocationData(direction) {
 
         printLocationDescription(currentLocation);
         printExits(currentExits);
-
-        updateScroll();
-        resolve();
-      })
-
+        whosOnline().then(currentPlayers => {
+          locationOccupants = currentPlayers;
+          parseWhosOnline(currentPlayers);
+          updateScroll();
+          resolve();
+        });
+      });
     } else {
       logThis("There's no exit at " + direction);
       resolve();
@@ -600,6 +652,7 @@ function findNewLocationData(direction) {
 //MOVE TO A NEW ROOM, AND GET A NEW CHAT
 const newLocation = function (direction) {
   // give this chatroom the correct id
+<<<<<<< HEAD
   findNewLocationData(direction).then(function () {
 
     // set channel off of locationIndex channel
@@ -632,6 +685,30 @@ const newLocation = function (direction) {
     };//end init
 
     init();
+=======
+  findNewLocationData(direction).then(function(){
+
+      // set channel off of locationIndex channel
+      const id = locationIndex;
+      channel = 'oo-chat-' + locationIndex;
+      console.log("In Room ID: " + locationIndex);
+
+      // this function is fired when Chatroom() is called
+      //it unsubscribes from previous rooms, and subscribes to the new room
+      const init = function () {
+
+        pubnub.unsubscribeAll();
+        console.log("subscribing");
+        pubnub.subscribe({
+          channels: [channel],
+          withPresence: true,
+        });
+
+
+      };//end init
+
+      init();
+>>>>>>> master
   })
 }
 
