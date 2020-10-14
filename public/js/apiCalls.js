@@ -121,10 +121,7 @@ function loginPlayer(characterName, password){
         window.location.replace("/play");
     }).catch(e=>{
         console.log(e);
-        logThis("I'm sorry, that character/password combination didn't match our records! For help with a forgotten password, contact us at innattheedgeofcopyright@gmail.com");
-        setTimeout(function(){
-            logThis("Do you want to try to log in again?");
-        }, 600);
+        window.location.replace("/play")
     });
 }
 

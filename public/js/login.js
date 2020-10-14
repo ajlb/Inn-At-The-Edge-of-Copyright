@@ -2,6 +2,15 @@ let characterEntered = false;
 let passwordEntered = false;
 let userRecentCommands = [];
 
+function showHideInput() {
+    var x = document.getElementById("inputBar");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+  
 
 //log to chatbox
 function logThis(text) {
@@ -48,9 +57,11 @@ $("#submit-button").click(function(event) {
 
     if (!(characterEntered)){
         getCharacterName(value);
+        showHideInput();
     } else if (!(passwordEntered)){
         passwordEntered = value;
         loginPlayer(characterEntered, passwordEntered);
+        showHideInput();
     } else {
         if (value.toLowerCase() === "yes" || value.toLowerCase() === "y"){
             passwordEntered = false;
