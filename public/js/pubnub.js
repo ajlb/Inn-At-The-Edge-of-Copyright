@@ -39,6 +39,8 @@ function createConnection(thisUser){
       operation = status.operation;
     },
     presence: (presence) => {
+      logAction(presence);
+      parseWhosOnline();
       action = presence.action;
       channelName = presence.channel;
       uuid = presence.uuid;
@@ -51,6 +53,15 @@ displayMessage = function(messageType, aMessage) {
   $("#anchor").before(`<p class="displayed-message">${aMessage.message.text}</p>`);
   updateScroll();
 }
+
+function logAction(presence){
+  if (presence.action == "join"){
+    publishEvent(`${presence.uuid} enters.`);
+  } else if (presence.action == "leave"){
+    publishEvent(`${presence.uuid} exits.`);
+  }
+}
+
 function publishDescription(value){
   pubnub.publish({
     channel: channel,
@@ -70,6 +81,21 @@ function publishMessage(value){
   pubnub.publish({
     channel: channel,
     message: {"text":`${thisUser}: ${value}`},
+    },
+    function(status, response) {
+      console.log("Publishing from submit button event");
+      if (status.error) {
+        console.log(status);
+        console.log(response);
+      }
+    }
+  );
+}
+
+function publishEvent(value){
+  pubnub.publish({
+    channel: channel,
+    message: {"text":`${value}`},
     },
     function(status, response) {
       console.log("Publishing from submit button event");

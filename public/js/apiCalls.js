@@ -117,6 +117,7 @@ function addItemToInventory(item, location, amount){
 }
 
 function loginPlayer(characterName, password){
+    console.log("You're in loginPlayer");
     $.post("/login", {characterName: characterName, password:password}).then(function(data){
         window.location.replace("/play");
     }).catch(e=>{
@@ -140,7 +141,13 @@ function signupPlayer(name, password, stats, race, profession){
     }
     return new Promise(function(resolve, reject){
         $.post('/signup', newCharObject, function(data){
-            resolve(data);
+            console.log(data);
+            loginPlayer(newCharObject.characterName, newCharObject.password);
+            resolve();
+        }).catch(e=>{
+            console.log(e);
+            loginPlayer(newCharObject.characterName, newCharObject.password);
+            resolve(e);
         });
     });
 }
@@ -194,14 +201,17 @@ function rememberLocation(userName, locationId){
 }
 
 function whosOnline(){
-    channel = 'oo-chat-' + currentLocation.locationName.replace(/ /g, "-");
-    pubnub.hereNow(
-        {
-          channels: [channel],
-          includeState: true
-        },
-        function (status, response) {
-          console.log(status, response);
-        }
-      );
+    return new Promise(function(resolve, reject){
+        channel = 'oo-chat-' + currentLocation.locationName.replace(/ /g, "-");
+        pubnub.hereNow(
+            {
+              channels: [channel],
+              includeState: true
+            },
+            function (status, response) {
+                console.log(response);
+              resolve(response);
+            }
+          );
+    })
 }

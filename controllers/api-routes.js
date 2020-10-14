@@ -25,9 +25,9 @@ module.exports = function (app) {
 
     //sign up
     app.post("/signup", function (req, res) {
-        models.player.create(req.body).then(function () {
+        models.player.create(req.body).then(function (data) {
             console.log("You signed up!");
-            res.redirect(307, "/play");
+            res.json(data);
         }).catch(e => res.status(401).json(e))
     });
 
