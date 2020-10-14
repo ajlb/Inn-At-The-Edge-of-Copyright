@@ -125,10 +125,19 @@ function loginPlayer(characterName, password){
     });
 }
 
+function newPlayer(){
+    return new Promise(function(resolve, reject){
+        $.get("/newPlayer").then(function(data) {
+            resolve(data);
+        }).catch(e => reject(e));
+    })
+}
+
 function signupPlayer(characterName, password){
     $.post("/signup", {
         characterName: characterName,
-        password:password
+        password: password,
+
     }).then(function(data){
     }).catch(e => console.log(e));
 }

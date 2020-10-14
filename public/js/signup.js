@@ -10,12 +10,10 @@ $(function () {
     signUpForm.on("click", function (event) {
         event.preventDefault();
         if (playerValidate === false) {
-            $.get("/newPlayer");
+            $.get("/newPlayer");//reload this page
         } else {
-
+            makePlayer();
         }
-
-
     });
 
     validateButton.on("click", function (event) {
@@ -55,6 +53,10 @@ $(function () {
         //         location.reload();
         //     }
         // );
+    }
+
+    function makePlayer () {
+        
     }
 
     function handleLoginErr(err) {
