@@ -180,3 +180,16 @@ function rememberLocation(userName, locationId){
         }).catch(e => reject(e));
     });
 }
+
+function whosOnline(){
+    channel = 'oo-chat-' + currentLocation.locationName.replace(/ /g, "-");
+    pubnub.hereNow(
+        {
+          channels: [channel],
+          includeState: true
+        },
+        function (status, response) {
+          console.log(status, response);
+        }
+      );
+}
