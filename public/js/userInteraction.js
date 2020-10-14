@@ -502,6 +502,22 @@ function displayHelp(value){
     for (action of actionData){
       listThis(`${action.actionName}\xa0\xa0\xa0\xa0\xa0 --${action.commandBriefDescription}`)
     }
+  } else {
+    for (action of actionData){
+      console.log(value.split(" ")[1]);
+      console.log(action.actionName);
+      if (value.split(" ")[1].toLowerCase() == action.actionName){
+        console.log("FOUND IT!");
+        listThis(action.actionName.toUpperCase());
+        listThis(" ");
+        listThis(action.commandLongDescription);
+        listThis(" ");
+        listThis(`example: ${action.exampleCall}\xa0\xa0\xa0\xa0\xa0 --result: ${action.exampleResult}`);
+        listThis(" ");
+        updateScroll();
+        break;
+      }
+    }
   }
 }
 
