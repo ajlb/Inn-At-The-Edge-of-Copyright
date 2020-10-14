@@ -60,12 +60,15 @@ width: 90%;
     font-size: 13px;
 }
 
-.displayed-stat #hp{
+.displayed-stat #red{
     color: red
 }
 
+.displayed-stat #green{
+    color: rgb(32, 223, 14)
+}
 
-.displayed-stat #three{
+.displayed-stat #blue{
     color: rgb(47, 255, 220)
 }
 
