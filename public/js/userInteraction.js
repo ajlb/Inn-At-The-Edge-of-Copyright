@@ -241,22 +241,17 @@ function printLocationDescription(locationData) {
 //print who's online
 function parseWhosOnline(){
   console.log(" inside parseWhosOnline()");
-  let string;
+  let string = "";
   let occupants = [];
   whosOnline().then(residents => {
-    console.log(residents);
     locationOccupants = residents;
     let locationKey = Object.keys(residents.channels)[0];
-    console.log(locationKey);
-    console.log(!(residents.channels[locationKey] === undefined));
-    console.log((residents.channels[locationKey].occupants.length > 0));
   if (!(residents.channels[locationKey] === undefined) && (residents.channels[locationKey].occupants.length > 0)){
-    string = "Also here: ";
     for (const occupant of residents.channels[locationKey].occupants){
       occupants.push(occupant.uuid);
     }
     string += occupants.join(", ");
-    describeThis(string);
+    $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}: ${string}</p>`);
   }
   })
 }
@@ -598,18 +593,14 @@ function findNewLocationData(direction){
         currentLocationId = "L" + currentLocation.id;
         locationIndex = data.locationName.replace(/ /g, "-");
         console.log(locationIndex);
+        $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
         $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
         printLocationDescription(currentLocation);
         currentExits = compileExits(currentLocation);
         printExits(currentExits);
-        whosOnline().then(currentPlayers=>{
-          console.log("we're checking who's online");
-          console.log(currentPlayers);
-          locationOccupants = currentPlayers;
-          parseWhosOnline(currentPlayers);
-          updateScroll();
-          resolve();
-        });
+        setTimeout(parseWhosOnline(), 4000);
+        updateScroll();
+        resolve();
       });
   
     } else if (!(currentExits[direction] == null)) {
@@ -620,17 +611,14 @@ function findNewLocationData(direction){
         locationIndex = data.locationName.replace(/ /g, "-");
         console.log(locationIndex);
         rememberLocation(currentUserData.characterName, currentLocation.id);
-  
+        $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
         $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
   
         printLocationDescription(currentLocation);
         printExits(currentExits);
-        whosOnline().then(currentPlayers=>{
-          locationOccupants = currentPlayers;
-          parseWhosOnline(currentPlayers);
-          updateScroll();
-          resolve();
-        });
+        setTimeout(parseWhosOnline(), 4000);
+        updateScroll();
+        resolve();
       });
   
     } else {
