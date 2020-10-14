@@ -125,21 +125,23 @@ function loginPlayer(characterName, password){
     });
 }
 
-function newPlayer(){
-    return new Promise(function(resolve, reject){
-        $.get("/newPlayer").then(function(data) {
-            resolve(data);
-        }).catch(e => reject(e));
-    })
-}
-
-function signupPlayer(characterName, password){
-    $.post("/signup", {
-        characterName: characterName,
+function signupPlayer(name, password, stats, race, profession){
+    console.log(`creating ${ name } with ${ stats }`);
+    let newCharObject = {
+        characterName: name,
         password: password,
-
-    }).then(function(data){
-    }).catch(e => console.log(e));
+        WIS: stats.wis,
+        DEX: stats.dex,
+        STR: stats.str,
+        HP: stats.hp,
+        race: race,
+        class : profession
+    }
+    return new Promise(function(resolve, reject){
+        $.post('/signup', newCharObject, function(data){
+            resolve(data);
+        });
+    });
 }
 
 function getPlayerFromLoginInfo(){
