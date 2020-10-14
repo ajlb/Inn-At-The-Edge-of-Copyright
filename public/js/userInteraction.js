@@ -14,6 +14,7 @@ let actionCalls = {};
 let currentUserData;
 let currentUserId;
 let locationIndex;
+let locationOccupants;
 
 let position = "standing";
 let sleepInterval;
@@ -103,6 +104,17 @@ function findMatchByItemName(value, data){
     }
   }
   resolve(false);
+  });
+}
+
+function findMatchByCharacterName(name){
+  return new Promise(function(resolve, reject){
+    let NPCList = currentLocation.NPCs.split(", ");
+    for (const NPC of NPCList){
+      if (name === NPC){
+        return (true);
+      }
+    }
   });
 }
 
@@ -224,6 +236,29 @@ function printLocationDescription(locationData) {
   } else {
     describeThis(locationData.nightDescription);
   }
+}
+
+//print who's online
+function parseWhosOnline(){
+  console.log(" inside parseWhosOnline()");
+  let string;
+  let occupants = [];
+  whosOnline().then(residents => {
+    console.log(residents);
+    locationOccupants = residents;
+    let locationKey = Object.keys(residents.channels)[0];
+    console.log(locationKey);
+    console.log(!(residents.channels[locationKey] === undefined));
+    console.log((residents.channels[locationKey].occupants.length > 0));
+  if (!(residents.channels[locationKey] === undefined) && (residents.channels[locationKey].occupants.length > 0)){
+    string = "Also here: ";
+    for (const occupant of residents.channels[locationKey].occupants){
+      occupants.push(occupant.uuid);
+    }
+    string += occupants.join(", ");
+    describeThis(string);
+  }
+  })
 }
 
 //react to input beginning with a move word
@@ -349,14 +384,30 @@ function lookAround(value) {
 
 //function react to input beginning with speak command
 function speak(value) {
-  value = takeTheseOffThat(actionCalls.speak, value);
-  publishMessage(value);
+  if (value.toLowerCase().startsWith("speak to")){
+    value = takeTheseOffThat(["speak to"], value);
+    let target = value.split(" ")[0];
+    findMatchByCharacterName(target).then(success=> {
+      if (success){
+        runNPC()
+      }
+    })
+  } else {
+    value = takeTheseOffThat(actionCalls.speak, value);
+    publishMessage(value);
+  }
 }
 
 //function react to input beginning with emote command
 function emote(value) {
   value = takeTheseOffThat(actionCalls.emote, value);
   publishDescription(value);
+}
+
+function tell(value){
+  value = takeTheseOffThat(actionCalls.tell, value);
+  let NPC = value.split(" ")[0];
+
 }
 
 
@@ -551,9 +602,14 @@ function findNewLocationData(direction){
         printLocationDescription(currentLocation);
         currentExits = compileExits(currentLocation);
         printExits(currentExits);
-  
-        updateScroll();
-        resolve();
+        whosOnline().then(currentPlayers=>{
+          console.log("we're checking who's online");
+          console.log(currentPlayers);
+          locationOccupants = currentPlayers;
+          parseWhosOnline(currentPlayers);
+          updateScroll();
+          resolve();
+        });
       });
   
     } else if (!(currentExits[direction] == null)) {
@@ -569,10 +625,13 @@ function findNewLocationData(direction){
   
         printLocationDescription(currentLocation);
         printExits(currentExits);
-  
-        updateScroll();
-        resolve();
-      })
+        whosOnline().then(currentPlayers=>{
+          locationOccupants = currentPlayers;
+          parseWhosOnline(currentPlayers);
+          updateScroll();
+          resolve();
+        });
+      });
   
     } else {
       logThis("There's no exit at " + direction);
@@ -603,19 +662,9 @@ const newLocation = function (direction) {
         console.log("subscribing");
         pubnub.subscribe({ 
           channels: [channel],
-          presence: function(data) {
-            // get notified when people join
-            if(data.action == "join") {
-              publishMessage$(`${data.uuid} enters.`)
-            }
-        
-            // and when they leave
-            if(data.action == "leave" || data.action == "timeout") {
-              publishMessage(`${data.uuid} exits.`)
-            }
-      
-          } 
+          withPresence: true,
         });
+
     
       };//end init
     

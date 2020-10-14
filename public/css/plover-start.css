@@ -22,6 +22,10 @@ body {
     font-size: 15px;
 }
 
+#location-info {
+    border-bottom-style: groove;
+}
+
 .input-group {
     position: absolute;
     display: flex;
