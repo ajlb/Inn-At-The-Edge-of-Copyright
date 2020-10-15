@@ -70,7 +70,7 @@ VALUES
     (1007, "Inn Kitchen", "The Inn kitchen smells of freshly baked bread and garlic. A bubbling pot sits on the stove unattended. Two doors lead outside to the north and the east. The swinging door to the Lobby is left slightly cracked open on the south wall.", Null, 1009, 1008, 1003, Null, "The Inn"),
     (1003, "Inn Lobby", "You enter what appears to be the Inn Lobby. Light streams in through the windows lighting the room with a soft glow. A bored clerk sits behind the counter clearly not paying attention to their work. The smell of cooking food wafts into the room through an open door on the north wall. The front door of the Inn exits to the east. Two more doors exit the room to the south and to the west.", Null, 1007, 1005, 1004, 1010, "The Inn"),
     (1004, "Inn Laundry Room", "You've entered the Inn Laundry Room. Washers and dryers line the back wall and folding station sits in the corner in front of the window. A door to the east leads outside. There appears to be an oversized mouse hole hidden behind a stack of boxes to the west. A wooden door labeled 'Lobby' sits on the north wall.", Null, 1003, 1005, Null, 1010, "The Inn"),
-    (1002, "Hallway", "The door to the room you just left seems to have locked behind you. A small window looks out over a beautiful but overgrown garden. The only way out must be the stairway and the end of the hall to the east.", Null, Null, 1003, Null, Null, "The Inn"),
+    (1002, "Hallway", "You see a narrow room materialize in front of you. You hear a door latch behind you and a odd hand-painted sign gently sways from a string on the locked knob: `INN AT THE EDGE - REMEMBER YOUR TOWEL - TRY help FOR HELP`. A small window looks out over a beautiful but overgrown garden. The only way out must be the stairway at the end of the hall to the east. The smell of tea and faint sounds of someone moving about down the stairs becons you forward....", Null, Null, 1003, Null, Null, "The Inn"),
     (1010, "Library", "You've entered the Inn Library. Rows upon rows of old wooden bookshelves house an innumerable amount of dusty books. A door labeled 'Lobby' sits on the east wall, though it seems that the right book on the south wall might lead elsewhere.", Null, Null, 1003, 1004, Null, "The Inn"),
     (1005, "Front Yard", "This must be the Front Yard of the Inn. The grass seems like it hasn't been cut in ages and yellow wildflowers peek through the tall grass. An old shed sits in the south end of the yard. A path to the north leads back into the Inn and continues east. Another door leads into a different part of the Inn to the west.", Null, 1003, 1201, 1006, 1004, "The Inn"),
     (1006, "Shed", "The old shed is full of junk and broken yard tools. Everything seems slightly out of place. The door you came through sits on the north wall.", Null, 1005, Null, Null, Null, "The Inn"),
@@ -106,7 +106,7 @@ VALUES
     (1309, "Mountain Trail South", "The stone path you're walking on gently curves to the north and east, though a smaller path splits off from the main trail, leading toward a cliff.", Null, 1307, Null, 1310, 1311, "Mountain"),
     (1310, "Cliff's Edge", "You find yourself at the end of the Mountain Trail standing on the edge of a sheer south-facing cliff. The unnerving distance from here to the valley floor below seems terrifying, but one can't help but be beckoned to leap off the cliff into the clouds below. The moutain trail leads away to the north.", Null, 1309, Null, 1401, Null, "Mountain"),
     (1311, "Gentle Slope East", "The gently sloping hike through the mountains is very forgiving to those who are prone to tripping. The path continues to the east and west.", Null, Null, 1309, Null, 1302, "Mountain"),
-    (1401, "Entrance to Cloud City", Null, Null, 1310, Null, 1402, Null, "Cloud City"),
+    (1401, "Vorbegon Space Ship", Null, Null, 1310, Null, 1402, Null, "Cloud City"),
     (1402, "Sky Pond", Null, Null, Null, 1401, Null, 1403, "Cloud City"),
     (1403, "Sky Ruins", Null, Null, Null, 1402, 1404, Null, "Cloud City"),
     (1404, "Sky Poppy Field", Null, Null, 1403, Null, 1405, Null, "Cloud City"),
@@ -131,9 +131,11 @@ VALUES
 ("fancy shirt", "a fancy white linen shirt with detail in many colors along all the edges", "clothing", 1, 0, 0),
 ("brown pants", "a pair of simple brown linen pants, excellent for warm weather", "clothing", 0, 1, 0),
 ("fancy slacks", "a pair of fancy pressed black slacks, made of fine wool", "clothing", 0, 1, 0),
-("green socks", "a pair of green cotton socks", "clothing", 0, 0, 1);
+("green socks", "a pair of green cotton socks", "clothing", 0, 0, 1),
+("dull ring", "a dull metal ring with signs of many years of wear", "tools", 0, 0, 0);
 
 UPDATE items SET HPeffect = 10 WHERE itemName = "leather gloves";
+UPDATE items SET ringSlot = 1 WHERE itemName = "dull ring";
 
 INSERT INTO items (itemName, `description`, category, neckSlot, DEXeffect)
 VALUES ("collar", "a red collar with a silver buckle. It has pictures of fish on it.", "clothing", 1, 2);
@@ -154,4 +156,23 @@ VALUES ("P1", 61, 1, 1),
 ("L1101", 1, 1, 1),
 ("L1101", 31, 4, 0),
 ("L1102", 11, 1, 0);
+
+INSERT INTO races (raceName, `description`, STRbonus, DEXbonus, WISbonus, HPbonus)
+VALUES ("Human", "a typical human from Earth wearing a bathrobe", 0, 2, 0, 0),
+("Cat", "like a housecat but the size of an average human", 3, 0, 0, 0),
+("Faerie", "a delicate fairy-like creature, but wickedly clever", 0, 0, 3, 0),
+("Ogre", "your basic not-so-smart super tough brute", 0, 0, 0, 3),
+("Gnome", "tiny but nimble and tenacious", 0, 3, 0, 0),
+("Unicorn", "stunningly magestic creature - but no hands", 0, 0, 8, 0),
+("Flamingo", "a plastic neon pink lawn flamingo that has survived several severe hurricanes", 0, 0, 0, 10);
+
+INSERT INTO professions (className, `description`)
+VALUES ("Sandwich-maker", "a maker of sandwiches"),
+("Rogue", "the elusive thief/assasin/ninja with cat like reflexes"),
+("Bard", "storyteller/singer/thespian/dancer woo-er of all the races... if you have the skill"),
+("Mage", "a magical profession like wizards"),
+("Healer", "good with bandages, mending and some spells"),
+("Lawn art", "a job where you love to stand firm and willfully ignore the HOA inspectors that insist you be removed"),
+("Warrior", "we are not at war yet but still, you aim to be ready for battle should it come knocking"),
+("Hunter", "a bit ruff and gruff skilled at ranged tasks, tends to wander and not get lost");
 

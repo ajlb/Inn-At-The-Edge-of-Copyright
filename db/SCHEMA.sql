@@ -146,3 +146,11 @@ CREATE TABLE `heroku_dd2cb150d033ed5`.`classes` (
   `level10Ability` INT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+  CREATE TABLE `heroku_dd2cb150d033ed5`.`dialog` (
+  `id` INT NOT NULL,
+  `NPC` VARCHAR(255) NOT NULL,
+  `dialogObj` LONGTEXT NOT NULL,
+  PRIMARY KEY (`NPC`),
+  UNIQUE INDEX `NPC_UNIQUE` (`NPC` ASC));
+
