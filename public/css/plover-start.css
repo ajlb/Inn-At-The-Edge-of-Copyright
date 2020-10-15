@@ -1,25 +1,40 @@
 body {
-    background-color: gray;
+    background-color: balck;
     margin: 0 auto;
 }
 
 
 /* Chat box */ 
 
+#background-small{
+    display: block;
+    width: 100%;
+}
+
+#background-large{
+    display: none;
+    width: 130%;
+    margin: 0 auto;
+    margin-left: -130px;
+    
+}
+
 .panel-default {
     background-color: black;
     color: white;
     padding: 10px;
-    width: 80%;
+    width: 69%;
     max-width: 1000px;
-    margin: 0 auto;
-    margin-top: 120px;
-    height: 55vh;
+    height: 63%;
     max-height: 500px;
     border: white 2px solid;
-    position: relative;
+    position: absolute;
+    opacity: 1;
+    left: 14%;
+    top: 22%;
+    border-radius: 10px;
     padding-bottom: 100px;
-    font-size: 15px;
+    font-size: 11px;
 }
 
 #location-info {
@@ -34,12 +49,15 @@ body {
     left: 2px;
     width: 98%;
     max-width: 998px;
+    border-radius: 10px;
+    height: 10%;
     background-color: black;
     padding: 2px;
 }
 
 .chat-input {
 width: 90%;
+border-radius: 8px;
 }
 
 .message-output-box {
@@ -49,12 +67,18 @@ width: 90%;
     overflow-anchor: none;
 }
 
-
+#whole-form {
+    position: absolute;
+    top: 55%;
+    left: 20%;
+    width: 65%;
+}
 
 /* message display */
 .displayed-description {
     margin-left: 20px;
     margin-top: -8px;
+    margin-right: 15px;
     color: rgb(245, 252, 181);
 }
 
@@ -62,6 +86,7 @@ width: 90%;
     margin-top: 1px;
     margin-bottom: 1px;
     font-size: 13px;
+    margin-right: 15px;
 }
 
 .displayed-stat #red{
@@ -80,3 +105,31 @@ width: 90%;
     overflow-anchor: auto;
     height: 1px;
 }
+
+button{
+    height: 100%;
+    background-color: rgb(122, 122, 122);
+    color: white;
+}
+
+@media only screen and (min-width: 500px) {
+    .panel-default {
+      top: 30%;
+      height: 1500px;
+    }
+  }
+
+  @media only screen and (min-width: 670px) {
+    .panel-default {
+      top: 55%;
+      left: 20%;
+      width: 65%;
+      height: 1500px;
+    }
+    #background-large{
+        display: block;
+    }
+    #background-small{
+        display: none;
+    }
+  }

@@ -604,6 +604,18 @@ function findNewLocationData(direction) {
         printLocationDescription(currentLocation);
         currentExits = compileExits(currentLocation);
         printExits(currentExits);
+        if (data.id == 1002){
+          getInventory(currentUserId).then(function(userInv){
+            console.log("checking inventory");
+            findMatchByItemName("dull ring", userInv).then(success=>{
+              console.log("looking in your bags");
+              if(!success){
+                console.log("it's a desolate place have a ring")
+                addItemToInventory(131, currentUserId, 1);
+              }
+            })
+          })
+        }
         setTimeout(parseWhosOnline(), 4000);
         updateScroll();
         resolve();
@@ -612,6 +624,15 @@ function findNewLocationData(direction) {
     } else if (!(currentExits[direction] == null)) {
       //set currentLocation, and pass to pubnub as locationIndex
       getLocation(currentExits[direction]).then(function (data) {
+        // if (data.id == 1002){
+        //   getInventory(currentUserId).then(function(userInv){
+        //     findMatchByItemName("dull ring").then(sucess=>{
+        //       if(!success){
+        //         addItemToInventory(131, currentUserId,1);
+        //       }
+        //     })
+        //   })
+        // }
         currentLocation = data;
         currentExits = compileExits(currentLocation);
         locationIndex = data.locationName.replace(/ /g, "-");

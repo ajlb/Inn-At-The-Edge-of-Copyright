@@ -144,8 +144,9 @@ function signupPlayer(name, password, stats, race, profession) {
         STR: stats.str,
         HP: stats.hp,
         race: race,
-        class: profession,
-        description: `${name} is a ${race} ${profession}`
+        class : profession,
+        lastLocation: 1002,
+        description: `${ name } is a ${ race } ${ profession }`
     }
     return new Promise(function (resolve, reject) {
         $.post('/signup', newCharObject, function (data) {
