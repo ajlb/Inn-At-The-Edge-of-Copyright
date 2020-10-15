@@ -70,6 +70,16 @@ module.exports = function (app) {
             console.log(e);
         });
     });
+    app.get("/api/dialog/:NPC", function (req, res) {
+        models.dialog.findOne({ where: { NPC: req.params.NPC } })
+            .then(data => {
+                res.json(data);
+            })
+            .catch(e => {
+                console.log(e)
+                res.status(404);
+            })
+    })
     //Put item into player equipment slot
     app.put("/api/playerEquipment/", function (req, res) {
         let wheres = {
@@ -168,18 +178,18 @@ module.exports = function (app) {
         });
     });
 
-    app.put("/api/playerStats/", function(req, res){
-        models.player.increment(req.body.stat, {where: {characterName: req.body.characterName}, by: req.body.amount}).then(function(data){
+    app.put("/api/playerStats/", function (req, res) {
+        models.player.increment(req.body.stat, { where: { characterName: req.body.characterName }, by: req.body.amount }).then(function (data) {
             res.json(data);
         }).catch(e => reject(e));
     });
-    app.get("/api/playerStats/:id", function(req, res){
-        models.player.findOne({attributes: ['DEX', 'STR', 'WIS', 'HP', 'maxHP', 'level', 'xp'], where: {characterName: req.params.id}}).then(function(data){
+    app.get("/api/playerStats/:id", function (req, res) {
+        models.player.findOne({ attributes: ['DEX', 'STR', 'WIS', 'HP', 'maxHP', 'level', 'xp'], where: { characterName: req.params.id } }).then(function (data) {
             res.json(data);
         }).catch(e => console.log(e));
     })
-    app.put("/api/playerLocation/", function(req, res){
-        models.player.update({lastLocation: req.body.lastLocation}, {where: {characterName: req.body.characterName}}).then(function(data){
+    app.put("/api/playerLocation/", function (req, res) {
+        models.player.update({ lastLocation: req.body.lastLocation }, { where: { characterName: req.body.characterName } }).then(function (data) {
             res.json(data);
         }).catch(e => reject(e));
     });
