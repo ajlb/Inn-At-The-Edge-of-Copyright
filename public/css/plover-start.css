@@ -1,10 +1,13 @@
 body {
-    background-color: balck;
+    background-color: black;
     margin: 0 auto;
 }
 
 
 /* Chat box */ 
+.container {
+    position: relative;
+}
 
 #background-small{
     display: block;
@@ -30,7 +33,7 @@ body {
     border: white 2px solid;
     position: absolute;
     opacity: 1;
-    left: 14%;
+    left: 16%;
     top: 22%;
     border-radius: 10px;
     padding-bottom: 100px;
@@ -119,12 +122,59 @@ button{
     }
   }
 
+
+
   @media only screen and (min-width: 670px) {
     .panel-default {
-      top: 55%;
-      left: 20%;
+      top: 25%;
+      left: 36px;
       width: 65%;
-      height: 1500px;
+      height: 35%;
+    }
+    #background-large{
+        display: block;
+    }
+    #background-small{
+        display: none;
+    }
+  }
+
+  @media only screen and (min-width: 767px) {
+    .panel-default {
+      top: 25%;
+      left: 100px;
+      width: 65%;
+      height: 35%;
+    }
+    #background-large{
+        display: block;
+    }
+    #background-small{
+        display: none;
+    }
+  }
+
+  @media only screen and (min-width: 990px) {
+    .panel-default {
+      top: 25%;
+      left: 185px;
+      width: 65%;
+      height: 35%;
+    }
+    #background-large{
+        display: block;
+    }
+    #background-small{
+        display: none;
+    }
+  }
+
+  @media only screen and (min-width: 1200px) {
+    .panel-default {
+      top: 29%;
+      left: 240px;
+      width: 65%;
+      height: 35%;
     }
     #background-large{
         display: block;
