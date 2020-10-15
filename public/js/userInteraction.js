@@ -96,25 +96,26 @@ function findItemProperty(data) {
   });
 }
 
-function findMatchByItemName(value, data){
-  return new Promise(function(resolve, reject){
-  for (const item of data){
-    if (item.item.itemName.toLowerCase() === value.toLowerCase()){
-      resolve(item);
+function findMatchByItemName(value, data) {
+  return new Promise(function (resolve, reject) {
+    for (const item of data) {
+      if (item.item.itemName.toLowerCase() === value.toLowerCase()) {
+        resolve(item);
+      }
     }
-  }
-  resolve(false);
+    resolve(false);
   });
 }
 
-function findMatchByCharacterName(name){
-  return new Promise(function(resolve, reject){
+function findMatchByCharacterName(name) {
+  return new Promise(function (resolve, reject) {
     let NPCList = currentLocation.NPCs.split(", ");
-    for (const NPC of NPCList){
-      if (name === NPC){
-        return (true);
+    for (const NPC of NPCList) {
+      if (name === NPC) {
+        resolve();
       }
     }
+    reject();
   });
 }
 
@@ -182,13 +183,13 @@ function insertArticleSingleValue(value) {
 
 //get user Id from pubnub, then put into string for searching inventories
 function setUserInventoryId() {
-  return new Promise(function(resolve, reject){
+  return new Promise(function (resolve, reject) {
     getPlayerData(thisUser).then(function (data) {
       thisUser = pubnub.getUUID();
       currentUserData = data;
       currentUserId = "P" + data.id;
       resolve(currentUserData);
-  })
+    })
   });
 }
 
@@ -239,26 +240,26 @@ function printLocationDescription(locationData) {
 }
 
 //print who's online
-function parseWhosOnline(){
+function parseWhosOnline() {
   console.log(" inside parseWhosOnline()");
   let string = "";
   let occupants = [];
   whosOnline().then(residents => {
     locationOccupants = residents;
     let locationKey = Object.keys(residents.channels)[0];
-  if (!(residents.channels[locationKey] === undefined) && (residents.channels[locationKey].occupants.length > 0)){
-    for (const occupant of residents.channels[locationKey].occupants){
-      occupants.push(occupant.uuid);
+    if (!(residents.channels[locationKey] === undefined) && (residents.channels[locationKey].occupants.length > 0)) {
+      for (const occupant of residents.channels[locationKey].occupants) {
+        occupants.push(occupant.uuid);
+      }
+      string += occupants.join(", ");
+      $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}: ${string}</p>`);
     }
-    string += occupants.join(", ");
-    $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}: ${string}</p>`);
-  }
   })
 }
 
 //react to input beginning with a move word
 function parseMove(value) {
-  if (position === "standing"){
+  if (position === "standing") {
     value = takeTheseOffThat(actionCalls.move, value);
     let success = false;
     for (const direction in DIRECTIONWORDS) {
@@ -379,14 +380,19 @@ function lookAround(value) {
 
 //function react to input beginning with speak command
 function speak(value) {
-  if (value.toLowerCase().startsWith("speak to")){
-    value = takeTheseOffThat(["speak to"], value);
+  if (value.toLowerCase().startsWith("speak to") || value.toLowerCase().startsWith("talk to") || value.toLowerCase().startsWith("say to")) {
+    value = takeTheseOffThat(["speak to ", "talk to ", "say to "], value.trim());
     let target = value.split(" ")[0];
-    findMatchByCharacterName(target).then(success=> {
-      if (success){
-        runNPC()
-      }
-    })
+    let message = value.split(" ").slice(1).join(' ');
+    target = target[0].toUpperCase() + target.slice(1);
+    findMatchByCharacterName(target)
+      .then(() => {
+        runNPC(target, message, logThis, describeThis, listThis);
+      })
+      .catch((err) => {
+        console.log(err)
+        logThis('You cannot speak directly to ' + target)
+      })
   } else {
     value = takeTheseOffThat(actionCalls.speak, value);
     publishMessage(value);
@@ -399,7 +405,7 @@ function emote(value) {
   publishDescription(value);
 }
 
-function tell(value){
+function tell(value) {
   value = takeTheseOffThat(actionCalls.tell, value);
   let NPC = value.split(" ")[0];
 
@@ -459,53 +465,53 @@ function removeItem(value) {
 
 
 
-function parseStats(){
+function parseStats() {
   getStats(currentUserData.characterName).then(stats => {
     let title = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0STATS\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
     let dashes = "---------------------";
     $("#anchor").before(`<p class="displayed-stat">${title}</p>`);
     $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
-      let maxHP = stats.maxHP;
-      delete stats.maxHP;
-      for (const item in stats) {
-        let string = "\xa0\xa0\xa0\xa0";
-        if (item.length === 3) {
-          string += `\xa0${item}\xa0\xa0\xa0|\xa0\xa0`;
+    let maxHP = stats.maxHP;
+    delete stats.maxHP;
+    for (const item in stats) {
+      let string = "\xa0\xa0\xa0\xa0";
+      if (item.length === 3) {
+        string += `\xa0${item}\xa0\xa0\xa0|\xa0\xa0`;
+        statValue = parseInt(stats[item]);
+        $("#anchor").before(`<p class="displayed-stat">${string}<span id="blue">${statValue}</span></p>`);
+      } else if (item.length == 2) {
+        string += `\xa0${item.toUpperCase()}\xa0\xa0\xa0\xa0\xa0|\xa0\xa0`;
+        if (item === "HP" && stats["HP"] < maxHP) {
           statValue = parseInt(stats[item]);
-          $("#anchor").before(`<p class="displayed-stat">${string}<span id="blue">${statValue}</span></p>`);
-        } else if (item.length == 2) {
-          string += `\xa0${item.toUpperCase()}\xa0\xa0\xa0\xa0\xa0|\xa0\xa0`;
-          if (item === "HP" && stats["HP"]<maxHP){
-            statValue = parseInt(stats[item]);
-            $("#anchor").before(`<p class="displayed-stat">${string}<span id="red">${statValue}</span>/${maxHP}</p>`);
-          } else if (item === "HP" && stats["HP"]>=maxHP){
-            statValue = parseInt(stats[item]);
-            $("#anchor").before(`<p class="displayed-stat">${string}<span id="green">${statValue}</span>/${maxHP}</p>`);
-          } else {
-            statValue = parseInt(stats[item]);
-            $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
-          }
+          $("#anchor").before(`<p class="displayed-stat">${string}<span id="red">${statValue}</span>/${maxHP}</p>`);
+        } else if (item === "HP" && stats["HP"] >= maxHP) {
+          statValue = parseInt(stats[item]);
+          $("#anchor").before(`<p class="displayed-stat">${string}<span id="green">${statValue}</span>/${maxHP}</p>`);
         } else {
-          string += `${item}\xa0\xa0\xa0|\xa0\xa0`;
           statValue = parseInt(stats[item]);
           $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
         }
+      } else {
+        string += `${item}\xa0\xa0\xa0|\xa0\xa0`;
+        statValue = parseInt(stats[item]);
+        $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
       }
-      $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
-      updateScroll();
+    }
+    $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
+    updateScroll();
   })
 }
 
 
-function sleep(){
-  if (position === "laying"){
+function sleep() {
+  if (position === "laying") {
     logThis("You fall into a deep slumber");
     pubnub.unsubscribeAll();
     publishDescription("falls asleep.");
-    let i=0;
-    sleepInterval = setInterval(function(){
-      getStats(currentUserData.characterName).then(stats =>{
-        if ((i > 1) && (stats.HP < stats.maxHP)){
+    let i = 0;
+    sleepInterval = setInterval(function () {
+      getStats(currentUserData.characterName).then(stats => {
+        if ((i > 1) && (stats.HP < stats.maxHP)) {
           incrementStat("HP", 1, currentUserData.characterName);
         }
         i++;
@@ -516,7 +522,7 @@ function sleep(){
   }
 }
 
-function wake(){
+function wake() {
   publishDescription("opens their eyes");
   clearInterval(sleepInterval);
   const id = currentLocation.locationName.replace(/ /g, "-");
@@ -526,34 +532,34 @@ function wake(){
   logThis("You wake up.")
 }
 
-function sitStandLie(value){
-  if (value == "stand" || value == "stand up"){
+function sitStandLie(value) {
+  if (value == "stand" || value == "stand up") {
     position = "standing";
     publishDescription("stands up.");
-  } else if (value == "sit" || value == "sit down"){
+  } else if (value == "sit" || value == "sit down") {
     position = "sitting";
     publishDescription("sits down.");
-  } else if (value == "lay" || value == "lay down" || value == "lie" || value == "lie down"){
+  } else if (value == "lay" || value == "lay down" || value == "lie" || value == "lie down") {
     position = "laying";
     publishDescription("lies down.");
   }
 }
 
 
-function displayHelp(value){
-  if (value.toLowerCase() === "help"){
+function displayHelp(value) {
+  if (value.toLowerCase() === "help") {
     let title = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0HELP\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
     let dashes = "---------------------";
     listThis(title);
     listThis(dashes);
-    for (action of actionData){
+    for (action of actionData) {
       listThis(`${action.actionName}\xa0\xa0\xa0\xa0\xa0 --${action.commandBriefDescription}`)
     }
   } else {
-    for (action of actionData){
+    for (action of actionData) {
       console.log(value.split(" ")[1]);
       console.log(action.actionName);
-      if (value.split(" ")[1].toLowerCase() == action.actionName){
+      if (value.split(" ")[1].toLowerCase() == action.actionName) {
         console.log("FOUND IT!");
         listThis(action.actionName.toUpperCase());
         listThis(" ");
@@ -569,23 +575,23 @@ function displayHelp(value){
 }
 
 
-function giveItem(value){
+function giveItem(value) {
   value = takeTheseOffThat(actionCalls.give, value);
   value = takeTheseOffThat(ARTICLES, value);
   value = value.split(" ");
   let target = value.pop();
   value = value.split(" ").
 
-  getInventory(currentUserId).then(userInv =>{
-    findMatchByItemNameAndChangeQuantity(value, userInv, )
-  })
+    getInventory(currentUserId).then(userInv => {
+      findMatchByItemNameAndChangeQuantity(value, userInv,)
+    })
 }
 
 //HIGH LEVEL FUNCTIONS
 
 
-function findNewLocationData(direction){
-  return new Promise(function(resolve, reject){
+function findNewLocationData(direction) {
+  return new Promise(function (resolve, reject) {
     if (direction == "start") {
       //set currentLocation, and pass to pubnub as locationIndex
       getLocation(currentUserData.lastLocation).then(function (data) {
@@ -602,7 +608,7 @@ function findNewLocationData(direction){
         updateScroll();
         resolve();
       });
-  
+
     } else if (!(currentExits[direction] == null)) {
       //set currentLocation, and pass to pubnub as locationIndex
       getLocation(currentExits[direction]).then(function (data) {
@@ -622,14 +628,13 @@ function findNewLocationData(direction){
         rememberLocation(currentUserData.characterName, currentLocation.id);
         $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
         $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
-  
+
         printLocationDescription(currentLocation);
         printExits(currentExits);
         setTimeout(parseWhosOnline(), 4000);
         updateScroll();
         resolve();
       });
-  
     } else {
       logThis("There's no exit at " + direction);
       resolve();
@@ -644,28 +649,28 @@ function findNewLocationData(direction){
 //MOVE TO A NEW ROOM, AND GET A NEW CHAT
 const newLocation = function (direction) {
   // give this chatroom the correct id
-  findNewLocationData(direction).then(function(){
-    
-      // set channel off of locationIndex channel
-      const id = locationIndex;
-      channel = 'oo-chat-' + locationIndex;
-      console.log("In Room ID: " + locationIndex);
-    
-      // this function is fired when Chatroom() is called
-      //it unsubscribes from previous rooms, and subscribes to the new room
-      const init = function () {
-    
-        pubnub.unsubscribeAll();
-        console.log("subscribing");
-        pubnub.subscribe({ 
-          channels: [channel],
-          withPresence: true,
-        });
+  findNewLocationData(direction).then(function () {
 
-    
-      };//end init
-    
-      init();
+    // set channel off of locationIndex channel
+    const id = locationIndex;
+    channel = 'oo-chat-' + locationIndex;
+    console.log("In Room ID: " + locationIndex);
+
+    // this function is fired when Chatroom() is called
+    //it unsubscribes from previous rooms, and subscribes to the new room
+    const init = function () {
+
+      pubnub.unsubscribeAll();
+      console.log("subscribing");
+      pubnub.subscribe({
+        channels: [channel],
+        withPresence: true,
+      });
+
+
+    };//end init
+
+    init();
   })
 }
 
@@ -682,39 +687,39 @@ $("#submit-button").click(function (event) {
 
   if (doesThisStartWithThose(value, actionCalls.move)) {
     parseMove(value);
-  } else if (value.toLowerCase() === "stop juggling"){
+  } else if (value.toLowerCase() === "stop juggling") {
     stopJuggling();
-  } else if (doesThisStartWithThose(value, actionCalls.inventory)){
+  } else if (doesThisStartWithThose(value, actionCalls.inventory)) {
     parseInventory("Player");
-  } else if (doesThisStartWithThose(value, actionCalls.speak)){
+  } else if (doesThisStartWithThose(value, actionCalls.speak)) {
     speak(value);
-  } else if (doesThisStartWithThose(value, actionCalls.look)){
+  } else if (doesThisStartWithThose(value, actionCalls.look)) {
     lookAround(value);
   } else if (juggleTime) {
     logThis("You should probably stop juggling first.");
-  } else if (doesThisStartWithThose(value, actionCalls.get)){
+  } else if (doesThisStartWithThose(value, actionCalls.get)) {
     getItem(value);
-  } else if (doesThisStartWithThose(value, actionCalls.drop)){
+  } else if (doesThisStartWithThose(value, actionCalls.drop)) {
     dropItem(value);
-  } else if (doesThisStartWithThose(value, actionCalls.wear)){
+  } else if (doesThisStartWithThose(value, actionCalls.wear)) {
     wearItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.remove)) {
     removeItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.emote)) {
     emote(value);
-  } else if (doesThisStartWithThose(value, actionCalls.juggle)){
+  } else if (doesThisStartWithThose(value, actionCalls.juggle)) {
     juggle(value);
-  } else if (doesThisStartWithThose(value, actionCalls.stats)){
+  } else if (doesThisStartWithThose(value, actionCalls.stats)) {
     parseStats();
-  } else if (doesThisStartWithThose(value, actionCalls.sleep)){
+  } else if (doesThisStartWithThose(value, actionCalls.sleep)) {
     sleep();
-  } else if (doesThisStartWithThose(value, actionCalls.wake)){
+  } else if (doesThisStartWithThose(value, actionCalls.wake)) {
     wake();
-  } else if (doesThisStartWithThose(value, actionCalls.position)){
+  } else if (doesThisStartWithThose(value, actionCalls.position)) {
     sitStandLie(value);
-  } else if (doesThisStartWithThose(value, actionCalls.give)){
+  } else if (doesThisStartWithThose(value, actionCalls.give)) {
     giveItem(value);
-  } else if (doesThisStartWithThose(value, actionCalls.help)){
+  } else if (doesThisStartWithThose(value, actionCalls.help)) {
     displayHelp(value);
   }
 });
