@@ -56,9 +56,9 @@ displayMessage = function(messageType, aMessage) {
 
 function logAction(presence){
   if (presence.action == "join"){
-    publishEvent(`${presence.uuid} enters.`);
+    logThis(`${presence.uuid} enters.`);
   } else if (presence.action == "leave"){
-    publishEvent(`${presence.uuid} exits.`);
+    logThis(`${presence.uuid} exits.`);
   }
 }
 
