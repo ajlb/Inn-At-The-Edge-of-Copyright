@@ -612,6 +612,15 @@ function findNewLocationData(direction) {
     } else if (!(currentExits[direction] == null)) {
       //set currentLocation, and pass to pubnub as locationIndex
       getLocation(currentExits[direction]).then(function (data) {
+        if (data.id == 1002){
+          getInventory(currentUserId).then(function(userInv){
+            findMatchByItemName("dull ring").then(sucess=>{
+              if(!success){
+                addItemToInventory(131, currentUserId,1);
+              }
+            })
+          })
+        }
         currentLocation = data;
         currentExits = compileExits(currentLocation);
         locationIndex = data.locationName.replace(/ /g, "-");
