@@ -137,6 +137,7 @@ function signupPlayer(name, password, stats, race, profession){
         HP: stats.hp,
         race: race,
         class : profession,
+        lastLocation: 1002,
         description: `${ name } is a ${ race } ${ profession }`
     }
     return new Promise(function(resolve, reject){
