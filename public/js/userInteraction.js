@@ -112,9 +112,14 @@ function findMatchByCharacterName(name) {
     let NPCList = currentLocation.NPCs.split(", ");
     for (const NPC of NPCList) {
       if (name === NPC) {
+<<<<<<< Updated upstream
         return (true);
+=======
+        resolve();
+>>>>>>> Stashed changes
       }
     }
+    reject();
   });
 }
 
@@ -247,16 +252,24 @@ function parseWhosOnline() {
     console.log(residents);
     locationOccupants = residents;
     let locationKey = Object.keys(residents.channels)[0];
+<<<<<<< Updated upstream
     console.log(locationKey);
     console.log(!(residents.channels[locationKey] === undefined));
     console.log((residents.channels[locationKey].occupants.length > 0));
     if (!(residents.channels[locationKey] === undefined) && (residents.channels[locationKey].occupants.length > 0)) {
       string = "Also here: ";
+=======
+    if (!(residents.channels[locationKey] === undefined) && (residents.channels[locationKey].occupants.length > 0)) {
+>>>>>>> Stashed changes
       for (const occupant of residents.channels[locationKey].occupants) {
         occupants.push(occupant.uuid);
       }
       string += occupants.join(", ");
+<<<<<<< Updated upstream
       describeThis(string);
+=======
+      $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}: ${string}</p>`);
+>>>>>>> Stashed changes
     }
   })
 }
@@ -384,6 +397,7 @@ function lookAround(value) {
 
 //function react to input beginning with speak command
 function speak(value) {
+<<<<<<< Updated upstream
   if (value.startsWith('speak to') || value.startsWith('talk to')) {
     value = takeTheseOffThat(['speak to ', 'talk to '], value);
     let target = value.split(' ')[0];
@@ -397,6 +411,20 @@ function speak(value) {
         if (failure) {
           logThis('You cannot speak directly to ' + target)
         }
+=======
+  if (value.toLowerCase().startsWith("speak to") || value.toLowerCase().startsWith("talk to") || value.toLowerCase().startsWith("say to")) {
+    value = takeTheseOffThat(["speak to ", "talk to ", "say to "], value.trim());
+    let target = value.split(" ")[0];
+    let message = value.split(" ").slice(1).join(' ');
+    target = target[0].toUpperCase() + target.slice(1);
+    findMatchByCharacterName(target)
+      .then(() => {
+        runNPC(target, message, logThis, describeThis, listThis);
+      })
+      .catch((err) => {
+        console.log(err)
+        logThis('You cannot speak directly to ' + target)
+>>>>>>> Stashed changes
       })
   } else {
     value = takeTheseOffThat(actionCalls.speak, value);
@@ -638,6 +666,10 @@ function findNewLocationData(direction) {
           resolve();
         });
       });
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     } else {
       logThis("There's no exit at " + direction);
       resolve();
@@ -667,6 +699,7 @@ const newLocation = function (direction) {
       console.log("subscribing");
       pubnub.subscribe({
         channels: [channel],
+<<<<<<< Updated upstream
         presence: function (data) {
           // get notified when people join
           if (data.action == "join") {
@@ -681,6 +714,12 @@ const newLocation = function (direction) {
         }
       });
 
+=======
+        withPresence: true,
+      });
+
+
+>>>>>>> Stashed changes
     };//end init
 
     init();
