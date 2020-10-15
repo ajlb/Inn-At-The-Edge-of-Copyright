@@ -2,9 +2,8 @@ function runNPC(target, message, logThis, describeThis, listThis) {
     getDialog(target).then(dialogRow => {
         console.log(dialogRow)
         let dialog = JSON.parse(dialogRow.dialogObj);
-        console.log('dialog object: ', dialog)
-        console.log('message: ', message)
-        if (message.trim() === '') {
+        let greetingArray = ["hello", "hey", "what's up", "whats up", "hi"]
+        if (message.trim() === '' || greetingArray.includes(message.toLowerCase())) {
             logThis(`${target}: ${dialog.messages[0].message}`)
             describeThis(`Responses: ${dialog.messages[0].exampleResponses.join(', ')}`)
         } else {
