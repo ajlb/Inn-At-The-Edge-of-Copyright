@@ -554,6 +554,7 @@ function displayHelp(value) {
     listThis(dashes);
     for (action of actionData) {
       listThis(`${action.actionName}\xa0\xa0\xa0\xa0\xa0 --${action.commandBriefDescription}`)
+      updateScroll()
     }
   } else {
     for (action of actionData) {
