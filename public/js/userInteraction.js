@@ -448,21 +448,25 @@ function removeItem(value) {
   locateEquippedItems(currentUserData.id).then(function (userEquipment) {
     let itemId;
     findItemData(value).then(function (itemData) {
-      itemId = itemData.id;
-      findMatchByItemIdInObject(itemId, userEquipment).then(function (itemMatch) {
-        if (itemMatch) {
-          console.log("Found a match");
-          findItemProperty(itemData).then(itemSlot => {
-            changeIsEquipped(itemId, currentUserId, -1).then(success => {
-              fillPlayerInvSlot(null, currentUserData.id, itemSlot).then(data => {
-                logThis(`You take off ${insertArticleSingleValue(value)}.`);
+      if(!(itemData == null)){
+        itemId = itemData.id;
+        findMatchByItemIdInObject(itemId, userEquipment).then(function (itemMatch) {
+          if (itemMatch) {
+            console.log("Found a match");
+            findItemProperty(itemData).then(itemSlot => {
+              changeIsEquipped(itemId, currentUserId, -1).then(success => {
+                fillPlayerInvSlot(null, currentUserData.id, itemSlot).then(data => {
+                  logThis(`You take off ${insertArticleSingleValue(value)}.`);
+                })
               })
             })
-          })
-        } else {
-          logThis(`You don't have ${insertArticleSingleValue(value)} to take off!`);
-        }
-      })
+          } else {
+            logThis(`You don't have ${insertArticleSingleValue(value)} to take off!`);
+          }
+        })
+      } else {
+        logThis("hmmm... not sure what a " + value + " is.");
+      } 
     })
   })
 }
