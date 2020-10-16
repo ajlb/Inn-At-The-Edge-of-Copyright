@@ -558,10 +558,7 @@ function displayHelp(value) {
     listThis(dashes);
     for (action of actionData) {
       listThis(`${action.actionName}\xa0\xa0\xa0\xa0\xa0 --${action.commandBriefDescription}`)
-<<<<<<< Updated upstream
-=======
       updateScroll();
->>>>>>> Stashed changes
     }
     logThis(" ");
     updateScroll();
