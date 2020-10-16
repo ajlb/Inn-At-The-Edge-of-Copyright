@@ -1,6 +1,5 @@
 function runNPC(target, message, logThis, describeThis, listThis) {
     getDialog(target).then(dialogRow => {
-        console.log(dialogRow)
         let dialog = JSON.parse(dialogRow.dialogObj);
         let greetingArray = ["hello", "hey", "what's up", "whats up", "hi"]
         if (message.trim() === '' || greetingArray.includes(message.toLowerCase())) {
@@ -10,9 +9,7 @@ function runNPC(target, message, logThis, describeThis, listThis) {
             let route;
 
             dialog.messages.forEach(messageObj => {
-                console.log('messageObj: ', messageObj);
                 messageObj.allowedResponses.forEach(responseObj => {
-                    console.log('responseObj: ', responseObj)
                     if (responseObj.responses.includes(message.toLowerCase())) {
                         route = responseObj.route
                     }
