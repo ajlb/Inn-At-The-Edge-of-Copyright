@@ -32,7 +32,9 @@ VALUES
 ("give", "give an item to someone", "When you type give followed by an item in your inventory, and someone else in your location, you will give the item to them.", "give", "give a mushroom to Grizabella", "[Character] gives a mushroom to Grizabella"),
 ("quests", "see a list of active quests", "When you type quests, you will see a list of active quests for your character.", "quests", "quests", "[List of quests]"),
 ("time", "check the time", "When you type time, you will get the current game time", "time, check time", "time", "It is 1:09pm"),
+("talk to", "talk to an NPC", "When you type 'talk to' followed by the name of an NPC in your location, you will be able to interact with them.", "talk to, address", "talk to clerk", "Clerk: Hi welcome to the In..."),
 ("help", "check command usage", "When you type help, you will get a list of all game commands. When you type help followed by a game command, you will get that command's details.", "help", "help", "[list of commands]");
+
 
 INSERT INTO locations
     (id,locationName, dayDescription, nightDescription, exitN, exitE, exitS, exitW, region)

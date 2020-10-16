@@ -301,8 +301,12 @@ function parseInventory(PlayerLocationItemID) {
           locationInventory.push(`${item.quantity} ${pluralizeAppropriateWords(item.item.itemName, item.quantity)}`);
         }
         currentLocationInventory = locationInventory;
-        describeThis(`You see: ${currentLocationInventory.join(", ")}`);
-        resolve(currentLocationInventory);
+        if (currentLocationInventory.length > 0){
+          describeThis(`You see: ${currentLocationInventory.join(", ")}`);
+          resolve(currentLocationInventory);
+        } else {
+          resolve(false);
+        }
       });
       //Item Inventory
     } else if (PlayerLocationItemID.startsWith("I")) {
@@ -444,21 +448,25 @@ function removeItem(value) {
   locateEquippedItems(currentUserData.id).then(function (userEquipment) {
     let itemId;
     findItemData(value).then(function (itemData) {
-      itemId = itemData.id;
-      findMatchByItemIdInObject(itemId, userEquipment).then(function (itemMatch) {
-        if (itemMatch) {
-          console.log("Found a match");
-          findItemProperty(itemData).then(itemSlot => {
-            changeIsEquipped(itemId, currentUserId, -1).then(success => {
-              fillPlayerInvSlot(null, currentUserData.id, itemSlot).then(data => {
-                logThis(`You take off ${insertArticleSingleValue(value)}.`);
+      if(!(itemData == null)){
+        itemId = itemData.id;
+        findMatchByItemIdInObject(itemId, userEquipment).then(function (itemMatch) {
+          if (itemMatch) {
+            console.log("Found a match");
+            findItemProperty(itemData).then(itemSlot => {
+              changeIsEquipped(itemId, currentUserId, -1).then(success => {
+                fillPlayerInvSlot(null, currentUserData.id, itemSlot).then(data => {
+                  logThis(`You take off ${insertArticleSingleValue(value)}.`);
+                })
               })
             })
-          })
-        } else {
-          logThis(`You don't have ${insertArticleSingleValue(value)} to take off!`);
-        }
-      })
+          } else {
+            logThis(`You don't have ${insertArticleSingleValue(value)} to take off!`);
+          }
+        })
+      } else {
+        logThis("hmmm... not sure what a " + value + " is.");
+      } 
     })
   })
 }
@@ -554,7 +562,10 @@ function displayHelp(value) {
     listThis(dashes);
     for (action of actionData) {
       listThis(`${action.actionName}\xa0\xa0\xa0\xa0\xa0 --${action.commandBriefDescription}`)
+      updateScroll();
     }
+    logThis(" ");
+    updateScroll();
   } else {
     for (action of actionData) {
       console.log(value.split(" ")[1]);
@@ -571,6 +582,8 @@ function displayHelp(value) {
         break;
       }
     }
+    logThis(" ");
+    updateScroll();
   }
 }
 
@@ -729,10 +742,10 @@ $("#submit-button").click(function (event) {
     wake();
   } else if (doesThisStartWithThose(value, actionCalls.position)) {
     sitStandLie(value);
-  } else if (doesThisStartWithThose(value, actionCalls.give)) {
-    giveItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.help)) {
     displayHelp(value);
+  } else {
+    logThis("hmmm... that didn't quite make sense. Try 'help' for a list of commands!");
   }
 });
 
