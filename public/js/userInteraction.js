@@ -742,8 +742,6 @@ $("#submit-button").click(function (event) {
     wake();
   } else if (doesThisStartWithThose(value, actionCalls.position)) {
     sitStandLie(value);
-  } else if (doesThisStartWithThose(value, actionCalls.give)) {
-    giveItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.help)) {
     displayHelp(value);
   } else {
