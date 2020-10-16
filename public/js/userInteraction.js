@@ -742,6 +742,8 @@ $("#submit-button").click(function (event) {
     giveItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.help)) {
     displayHelp(value);
+  } else {
+    logThis("hmmm... that didn't quite make sense. Try 'help' for a list of commands!");
   }
 });
 
