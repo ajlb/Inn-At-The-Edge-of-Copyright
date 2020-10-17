@@ -14,17 +14,40 @@
 
 The Inn at the Edge of Copyright is a text-based framework for anyone with a crave for an adventure. Our project is a MUD or Multi-User-Dungeon RPG based loosely on the Hitchhiker's Guide to the Galaxy series by Douglas Adams and inspired by text-based MUDs of the early days of the internet. The Inn At The Edge is where all who are lost can find a home. To keep the gameplay compelling we added PubNub to serve as our chat server allowing players to interact with each other and the location environments. This was an exciting venture into Passport and learning PubNub’s publish/subscribe technology. The application uses a blend of server-side and client-side processing. Most of the game data is stored in our server's MySQL database.
 
+[![Gif Tutorial of how to navigate the game](./screenshots/tutorial.gif)](https://innattheedge.herokuapp.com/)
+
 ### Installation ###
 
-1. Download the .zip file from the GitHub Page for Inn at the Edge of Copyright [here](https://github.com/n-lambert/Inn-At-The-Edge-of-Copyright)
-1. Unzip the file
-1. Navigate to the unzipped folder in your preferred command shell and run ```npm install```
-1. run ```npm start``` to run the server locally 
+1. No installation required! Join us in The Inn at [InnattheEdge.herokuapp.com/](https://innattheedge.herokuapp.com/)
 
 ### Usage
 
 1. To use the application, visit us [here](https://innattheedge.herokuapp.com)
-   1. If you're running the server locally, go to localhost:8080 instead
+1. Your list of commands are as follows:
+```
+get      --Pick up an item
+look      --You look around you.
+drop      --You drop an item
+inventory      --You check your inventory
+move      --You move through an exit
+speak      --You speak.
+wear      --You put on a wearable item.
+remove      --You take off an item you are wearing.
+stats      --You call up your character stats.
+juggle      --You juggle something.
+emote      --you describe an action
+sleep      --You go to sleep
+wake      --You wake up
+position      --You change position.
+help      --check command usage
+examine      --Look closely at an item
+```
+
+### Known Issues
+
+1. Occasionally when someone logs in they're greeted with a blank screen and no working commands! If this happens to you, refresh your page and all should be working. View the issue on our GitHub issues page [here](https://github.com/n-lambert/Inn-At-The-Edge-of-Copyright/issues/87).
+
+We are working at fixing these bugs as soon as possible! Thank you for your patience.
 
 ### Tests
 
@@ -40,7 +63,7 @@ The Inn at the Edge of Copyright is a text-based framework for anyone with a cra
 * [Nicholas Konzen](https://github.com/NTKonzen)
 
 ### Questions
-If you have any questions feel free to contact me on [GitHub](https://github.com/n-lambert) or email me at nicholaskonzen@gmail.com.
+If you have any questions, refer to the [Contributors](#contributors) section of this page or email us at innattheedgeofcopyright@gmail.com.
 
 ---
 #### License
