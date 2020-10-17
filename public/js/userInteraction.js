@@ -417,6 +417,20 @@ function tell(value) {
 
 }
 
+function talkDirectlyToNPC(value){
+  let target = value.split(" ")[0];
+  target = target.replace(",", "");
+  let message = value.split(" ").slice(1).join(' ');
+  target = target[0].toUpperCase() + target.slice(1);
+  findMatchByCharacterName(target)
+    .then(() => {
+      runNPC(target, message, logThis, describeThis, listThis);
+    })
+    .catch((err) => {
+      console.log(err)
+      logThis('You cannot speak directly to ' + target)
+    })
+}
 
 function wearItem(value) {
   value = takeTheseOffThat(actionCalls.wear, value);
@@ -744,6 +758,8 @@ $("#submit-button").click(function (event) {
     parseInventory("Player");
   } else if (doesThisStartWithThose(value, actionCalls.speak)) {
     speak(value);
+  } else if (doesThisStartWithThose(value, currentLocation.NPCs.split(", "))) {
+    talkDirectlyToNPC(value);
   } else if (doesThisStartWithThose(value, actionCalls.look)) {
     lookAround(value);
   } else if (juggleTime) {
