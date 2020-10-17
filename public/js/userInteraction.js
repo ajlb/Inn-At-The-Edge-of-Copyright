@@ -18,6 +18,7 @@ let locationOccupants;
 
 let position = "standing";
 let sleepInterval;
+let sleeping = false;
 
 //HELPER FUNCTIONS
 
@@ -295,6 +296,7 @@ function parseInventory(PlayerLocationItemID) {
       //Location Inventory
     } else if (PlayerLocationItemID.toLowerCase() === "location") {
       getInventory(currentLocationId).then(function (data) {
+        currentLocationInventory = [];
         let locationInventory = [];
         for (const item of data) {
           //check if item is in a set, and if not, pluralize
@@ -513,43 +515,65 @@ function parseStats() {
 
 function sleep() {
   if (position === "laying") {
-    logThis("You fall into a deep slumber");
-    pubnub.unsubscribeAll();
-    publishDescription("falls asleep.");
-    let i = 0;
-    sleepInterval = setInterval(function () {
-      getStats(currentUserData.characterName).then(stats => {
-        if ((i > 1) && (stats.HP < stats.maxHP)) {
-          incrementStat("HP", 1, currentUserData.characterName);
-        }
-        i++;
-      });
-    }, 5000);
+    if (!sleeping){
+      logThis("You fall into a deep slumber");
+      sleeping = true;
+      pubnub.unsubscribeAll();
+      publishDescription("falls asleep.");
+      let i = 0;
+      sleepInterval = setInterval(function () {
+        getStats(currentUserData.characterName).then(stats => {
+          if ((i > 1) && (stats.HP < stats.maxHP)) {
+            incrementStat("HP", 1, currentUserData.characterName);
+          }
+          i++;
+        });
+      }, 5000);
+    } else {
+      logThis("... you're already asleep.");
+    }
   } else {
     logThis("You'll need to lie down for that!");
   }
 }
 
 function wake() {
-  publishDescription("opens their eyes");
-  clearInterval(sleepInterval);
-  const id = currentLocation.locationName.replace(/ /g, "-");
-  channel = 'oo-chat-' + id;
-  console.log("In Room ID: " + id);
-  pubnub.subscribe({ channels: [channel] });
-  logThis("You wake up.")
+  if (sleeping){
+    publishDescription("opens their eyes");
+    sleeping = false;
+    clearInterval(sleepInterval);
+    const id = currentLocation.locationName.replace(/ /g, "-");
+    channel = 'oo-chat-' + id;
+    console.log("In Room ID: " + id);
+    pubnub.subscribe({ channels: [channel] });
+    logThis("You wake up.")
+  } else {
+    logThis("You can't wake up if you're not asleep.");
+  }
 }
 
 function sitStandLie(value) {
   if (value == "stand" || value == "stand up") {
-    position = "standing";
-    publishDescription("stands up.");
+    if (!(position === "standing")){
+      position = "standing";
+      publishDescription("stands up.");
+    } else {
+      logThis("You're already standing!");
+    }
   } else if (value == "sit" || value == "sit down") {
-    position = "sitting";
-    publishDescription("sits down.");
+    if (!(position === "sitting")){
+      position = "sitting";
+      publishDescription("sits down.");
+    } else {
+      logThis("You're already sitting!");
+    }
   } else if (value == "lay" || value == "lay down" || value == "lie" || value == "lie down") {
-    position = "laying";
-    publishDescription("lies down.");
+    if (!(position === "laying")){
+      position = "laying";
+      publishDescription("lies down.");
+    } else {
+      logThis("You're already lying down!");
+    }
   }
 }
 
@@ -609,7 +633,7 @@ function findNewLocationData(direction) {
       //set currentLocation, and pass to pubnub as locationIndex
       getLocation(currentUserData.lastLocation).then(function (data) {
         currentLocation = data;
-        currentLocationId = "L" + currentLocation.id;
+        currentLocationId = "L" + data.id;
         locationIndex = data.locationName.replace(/ /g, "-");
         console.log(locationIndex);
         $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
@@ -647,7 +671,9 @@ function findNewLocationData(direction) {
         //   })
         // }
         currentLocation = data;
+        currentLocationInventory = [];
         currentExits = compileExits(currentLocation);
+        currentLocationId = "L" + data.id;
         locationIndex = data.locationName.replace(/ /g, "-");
         console.log(locationIndex);
         rememberLocation(currentUserData.characterName, currentLocation.id);
