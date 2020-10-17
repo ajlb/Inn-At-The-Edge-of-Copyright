@@ -87,10 +87,10 @@ function listThis(text) {
   $("#anchor").before(`<p class="displayed-stat">${text}</p>`);
 }
 
-function findItemProperty(data) {
+function findItemSlot(itemData) {
   return new Promise(function (resolve, reject) {
-    for (const property in data) {
-      if (property.endsWith("Slot") && (data[property] === true)) {
+    for (const property in itemData) {
+      if (property.endsWith("Slot") && (itemData[property] === true)) {
         resolve(property);
       }
     }
@@ -105,6 +105,9 @@ function findMatchByItemName(value, data) {
       }
     }
     resolve(false);
+  }).catch(e=>{
+    console.log("Error:");
+    console.log(e.message);
   });
 }
 
@@ -442,7 +445,7 @@ function wearItem(value) {
         let itemId;
         findItemData(value).then(function (data) {
           itemId = data.id;
-          findItemProperty(data).then(function (itemSlot) {
+          findItemSlot(data).then(function (itemSlot) {
             changeIsEquipped(itemId, currentUserId, 1).then(function (changesuccess) {
               console.log(itemSlot);
               fillPlayerInvSlot(itemId, parseInt(currentUserId.slice(1, currentUserId.length)), itemSlot).then(function (data) {
@@ -469,7 +472,7 @@ function removeItem(value) {
         findMatchByItemIdInObject(itemId, userEquipment).then(function (itemMatch) {
           if (itemMatch) {
             console.log("Found a match");
-            findItemProperty(itemData).then(itemSlot => {
+            findItemSlot(itemData).then(itemSlot => {
               changeIsEquipped(itemId, currentUserId, -1).then(success => {
                 fillPlayerInvSlot(null, currentUserData.id, itemSlot).then(data => {
                   logThis(`You take off ${insertArticleSingleValue(value)}.`);
@@ -638,6 +641,45 @@ function giveItem(value) {
     })
 }
 
+//ISSUE - user can't currently examine equipped items
+//ISSUE - user can't currently get secondary info (wearability, etc)
+function examine(value){
+  value = takeTheseOffThat(actionCalls.examine, value);
+  value = takeTheseOffThat(ARTICLES, value);
+
+  findItemData(value).then(itemData=>{
+    if (itemData == null){
+
+    } else {
+      getInventory(currentUserId).then(userInv=>{
+        findMatchByItemName(value, userInv).then(existingItem=>{
+          if(existingItem){
+            logThis(`You look closely at ${insertArticleSingleValue(value)}.`);
+            logThis(`You see ${itemData.description}.`);
+          } else {
+            getInventory(currentLocationId).then(locationInv=>{
+              findMatchByItemName(value, locationInv).then(existingItem => {
+                if (existingItem){
+                  logThis(`You look closely at ${insertArticleSingleValue(value)}.`);
+                  logThis(`You see ${itemData.description}.`);
+                } else {
+                  logThis(`There doesn't seem to be ${insertArticleSingleValue(value)} here.`);
+                }//end if else location has item
+              })
+            })//end if/else user has item
+
+
+          }
+        })
+      })
+    }
+  })
+}
+
+
+
+
+
 //HIGH LEVEL FUNCTIONS
 
 
@@ -786,6 +828,8 @@ $("#submit-button").click(function (event) {
     sitStandLie(value);
   } else if (doesThisStartWithThose(value, actionCalls.help)) {
     displayHelp(value);
+  } else if (doesThisStartWithThose(value, actionCalls.examine)) {
+    examine(value);
   } else {
     logThis("hmmm... that didn't quite make sense. Try 'help' for a list of commands!");
   }
