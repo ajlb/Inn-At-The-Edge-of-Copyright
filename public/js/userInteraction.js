@@ -649,7 +649,7 @@ function examine(value){
 
   findItemData(value).then(itemData=>{
     if (itemData == null){
-
+      //need to change getPlayerData to work with player name instead of ID
     } else {
       getInventory(currentUserId).then(userInv=>{
         findMatchByItemName(value, userInv).then(existingItem=>{
