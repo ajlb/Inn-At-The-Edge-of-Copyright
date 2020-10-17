@@ -8,7 +8,6 @@ let currentExits; //easily accessible exit data
 let currentLocationId; //location ID prefixed with "L"
 let currentLocationInventory; //inventory of this location
 let isDay = true;
-let userRecentCommands = [];
 let actionData = {};
 let actionCalls = {};
 let currentUserData;
@@ -19,6 +18,9 @@ let locationOccupants;
 let position = "standing";
 let sleepInterval;
 let sleeping = false;
+
+let userRecentCommands = [];
+let userRecentCommandsIndex;
 
 //HELPER FUNCTIONS
 
@@ -837,9 +839,18 @@ $("#submit-button").click(function (event) {
 
 
 
+$(".chat-input").keydown(function(event){
+  if (event.which == 38){
+    userRecentCommandsIndex -= 1;
+    $(".chat-input").val(userRecentCommands[userRecentCommandsIndex]);
+  } else if (event.which == 40){
+    userRecentCommandsIndex += 1;
+    $(".chat-input").val(userRecentCommands[userRecentCommandsIndex]);
+  } else if (event.which == 13){
+    userRecentCommandsIndex = userRecentCommands.length + 1;
+  }
+});
 
 
-
-
-//PAGE INIT
+  //PAGE INIT
 setActionCalls();
