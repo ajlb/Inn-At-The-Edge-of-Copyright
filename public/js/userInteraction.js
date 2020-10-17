@@ -18,6 +18,7 @@ let locationOccupants;
 
 let position = "standing";
 let sleepInterval;
+let sleeping = false;
 
 //HELPER FUNCTIONS
 
@@ -86,10 +87,10 @@ function listThis(text) {
   $("#anchor").before(`<p class="displayed-stat">${text}</p>`);
 }
 
-function findItemProperty(data) {
+function findItemSlot(itemData) {
   return new Promise(function (resolve, reject) {
-    for (const property in data) {
-      if (property.endsWith("Slot") && (data[property] === true)) {
+    for (const property in itemData) {
+      if (property.endsWith("Slot") && (itemData[property] === true)) {
         resolve(property);
       }
     }
@@ -104,6 +105,9 @@ function findMatchByItemName(value, data) {
       }
     }
     resolve(false);
+  }).catch(e=>{
+    console.log("Error:");
+    console.log(e.message);
   });
 }
 
@@ -295,6 +299,7 @@ function parseInventory(PlayerLocationItemID) {
       //Location Inventory
     } else if (PlayerLocationItemID.toLowerCase() === "location") {
       getInventory(currentLocationId).then(function (data) {
+        currentLocationInventory = [];
         let locationInventory = [];
         for (const item of data) {
           //check if item is in a set, and if not, pluralize
@@ -415,6 +420,20 @@ function tell(value) {
 
 }
 
+function talkDirectlyToNPC(value){
+  let target = value.split(" ")[0];
+  target = target.replace(",", "");
+  let message = value.split(" ").slice(1).join(' ');
+  target = target[0].toUpperCase() + target.slice(1);
+  findMatchByCharacterName(target)
+    .then(() => {
+      runNPC(target, message, logThis, describeThis, listThis);
+    })
+    .catch((err) => {
+      console.log(err)
+      logThis('You cannot speak directly to ' + target)
+    })
+}
 
 function wearItem(value) {
   value = takeTheseOffThat(actionCalls.wear, value);
@@ -426,7 +445,7 @@ function wearItem(value) {
         let itemId;
         findItemData(value).then(function (data) {
           itemId = data.id;
-          findItemProperty(data).then(function (itemSlot) {
+          findItemSlot(data).then(function (itemSlot) {
             changeIsEquipped(itemId, currentUserId, 1).then(function (changesuccess) {
               console.log(itemSlot);
               fillPlayerInvSlot(itemId, parseInt(currentUserId.slice(1, currentUserId.length)), itemSlot).then(function (data) {
@@ -453,7 +472,7 @@ function removeItem(value) {
         findMatchByItemIdInObject(itemId, userEquipment).then(function (itemMatch) {
           if (itemMatch) {
             console.log("Found a match");
-            findItemProperty(itemData).then(itemSlot => {
+            findItemSlot(itemData).then(itemSlot => {
               changeIsEquipped(itemId, currentUserId, -1).then(success => {
                 fillPlayerInvSlot(null, currentUserData.id, itemSlot).then(data => {
                   logThis(`You take off ${insertArticleSingleValue(value)}.`);
@@ -513,43 +532,65 @@ function parseStats() {
 
 function sleep() {
   if (position === "laying") {
-    logThis("You fall into a deep slumber");
-    pubnub.unsubscribeAll();
-    publishDescription("falls asleep.");
-    let i = 0;
-    sleepInterval = setInterval(function () {
-      getStats(currentUserData.characterName).then(stats => {
-        if ((i > 1) && (stats.HP < stats.maxHP)) {
-          incrementStat("HP", 1, currentUserData.characterName);
-        }
-        i++;
-      });
-    }, 5000);
+    if (!sleeping){
+      logThis("You fall into a deep slumber");
+      sleeping = true;
+      pubnub.unsubscribeAll();
+      publishDescription("falls asleep.");
+      let i = 0;
+      sleepInterval = setInterval(function () {
+        getStats(currentUserData.characterName).then(stats => {
+          if ((i > 1) && (stats.HP < stats.maxHP)) {
+            incrementStat("HP", 1, currentUserData.characterName);
+          }
+          i++;
+        });
+      }, 5000);
+    } else {
+      logThis("... you're already asleep.");
+    }
   } else {
     logThis("You'll need to lie down for that!");
   }
 }
 
 function wake() {
-  publishDescription("opens their eyes");
-  clearInterval(sleepInterval);
-  const id = currentLocation.locationName.replace(/ /g, "-");
-  channel = 'oo-chat-' + id;
-  console.log("In Room ID: " + id);
-  pubnub.subscribe({ channels: [channel] });
-  logThis("You wake up.")
+  if (sleeping){
+    publishDescription("opens their eyes");
+    sleeping = false;
+    clearInterval(sleepInterval);
+    const id = currentLocation.locationName.replace(/ /g, "-");
+    channel = 'oo-chat-' + id;
+    console.log("In Room ID: " + id);
+    pubnub.subscribe({ channels: [channel] });
+    logThis("You wake up.")
+  } else {
+    logThis("You can't wake up if you're not asleep.");
+  }
 }
 
 function sitStandLie(value) {
   if (value == "stand" || value == "stand up") {
-    position = "standing";
-    publishDescription("stands up.");
+    if (!(position === "standing")){
+      position = "standing";
+      publishDescription("stands up.");
+    } else {
+      logThis("You're already standing!");
+    }
   } else if (value == "sit" || value == "sit down") {
-    position = "sitting";
-    publishDescription("sits down.");
+    if (!(position === "sitting")){
+      position = "sitting";
+      publishDescription("sits down.");
+    } else {
+      logThis("You're already sitting!");
+    }
   } else if (value == "lay" || value == "lay down" || value == "lie" || value == "lie down") {
-    position = "laying";
-    publishDescription("lies down.");
+    if (!(position === "laying")){
+      position = "laying";
+      publishDescription("lies down.");
+    } else {
+      logThis("You're already lying down!");
+    }
   }
 }
 
@@ -600,6 +641,45 @@ function giveItem(value) {
     })
 }
 
+//ISSUE - user can't currently examine equipped items
+//ISSUE - user can't currently get secondary info (wearability, etc)
+function examine(value){
+  value = takeTheseOffThat(actionCalls.examine, value);
+  value = takeTheseOffThat(ARTICLES, value);
+
+  findItemData(value).then(itemData=>{
+    if (itemData == null){
+      //need to change getPlayerData to work with player name instead of ID
+    } else {
+      getInventory(currentUserId).then(userInv=>{
+        findMatchByItemName(value, userInv).then(existingItem=>{
+          if(existingItem){
+            logThis(`You look closely at ${insertArticleSingleValue(value)}.`);
+            logThis(`You see ${itemData.description}.`);
+          } else {
+            getInventory(currentLocationId).then(locationInv=>{
+              findMatchByItemName(value, locationInv).then(existingItem => {
+                if (existingItem){
+                  logThis(`You look closely at ${insertArticleSingleValue(value)}.`);
+                  logThis(`You see ${itemData.description}.`);
+                } else {
+                  logThis(`There doesn't seem to be ${insertArticleSingleValue(value)} here.`);
+                }//end if else location has item
+              })
+            })//end if/else user has item
+
+
+          }
+        })
+      })
+    }
+  })
+}
+
+
+
+
+
 //HIGH LEVEL FUNCTIONS
 
 
@@ -609,7 +689,7 @@ function findNewLocationData(direction) {
       //set currentLocation, and pass to pubnub as locationIndex
       getLocation(currentUserData.lastLocation).then(function (data) {
         currentLocation = data;
-        currentLocationId = "L" + currentLocation.id;
+        currentLocationId = "L" + data.id;
         locationIndex = data.locationName.replace(/ /g, "-");
         console.log(locationIndex);
         $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
@@ -647,7 +727,9 @@ function findNewLocationData(direction) {
         //   })
         // }
         currentLocation = data;
+        currentLocationInventory = [];
         currentExits = compileExits(currentLocation);
+        currentLocationId = "L" + data.id;
         locationIndex = data.locationName.replace(/ /g, "-");
         console.log(locationIndex);
         rememberLocation(currentUserData.characterName, currentLocation.id);
@@ -718,6 +800,8 @@ $("#submit-button").click(function (event) {
     parseInventory("Player");
   } else if (doesThisStartWithThose(value, actionCalls.speak)) {
     speak(value);
+  } else if (doesThisStartWithThose(value, currentLocation.NPCs.split(", "))) {
+    talkDirectlyToNPC(value);
   } else if (doesThisStartWithThose(value, actionCalls.look)) {
     lookAround(value);
   } else if (juggleTime) {
@@ -744,6 +828,8 @@ $("#submit-button").click(function (event) {
     sitStandLie(value);
   } else if (doesThisStartWithThose(value, actionCalls.help)) {
     displayHelp(value);
+  } else if (doesThisStartWithThose(value, actionCalls.examine)) {
+    examine(value);
   } else {
     logThis("hmmm... that didn't quite make sense. Try 'help' for a list of commands!");
   }
