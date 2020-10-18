@@ -31,10 +31,10 @@ let userRecentCommandsIndex;
 
 //determine if a string begins with any of an array of other strings
 function doesThisStartWithThose(thisThing, those) {
-  for (let thing of those) {
-    if (thisThing.toLowerCase().startsWith(thing) && (thing.length > 1)) {
+  for (let thatThing of those) {
+    if (thisThing.toLowerCase().startsWith(thatThing) && (thatThing.length > 1)) {
       return true
-    } else if (thisThing.split(" ")[0].toLowerCase() === thing.toLowerCase()) {
+    } else if (thisThing.split(" ")[0].toLowerCase() === thatThing.toLowerCase()) {
       return true
     }
   }
@@ -61,9 +61,9 @@ function takeTheseOffThat(these, that) {
 }
 
 //see if a string is equal to any of the strings in an array
-function doesThisEqualThat(thisThing, that) {
-  for (let thing of that) {
-    if (thisThing.toLowerCase().trim() === thing) {
+function doesThisEqualThat(thisThing, thatStuff) {
+  for (let thatThing of thatStuff) {
+    if (thisThing.toLowerCase().trim() === thatThing) {
       return true;
     }
   }
@@ -72,9 +72,9 @@ function doesThisEqualThat(thisThing, that) {
 
 //return alias for words with multiple ways to type them
 function parseAlternateWords(thisThing, objecty) {
-  for (let thing in objecty) {
-    if (thisThing.toLowerCase().trim() === objecty[thing]) {
-      return thing;
+  for (let thatThing in objecty) {
+    if (thisThing.toLowerCase().trim() === objecty[thatThing]) {
+      return thatThing;
     }
   }
   return thisThing;
