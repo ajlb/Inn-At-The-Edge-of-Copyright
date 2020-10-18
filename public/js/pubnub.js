@@ -49,23 +49,51 @@ function createConnection(thisUser){
 }
 //write the messages out to the chat box
 displayMessage = function(messageType, aMessage) {
+  console.log("received message");
   console.log(aMessage);
-  $("#anchor").before(`<p class="displayed-message">${aMessage.message.text}</p>`);
-  updateScroll();
+  //display message as is if it is speech
+  if (aMessage.message.messageIntent == "speech"){
+    $("#anchor").before(`<p class="displayed-message">${aMessage.message.text}</p>`);
+  } else {
+    let text = aMessage.message.text;
+    //replace your name with "you"
+    text = text.replace(thisUser, "you");
+    if (text[0] === "y"){
+      text = "Y" + text.slice(1);
+      if (text.split(" ")[1].endsWith("s")){
+        text = text.slice(0,text.split(" ")[1].length+3) + text.slice(text.split(" ")[1].length+4);
+        $("#anchor").before(`<p class="displayed-message">${text}</p>`);
+      } else {
+        $("#anchor").before(`<p class="displayed-message">${text}</p>`);
+      }
+    updateScroll();
+    } else {
+      $("#anchor").before(`<p class="displayed-message">${text}</p>`);
+    updateScroll();
+    } 
+  }
 }
 
 function logAction(presence){
   if (presence.action == "join"){
-    logThis(`${presence.uuid} enters.`);
+    if (thisUser === presence.uuid){
+      logThis("You enter.");
+    } else {
+      logThis(`${presence.uuid} enters.`);
+    }
   } else if (presence.action == "leave"){
-    logThis(`${presence.uuid} exits.`);
+    if (thisUser === presence.uuid){
+      logThis("You exit.");
+    } else {
+      logThis(`${presence.uuid} exits.`);
+    }
   }
 }
 
 function publishDescription(value){
   pubnub.publish({
     channel: channel,
-    message: {"text":`${thisUser} ${value}`},
+    message: {"text":`${thisUser} ${value}`, "messageIntent":"description"},
     },
     function(status, response) {
       console.log("Publishing from submit button event");
@@ -80,7 +108,7 @@ function publishDescription(value){
 function publishMessage(value){
   pubnub.publish({
     channel: channel,
-    message: {"text":`${thisUser}: ${value}`},
+    message: {"text":`${thisUser}: ${value}`, "messageIntent":"speech"},
     },
     function(status, response) {
       console.log("Publishing from submit button event");
