@@ -139,11 +139,6 @@ function findMatchByItemIdInObject(itemId, data) {
 function findMatchByItemNameAndChangeQuantity(value, data, target, amount) {
   return new Promise(function (resolve, reject) {
     let wasItIn;
-    if (target.startsWith("P") && (amount > 0)) {
-      logThis(`You pick up ${insertArticleSingleValue(value)}.`)
-    } else if (target.startsWith("L") && (amount > 0)) {
-      logThis(`You drop ${insertArticleSingleValue(value)}.`)
-    }
     for (const thing of data) {
       //increase quantity if match found
       if (thing.item.itemName.toLowerCase() === value.toLowerCase()) {
@@ -247,7 +242,6 @@ function printLocationDescription(locationData) {
 
 //print who's online
 function parseWhosOnline() {
-  console.log(" inside parseWhosOnline()");
   let string = "";
   let occupants = [];
   whosOnline().then(residents => {
@@ -343,6 +337,7 @@ function getItem(value) {
         //get user inventory to check for item in inv
         getInventory(currentUserId).then(function (userInvData) {
           findMatchByItemNameAndChangeQuantity(value, userInvData, currentUserId, 1).then(function (result) {
+            logThis(`You pick up ${insertArticleSingleValue(value)}.`);
             if (!result) {
               addItemToInventory(itemId, currentUserId, 1);
               return "added item to Inventory"
@@ -368,6 +363,7 @@ function dropItem(value) {
       if (userHas) {
         getInventory(currentLocationId).then(function (locationInventory) {
           findMatchByItemNameAndChangeQuantity(value, locationInventory, currentLocationId, 1).then(function (locationHad) {
+          logThis(`You drop ${insertArticleSingleValue(value)}.`);
             if (!(locationHad)) {
               addItemToInventory(itemId, currentLocationId, 1);
             }
@@ -449,7 +445,6 @@ function wearItem(value) {
           itemId = data.id;
           findItemSlot(data).then(function (itemSlot) {
             changeIsEquipped(itemId, currentUserId, 1).then(function (changesuccess) {
-              console.log(itemSlot);
               fillPlayerInvSlot(itemId, parseInt(currentUserId.slice(1, currentUserId.length)), itemSlot).then(function (data) {
                 logThis(`You put on ${insertArticleSingleValue(value)}.`);
               })
@@ -473,7 +468,6 @@ function removeItem(value) {
         itemId = itemData.id;
         findMatchByItemIdInObject(itemId, userEquipment).then(function (itemMatch) {
           if (itemMatch) {
-            console.log("Found a match");
             findItemSlot(itemData).then(itemSlot => {
               changeIsEquipped(itemId, currentUserId, -1).then(success => {
                 fillPlayerInvSlot(null, currentUserData.id, itemSlot).then(data => {
@@ -611,10 +605,8 @@ function displayHelp(value) {
     updateScroll();
   } else {
     for (action of actionData) {
-      console.log(value.split(" ")[1]);
       console.log(action.actionName);
       if (value.split(" ")[1].toLowerCase() == action.actionName) {
-        console.log("FOUND IT!");
         listThis(action.actionName.toUpperCase());
         listThis(" ");
         listThis(action.commandLongDescription);
@@ -636,10 +628,31 @@ function giveItem(value) {
   value = takeTheseOffThat(ARTICLES, value);
   value = value.split(" ");
   let target = value.pop();
-  value = value.split(" ").
+  value.pop();
+  value = value.join(" ");
 
     getInventory(currentUserId).then(userInv => {
-      findMatchByItemNameAndChangeQuantity(value, userInv,)
+      findMatchByItemNameAndChangeQuantity(value, userInv, currentUserId, -1).then(success=>{
+        if (success){//user had it
+          getPlayerData(target).then(otherPlayerData => {
+            let otherPlayerId = "P" + otherPlayerData.id;
+            getInventory(otherPlayerId).then(otherPlayerInv=>{
+              findMatchByItemNameAndChangeQuantity(value, otherPlayerInv, otherPlayerId, 1).then(otherPlayerSuccess => {
+                if (otherPlayerSuccess){//other player had one
+                  publishDescription(`gives ${insertArticleSingleValue(value)} to ${target}.`);
+                } else {//other player didn't have one
+                  findItemData(value).then(itemData=>{
+                    addItemToInventory(itemData.id, otherPlayerId, 1);
+                    publishDescription(`gives ${insertArticleSingleValue(value)} to ${target}.`);
+                  })
+                }
+              })
+            })
+          })
+        } else {//user didn't have it
+          logThis(`You don't seem to have ${insertArticleSingleValue(value)} to give...`);
+        }
+      })
     })
 }
 
@@ -693,7 +706,6 @@ function findNewLocationData(direction) {
         currentLocation = data;
         currentLocationId = "L" + data.id;
         locationIndex = data.locationName.replace(/ /g, "-");
-        console.log(locationIndex);
         $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
         $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
         printLocationDescription(currentLocation);
@@ -701,7 +713,6 @@ function findNewLocationData(direction) {
         printExits(currentExits);
         if (data.id == 1002){
           getInventory(currentUserId).then(function(userInv){
-            console.log("checking inventory");
             findMatchByItemName("dull ring", userInv).then(success=>{
               console.log("looking in your bags");
               if(!success){
@@ -733,7 +744,6 @@ function findNewLocationData(direction) {
         currentExits = compileExits(currentLocation);
         currentLocationId = "L" + data.id;
         locationIndex = data.locationName.replace(/ /g, "-");
-        console.log(locationIndex);
         rememberLocation(currentUserData.characterName, currentLocation.id);
         $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
         $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
@@ -790,7 +800,6 @@ $("#submit-button").click(function (event) {
 
   //log, then clear input value
   let value = $(".chat-input").val();
-  console.log(value);
   $(".chat-input").val("");
   userRecentCommands.push(value);
 
@@ -804,6 +813,8 @@ $("#submit-button").click(function (event) {
     speak(value);
   } else if (doesThisStartWithThose(value, currentLocation.NPCs.split(", "))) {
     talkDirectlyToNPC(value);
+  } else if (doesThisStartWithThose(value, actionCalls.give)) {
+    giveItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.look)) {
     lookAround(value);
   } else if (juggleTime) {

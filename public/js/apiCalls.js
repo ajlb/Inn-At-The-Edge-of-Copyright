@@ -38,9 +38,9 @@ function getInventory(idString) {
     });
 }
 
-function getPlayerData(idNumber) {
+function getPlayerData(playerName) {
     return new Promise(function (resolve, reject) {
-        $.get("/api/players/" + idNumber, function (data) {
+        $.get("/api/players/" + playerName, function (data) {
             resolve(data);
         }).catch(e => {
             reject(e);
