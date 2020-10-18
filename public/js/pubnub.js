@@ -14,6 +14,8 @@ let operation;
 let action;
 let uuid;
 let thisUser;
+
+
 function createConnection(thisUser){
   pubnub = new PubNub({
       publishKey: 'pub-c-3b1a90da-b8c6-4753-a965-7fd056636e55',
@@ -47,6 +49,7 @@ function createConnection(thisUser){
     },
   });//end addListener
 }
+
 //write the messages out to the chat box
 displayMessage = function(messageType, aMessage) {
   console.log("received message");
@@ -54,10 +57,12 @@ displayMessage = function(messageType, aMessage) {
   //display message as is if it is speech
   if (aMessage.message.messageIntent == "speech"){
     $("#anchor").before(`<p class="displayed-message">${aMessage.message.text}</p>`);
+    updateScroll();
   } else {
     let text = aMessage.message.text;
     //replace your name with "you"
     text = text.replace(thisUser, "you");
+    text = text.replace(thisUser.toLowerCase(), "you");
     if (text[0] === "y"){
       text = "Y" + text.slice(1);
       if (text.split(" ")[1].endsWith("s")){
@@ -74,6 +79,7 @@ displayMessage = function(messageType, aMessage) {
   }
 }
 
+//respond to presence event
 function logAction(presence){
   if (presence.action == "join"){
     if (thisUser === presence.uuid){
@@ -90,6 +96,7 @@ function logAction(presence){
   }
 }
 
+//publish action to pubnub server as message
 function publishDescription(value){
   pubnub.publish({
     channel: channel,
@@ -104,7 +111,8 @@ function publishDescription(value){
     }
   );
 }
-//publish text to pubnub server as a message
+
+//publish speech to pubnub server as a message
 function publishMessage(value){
   pubnub.publish({
     channel: channel,
@@ -120,21 +128,7 @@ function publishMessage(value){
   );
 }
 
-function publishEvent(value){
-  pubnub.publish({
-    channel: channel,
-    message: {"text":`${value}`},
-    },
-    function(status, response) {
-      console.log("Publishing from submit button event");
-      if (status.error) {
-        console.log(status);
-        console.log(response);
-      }
-    }
-  );
-}
-//page init
+//page init - LOAD ON START OF /PLAY
 getPlayerFromLoginInfo().then(data => {
   thisUser=data.characterName;
   createConnection(thisUser);
