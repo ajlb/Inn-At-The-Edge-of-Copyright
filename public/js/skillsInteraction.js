@@ -16,6 +16,7 @@ function juggle(value){
         if (numbers[prop].includes(num.toLowerCase())){
             num = parseInt(prop);
             if (typeof num === "number" && num > 2){  
+                //search for item in user inventory, determine if there are enough to juggle
                 getInventory(currentUserId).then(userInventory => {
                     findMatchByItemName(pluralize(target, 1), userInventory).then(matchSuccess=>{
                         if (((currentUserData.DEX*2)/(num**2))<2){
@@ -39,12 +40,15 @@ function juggle(value){
     }
 
 }
+
+//set difficulty of juggling based on dex and number of objects
 function chancesOfSuccessJuggling(dex, num){
     if (Math.floor(Math.random()*10)>((dex*2)/(num**2))){
         stopJuggling(true);
     }
 }
 
+//see whether juggle continues
 function continueJuggle(num, target){
     juggleTime = setInterval(function(){
         publishDescription(`juggles ${num} ${target}.`);
@@ -52,6 +56,7 @@ function continueJuggle(num, target){
     }, 4000);
 }
 
+//end juggle, increment dex if appropriate
 function stopJuggling(dropped){
     clearInterval(juggleTime);
     if (!(juggleTime)){

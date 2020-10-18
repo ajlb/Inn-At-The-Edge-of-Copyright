@@ -21,8 +21,6 @@ module.exports = function (app) {
             });
         }
     });
-
-
     //sign up
     app.post("/signup", function (req, res) {
         models.player.create(req.body).then(function (data) {
@@ -30,8 +28,6 @@ module.exports = function (app) {
             res.json(data);
         }).catch(e => res.status(401).json(e))
     });
-
-
     //find location based on id
     app.get("/api/locations/:id", function (req, res) {
         models.location.findOne({ where: { id: req.params.id } }).then(function (data) {
@@ -70,6 +66,7 @@ module.exports = function (app) {
             console.log(e);
         });
     });
+    //get NPC dialogue by NPC name
     app.get("/api/dialog/:NPC", function (req, res) {
         models.dialog.findOne({ where: { NPC: req.params.NPC } })
             .then(data => {
@@ -138,6 +135,7 @@ module.exports = function (app) {
             console.log(e);
         });
     });
+    //Put an item in inventory
     app.post('/api/inventory/', function (req, res) {
         models.inventory.create(req.body).then(function (data) {
             res.json(data);
@@ -153,17 +151,18 @@ module.exports = function (app) {
             console.log(e)
         });
     });
+    //get item data by ID
     app.get("/api/items/:id", function (req, res) {
         models.item.findOne({ where: { itemName: req.params.id } }).then(function (data) {
             res.json(data);
         }).catch(e => console.log(e));
     });
+    //get player's equipment data by player ID
     app.get("/api/playerEquipment/:id", function (req, res) {
         models.player.findOne({ attributes: ['headSlot', 'neckSlot', 'torsoSlot', 'rightHandSlot', 'leftHandSlot', 'legsSlot', 'feetSlot', 'ringSlot', 'handsSlot', 'twoHands'], where: { id: req.params.id } }).then(function (data) {
             res.json(data);
         }).catch(e => console.log(e));
     })
-
     // validate if player exists during sign up
     app.get("/api/validate/:name", function (req, res) {
         models.player.findOne({ where: { characterName: req.params.name } }).then(function (data) {
@@ -177,17 +176,19 @@ module.exports = function (app) {
             res.json("Error")
         });
     });
-
+    //update player stats by amount locating by player name
     app.put("/api/playerStats/", function (req, res) {
         models.player.increment(req.body.stat, { where: { characterName: req.body.characterName }, by: req.body.amount }).then(function (data) {
             res.json(data);
         }).catch(e => reject(e));
     });
+    //get player stats by player name
     app.get("/api/playerStats/:id", function (req, res) {
         models.player.findOne({ attributes: ['DEX', 'STR', 'WIS', 'HP', 'maxHP', 'level', 'xp'], where: { characterName: req.params.id } }).then(function (data) {
             res.json(data);
         }).catch(e => console.log(e));
     })
+    //update player's last location by player name
     app.put("/api/playerLocation/", function (req, res) {
         models.player.update({ lastLocation: req.body.lastLocation }, { where: { characterName: req.body.characterName } }).then(function (data) {
             res.json(data);

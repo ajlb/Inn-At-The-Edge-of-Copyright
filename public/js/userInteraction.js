@@ -1,8 +1,10 @@
-//VARIABLES
+//CONSTANT VARIABLES
 const DIRECTIONWORDS = { N: ["n", "north"], E: ["e", "east"], S: ["s", "south"], W: ["w", "west"] };
 const ARTICLES = ["the", "a", "an"];
 const MULTIPLES = ["set", "pair", "box", "bag"];
 const VOWELS = ["a", "e", "i", "o", "u"];
+
+//LOCATION, ACTION, USER DATA
 let currentLocation; //holds all data for current location
 let currentExits; //easily accessible exit data
 let currentLocationId; //location ID prefixed with "L"
@@ -21,6 +23,9 @@ let sleeping = false;
 
 let userRecentCommands = [];
 let userRecentCommandsIndex;
+
+
+
 
 //HELPER FUNCTIONS
 
@@ -75,20 +80,52 @@ function parseAlternateWords(thisThing, objecty) {
   return thisThing;
 }
 
+//print info to user
 function logThis(text) {
   $("#anchor").before(`<p class="displayed-message">${text}</p>`);
   updateScroll();
 }
 
+//print info to user in yellow with indent
 function describeThis(text) {
   $("#anchor").before(`<p class="displayed-description">${text}</p>`);
   updateScroll();
 }
 
+//print info out to user with small margins between items
 function listThis(text) {
   $("#anchor").before(`<p class="displayed-stat">${text}</p>`);
 }
 
+//Pull scroll bar to bottom
+function updateScroll() {
+  $(".message-output-box").scrollTop($(".message-output-box")[0].scrollHeight)
+}
+
+//only pluralize things that don't start with multiples words
+function pluralizeAppropriateWords(itemName, itemQuantity) {
+  if (doesThisStartWithThose(itemName, MULTIPLES)) {
+    return itemName;
+  } else {
+    return pluralize(itemName, itemQuantity);
+  }
+}
+
+//put "a" before consonants and y, put "an" before vowels
+function insertArticleSingleValue(value) {
+  if (doesThisStartWithThose(value, VOWELS)) {
+    return `an ${value}`;
+  } else {
+    return `a ${value}`;
+  }
+}
+
+
+
+
+//FINDER FUNCTIONS
+
+//find where an item is wearable
 function findItemSlot(itemData) {
   return new Promise(function (resolve, reject) {
     for (const property in itemData) {
@@ -99,6 +136,7 @@ function findItemSlot(itemData) {
   });
 }
 
+//find an item in data by name
 function findMatchByItemName(value, data) {
   return new Promise(function (resolve, reject) {
     for (const item of data) {
@@ -113,6 +151,7 @@ function findMatchByItemName(value, data) {
   });
 }
 
+//Find NPC to talk to
 function findMatchByCharacterName(name) {
   return new Promise(function (resolve, reject) {
     let NPCList = currentLocation.NPCs.split(", ");
@@ -125,6 +164,7 @@ function findMatchByCharacterName(name) {
   });
 }
 
+//Find an item in data by ID
 function findMatchByItemIdInObject(itemId, data) {
   return new Promise(function (resolve, reject) {
     for (const slot in data) {
@@ -136,6 +176,7 @@ function findMatchByItemIdInObject(itemId, data) {
   });
 }
 
+//Find an item in data by name and change the quantity
 function findMatchByItemNameAndChangeQuantity(value, data, target, amount) {
   return new Promise(function (resolve, reject) {
     let wasItIn;
@@ -152,35 +193,10 @@ function findMatchByItemNameAndChangeQuantity(value, data, target, amount) {
   });
 }
 
-//Scrolling
-function updateScroll() {
-  $(".message-output-box").scrollTop($(".message-output-box")[0].scrollHeight)
-}
-
-
-//only pluralize things that don't start with multiples words
-function pluralizeAppropriateWords(itemName, itemQuantity) {
-  if (doesThisStartWithThose(itemName, MULTIPLES)) {
-    return itemName;
-  } else {
-    return pluralize(itemName, itemQuantity);
-  }
-}
-
-
-function insertArticleSingleValue(value) {
-  if (doesThisStartWithThose(value, VOWELS)) {
-    return `an ${value}`;
-  } else {
-    return `a ${value}`;
-  }
-}
-
-//MID LEVEL FUNCTIONS
 
 
 
-
+//SINGLE PURPOSE HELPER FUNCTIONS (functions that save on function length elsewhere)
 
 //get user Id from pubnub, then put into string for searching inventories
 function setUserInventoryId() {
@@ -257,7 +273,12 @@ function parseWhosOnline() {
   })
 }
 
-//react to input beginning with a move word
+
+
+
+//USER INPUT FUNCTIONS
+
+
 function parseMove(value) {
   if (position === "standing") {
     value = takeTheseOffThat(actionCalls.move, value);
@@ -277,7 +298,7 @@ function parseMove(value) {
   }
 }
 
-//react to input beginning with inventory
+
 function parseInventory(PlayerLocationItemID) {
   return new Promise(function (resolve, reject) {
     scrubInventory();
@@ -324,7 +345,87 @@ function parseInventory(PlayerLocationItemID) {
   });
 }
 
-//react to input beginning with get command
+
+function speak(value) {
+  if (value.toLowerCase().startsWith("speak to") || value.toLowerCase().startsWith("talk to") || value.toLowerCase().startsWith("say to")) {
+    value = takeTheseOffThat(["speak to ", "talk to ", "say to "], value.trim());
+    let target = value.split(" ")[0];
+    let message = value.split(" ").slice(1).join(' ');
+    target = target[0].toUpperCase() + target.slice(1);
+    findMatchByCharacterName(target)
+      .then(() => {
+        runNPC(target, message, logThis, describeThis, listThis);
+      })
+      .catch((err) => {
+        console.log(err)
+        logThis('You cannot speak directly to ' + target)
+      })
+  } else {
+    value = takeTheseOffThat(actionCalls.speak, value);
+    publishMessage(value);
+    updateScroll();
+  }
+}
+
+
+//react to user input beginning with NPC name in room
+function talkDirectlyToNPC(value){
+  let target = value.split(" ")[0];
+  target = target.replace(",", "");
+  let message = value.split(" ").slice(1).join(' ');
+  target = target[0].toUpperCase() + target.slice(1);
+  findMatchByCharacterName(target)
+    .then(() => {
+      runNPC(target, message, logThis, describeThis, listThis);
+    })
+    .catch((err) => {
+      console.log(err)
+      logThis('You cannot speak directly to ' + target)
+    })
+}
+
+
+function displayHelp(value) {
+  if (value.toLowerCase() === "help") {
+    let title = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0HELP\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
+    let dashes = "---------------------";
+    listThis(title);
+    listThis(dashes);
+    for (action of actionData) {
+      listThis(`${action.actionName}\xa0\xa0\xa0\xa0\xa0 --${action.commandBriefDescription}`)
+      updateScroll();
+    }
+    logThis(" ");
+    updateScroll();
+  } else {
+    for (action of actionData) {
+      console.log(action.actionName);
+      if (value.split(" ")[1].toLowerCase() == action.actionName) {
+        listThis(action.actionName.toUpperCase());
+        listThis(" ");
+        listThis(action.commandLongDescription);
+        listThis(" ");
+        listThis(`example: ${action.exampleCall}\xa0\xa0\xa0\xa0\xa0 --result: ${action.exampleResult}`);
+        listThis(" ");
+        updateScroll();
+        break;
+      }
+    }
+    logThis(" ");
+    updateScroll();
+  }
+}
+
+
+function lookAround(value) {
+  scrubInventory();
+  logThis(`You look around.`)
+  printLocationDescription(currentLocation);
+  printExits(currentExits);
+  parseInventory("Location");
+}
+
+
 function getItem(value) {
   value = takeTheseOffThat(actionCalls.get, value);
   value = takeTheseOffThat(ARTICLES, value);
@@ -352,6 +453,7 @@ function getItem(value) {
   });//getInventory() for room
 }
 
+
 function dropItem(value) {
   value = takeTheseOffThat(actionCalls.drop, value);
   value = takeTheseOffThat(ARTICLES, value);
@@ -376,62 +478,6 @@ function dropItem(value) {
   });
 }
 
-//react to input beginning with look command
-function lookAround(value) {
-  scrubInventory();
-  logThis(`You look around.`)
-  printLocationDescription(currentLocation);
-  printExits(currentExits);
-  parseInventory("Location");
-}
-
-//function react to input beginning with speak command
-function speak(value) {
-  if (value.toLowerCase().startsWith("speak to") || value.toLowerCase().startsWith("talk to") || value.toLowerCase().startsWith("say to")) {
-    value = takeTheseOffThat(["speak to ", "talk to ", "say to "], value.trim());
-    let target = value.split(" ")[0];
-    let message = value.split(" ").slice(1).join(' ');
-    target = target[0].toUpperCase() + target.slice(1);
-    findMatchByCharacterName(target)
-      .then(() => {
-        runNPC(target, message, logThis, describeThis, listThis);
-      })
-      .catch((err) => {
-        console.log(err)
-        logThis('You cannot speak directly to ' + target)
-      })
-  } else {
-    value = takeTheseOffThat(actionCalls.speak, value);
-    publishMessage(value);
-  }
-}
-
-//function react to input beginning with emote command
-function emote(value) {
-  value = takeTheseOffThat(actionCalls.emote, value);
-  publishDescription(value);
-}
-
-function tell(value) {
-  value = takeTheseOffThat(actionCalls.tell, value);
-  let NPC = value.split(" ")[0];
-
-}
-
-function talkDirectlyToNPC(value){
-  let target = value.split(" ")[0];
-  target = target.replace(",", "");
-  let message = value.split(" ").slice(1).join(' ');
-  target = target[0].toUpperCase() + target.slice(1);
-  findMatchByCharacterName(target)
-    .then(() => {
-      runNPC(target, message, logThis, describeThis, listThis);
-    })
-    .catch((err) => {
-      console.log(err)
-      logThis('You cannot speak directly to ' + target)
-    })
-}
 
 function wearItem(value) {
   value = takeTheseOffThat(actionCalls.wear, value);
@@ -457,6 +503,7 @@ function wearItem(value) {
     })
   })
 }
+
 
 function removeItem(value) {
   value = takeTheseOffThat(actionCalls.remove, value);
@@ -486,6 +533,11 @@ function removeItem(value) {
   })
 }
 
+
+function emote(value) {
+  value = takeTheseOffThat(actionCalls.emote, value);
+  publishDescription(value);
+}
 
 
 function parseStats() {
@@ -550,6 +602,7 @@ function sleep() {
   }
 }
 
+
 function wake() {
   if (sleeping){
     publishDescription("opens their eyes");
@@ -564,6 +617,7 @@ function wake() {
     logThis("You can't wake up if you're not asleep.");
   }
 }
+
 
 function sitStandLie(value) {
   if (value == "stand" || value == "stand up") {
@@ -587,38 +641,6 @@ function sitStandLie(value) {
     } else {
       logThis("You're already lying down!");
     }
-  }
-}
-
-
-function displayHelp(value) {
-  if (value.toLowerCase() === "help") {
-    let title = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0HELP\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
-    let dashes = "---------------------";
-    listThis(title);
-    listThis(dashes);
-    for (action of actionData) {
-      listThis(`${action.actionName}\xa0\xa0\xa0\xa0\xa0 --${action.commandBriefDescription}`)
-      updateScroll();
-    }
-    logThis(" ");
-    updateScroll();
-  } else {
-    for (action of actionData) {
-      console.log(action.actionName);
-      if (value.split(" ")[1].toLowerCase() == action.actionName) {
-        listThis(action.actionName.toUpperCase());
-        listThis(" ");
-        listThis(action.commandLongDescription);
-        listThis(" ");
-        listThis(`example: ${action.exampleCall}\xa0\xa0\xa0\xa0\xa0 --result: ${action.exampleResult}`);
-        listThis(" ");
-        updateScroll();
-        break;
-      }
-    }
-    logThis(" ");
-    updateScroll();
   }
 }
 
@@ -657,6 +679,7 @@ function giveItem(value) {
 }
 
 //ISSUE - user can't currently examine equipped items
+//ISSUE - user can't currently examine players
 //ISSUE - user can't currently get secondary info (wearability, etc)
 function examine(value){
   value = takeTheseOffThat(actionCalls.examine, value);
@@ -682,8 +705,6 @@ function examine(value){
                 }//end if else location has item
               })
             })//end if/else user has item
-
-
           }
         })
       })
@@ -695,14 +716,14 @@ function examine(value){
 
 
 
-//HIGH LEVEL FUNCTIONS
+//MAIN REPEATED FUNCTIONS OF PROGRAM
 
-
+//SET INFO FOR NEW LOCATION
 function findNewLocationData(direction) {
   return new Promise(function (resolve, reject) {
     if (direction == "start") {
-      //set currentLocation, and pass to pubnub as locationIndex
       getLocation(currentUserData.lastLocation).then(function (data) {
+        //set variables and print descriptions
         currentLocation = data;
         currentLocationId = "L" + data.id;
         locationIndex = data.locationName.replace(/ /g, "-");
@@ -711,6 +732,7 @@ function findNewLocationData(direction) {
         printLocationDescription(currentLocation);
         currentExits = compileExits(currentLocation);
         printExits(currentExits);
+        //give user dull ring on entering starting hallway
         if (data.id == 1002){
           getInventory(currentUserId).then(function(userInv){
             findMatchByItemName("dull ring", userInv).then(success=>{
@@ -726,19 +748,10 @@ function findNewLocationData(direction) {
         updateScroll();
         resolve();
       });
-
     } else if (!(currentExits[direction] == null)) {
       //set currentLocation, and pass to pubnub as locationIndex
       getLocation(currentExits[direction]).then(function (data) {
-        // if (data.id == 1002){
-        //   getInventory(currentUserId).then(function(userInv){
-        //     findMatchByItemName("dull ring").then(sucess=>{
-        //       if(!success){
-        //         addItemToInventory(131, currentUserId,1);
-        //       }
-        //     })
-        //   })
-        // }
+        //set variables and print descriptions
         currentLocation = data;
         currentLocationInventory = [];
         currentExits = compileExits(currentLocation);
@@ -747,7 +760,6 @@ function findNewLocationData(direction) {
         rememberLocation(currentUserData.characterName, currentLocation.id);
         $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
         $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
-
         printLocationDescription(currentLocation);
         printExits(currentExits);
         setTimeout(parseWhosOnline(), 4000);
@@ -813,11 +825,11 @@ $("#submit-button").click(function (event) {
     speak(value);
   } else if (doesThisStartWithThose(value, currentLocation.NPCs.split(", "))) {
     talkDirectlyToNPC(value);
-  } else if (doesThisStartWithThose(value, actionCalls.give)) {
-    giveItem(value);
+  } else if (doesThisStartWithThose(value, actionCalls.help)) {
+    displayHelp(value);
   } else if (doesThisStartWithThose(value, actionCalls.look)) {
     lookAround(value);
-  } else if (juggleTime) {
+  } else if (juggleTime) {//following actions can't be done while juggling
     logThis("You should probably stop juggling first.");
   } else if (doesThisStartWithThose(value, actionCalls.get)) {
     getItem(value);
@@ -839,8 +851,8 @@ $("#submit-button").click(function (event) {
     wake();
   } else if (doesThisStartWithThose(value, actionCalls.position)) {
     sitStandLie(value);
-  } else if (doesThisStartWithThose(value, actionCalls.help)) {
-    displayHelp(value);
+  } else if (doesThisStartWithThose(value, actionCalls.give)) {
+    giveItem(value);
   } else if (doesThisStartWithThose(value, actionCalls.examine)) {
     examine(value);
   } else {
@@ -849,7 +861,7 @@ $("#submit-button").click(function (event) {
 });
 
 
-
+//fill previous commands into input field on arrow up and arrow down
 $(".chat-input").keydown(function(event){
   if (event.which == 38){
     userRecentCommandsIndex -= 1;
