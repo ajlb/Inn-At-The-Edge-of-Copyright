@@ -58,6 +58,7 @@ displayMessage = function(messageType, aMessage) {
     let text = aMessage.message.text;
     //replace your name with "you"
     text = text.replace(thisUser, "you");
+    text = text.replace(thisUser.toLowerCase(), "you");
     if (text[0] === "y"){
       text = "Y" + text.slice(1);
       if (text.split(" ")[1].endsWith("s")){
