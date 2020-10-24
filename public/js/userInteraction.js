@@ -648,24 +648,43 @@ function sitStandLie(value) {
 function giveItem(value) {
   value = takeTheseOffThat(actionCalls.give, value);
   value = takeTheseOffThat(ARTICLES, value);
-  value = value.split(" ");
-  let target = value.pop();
-  value.pop();
-  value = value.join(" ");
+  let target;
+  let item;
+  console.log("In Give:");
+  console.log(value);
+  
+  function splitOnTo(value){
+    return new Promise(function(resolve, reject){
+      if (value.split(" to ").length == 2){
+        target = value.split(" to ")[1];
+        item = value.split(" to ")[0];
+        resolve();
+      } else {
+        item = value.split(" to ")[0];
+        target = value.slice(item.length+3);
+        resolve();
+      }
+    }).catch(e=>{
+      console.log(e.message);
+    })
+  }
 
+  splitOnTo(value).then(function(){
+    console.log(target);
+    console.log(item);
     getInventory(currentUserId).then(userInv => {
-      findMatchByItemNameAndChangeQuantity(value, userInv, currentUserId, -1).then(success=>{
+      findMatchByItemNameAndChangeQuantity(item, userInv, currentUserId, -1).then(success=>{
         if (success){//user had it
           getPlayerData(target).then(otherPlayerData => {
             let otherPlayerId = "P" + otherPlayerData.id;
             getInventory(otherPlayerId).then(otherPlayerInv=>{
-              findMatchByItemNameAndChangeQuantity(value, otherPlayerInv, otherPlayerId, 1).then(otherPlayerSuccess => {
+              findMatchByItemNameAndChangeQuantity(item, otherPlayerInv, otherPlayerId, 1).then(otherPlayerSuccess => {
                 if (otherPlayerSuccess){//other player had one
-                  publishDescription(`gives ${insertArticleSingleValue(value)} to ${target}.`);
+                  publishDescription(`gives ${insertArticleSingleValue(item)} to ${target}.`);
                 } else {//other player didn't have one
-                  findItemData(value).then(itemData=>{
+                  findItemData(item).then(itemData=>{
                     addItemToInventory(itemData.id, otherPlayerId, 1);
-                    publishDescription(`gives ${insertArticleSingleValue(value)} to ${target}.`);
+                    publishDescription(`gives ${insertArticleSingleValue(item)} to ${target}.`);
                   })
                 }
               })
@@ -676,6 +695,7 @@ function giveItem(value) {
         }
       })
     })
+  })
 }
 
 //ISSUE - user can't currently examine equipped items
@@ -684,6 +704,15 @@ function giveItem(value) {
 function examine(value){
   value = takeTheseOffThat(actionCalls.examine, value);
   value = takeTheseOffThat(ARTICLES, value);
+  
+  if (value.toLowerCase().startsWith("self")){
+    logThis(currentUserData.description);
+    parseStats();
+    locateEquippedItems(currentUserData.id).then(playerEquipment => {
+      console.log(playerEquipment);
+    })
+
+  }
 
   findItemData(value).then(itemData=>{
     if (itemData == null){
