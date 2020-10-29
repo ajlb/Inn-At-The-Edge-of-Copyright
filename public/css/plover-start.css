@@ -3,12 +3,12 @@ body {
     margin: 0 auto;
 }
 
-#about-link {
+#about-link, #about-link a {
     margin-top: -100px;
     color: #AAA9AD;
 }
 
-#play-link {
+#play-link, #play-link a {
     color: black;
 }
 
