@@ -3,6 +3,14 @@ body {
     margin: 0 auto;
 }
 
+#about-link {
+    margin-top: -100px;
+    color: #AAA9AD;
+}
+
+#play-link {
+    color: black;
+}
 
 /* Chat box */ 
 .container {
@@ -37,7 +45,7 @@ body {
     top: 22%;
     border-radius: 10px;
     padding-bottom: 100px;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 #location-info {
@@ -59,8 +67,8 @@ body {
 }
 
 .chat-input {
-width: 90%;
-border-radius: 8px;
+    width: 90%;
+    border-radius: 8px;
 }
 
 .message-output-box {
@@ -115,6 +123,115 @@ button{
     color: white;
 }
 
+
+/* about page */
+
+.about-box {
+    overflow: hidden;
+    background: url("/images/Gyev.gif") no-repeat center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#tv-circles {
+    width: 100%;
+    display: none;
+}
+
+#static-box {
+    padding-bottom: 10px;
+    border-bottom: white 2px solid;
+}
+
+#tv-static {
+    height: 50%;
+    visibility: hidden;
+}
+
+
+/* ABOUT */
+
+.inside-border {
+    margin-top: 60px;
+    margin-bottom: 60px;
+    border: 3px white solid;
+    background-color: black;
+    border-radius: 15px;
+    height: 100%;
+    padding: 20px;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.hidden-figure {
+    height: 250px;
+    width: 250px;
+    display: none;
+}
+
+.image-div {
+    height: 250px;
+    width: 250px;
+}
+
+.card-img-left {
+    height: 250px;
+    width: 250px;
+    border-radius: 10px;
+}
+
+.card-body {
+    display: flex;
+}
+
+.card-text-elements, .card-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-buttons {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card a {
+    height: 80px;
+    width: 80px;
+    padding: 0px;
+    margin: 2px;
+    background-color: #AAA9AD;
+    border: none;
+}
+
+#github-a:hover {
+    background-color: rgb(194, 1, 194);
+}
+
+#linkedin-a:hover {
+    background-color: rgb(1, 108, 248);
+}
+
+.card a img {
+    height: 70px;
+    width: 70px;
+    margin: 2px;
+    margin-top: 4px;  
+    filter: contrast(200%);
+}
+
+
+
+
+/* media queries */
 @media only screen and (min-width: 500px) {
     .panel-default {
       top: 30%;
@@ -137,6 +254,13 @@ button{
     #background-small{
         display: none;
     }
+
+    #tv-circles {
+        display: block;
+    }
+    #tv-static {
+        display: none;
+    }
   }
 
   @media only screen and (min-width: 767px) {
@@ -150,6 +274,13 @@ button{
         display: block;
     }
     #background-small{
+        display: none;
+    }
+
+    #tv-circles {
+        display: block;
+    }
+    #tv-static {
         display: none;
     }
   }
@@ -167,6 +298,13 @@ button{
     #background-small{
         display: none;
     }
+
+    #tv-circles {
+        display: block;
+    }
+    #tv-static {
+        display: none;
+    }
   }
 
   @media only screen and (min-width: 1200px) {
@@ -180,6 +318,13 @@ button{
         display: block;
     }
     #background-small{
+        display: none;
+    }
+
+    #tv-circles {
+        display: block;
+    }
+    #tv-static {
         display: none;
     }
   }

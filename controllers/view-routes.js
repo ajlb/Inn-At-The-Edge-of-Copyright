@@ -22,6 +22,10 @@ module.exports = function (app) {
         res.render('index', {});
     });
 
+    app.get('/about', function(req, res) {
+        res.render('about', {});
+    })
+
     app.get("/play", isAuthenticated, function(req, res){
         res.render('play', {});
     });
