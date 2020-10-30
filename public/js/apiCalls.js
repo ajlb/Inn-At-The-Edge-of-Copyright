@@ -8,6 +8,14 @@ function getLocation(locationID) {
     });
 }
 
+function getAllLocations() {
+    return new Promise(function(resolve, reject){
+        $.get("/api/locations/", function(data){
+            resolve(data);
+        });
+    });
+}
+
 function getDialog(NPC) {
     return new Promise((resolve, reject) => {
         $.get("/api/dialog/" + NPC, (data) => {
@@ -104,12 +112,20 @@ function scrubInventory() {
     })
 }
 
+function findAllItems() {
+    return new Promise(function (resolve, reject) {
+        $.get("api/items/", function(data){
+            resolve(data);
+        });
+    });
+}
+
 function findItemData(itemName) {
     return new Promise(function (resolve, reject) {
         $.get("api/items/" + itemName, function (data) {
             resolve(data);
-        })
-    })
+        });
+    });
 }
 
 function addItemToInventory(item, location, amount) {

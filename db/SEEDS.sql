@@ -122,20 +122,35 @@ INSERT INTO quests (questTitle, dialogue, hints, XPorItem, reward, completionIte
 VALUES ("Find my missing sock.", "I'm pretty sure I put it in the washing machine, but it didn't come out of the dryer. Can you help me?;Oh thank you! I'm so glad. I live at 4532 Little Bittle Lane, out east of the inn.", "I suppose you could my closet, but I already looked twice...", True, 500, 101, Null);
 
 
-INSERT INTO items (itemName, `description`, category, torsoSlot, legsSlot, feetSlot)
+INSERT INTO items (itemName, `description`, category, torsoSlot, legsSlot, feetSlot, inventory, inventorySize)
 VALUES
-("branch", "a dry, brown branch", "nature", 0, 0, 0),
-("mushroom", "a small, white mushroom with a round top", "nature", 0, 0, 0),
-("sock", "a lone argyle sock, blue and yellow", "household", 0, 0, 0),
-("pumpkin pie", "a whole pumpkin pie! It smells like autumn", "food", 0, 0, 0),
-("collar", "A red collar with a silver buckle. It has pictures of fish on it.", "clothing", 0, 0, 0),
-("leather gloves", "nice leather gloves. They look protective.", "armor", 0, 0, 0),
-("blue shirt", "a simple blue linen shirt, good for warm weather", "clothing", 1, 0, 0),
-("fancy shirt", "a fancy white linen shirt with detail in many colors along all the edges", "clothing", 1, 0, 0),
-("brown pants", "a pair of simple brown linen pants, excellent for warm weather", "clothing", 0, 1, 0),
-("fancy slacks", "a pair of fancy pressed black slacks, made of fine wool", "clothing", 0, 1, 0),
-("green socks", "a pair of green cotton socks", "clothing", 0, 0, 1),
-("dull ring", "a dull metal ring with signs of many years of wear", "tools", 0, 0, 0);
+("branch", "a dry, brown branch", "nature", 0, 0, 0, null, null),
+("mushroom", "a small, white mushroom with a round top", "nature", 0, 0, 0, null, null),
+("sock", "a lone argyle sock, blue and yellow", "household", 0, 0, 0, null, null),
+("pumpkin pie", "a whole pumpkin pie! It smells like autumn", "food", 0, 0, 0, null, null),
+("collar", "A red collar with a silver buckle. It has pictures of fish on it.", "clothing", 0, 0, 0, null, null),
+("leather gloves", "nice leather gloves. They look protective.", "armor", 0, 0, 0, null, null),
+("blue shirt", "a simple blue linen shirt, good for warm weather", "clothing", 1, 0, 0, null, null),
+("fancy shirt", "a fancy white linen shirt with detail in many colors along all the edges", "clothing", 1, 0, 0, null, null),
+("brown pants", "a pair of simple brown linen pants, excellent for warm weather", "clothing", 0, 1, 0, null, null),
+("fancy slacks", "a pair of fancy pressed black slacks, made of fine wool", "clothing", 0, 1, 0, null, null),
+("green socks", "a pair of green cotton socks", "clothing", 0, 0, 1, null, null),
+("dull ring", "a dull metal ring with signs of many years of wear", "tools", 0, 0, 0, null, null),
+("acorn", "a small brown nut with a jaunty cap", "nature", null, null, null),
+("toadstool", "an alarmingly bright red mushroom with white spots", "nature", null, null, null, null, null),
+("mushroom patch", "a smallish patch of white, round mushrooms", "nature", null, null, null, 1, 6),
+("strawberry patch", "a little patch of green leaves with red berries peeking out from underneath", "nature", null, null, null, 1, 4),
+("hazelnut bush", "a group of strong shoots with fuzzy, pointed leaves, and sets of prickly hazelnuts", "nature", null, null, null, 1, 8),
+("huckleberry bush", "a delicate bush with neat little leaves and tiny, round, red berries", "nature", null, null, null, 1, 5),
+("blackberry bush", "a wicked looking bush with razor sharp thorns glinting evilly at you. Oh, and some berries", "nature", null, null, null, 1, 10),
+("button", "a small, round button with two hole", "household", null, null, null, null, null),
+("vein of iron", "an outcropping of rock with a bit of iron ore showing through", "mountains", null, null, null, 1, 3),
+("vein of tin", "an outcropping of rock with a bit of tin ore showing through", "mountains", null, null, null, 1, 3),
+("vein of copper", "an outcropping of rock with a bit of copper ore showing through", "mountains", null, null, null, 1, 3),
+("vein of zinc", "an outcropping of rock with a bit of zinc ore showing through", "mountains", null, null, null, 1, 3),
+("plum tree", "a medium sized tree with ripe, purple plums hanging off of it", "mountains", null, null, null, 1, 4),
+("apple tree", "a medium sized tree with round, shiny, red and yellow apples glinting from the branches", "nature", null, null, null, 1, 6),
+("dagger", "a small steel dagger with a leather wrapped handle", "weapon", null, null, null, null, null);
 
 UPDATE items SET HPeffect = 10 WHERE itemName = "leather gloves";
 UPDATE items SET ringSlot = 1 WHERE itemName = "dull ring";

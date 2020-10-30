@@ -42,7 +42,7 @@ function createConnection(thisUser){
     },
     presence: (presence) => {
       logAction(presence);
-      parseWhosOnline();
+      setTimeout(parseWhosOnline(), 2000);
       action = presence.action;
       channelName = presence.channel;
       uuid = presence.uuid;

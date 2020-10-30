@@ -28,6 +28,12 @@ module.exports = function (app) {
             res.json(data);
         }).catch(e => res.status(401).json(e))
     });
+    //find all locations
+    app.get("/api/locations/", function (req, res){
+        models.location.findAll({}).then(function(data){
+            res.json(data);
+        }).catch(e=>console.log(e));
+    });
     //find location based on id
     app.get("/api/locations/:id", function (req, res) {
         models.location.findOne({ where: { id: req.params.id } }).then(function (data) {
@@ -151,6 +157,12 @@ module.exports = function (app) {
             console.log(e)
         });
     });
+    //get all items
+    app.get("/api/items/", function(req, res){
+        models.item.findAll({}).then(function(data){
+            res.json(data);
+        }).catch(e=>console.log(e));
+    })
     //get item data by ID
     app.get("/api/items/:id", function (req, res) {
         models.item.findOne({ where: { itemName: req.params.id } }).then(function (data) {
