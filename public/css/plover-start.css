@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'kavalerkursive';
+    src: url('kavaler_kursive-webfont.woff2') format('woff2'),
+         url('kavaler_kursive-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
     background-color: black;
     margin: 0 auto;
@@ -11,6 +19,11 @@ body {
 #play-link, #play-link a {
     color: black;
 }
+
+footer {
+    margin-left: 0px;
+}
+
 
 /* Chat box */ 
 .container {
@@ -85,6 +98,7 @@ body {
     width: 65%;
 }
 
+
 /* message display */
 .displayed-description {
     margin-left: 20px;
@@ -124,38 +138,13 @@ button{
 }
 
 
-/* about page */
-
-.about-box {
-    overflow: hidden;
-    background: url("/images/Gyev.gif") no-repeat center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-}
-
-#tv-circles {
-    width: 100%;
-    display: none;
-}
-
-#static-box {
-    padding-bottom: 10px;
-    border-bottom: white 2px solid;
-}
-
-#tv-static {
-    height: 50%;
-    visibility: hidden;
-}
-
 
 /* ABOUT */
 
 h1 {
     margin: 0 auto;
     margin-top: 40px;
-    font-family: Pacifico;
+    font-family: kavalerkursive;
 }
 
 .inside-border {
