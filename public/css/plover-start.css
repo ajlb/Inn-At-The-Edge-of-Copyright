@@ -152,8 +152,14 @@ button{
 
 /* ABOUT */
 
+h1 {
+    margin: 0 auto;
+    margin-top: 40px;
+    font-family: Pacifico;
+}
+
 .inside-border {
-    margin-top: 60px;
+    margin-top: 40px;
     margin-bottom: 60px;
     border: 3px white solid;
     background-color: black;
@@ -163,8 +169,11 @@ button{
 }
 
 .card {
+    padding-top: 16px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     margin: 10px;
     margin-bottom: 20px;
     border-radius: 10px;
@@ -191,15 +200,16 @@ button{
     display: flex;
 }
 
-.card-text-elements, .card-buttons {
+.card-text-elements {
     display: flex;
     flex-direction: column;
 }
 
 .card-buttons {
     margin-left: 10px;
+    margin-bottom: 10px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
 }
 
@@ -229,9 +239,21 @@ button{
 }
 
 
-
-
 /* media queries */
+
+@media only screen and (max-width: 350px) {
+    .image-div {
+        height: 150px;
+        width: 150px;
+    }
+
+    .card-img-left {
+        height: 150px;
+        width: 150px;
+        border-radius: 10px;
+    }
+}
+
 @media only screen and (min-width: 500px) {
     .panel-default {
       top: 30%;
@@ -305,6 +327,19 @@ button{
     #tv-static {
         display: none;
     }
+
+    .card {
+        padding-top: 0px;
+        flex-direction: row;
+        text-align: left;
+    }
+    
+    .card-buttons {
+        margin-bottom: 0px;
+        flex-direction: column;
+        margin-right: 16px;
+    }
+
   }
 
   @media only screen and (min-width: 1200px) {
