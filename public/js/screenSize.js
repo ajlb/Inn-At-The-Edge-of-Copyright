@@ -45,7 +45,7 @@ $('#inputBar').focusout(function(){
             $('.panel-default').css("top", "22%");
             $('.panel-default').css("left", "16%");
             $('.panel-default').css("width", "69%");
-            $('.panel-default').css("height", "54%");
+            $('.panel-default').css("height", "57%");
         }
     }
 });
