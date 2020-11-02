@@ -21,8 +21,10 @@ $('#inputBar').focusin(function(){
         $('.panel-default').css("top", "8%");
         $('.panel-default').css("left", "48px");
         $('.panel-default').css("width", "78%");
-        $('.panel-default').css("height", "52%");
+        $('.panel-default').css("height", "44%");
         $('.panel-default').css("padding-bottom", "10px");
+
+        $('.message-output-box').css("height", "46%");
 
         $('.input-group').css('bottom', "20px");
         $('#inputBar').css("border-radius", "10px");
@@ -38,5 +40,12 @@ $('#inputBar').focusout(function(){
         $('.panel-default').css("left", "16%");
         $('.panel-default').css("width", "69%");
         $('.panel-default').css("height", "63%");
+
+        // // if (location.pathname == "/play"){
+        //     $('.panel-default').css("top", "10%");
+        //     $('.panel-default').css("left", "16%");
+        //     $('.panel-default').css("width", "68%");
+        //     $('.panel-default').css("height", "54%");
+        // // }
     }
 });

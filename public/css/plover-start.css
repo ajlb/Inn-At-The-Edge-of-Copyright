@@ -50,13 +50,15 @@ footer {
     margin: 0 auto;
 }
 
+/* BEGIN HERE*/
+
 .panel-default {
     background-color: black;
     color: white;
     padding: 10px;
     width: 69%;
     max-width: 1000px;
-    height: 63%;
+    height: 54%;
     max-height: 500px;
     border: white 2px solid;
     position: absolute;
@@ -76,7 +78,7 @@ footer {
     position: absolute;
     display: flex;
     justify-content: space-between;
-    bottom: 2px;
+    bottom: 4px;
     left: 2px;
     width: 98%;
     max-width: 998px;
