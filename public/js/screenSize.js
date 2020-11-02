@@ -41,11 +41,11 @@ $('#inputBar').focusout(function(){
         $('.panel-default').css("width", "69%");
         $('.panel-default').css("height", "63%");
 
-        // // if (location.pathname == "/play"){
-        //     $('.panel-default').css("top", "10%");
-        //     $('.panel-default').css("left", "16%");
-        //     $('.panel-default').css("width", "68%");
-        //     $('.panel-default').css("height", "54%");
-        // // }
+        if (location.pathname == "/play"){
+            $('.panel-default').css("top", "22%");
+            $('.panel-default').css("left", "16%");
+            $('.panel-default').css("width", "69%");
+            $('.panel-default').css("height", "54%");
+        }
     }
 });
