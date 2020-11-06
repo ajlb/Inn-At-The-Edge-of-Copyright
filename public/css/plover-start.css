@@ -14,10 +14,13 @@ body {
 #about-link, #about-link a {
     margin-top: -100px;
     color: #AAA9AD;
+    z-index: 1000;
 }
 
 #play-link, #play-link a {
     color: black;
+    z-index: 1000;
+
 }
 
 footer {
@@ -40,8 +43,14 @@ footer {
     width: 130%;
     margin: 0 auto;
     margin-left: -130px;
-    
 }
+
+#background-mobile {
+    display: none;
+    margin: 0 auto;
+}
+
+/* BEGIN HERE*/
 
 .panel-default {
     background-color: black;
@@ -49,7 +58,7 @@ footer {
     padding: 10px;
     width: 69%;
     max-width: 1000px;
-    height: 63%;
+    height: 54%;
     max-height: 500px;
     border: white 2px solid;
     position: absolute;
@@ -69,7 +78,7 @@ footer {
     position: absolute;
     display: flex;
     justify-content: space-between;
-    bottom: 2px;
+    bottom: 4px;
     left: 2px;
     width: 98%;
     max-width: 998px;
