@@ -16,6 +16,7 @@ body {
     margin: 0 auto;
     display: flex;
     justify-content: center;
+    overflow-x: hidden;
 }
 
 #about-link, #about-link a {
@@ -50,10 +51,10 @@ figure {
 }
 
 #panel-border {
-    border: white solid 4px;
+    border: white solid 5px;
     border-radius: 32px;
     height: 50%;
-    width: 70%;
+    width: 96%;
     padding: 0px;
     margin: 0 auto;
 }
@@ -65,7 +66,8 @@ figure {
     justify-content: center;
     align-items: center;
     border: 30px solid rgb(180, 180, 180);
-    height: 200px;
+    height: 40vh;
+    width: 50vw;
     border-radius: 25px;
     font-size: 12px;
 }
@@ -74,7 +76,9 @@ figure {
     background-color: black;
     border: black solid 20px;
     border-radius: 10px;
+    margin: 0px 20px 0px 20px;
     height: 85%;
+    width: 85%;
 }
 
 #location-info {
@@ -92,35 +96,28 @@ figure {
     overflow-y: scroll;
     overflow-wrap: break-word;
     min-height: 100%;
+    width: 100%;
     overflow-anchor: none;
 }
 
-.input-box {
-    position: relative;
-    bottom: 30px;
-}
-
-
-/* .input-box {
+#input-group {
     display: flex;
-    justify-content: space-between;
-    width: 98%;
-    max-width: 998px;
-    border-radius: 10px;
-    height: 10%;
-    background-color: black;
-    padding: 2px;
 }
 
-.chat-input {
-    width: 90%;
-    border-radius: 8px;
-} */
+#inputBar {
+    position: relative;
+    left: -5px;
+    width: 100%;
+    border-radius: 6px;
+}
 
-
+#submit-button {
+    width: 30px;
+    color: white;
+    border-radius: 6px;
+}
 
 /* message display */
-
 
 .displayed-description {
     margin-left: 20px;
@@ -195,9 +192,9 @@ h1 {
     display: none;
 }
 
-.hidden-text {
+#hidden-text {
     position: absolute;
-    display: none;
+    right: -1000px;
 }
 
 .image-div {

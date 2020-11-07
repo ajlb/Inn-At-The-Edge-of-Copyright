@@ -5,11 +5,11 @@ function ChatPanel() {
     return (
         <div class="input-box">
             <form>
-                <div class="input-group">
+                <div id="input-group">
                     <label for="inputBar" id="hidden-text">User Input Bar: </label>
-                    <input type="text" id="inputBar" class="form-control chat-input" autofocus="autofocus" onfocus="this.select()" />
+                    <input type="text" id="inputBar" className="form-control chat-input" autofocus="autofocus" onfocus="this.select()" />
                     <span class="input-group-btn">
-                        <button type="submit" id="submit-button" class="btn btn-default">=&gt;</button>
+                        <button type="submit" id="submit-button" className="btn btn-default fa fa-arrow-right"></button>
                     </span>
                 </div>
             </form>
