@@ -6,7 +6,6 @@ import Talia from "./images/Talia.jpg";
 import Jeneth from "./images/Jeneth.jpg";
 import github from "./images/github.png";
 import linkedin from "./images/linkedin.png";
-import ScriptTag from 'react-script-tag';
 import JS from './about';
 
 
