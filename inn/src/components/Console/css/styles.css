@@ -326,3 +326,39 @@ button{
         flex-direction: column !important;
     }
 }
+
+@media screen and (min-width: 1050px){
+
+    .inside-border {
+        margin-left: 100px;
+        margin-right: 100px;
+    }
+
+}
+
+@media screen and (min-width: 1350px){
+
+    .inside-border {
+        margin-left: 200px;
+        margin-right: 200px;
+    }
+
+}
+
+@media screen and (min-width: 1500px){
+
+    .inside-border {
+        margin-left: 300px;
+        margin-right: 300px;
+    }
+
+}
+
+@media screen and (min-width: 1800px){
+
+    .inside-border {
+        margin-left: 400px;
+        margin-right: 400px;
+    }
+
+}

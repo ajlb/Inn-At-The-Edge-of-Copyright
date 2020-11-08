@@ -6,6 +6,10 @@ import Talia from "./images/Talia.jpg";
 import Jeneth from "./images/Jeneth.jpg";
 import github from "./images/github.png";
 import linkedin from "./images/linkedin.png";
+import ScriptTag from 'react-script-tag';
+import JS from './about';
+
+
 
 function About() {
     return (<div>
@@ -98,7 +102,6 @@ function About() {
 
 <footer id="play-link"><a href="/play">Back to the game!</a></footer>
 
-<script src="./js/about.js"></script>
 </div>);
   }
   
