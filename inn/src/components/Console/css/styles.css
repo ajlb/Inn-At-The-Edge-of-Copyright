@@ -31,10 +31,17 @@ body {
 
 }
 
-footer {
-    position: absolute;
-    bottom: 4px;
-    margin-left: 9px;
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Equal to height of footer */
+    /* But also accounting for potential margin-bottom of last child */
+    margin-bottom: -50px;
+}
+.footer, .push {
+    height: 50px;
 }
 
 
@@ -155,7 +162,8 @@ button{
 
 /* ABOUT */
 
-h1 {
+
+.about-title {
     margin: 0 auto;
     margin-top: 40px;
     font-family: kavalerkursive;
@@ -267,6 +275,13 @@ h1 {
         width: 50px;
         margin-left: 4px;
     }
+
+    
+    .inside-border {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
 }
 
 @media screen and (min-width: 700px){
@@ -297,5 +312,17 @@ h1 {
     #submit-button {
         width: 50px;
         margin-left: 4px;
+    }
+
+}
+
+@media screen and (min-width: 850px){
+    .card {
+        flex-direction: row !important;
+        padding: 10px;
+    }
+
+    .card-buttons {
+        flex-direction: column !important;
     }
 }
