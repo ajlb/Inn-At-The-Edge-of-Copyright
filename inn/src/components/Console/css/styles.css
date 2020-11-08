@@ -51,12 +51,10 @@ figure {
 }
 
 #panel-border {
-    border: white solid 5px;
+    background-color: white;
     border-radius: 32px;
-    height: 50%;
-    width: 96%;
-    padding: 0px;
-    margin: 0 auto;
+    padding: 5px;
+    margin-bottom: 58px;
 }
 
 .panel-default {
@@ -102,18 +100,16 @@ figure {
 
 #input-group {
     display: flex;
+    position: relative;
+    left: -10px;
+    bottom: 12px;
 }
 
 #inputBar {
-    position: relative;
-    left: -5px;
-    width: 100%;
     border-radius: 6px;
 }
 
 #submit-button {
-    width: 30px;
-    color: white;
     border-radius: 6px;
 }
 
@@ -193,8 +189,7 @@ h1 {
 }
 
 #hidden-text {
-    position: absolute;
-    right: -1000px;
+    font-size: 0px;
 }
 
 .image-div {
@@ -252,3 +247,55 @@ h1 {
 
 
 /* media queries */
+
+@media screen and (min-width: 500px){
+    #panel-interior{
+        margin: 0px;
+    }
+
+    #input-group {
+        height: 28px;
+        bottom: 16px;
+    }
+
+    #inputBar {
+        width: 90%;
+        font-size: 12px;
+    }
+
+    #submit-button {
+        width: 50px;
+        margin-left: 4px;
+    }
+}
+
+@media screen and (min-width: 700px){
+    #logo {
+        width: 260px;
+    }
+
+    .panel-default {
+        font-size: 18px;
+        height: 55vh;
+    }
+
+    #panel-interior{
+        margin: 0px;
+        width: 100%;
+    }
+
+    #input-group {
+        height: 40px;
+        bottom: 30px;
+    }
+
+    #inputBar {
+        width: 90%;
+        font-size: 18px;
+    }
+
+    #submit-button {
+        width: 50px;
+        margin-left: 4px;
+    }
+}
