@@ -19,11 +19,11 @@ body {
     overflow-x: hidden;
 }
 
-#about-link, #about-link a {
+/* #about-link, #about-link a {
     margin-top: -100px;
     color: #AAA9AD;
     z-index: 1000;
-}
+} */
 
 #play-link, #play-link a {
     color: black;
@@ -70,9 +70,9 @@ figure {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 30px solid rgb(180, 180, 180);
-    height: 40vh;
-    width: 50vw;
+    border: 15px solid rgb(180, 180, 180);
+    height: 70vh;
+    width: 80vw;
     border-radius: 25px;
     font-size: 12px;
 }
@@ -93,7 +93,8 @@ figure {
 #logo {
     width: 160px;
     margin-left: 20%;
-    margin-bottom: -5px;
+    margin-bottom: -20px;
+    margin-top: 20px;
 
 }
 
@@ -109,15 +110,25 @@ figure {
     display: flex;
     position: relative;
     left: -10px;
-    bottom: 12px;
+    bottom: 20px;
+    width: 110%;
 }
 
 #inputBar {
     border-radius: 6px;
+    height: 34px;
 }
 
 #submit-button {
     border-radius: 6px;
+    background-color: gray;
+    height: 34px;
+    margin-left: 4px;
+}
+
+.fa {
+    display: inline-block;
+    vertical-align: center;
 }
 
 /* message display */
@@ -263,11 +274,14 @@ button{
 
     #input-group {
         height: 28px;
+        width: 100%;
+        height: 34px;
         bottom: 16px;
     }
 
     #inputBar {
         width: 90%;
+        height: 34px;
         font-size: 12px;
     }
 
@@ -292,6 +306,7 @@ button{
     .panel-default {
         font-size: 18px;
         height: 55vh;
+        width: 70vw;
     }
 
     #panel-interior{
@@ -300,17 +315,19 @@ button{
     }
 
     #input-group {
-        height: 40px;
-        bottom: 30px;
+        height: 50px;
+        bottom: 20px;
     }
 
     #inputBar {
         width: 90%;
+        height: 34px;
         font-size: 18px;
     }
 
     #submit-button {
-        width: 50px;
+        width: 40px;
+        height: 34px;
         margin-left: 4px;
     }
 
@@ -328,6 +345,11 @@ button{
 }
 
 @media screen and (min-width: 1050px){
+    .panel-default {
+        font-size: 18px;
+        height: 70vh;
+        width: 50vw;
+    }
 
     .inside-border {
         margin-left: 100px;

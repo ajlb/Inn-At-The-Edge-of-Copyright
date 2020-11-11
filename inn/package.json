@@ -7,12 +7,14 @@
     "@testing-library/react": "^11.1.1",
     "@testing-library/user-event": "^12.2.0",
     "bootstrap": "^4.5.3",
+    "pluralize": "^8.0.0",
     "react": "^17.0.1",
-    "react-bootstrap": "^1.4.0",
+    "react-device-detect": "^1.14.0",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-script-tag": "^1.1.2",
     "react-scripts": "4.0.0",
+    "react-scroll": "^1.8.1",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

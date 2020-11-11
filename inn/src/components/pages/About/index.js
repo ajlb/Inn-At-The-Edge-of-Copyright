@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import '../../Console/css/styles.css';
 import Nancy from "./images/Nancy.jpg";
 import Plover from "./images/Plover.jpg";
@@ -6,11 +7,15 @@ import Talia from "./images/Talia.jpg";
 import Jeneth from "./images/Jeneth.jpg";
 import github from "./images/github.png";
 import linkedin from "./images/linkedin.png";
-import JS from './about';
 
 
 
 function About() {
+
+    useEffect(() => { document.body.style.backgroundColor = '#AAA9AD' }, [])
+
+
+
     return (<div>
 
 <div className="wrapper">
