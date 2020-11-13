@@ -3,6 +3,12 @@ import {
     BrowserView
 } from 'react-device-detect';
 
+const styles = {
+    inputGroup: {
+        width: "100%"
+    },
+}
+
 
 
 function InputPanel(props) {
@@ -10,16 +16,17 @@ function InputPanel(props) {
     return (
         <div>
             <BrowserView>
-                <div class="input-box">
+                <div className="input-box">
                     <form>
                         <div id="input-group">
-                            <label for="inputBar" id="hidden-text">User Input Bar: </label>
+                            <label htmlFor="inputBar" id="hidden-text">User Input Bar: </label>
                             <input
                                 type="text"
                                 id="inputBar"
-                                className="form-control chat-input" autofocus="autofocus"
+                                className="form-control chat-input" autoFocus="autofocus"
+                                autoComplete="off"
                             />
-                            <span class="input-group-btn">
+                            <span className="input-group-btn">
                                 <button type="submit" id="submit-button" className="btn btn-default fa fa-arrow-right"></button>
                             </span>
                         </div>
@@ -27,37 +34,27 @@ function InputPanel(props) {
                 </div>
             </BrowserView>
             <MobileView>
-                <div class="input-box">
+                <div className="input-box">
                     <form>
-                        {(props.minState === "max") ?
-                            <div id="input-group">
-                                <label for="inputBar" id="hidden-text">User Input Bar: </label>
-                                <input
-                                    type="text"
-                                    id="inputBar"
-                                    className="form-control chat-input"
-                                    onBlur={props.onBlur}
-                                    onSelect={props.onSelect}
-                                />
-                                <span class="input-group-btn">
-                                    <button type="submit" id="submit-button" className="btn btn-default fa fa-arrow-right"></button>
-                                </span>
-                            </div>
-                            :
-                            <div id="input-group" style={{width: 100+"%"}}>
-                                <label for="inputBar" id="hidden-text">User Input Bar: </label>
-                                <input
-                                    type="text"
-                                    id="inputBar"
-                                    className="form-control chat-input"
-                                    onBlur={props.onBlur}
-                                    onSelect={props.onSelect}
-                                />
-                                <span class="input-group-btn">
-                                    <button type="submit" id="submit-button" className="btn btn-default fa fa-arrow-right"></button>
-                                </span>
-                            </div>
-                        }
+                        <div 
+                        id="input-group"
+                        style={{
+                            width: props.minState==="min" && 100+"%" 
+                        }}
+                        >
+                            <label htmlFor="inputBar" id="hidden-text">User Input Bar: </label>
+                            <input
+                                type="text"
+                                id="inputBar"
+                                className="form-control chat-input"
+                                onBlur={props.onBlur}
+                                onSelect={props.onSelect}
+                                autoComplete="off"
+                            />
+                            <span className="input-group-btn">
+                                <button type="submit" id="submit-button" className="btn btn-default fa fa-arrow-right"></button>
+                            </span>
+                        </div>
                     </form>
                 </div>
             </MobileView>

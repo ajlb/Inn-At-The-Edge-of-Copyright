@@ -12,13 +12,11 @@ function Console() {
     const [minState, setMinState] = useState("max");
 
     const onSelect = () => {
-        console.log("SELECTED");
         setMinState("min");
 
     }
 
     const onBlur = () => {
-        console.log("BLURRED");
         setMinState("max")
     }
 
@@ -41,9 +39,9 @@ function Console() {
 
                 {(minState === "max") ?
                     <div id="panel-border">
-                        <div class="panel-default">
+                        <div className="panel-default">
                             <div id="panel-interior">
-                                <div class="panel-heading"></div>
+                                <div className="panel-heading"></div>
                                 <div id="location-info"></div>
                                 <ChatPanel />
                                 <InputPanel
@@ -55,9 +53,9 @@ function Console() {
                     </div>
                     :
                     <div id="panel-border" style={{ height: 50 + "vh", width: 120 + "vw", marginTop: 57 + "vh", overflow: "hidden"}}>
-                        <div class="panel-default" style={{ height: 100 + "%", width: 100 + "%" }}>
+                        <div className="panel-default" style={{ height: 100 + "%", width: 100 + "%" }}>
                             <div id="panel-interior">
-                                <div class="panel-heading"></div>
+                                <div className="panel-heading"></div>
                                 <div id="location-info"></div>
                                 <ChatPanel />
                                 <InputPanel
