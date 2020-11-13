@@ -1,6 +1,7 @@
 import axios from "axios";
 
-function GetActions() {
+//populate actions from action collection in db
+function getActions() {
     return new Promise(function(resolve, reject){
         console.log("sending GET");
         axios.get("http://localhost:4000/getData").then(data => {
@@ -9,5 +10,7 @@ function GetActions() {
     })
 }
 
-export default GetActions;
+export {
+    getActions
+};
 

@@ -7,6 +7,8 @@ function ChatPanel(props) {
     const gamewideInfo = useContext(GamewideInfo);
     console.log("ChatPanel:", gamewideInfo);
 
+    let anchorDiv;
+
     return (
         <div className="message-output-box">
             <ul className="list-group chat-output"></ul>
@@ -17,7 +19,9 @@ function ChatPanel(props) {
 
             }   
             
-            <div id="anchor"></div>
+            <div
+            id="anchor"
+            ref={(el) => anchorDiv=el }></div>
         </div>
     );
 
