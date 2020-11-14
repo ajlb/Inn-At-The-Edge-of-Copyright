@@ -1,7 +1,7 @@
-import Play from "./components/pages/Play/Index";
-import Home from "./components/pages/Home/Index";
-import Signup from "./components/pages/Singup/Index";
-import About from "./components/pages/About";
+import Play from "./pages/Play/Index";
+import Home from "./pages/Home/Index";
+import Signup from "./pages/Singup/Index";
+import About from "./pages/About";
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 

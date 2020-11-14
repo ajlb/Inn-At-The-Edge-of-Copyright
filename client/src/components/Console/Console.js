@@ -7,7 +7,7 @@ import { isBrowser } from 'react-device-detect';
 import { getActions } from "../../Utils/API";
 import GamewideInfo from '../../Utils/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
-import findIn from "../pages/js/finders";
+import findIn from "../../pages/js/finders";
 
 
 

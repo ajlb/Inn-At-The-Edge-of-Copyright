@@ -1,4 +1,4 @@
-import Console from "../../Console/Console"
+import Console from "../../components/Console/Console"
 
 function Play() {
     return (
