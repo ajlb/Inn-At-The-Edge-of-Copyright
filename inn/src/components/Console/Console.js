@@ -6,14 +6,22 @@ import "./css/styles.css";
 import { isBrowser } from 'react-device-detect';
 import { getActions } from "../../Utils/API";
 import GamewideInfo from '../../Utils/GamewideInfo';
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 function Console() {
-
 
     //set state for whether to move to min state (because of soft keyboard on mobile)
     const [minState, setMinState] = useState("max");
     //set state for GamewideInfo provider - actions
-    const [actions, setActions] = useState([]);
+
+    const initialGameInfo = {
+        actions: [],
+        chatHistory: [],
+        theme: "",
+        currentMessage: ""
+    }
+
+    const [gameInfo, setGameInfo] = useState(initialGameInfo);
 
     //blur and select functions for input - to set min state
     const onSelect = () => {
@@ -24,39 +32,69 @@ function Console() {
         setMinState("max")
     }
 
+    const handleMessage = (event, type="displayed-stat") => {
+        event.preventDefault();
+        const input = document.querySelector("input");
+        input.value = "";
+        setGameInfo(prevState => ({
+            ...gameInfo,
+            chatHistory: [...prevState.chatHistory, {type, text: gameInfo.currentMessage}]
+        }))
+    }
+
+    const onInputBarChange = (event) => {
+        setGameInfo({
+            ...gameInfo,
+            currentMessage: event.target.value
+        })
+    }
+
     //initialize console with black background, minState="max", and then fetch data for GamewideData
     useEffect(() => {
+        let mounted = true;
         document.body.style.backgroundColor = 'black'
         if (isBrowser) {
             setMinState("max");
         }
         getActions().then(actionData => {
-            console.log("inside console useEffect");
-            console.log(actionData);
-            setActions(actionData.data);
+            if (mounted) {
+                console.log("inside console useEffect");
+                console.log(actionData);
+                setGameInfo({
+                    ...gameInfo,
+                    chatHistory: [{type:"displayed-stat", text:"Hello"}],
+                    actions: actionData.data
+                });
+            }
         });
+
+        return function cleanup(){
+            mounted = false;
+        }
     }, [])
+
 
 
     return (
         <div>
             <div className="wrapper">
-                <GamewideInfo.Provider value={actions}>
-                    {(minState === "max") &&
-                        <figure>
-                            <img src={logo} alt="Inn At The Edge of Copyright Logo" id="logo" />
-                        </figure>
-                    }
-                    <div id="panel-border" style={{ 
-                        height: minState==="min" && 50 + "vh",
-                        width: minState==="min" && 120 + "vw",
-                        marginTop: minState==="min" && 57 + "vh",
-                        overflow: minState==="min" && "hidden" 
+                <ErrorBoundary>
+                    <GamewideInfo.Provider value={gameInfo}>
+                        {(minState === "max") &&
+                            <figure>
+                                <img src={logo} alt="Inn At The Edge of Copyright Logo" id="logo" />
+                            </figure>
+                        }
+                        <div id="panel-border" style={{
+                            height: minState === "min" && 50 + "vh",
+                            width: minState === "min" && 120 + "vw",
+                            marginTop: minState === "min" && 57 + "vh",
+                            overflow: minState === "min" && "hidden"
                         }}>
                             <div className="panel-default" style={{
-                                height: minState==="min" && 100 + "%",
-                                width: minState==="min" && 100 + "%" 
-                                }}>
+                                height: minState === "min" && 100 + "%",
+                                width: minState === "min" && 100 + "%"
+                            }}>
                                 <div id="panel-interior">
                                     <div className="panel-heading"></div>
                                     <div id="location-info"></div>
@@ -64,11 +102,14 @@ function Console() {
                                     <InputPanel
                                         onBlur={onBlur}
                                         onSelect={onSelect}
-                                        minState={minState} />
+                                        minState={minState} 
+                                        onSubmit={handleMessage}
+                                        onChange={onInputBarChange}/>
                                 </div>
                             </div>
                         </div>
-                </GamewideInfo.Provider>
+                    </GamewideInfo.Provider>
+                </ErrorBoundary>
             </div>
             {(minState === "max") &&
                 <div className="push"></div>

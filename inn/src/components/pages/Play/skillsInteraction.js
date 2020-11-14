@@ -14,7 +14,7 @@ function juggle(value){
     let num = value.split(" ")[0];
     let target = value.replace(`${num} `, "");
     //turn typed number into int
-    for (prop in numbers){
+    for (const prop in numbers){
         if (numbers[prop].includes(num.toLowerCase())){
             num = parseInt(prop);
             if (typeof num === "number" && num > 2){  

@@ -2,7 +2,11 @@
 import React from 'react';
 
 const GamewideInfo = React.createContext({
-    actions: []
+    actions: [],
+    chatHistory: [],
+    theme: "",
+    currentMessage: "",
+    messageDisplay: () => {}
 });
 
 export default GamewideInfo;

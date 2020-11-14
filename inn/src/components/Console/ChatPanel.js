@@ -3,30 +3,35 @@ import GamewideInfo from "../../Utils/GamewideInfo";
 
 
 function ChatPanel(props) {
-    
-    const gamewideInfo = useContext(GamewideInfo);
-    console.log("ChatPanel:", gamewideInfo);
-    
-    const scrollToBottom = () => {
-        anchorDiv.scrollIntoView({ behavior: "smooth" });
-      }
+    //prepare variable to hold div reference for scrolling
     let anchorDiv;
-
-    useEffect(() => {
-        scrollToBottom();
-    })
-
     
+    //get context provider
+    const gamewideInfo = useContext(GamewideInfo);
+    
+    
+    //effect on render
+    useEffect(() => {
+
+        //pin to bottom after every render
+        const scrollToBottom = () => {
+            anchorDiv.scrollIntoView({ behavior: "smooth" });
+        }
+
+        scrollToBottom();
+    }, [gamewideInfo.chatHistory, anchorDiv])
+    
+    let i = 0;
+
     return (
         <div className="message-output-box">
             <ul className="list-group chat-output"></ul>
             {
-                gamewideInfo.map(action => {
-                    return <li key={action.actionName}>{action.actionName}</li>
+                gamewideInfo.chatHistory.map(message => {
+                    i++;
+                    return <p key={i} className={message.type}>{message.text}</p>
                 })
-
             }   
-            
             <div
             id="anchor"
             ref={(el) => anchorDiv=el }></div>
@@ -37,3 +42,7 @@ function ChatPanel(props) {
 
 
 export default ChatPanel;
+
+export {
+    
+};

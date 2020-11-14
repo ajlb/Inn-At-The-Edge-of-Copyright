@@ -43,20 +43,10 @@ function doesThisStartWithThose(thisThing, those) {
     return false;
   }
   
-  //return alias for words with multiple ways to type them
-  function parseAlternateWords(thisThing, objecty) {
-    for (let thatThing in objecty) {
-      if (thisThing.toLowerCase().trim() === objecty[thatThing]) {
-        return thatThing;
-      }
-    }
-    return thisThing;
-  }
 
   export {
     doesThisStartWithThose,
     startsWithOrIs,
     takeTheseOffThat,
-    doesThisEqualThat,
-    parseAlternateWords
+    doesThisEqualThat
   }

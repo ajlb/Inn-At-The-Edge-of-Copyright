@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import Console from "../../Console/Console"
 import '../../Console/css/styles.css'
 

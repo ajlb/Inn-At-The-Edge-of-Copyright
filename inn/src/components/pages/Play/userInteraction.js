@@ -2,12 +2,12 @@ import {doesThisStartWithThose, takeTheseOffThat} from "../js/finders";
 import {changeItemQuantity, scrubInventory, getPlayerData, getActions, getLocation, rememberLocation, getInventory, whosOnline, addItemToInventory, findItemData, getStats, incrementStat, changeIsEquipped, fillPlayerInvSlot, locateEquippedItems} from "../js/apiCalls";
 import runNPC from "./NPCs";
 import pluralize from "pluralize";
+import {pluralizeAppropriateWords, insertArticleSingleValue, parseAlternateWords} from "../js/parsers";
+import {juggle, stopJuggling, juggleTime} from "./skillsInteraction";
 
 //CONSTANT VARIABLES
 const DIRECTIONWORDS = { N: ["n", "north"], E: ["e", "east"], S: ["s", "south"], W: ["w", "west"] };
 const ARTICLES = ["the", "a", "an"];
-const MULTIPLES = ["set", "pair", "box", "bag"];
-const VOWELS = ["a", "e", "i", "o", "u"];
 
 //LOCATION, ACTION, USER DATA
 let currentLocation; //holds all data for current location
@@ -31,47 +31,31 @@ let userRecentCommandsIndex;
 
 
 
-//print info to user
-function logThis(text) {
-  $("#anchor").before(`<p class="displayed-message">${text}</p>`);
-  updateScroll();
+//FAKE FUNCTIONS ()
+function logThis(text){
+  console.log("Personal Message: ", text);
+  //send a message to user through socket.io
 }
 
-//print info to user in yellow with indent
-function describeThis(text) {
-  $("#anchor").before(`<p class="displayed-description">${text}</p>`);
-  updateScroll();
+function describeThis(text){
+  console.log("Personal Description: ", text);
+  //publish a description through socket.io
 }
 
-//print info out to user with small margins between items
-function listThis(text) {
-  $("#anchor").before(`<p class="displayed-stat">${text}</p>`);
+function listThis(text){
+  console.log("Stat: ", text);
+  //publish a description through socket.io
 }
 
-//Pull scroll bar to bottom
-function updateScroll() {
-  $(".message-output-box").scrollTop($(".message-output-box")[0].scrollHeight)
+function sayThis(text){
+  console.log("Chat Message: ", text);
+  //publish a message to chat through socket.io
 }
 
-//only pluralize things that don't start with multiples words
-function pluralizeAppropriateWords(itemName, itemQuantity) {
-  if (doesThisStartWithThose(itemName, MULTIPLES)) {
-    return itemName;
-  } else {
-    return pluralize(itemName, itemQuantity);
-  }
+function publishDescription(text){
+  console.log("Locationwide Description: ", text);
+  //publish a description through socket.io
 }
-
-//put "a" before consonants and y, put "an" before vowels
-function insertArticleSingleValue(value) {
-  if (doesThisStartWithThose(value, VOWELS)) {
-    return `an ${value}`;
-  } else {
-    return `a ${value}`;
-  }
-}
-
-
 
 
 //FINDER FUNCTIONS
@@ -150,16 +134,16 @@ function findMatchByItemNameAndChangeQuantity(value, data, target, amount) {
 //SINGLE PURPOSE HELPER FUNCTIONS (functions that save on function length elsewhere)
 
 //get user Id from pubnub, then put into string for searching inventories
-function setUserInventoryId() {
-  return new Promise(function (resolve, reject) {
-    getPlayerData(thisUser).then(function (data) {
-      thisUser = pubnub.getUUID();
-      currentUserData = data;
-      currentUserId = "P" + data.id;
-      resolve(currentUserData);
-    })
-  });
-}
+// function setUserInventoryId() {
+//   return new Promise(function (resolve, reject) {
+//     getPlayerData(thisUser).then(function (data) {
+//       thisUser = pubnub.getUUID();
+//       currentUserData = data;
+//       currentUserId = "P" + data.id;
+//       resolve(currentUserData);
+//     })
+//   });
+// }
 
 //set up action words for parsing user input
 function setActionCalls() {
@@ -219,7 +203,8 @@ function parseWhosOnline() {
         occupants.push(occupant.uuid);
       }
       string += occupants.join(", ");
-      $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}: ${string}</p>`);
+      //send an occupancy list with socket.io
+      // $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}: ${string}</p>`);
     }
   })
 }
@@ -237,12 +222,12 @@ function parseMove(value) {
     for (const direction in DIRECTIONWORDS) {
       if (DIRECTIONWORDS[direction].includes(value.toLowerCase())) {
         success = true;
-        newLocation(direction);
+        // newLocation(direction);
       }
     }
     if (!success) {
       logThis(`You can't move '${value}'! For help, type 'help move'.`)
-      updateScroll();
+      
     }
   } else {
     logThis("You'll need to stand up for that!")
@@ -313,8 +298,8 @@ function speak(value) {
       })
   } else {
     value = takeTheseOffThat(actionCalls.speak, value);
-    publishMessage(value);
-    updateScroll();
+    sayThis(value);
+    
   }
 }
 
@@ -344,10 +329,10 @@ function displayHelp(value) {
     listThis(dashes);
     for (const action of actionData) {
       listThis(`${action.actionName}\xa0\xa0\xa0\xa0\xa0 --${action.commandBriefDescription}`)
-      updateScroll();
+      
     }
     logThis(" ");
-    updateScroll();
+    
   } else {
     for (const action of actionData) {
       console.log(action.actionName);
@@ -358,12 +343,12 @@ function displayHelp(value) {
         listThis(" ");
         listThis(`example: ${action.exampleCall}\xa0\xa0\xa0\xa0\xa0 --result: ${action.exampleResult}`);
         listThis(" ");
-        updateScroll();
+        
         break;
       }
     }
     logThis(" ");
-    updateScroll();
+    
   }
 }
 
@@ -491,42 +476,42 @@ function emote(value) {
 }
 
 
-function parseStats() {
-  getStats(currentUserData.characterName).then(stats => {
-    let title = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0STATS\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
-    let dashes = "---------------------";
-    $("#anchor").before(`<p class="displayed-stat">${title}</p>`);
-    $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
-    let maxHP = stats.maxHP;
-    delete stats.maxHP;
-    for (const item in stats) {
-      let string = "\xa0\xa0\xa0\xa0";
-      if (item.length === 3) {
-        string += `\xa0${item}\xa0\xa0\xa0|\xa0\xa0`;
-        const statValue = parseInt(stats[item]);
-        $("#anchor").before(`<p class="displayed-stat">${string}<span id="blue">${statValue}</span></p>`);
-      } else if (item.length == 2) {
-        string += `\xa0${item.toUpperCase()}\xa0\xa0\xa0\xa0\xa0|\xa0\xa0`;
-        if (item === "HP" && stats["HP"] < maxHP) {
-          const statValue = parseInt(stats[item]);
-          $("#anchor").before(`<p class="displayed-stat">${string}<span id="red">${statValue}</span>/${maxHP}</p>`);
-        } else if (item === "HP" && stats["HP"] >= maxHP) {
-          const statValue = parseInt(stats[item]);
-          $("#anchor").before(`<p class="displayed-stat">${string}<span id="green">${statValue}</span>/${maxHP}</p>`);
-        } else {
-          const statValue = parseInt(stats[item]);
-          $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
-        }
-      } else {
-        string += `${item}\xa0\xa0\xa0|\xa0\xa0`;
-        const statValue = parseInt(stats[item]);
-        $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
-      }
-    }
-    $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
-    updateScroll();
-  })
-}
+// function parseStats() {
+//   getStats(currentUserData.characterName).then(stats => {
+//     let title = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0STATS\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0";
+//     let dashes = "---------------------";
+//     $("#anchor").before(`<p class="displayed-stat">${title}</p>`);
+//     $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
+//     let maxHP = stats.maxHP;
+//     delete stats.maxHP;
+//     for (const item in stats) {
+//       let string = "\xa0\xa0\xa0\xa0";
+//       if (item.length === 3) {
+//         string += `\xa0${item}\xa0\xa0\xa0|\xa0\xa0`;
+//         const statValue = parseInt(stats[item]);
+//         $("#anchor").before(`<p class="displayed-stat">${string}<span id="blue">${statValue}</span></p>`);
+//       } else if (item.length == 2) {
+//         string += `\xa0${item.toUpperCase()}\xa0\xa0\xa0\xa0\xa0|\xa0\xa0`;
+//         if (item === "HP" && stats["HP"] < maxHP) {
+//           const statValue = parseInt(stats[item]);
+//           $("#anchor").before(`<p class="displayed-stat">${string}<span id="red">${statValue}</span>/${maxHP}</p>`);
+//         } else if (item === "HP" && stats["HP"] >= maxHP) {
+//           const statValue = parseInt(stats[item]);
+//           $("#anchor").before(`<p class="displayed-stat">${string}<span id="green">${statValue}</span>/${maxHP}</p>`);
+//         } else {
+//           const statValue = parseInt(stats[item]);
+//           $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
+//         }
+//       } else {
+//         string += `${item}\xa0\xa0\xa0|\xa0\xa0`;
+//         const statValue = parseInt(stats[item]);
+//         $("#anchor").before(`<p class="displayed-stat">${string}<span id="levels">${statValue}</span></p>`);
+//       }
+//     }
+//     $("#anchor").before(`<p class="displayed-stat">${dashes}</p>`);
+    
+//   })
+// }
 
 
 function sleep() {
@@ -534,7 +519,7 @@ function sleep() {
     if (!sleeping){
       logThis("You fall into a deep slumber");
       sleeping = true;
-      pubnub.unsubscribeAll();
+      // pubnub.unsubscribeAll();
       publishDescription("falls asleep.");
       let i = 0;
       sleepInterval = setInterval(function () {
@@ -560,9 +545,9 @@ function wake() {
     sleeping = false;
     clearInterval(sleepInterval);
     const id = currentLocation.locationName.replace(/ /g, "-");
-    channel = 'oo-chat-' + id;
+    // channel = 'oo-chat-' + id;
     console.log("In Room ID: " + id);
-    pubnub.subscribe({ channels: [channel] });
+    // pubnub.subscribe({ channels: [channel] });
     logThis("You wake up.")
   } else {
     logThis("You can't wake up if you're not asleep.");
@@ -658,7 +643,7 @@ function examine(value){
   
   if (value.toLowerCase().startsWith("self")){
     logThis(currentUserData.description);
-    parseStats();
+    // parseStats();
     locateEquippedItems(currentUserData.id).then(playerEquipment => {
       console.log(playerEquipment);
     })
@@ -707,8 +692,8 @@ function findNewLocationData(direction) {
         currentLocation = data;
         currentLocationId = "L" + data.id;
         locationIndex = data.locationName.replace(/ /g, "-");
-        $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
-        $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
+        // $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
+        // $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
         printLocationDescription(currentLocation);
         currentExits = compileExits(currentLocation);
         printExits(currentExits);
@@ -725,7 +710,7 @@ function findNewLocationData(direction) {
           })
         }
         setTimeout(parseWhosOnline(), 4000);
-        updateScroll();
+        
         resolve();
       });
     } else if (!(currentExits[direction] == null)) {
@@ -738,12 +723,12 @@ function findNewLocationData(direction) {
         currentLocationId = "L" + data.id;
         locationIndex = data.locationName.replace(/ /g, "-");
         rememberLocation(currentUserData.characterName, currentLocation.id);
-        $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
-        $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
+        // $("#location-info").html(`<p class="displayed-description">In ${currentLocation.locationName}</p>`);
+        // $("#anchor").before(`<p class="displayed-message" style="color:rgb(249, 255, 199)">${currentLocation.locationName}</p>`);
         printLocationDescription(currentLocation);
         printExits(currentExits);
         setTimeout(parseWhosOnline(), 4000);
-        updateScroll();
+        
         resolve();
       });
     } else {
@@ -757,33 +742,33 @@ function findNewLocationData(direction) {
 
 
 
-//MOVE TO A NEW ROOM, AND GET A NEW CHAT
-const newLocation = function (direction) {
-  // give this chatroom the correct id
-  findNewLocationData(direction).then(function () {
+// //MOVE TO A NEW ROOM, AND GET A NEW CHAT
+// const newLocation = function (direction) {
+//   // give this chatroom the correct id
+//   findNewLocationData(direction).then(function () {
 
-    // set channel off of locationIndex channel
-    const id = locationIndex;
-    channel = 'oo-chat-' + locationIndex;
-    console.log("In Room ID: " + locationIndex);
+//     // set channel off of locationIndex channel
+//     const id = locationIndex;
+//     channel = 'oo-chat-' + locationIndex;
+//     console.log("In Room ID: " + locationIndex);
 
-    // this function is fired when Chatroom() is called
-    //it unsubscribes from previous rooms, and subscribes to the new room
-    const init = function () {
+//     // this function is fired when Chatroom() is called
+//     //it unsubscribes from previous rooms, and subscribes to the new room
+//     const init = function () {
 
-      pubnub.unsubscribeAll();
-      console.log("subscribing");
-      pubnub.subscribe({
-        channels: [channel],
-        withPresence: true,
-      });
+//       pubnub.unsubscribeAll();
+//       console.log("subscribing");
+//       pubnub.subscribe({
+//         channels: [channel],
+//         withPresence: true,
+//       });
 
 
-    };//end init
+//     };//end init
 
-    init();
-  })
-}
+//     init();
+//   })
+// }
 
 
 //RESPOND TO USER INPUT
@@ -824,7 +809,7 @@ $("#submit-button").click(function (event) {
   } else if (doesThisStartWithThose(value, actionCalls.juggle)) {
     juggle(value);
   } else if (doesThisStartWithThose(value, actionCalls.stats)) {
-    parseStats();
+    // parseStats();
   } else if (doesThisStartWithThose(value, actionCalls.sleep)) {
     sleep();
   } else if (doesThisStartWithThose(value, actionCalls.wake)) {
@@ -841,18 +826,18 @@ $("#submit-button").click(function (event) {
 });
 
 
-//fill previous commands into input field on arrow up and arrow down
-$(".chat-input").keydown(function(event){
-  if (event.which == 38){
-    userRecentCommandsIndex -= 1;
-    $(".chat-input").val(userRecentCommands[userRecentCommandsIndex]);
-  } else if (event.which == 40){
-    userRecentCommandsIndex += 1;
-    $(".chat-input").val(userRecentCommands[userRecentCommandsIndex]);
-  } else if (event.which == 13){
-    userRecentCommandsIndex = userRecentCommands.length + 1;
-  }
-});
+// //fill previous commands into input field on arrow up and arrow down
+// $(".chat-input").keydown(function(event){
+//   if (event.which == 38){
+//     userRecentCommandsIndex -= 1;
+//     $(".chat-input").val(userRecentCommands[userRecentCommandsIndex]);
+//   } else if (event.which == 40){
+//     userRecentCommandsIndex += 1;
+//     $(".chat-input").val(userRecentCommands[userRecentCommandsIndex]);
+//   } else if (event.which == 13){
+//     userRecentCommandsIndex = userRecentCommands.length + 1;
+//   }
+// });
 
 
   //PAGE INIT
