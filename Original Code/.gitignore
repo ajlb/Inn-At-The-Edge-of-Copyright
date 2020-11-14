@@ -1,6 +1,0 @@
-node_modules
-.DS_Store
-config.json
-.env
-package-lock.json
-configcomments.js
