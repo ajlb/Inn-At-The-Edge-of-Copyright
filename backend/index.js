@@ -40,7 +40,7 @@ connection.once("open", function() {
     console.log("\nConnected to mongoose\n\n--------------begin log--------------\n");
   });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use("/", router);
 app.listen(PORT, function() {

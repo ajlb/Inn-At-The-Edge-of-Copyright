@@ -76,5 +76,6 @@ function stopJuggling(dropped){
 
 export default juggle;
 export {
-    stopJuggling
+    stopJuggling,
+    juggleTime
 }

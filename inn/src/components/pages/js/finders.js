@@ -42,7 +42,8 @@ function doesThisStartWithThose(thisThing, those) {
     }
     return false;
   }
-  
+
+  export default doesThisStartWithThose;
 
   export {
     doesThisStartWithThose,

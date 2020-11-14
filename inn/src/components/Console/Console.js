@@ -7,21 +7,26 @@ import { isBrowser } from 'react-device-detect';
 import { getActions } from "../../Utils/API";
 import GamewideInfo from '../../Utils/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import findIn from "../pages/js/finders";
+
+
 
 function Console() {
-
+    
     //set state for whether to move to min state (because of soft keyboard on mobile)
     const [minState, setMinState] = useState("max");
-    //set state for GamewideInfo provider - actions
-
+    //set initial state for GamewideInfo provider - gameInfo.actions
     const initialGameInfo = {
         actions: [],
         chatHistory: [],
+        userCommandsHistory: [],
         theme: "",
         currentMessage: ""
     }
-
     const [gameInfo, setGameInfo] = useState(initialGameInfo);
+    const [actionCalls, setActionCalls] = useState({});
+
+
 
     //blur and select functions for input - to set min state
     const onSelect = () => {
@@ -32,16 +37,7 @@ function Console() {
         setMinState("max")
     }
 
-    //action on enter key
-    const handleMessage = (event, type="displayed-stat") => {
-        event.preventDefault();
-        const input = document.querySelector("input");
-        input.value = "";
-        setGameInfo(prevState => ({
-            ...gameInfo,
-            chatHistory: [...prevState.chatHistory, {type, text: gameInfo.currentMessage}]
-        }))
-    }
+
 
     //update currentMessage in gameinfo based on input bar change
     const onInputBarChange = (event) => {
@@ -51,6 +47,83 @@ function Console() {
         })
     }
 
+
+
+    //action on enter key
+    const handleMessage = (event, type = "displayed-stat") => {
+        event.preventDefault();
+
+        //record and clear value from input bar
+        const input = document.querySelector("input");
+        let value = input.value;
+
+        //send messages to chatHistory and commandHistory. chatHistory will later be handled by message listener
+        setGameInfo(prevState => ({
+            ...gameInfo,
+            chatHistory: [...prevState.chatHistory, { type, text: gameInfo.currentMessage }],
+            userCommandsHistory: [...prevState.userCommandsHistory, {value}]
+        }))
+
+        //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
+        if (findIn(value, actionCalls.move)) {
+          console.log("parseMove(value);")
+        } else if (value.toLowerCase() === "stop juggling") {
+          console.log("stopJuggling();")
+        } else if (findIn(value, actionCalls.inventory)) {
+          console.log("parseInventory('Player');")
+        } else if (findIn(value, actionCalls.speak)) {
+          console.log("speak(value);")
+        // } else if (findIn(value, currentLocation.NPCs.split(", "))) {
+        //   console.log("talkDirectlyToNPC(value);")
+        } else if (findIn(value, actionCalls.help)) {
+          console.log("displayHelp(value);")
+        } else if (findIn(value, actionCalls.look)) {
+          console.log("lookAround(value);")
+        // } else if (juggleTime) {//following gameInfo.actions can't be done while juggling
+        //   console.log("You should probably stop juggling first.");
+        } else if (findIn(value, actionCalls.get)) {
+          console.log("getItem(value);")
+        } else if (findIn(value, actionCalls.drop)) {
+          console.log("dropItem(value);")
+        } else if (findIn(value, actionCalls.wear)) {
+          console.log("wearItem(value);")
+        } else if (findIn(value, actionCalls.remove)) {
+          console.log("removeItem(value);")
+        } else if (findIn(value, actionCalls.emote)) {
+          console.log("emote(value);")
+        } else if (findIn(value, actionCalls.juggle)) {
+          console.log("juggle(value);")
+        } else if (findIn(value, actionCalls.stats)) {
+          // parseStats();
+        } else if (findIn(value, actionCalls.sleep)) {
+          console.log("sleep();")
+        } else if (findIn(value, actionCalls.wake)) {
+          console.log("wake();")
+        } else if (findIn(value, actionCalls.position)) {
+          console.log("sitStandLie(value);")
+        } else if (findIn(value, actionCalls.give)) {
+          console.log("giveItem(value);")
+        } else if (findIn(value, actionCalls.examine)) {
+          console.log("examine(value);")
+        } else {
+          console.log("hmmm... that didn't quite make sense. Try 'help' for a list of commands!");
+        }
+      
+        
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+    
     //initialize console with black background, minState="max", and then fetch data for GamewideData
     useEffect(() => {
         let mounted = true;
@@ -60,18 +133,25 @@ function Console() {
         }
         getActions().then(actionData => {
             if (mounted) {
-                console.log("inside console useEffect");
-                console.log(actionData);
+                //init gameInfo with chatHistory of Hello and action data
                 setGameInfo({
                     ...gameInfo,
-                    chatHistory: [{type:"displayed-stat", text:"Hello"}],
+                    chatHistory: [{ type: "displayed-stat", text: "Hello" }],
                     actions: actionData.data
                 });
+                //create an object full of ways to call actions
+                let deconstructedActions = {};
+                for (const action of actionData.data){
+                    deconstructedActions[action.actionName] = action.waysToCall.split(", ")
+                }
+                //set previously create object as actionCalls (in state)
+                setActionCalls(deconstructedActions);
+
             }
         });
 
         //avoid trying to set state after component is unmounted
-        return function cleanup(){
+        return function cleanup() {
             mounted = false;
         }
     }, [])
@@ -105,9 +185,9 @@ function Console() {
                                     <InputPanel
                                         onBlur={onBlur}
                                         onSelect={onSelect}
-                                        minState={minState} 
+                                        minState={minState}
                                         onSubmit={handleMessage}
-                                        onChange={onInputBarChange}/>
+                                        onChange={onInputBarChange} />
                                 </div>
                             </div>
                         </div>

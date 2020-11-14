@@ -6,8 +6,8 @@ import {
 import GamewideInfo from "../../Utils/GamewideInfo";
 
 
-//set up index for current position in chatHistory
-let chatIndex;
+//set up index for current position in userCommandsHistory
+let commandIndex;
 
 function InputPanel(props) {
     //get context provider
@@ -22,18 +22,18 @@ function InputPanel(props) {
         //up arrow
         if (event.which === 38) {
             //stop at 0
-            chatIndex > 0 ? chatIndex -= 1 : chatIndex = 0;
-            inputEl.value = gamewideInfo.chatHistory[chatIndex].text
+            commandIndex > 0 ? commandIndex -= 1 : commandIndex = 0;
+            inputEl.value = gamewideInfo.userCommandsHistory[commandIndex]
             //down arrow
         } else if (event.which === 40) {
-            //stop at chatHistory length
-            chatIndex < gamewideInfo.chatHistory.length ? chatIndex += 1 : chatIndex = gamewideInfo.chatHistory.length;
-            //if chatIndex is less than length, show indexed message, otherwise show ""
-            chatIndex < gamewideInfo.chatHistory.length ? inputEl.value = gamewideInfo.chatHistory[chatIndex].text : inputEl.value = "";
+            //stop at userCommandsHistory length
+            commandIndex < gamewideInfo.userCommandsHistory.length ? commandIndex += 1 : commandIndex = gamewideInfo.userCommandsHistory.length;
+            //if commandIndex is less than length, show indexed message, otherwise show ""
+            commandIndex < gamewideInfo.userCommandsHistory.length ? inputEl.value = gamewideInfo.userCommandsHistory[commandIndex].text : inputEl.value = "";
             //enter key
         } else if (event.which === 13) {
-            //reset chatIndex to end
-            chatIndex = gamewideInfo.chatHistory.length + 1;
+            //reset commandIndex to end
+            commandIndex = gamewideInfo.userCommandsHistory.length + 1;
         }
 
     }
