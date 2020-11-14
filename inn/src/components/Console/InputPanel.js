@@ -6,6 +6,8 @@ import {
 import GamewideInfo from "../../Utils/GamewideInfo";
 
 
+//set up index for current position in chatHistory
+let chatIndex;
 
 function InputPanel(props) {
     //get context provider
@@ -13,8 +15,6 @@ function InputPanel(props) {
 
     //set up reference to user input bar
     let inputEl;
-    //set up index for current position in chatHistory
-    let chatIndex;
 
 
     //display previous commands on key up, key down
