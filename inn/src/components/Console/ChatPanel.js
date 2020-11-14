@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import GamewideInfo from "../../Utils/GamewideInfo";
 
 
@@ -10,15 +10,10 @@ function ChatPanel(props) {
     const gamewideInfo = useContext(GamewideInfo);
     
     
-    //effect on render
+    //effect runs on every update to chatHistory
     useEffect(() => {
-
         //pin to bottom after every render
-        const scrollToBottom = () => {
-            anchorDiv.scrollIntoView({ behavior: "smooth" });
-        }
-
-        scrollToBottom();
+        anchorDiv.scrollIntoView({ behavior: "smooth" });
     }, [gamewideInfo.chatHistory, anchorDiv])
     
     let i = 0;

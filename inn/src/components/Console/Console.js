@@ -32,6 +32,7 @@ function Console() {
         setMinState("max")
     }
 
+    //action on enter key
     const handleMessage = (event, type="displayed-stat") => {
         event.preventDefault();
         const input = document.querySelector("input");
@@ -42,6 +43,7 @@ function Console() {
         }))
     }
 
+    //update currentMessage in gameinfo based on input bar change
     const onInputBarChange = (event) => {
         setGameInfo({
             ...gameInfo,
@@ -68,6 +70,7 @@ function Console() {
             }
         });
 
+        //avoid trying to set state after component is unmounted
         return function cleanup(){
             mounted = false;
         }
