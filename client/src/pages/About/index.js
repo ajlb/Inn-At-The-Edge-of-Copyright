@@ -9,6 +9,8 @@ import Mando from "./images/Mando.jfif";
 import Kira from "./images/Kira.jfif";
 import github from "./images/github.png";
 import linkedin from "./images/linkedin.png";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons'
 
 
 
@@ -40,8 +42,8 @@ function About() {
                         </div>
                     </div>
                     <div className="card-buttons">
-                        <a id="github-a" href="https://github.com/n-lambert" className="btn btn-primary"><img src={github} alt="github icon" /></a>
-                        <a id="linkedin-a" href="https://www.linkedin.com/in/njlambert/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
+                        <a id="github-a" href="https://github.com/n-lambert" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
+                        <a id="linkedin-a" href="https://www.linkedin.com/in/njlambert/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
                 </div>
 
@@ -54,8 +56,8 @@ function About() {
                         </div>
                     </div>
                     <div className="card-buttons">
-                        <a id="github-a" href="https://github.com/NTKonzen" className="btn btn-primary"><img src={github} alt="github icon" /></a>
-                        <a id="linkedin-a" href="https://www.linkedin.com/in/nicholas-konzen-7160881b0/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
+                        <a id="github-a" href="https://github.com/NTKonzen" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
+                        <a id="linkedin-a" href="https://www.linkedin.com/in/nicholas-konzen-7160881b0/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
                 </div>
 
@@ -68,8 +70,8 @@ function About() {
                         </div>
                     </div>
                     <div className="card-buttons">
-                        <a id="github-a" href="https://github.com/rebgrasshopper" className="btn btn-primary"><img src={github} alt="github icon" /></a>
-                        <a id="linkedin-a" href="https://www.linkedin.com/in/plover-brown-37b6981a5/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
+                        <a id="github-a" href="https://github.com/rebgrasshopper" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
+                        <a id="linkedin-a" href="https://www.linkedin.com/in/plover-brown-37b6981a5/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
                 </div>
 
@@ -82,8 +84,8 @@ function About() {
                         </div>
                     </div>
                     <div className="card-buttons">
-                        <a id="github-a" href="https://github.com/taliavazquez" className="btn btn-primary"><img src={github} alt="github icon" /></a>
-                        <a id="linkedin-a" href="https://www.linkedin.com/in/talia-vazquez-1768461a9/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
+                        <a id="github-a" href="https://github.com/taliavazquez" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
+                        <a id="linkedin-a" href="https://www.linkedin.com/in/talia-vazquez-1768461a9/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
                 </div>
 
@@ -96,8 +98,8 @@ function About() {
                         </div>
                     </div>
                     <div className="card-buttons">
-                        <a id="github-a" href="https://github.com/NTKonzen" className="btn btn-primary"><img src={github} alt="github icon" /></a>
-                        <a id="linkedin-a" href="https://www.linkedin.com/in/nicholas-konzen-7160881b0/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
+                        <a id="github-a" href="https://github.com/Mando619" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
+                        <a id="linkedin-a" href="https://www.linkedin.com/in/armando-estrada-0a5304118/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
                 </div>
 
@@ -110,8 +112,8 @@ function About() {
                         </div>
                     </div>
                     <div className="card-buttons">
-                        <a id="github-a" href="https://github.com/NTKonzen" className="btn btn-primary"><img src={github} alt="github icon" /></a>
-                        <a id="linkedin-a" href="https://www.linkedin.com/in/nicholas-konzen-7160881b0/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
+                        <a id="github-a" href="https://github.com/KILowrey" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
+                        <a id="linkedin-a" href="https://www.linkedin.com/in/kira-lowrey-209533171/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
                 </div>
             </div>
@@ -122,7 +124,6 @@ function About() {
                 </div>
                 <div className="card">
                     <div className="image-div">
-                        {/* <img src="./images/Plover.jpg" alt="hidden image to size box to square" className="hidden-figure"/> */}
                         <img src={Jeneth} alt="headshot of Jeneth Diesta" className="card-img-left" />
                     </div>
                     <div className="card-body">
@@ -132,8 +133,8 @@ function About() {
                         </div>
                     </div>
                     <div className="card-buttons">
-                        <a id="github-a" href="https://github.com/jen6one9" className="btn btn-primary"><img src={github} alt="github icon" /></a>
-                        <a id="linkedin-a" href="https://www.linkedin.com/in/jeneth-diesta/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
+                        <a id="github-a" href="https://github.com/jen6one9" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
+                        <a id="linkedin-a" href="https://www.linkedin.com/in/jeneth-diesta/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
                 </div>
             </div>
