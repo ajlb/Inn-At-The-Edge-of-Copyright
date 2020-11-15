@@ -21,5 +21,5 @@ let locationSchema = new Schema({
     type: String
   }
 });
-const Location = mongoose.model("Action", locationSchema);
+const Location = mongoose.model("Location", locationSchema);
 module.exports = Location;
