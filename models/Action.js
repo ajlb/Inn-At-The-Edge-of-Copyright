@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
-let Action = new Schema({
+let actionSchema = new Schema({
   actionName: {
     type: String
   },
@@ -22,5 +21,5 @@ let Action = new Schema({
     type: String
   }
 });
-
-module.exports = mongoose.model("Action", Action);
+const Action = mongoose.model("Action", actionSchema);
+module.exports = Action;
