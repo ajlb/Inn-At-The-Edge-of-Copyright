@@ -96,8 +96,8 @@ function About() {
                         </div>
                     </div>
                     <div className="card-buttons">
-                        <a id="github-a" href="https://github.com/NTKonzen" className="btn btn-primary"><img src={github} alt="github icon" /></a>
-                        <a id="linkedin-a" href="https://www.linkedin.com/in/nicholas-konzen-7160881b0/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
+                        <a id="github-a" href="https://github.com/Mando619" className="btn btn-primary"><img src={github} alt="github icon" /></a>
+                        <a id="linkedin-a" href="https://www.linkedin.com/in/armando-estrada-0a5304118/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
                     </div>
                 </div>
 
@@ -110,8 +110,8 @@ function About() {
                         </div>
                     </div>
                     <div className="card-buttons">
-                        <a id="github-a" href="https://github.com/NTKonzen" className="btn btn-primary"><img src={github} alt="github icon" /></a>
-                        <a id="linkedin-a" href="https://www.linkedin.com/in/nicholas-konzen-7160881b0/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
+                        <a id="github-a" href="https://github.com/KILowrey" className="btn btn-primary"><img src={github} alt="github icon" /></a>
+                        <a id="linkedin-a" href="https://www.linkedin.com/in/kira-lowrey-209533171/" className="btn btn-primary"><img src={linkedin} alt="linkedin icon" /></a>
                     </div>
                 </div>
             </div>
@@ -122,7 +122,6 @@ function About() {
                 </div>
                 <div className="card">
                     <div className="image-div">
-                        {/* <img src="./images/Plover.jpg" alt="hidden image to size box to square" className="hidden-figure"/> */}
                         <img src={Jeneth} alt="headshot of Jeneth Diesta" className="card-img-left" />
                     </div>
                     <div className="card-body">
