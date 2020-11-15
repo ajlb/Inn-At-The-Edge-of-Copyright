@@ -249,12 +249,23 @@ button{
     border: none;
 }
 
+#github-a, #linkedin-a {
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+}
+
 #github-a:hover {
     background-color: rgb(194, 1, 194);
+    color: black;
 }
 
 #linkedin-a:hover {
     background-color: rgb(1, 108, 248);
+    color: black;
 }
 
 .card a img {
