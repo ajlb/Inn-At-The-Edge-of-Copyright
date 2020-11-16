@@ -39,7 +39,7 @@ mongoose.connect(process.env.URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
-
+mongoose.set('useCreateIndex', true);
 const connection = mongoose.connection;
 
 

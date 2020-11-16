@@ -7,8 +7,6 @@ import Talia from "./images/Talia.jpg";
 import Jeneth from "./images/Jeneth.jpg";
 import Mando from "./images/Mando.jfif";
 import Kira from "./images/Kira.jfif";
-import github from "./images/github.png";
-import linkedin from "./images/linkedin.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons'
 
@@ -24,17 +22,16 @@ function About() {
 
         <div className="wrapper">
 
-            <h1 className="about-title">Meet our team:</h1>
+            <header><h1 className="about-title">Meet our team:</h1></header>
 
-            <div className="inside-border">
-                <div className="jumbotron text-center">
+            <article className="inside-border">
+                <header className="jumbotron text-center">
                     <h1>Player Characters</h1>
-                </div>
-                <div className="card">
-                    <div className="image-div">
-                        {/* <img src={require("./images/Plover.jpg")} alt="hidden item to size box to square" className="hidden-figure"/> */}
+                </header>
+                <section className="card">
+                    <figure className="image-div">
                         <img src={Nancy} alt="headshot of Nancy Lambert-Brown" className="card-img-left" />
-                    </div>
+                    </figure>
                     <div className="card-body">
                         <div className="card-text-elements">
                             <h4 className="card-title">Nancy Lambert-Brown</h4>
@@ -45,9 +42,9 @@ function About() {
                         <a id="github-a" href="https://github.com/n-lambert" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
                         <a id="linkedin-a" href="https://www.linkedin.com/in/njlambert/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
-                </div>
+                </section>
 
-                <div className="card">
+                <section className="card">
                     <img src={Nick} alt="headshot of Nicholas Konzen" className="card-img-left" />
                     <div className="card-body">
                         <div className="card-text-elements">
@@ -59,9 +56,9 @@ function About() {
                         <a id="github-a" href="https://github.com/NTKonzen" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
                         <a id="linkedin-a" href="https://www.linkedin.com/in/nicholas-konzen-7160881b0/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
-                </div>
+                </section>
 
-                <div className="card">
+                <section className="card">
                     <img src={Plover} alt="headshot of Plover Brown" className="card-img-left" />
                     <div className="card-body">
                         <div className="card-text-elements">
@@ -73,9 +70,9 @@ function About() {
                         <a id="github-a" href="https://github.com/rebgrasshopper" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
                         <a id="linkedin-a" href="https://www.linkedin.com/in/plover-brown-37b6981a5/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
-                </div>
+                </section>
 
-                <div className="card">
+                <section className="card">
                     <img src={Talia} alt="headshot of Talia Vazquez" className="card-img-left" />
                     <div className="card-body">
                         <div className="card-text-elements">
@@ -87,9 +84,9 @@ function About() {
                         <a id="github-a" href="https://github.com/taliavazquez" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
                         <a id="linkedin-a" href="https://www.linkedin.com/in/talia-vazquez-1768461a9/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
-                </div>
+                </section>
 
-                <div className="card">
+                <section className="card">
                     <img src={Mando} alt="headshot of Mando Estrada" className="card-img-left" />
                     <div className="card-body">
                         <div className="card-text-elements">
@@ -101,9 +98,9 @@ function About() {
                         <a id="github-a" href="https://github.com/Mando619" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
                         <a id="linkedin-a" href="https://www.linkedin.com/in/armando-estrada-0a5304118/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
-                </div>
+                </section>
 
-                <div className="card">
+                <section className="card">
                     <img src={Kira} alt="headshot of Kira Lowry" className="card-img-left" />
                     <div className="card-body">
                         <div className="card-text-elements">
@@ -115,17 +112,19 @@ function About() {
                         <a id="github-a" href="https://github.com/KILowrey" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
                         <a id="linkedin-a" href="https://www.linkedin.com/in/kira-lowrey-209533171/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
-                </div>
-            </div>
-            <div className="inside-border">
-                <div className="jumbotron text-center">
+                </section>
+            </article>
+
+            <article className="inside-border">
+                <header className="jumbotron text-center">
                     <h1>NPCs</h1>
                     <p>previous contributors!</p>
-                </div>
-                <div className="card">
-                    <div className="image-div">
+                </header>
+                
+                <section className="card">
+                    <figure className="image-div">
                         <img src={Jeneth} alt="headshot of Jeneth Diesta" className="card-img-left" />
-                    </div>
+                    </figure>
                     <div className="card-body">
                         <div className="card-text-elements">
                             <h4 className="card-title">Jeneth Diesta</h4>
@@ -136,8 +135,8 @@ function About() {
                         <a id="github-a" href="https://github.com/jen6one9" className="btn btn-primary"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
                         <a id="linkedin-a" href="https://www.linkedin.com/in/jeneth-diesta/" className="btn btn-primary"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></a>
                     </div>
-                </div>
-            </div>
+                </section>
+            </article>
 
             <div className="push"></div>
 
