@@ -125,7 +125,10 @@ const playerSchema = new Schema({
         type: String
       }
     }
-  ]
+  ],
+  day: {
+    type: Boolean
+  }
 });
 
 const Player = mongoose.model("Player", playerSchema);
