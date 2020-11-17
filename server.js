@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const db = require("./models");
 const dotenv = require("dotenv").config()
 const cors = require("cors");
+const backEngine = require("./controller/backEngine");
+const APIBackroutes = require("./routes/API/backEngineAPI");
 
 
 
@@ -21,6 +23,7 @@ if (process.env.NODE_ENV === "production") {
 // Define API routes here
 /* API ROUTES */
 
+app.use("/API", APIBackroutes);
 
 app.route("/getData").get(function(req, res) {
   db.Action.find({}, function(err, result) {
