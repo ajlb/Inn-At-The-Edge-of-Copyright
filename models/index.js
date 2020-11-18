@@ -10,6 +10,5 @@ module.exports = {
     Quest: require("./Quest"),
     Profession: require("./Profession"),
     Race: require("./Race"),
-    Weather: require("./Weather"),
-    GameInfo: require("./GameInfo")
+    Weather: require("./Weather")
   };

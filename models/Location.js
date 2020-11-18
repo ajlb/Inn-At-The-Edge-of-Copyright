@@ -12,12 +12,21 @@ let locationSchema = new Schema({
     type: String
   },
   exits: {
-    type: String
+    type: Array
   },
   region: {
     type: String
   },
   NPCs: {
+    type: String
+  },
+  inventory: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Inventory"
+    }
+  ],
+  indoorOutdoor: {
     type: String
   }
 });

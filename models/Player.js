@@ -26,7 +26,7 @@ const playerSchema = new Schema({
     type: Boolean,
     default: false
   },
-  stats: [
+  stats: 
     {
       WIS: {
         type: Number,
@@ -68,8 +68,7 @@ const playerSchema = new Schema({
         type: Number,
         default: 1
       }
-    }
-  ],
+    },
   race: {
     type: String,
     default: "Human"
