@@ -4,7 +4,7 @@ import axios from "axios";
 function getActions() {
     return new Promise(function(resolve, reject){
         console.log("sending GET");
-        axios.get("http://localhost:3001/getData").then(data => {
+        axios.get("http://localhost:3001/frontAPI/getData").then(data => {
             resolve(data);
         })
     })
