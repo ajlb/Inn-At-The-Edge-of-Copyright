@@ -7,7 +7,7 @@ module.exports = function dayNight() {
 
     const dayNightInterval = setInterval(() => {
         let now = new Date()
-        axios.get("http://localhost:3001/API/playerTime").then(data => {
+        axios.get("http://localhost:3001/backAPI/playerTime").then(data => {
             currentDay = data.data.day;
             currentDay ? console.log("... day") : console.log("... night");
         })
@@ -31,7 +31,7 @@ module.exports = function dayNight() {
                     finalDay = true;
                 }
                 if (!(currentDay === finalDay)) {
-                    axios.put("http://localhost:3001/API/playerTime", { day: finalDay }).then(data => {
+                    axios.put("http://localhost:3001/backAPI/playerTime", { day: finalDay }).then(data => {
                         finalDay ? console.log("It has become day") : console.log("It has become night");;
                         //SEND OUT SOCKET.IO MESSAGE TO TRIGGER SESSION DATA CHANGE
                     })

@@ -8,6 +8,7 @@ const dotenv = require("dotenv").config()
 const cors = require("cors");
 const backEngine = require("./controller/backEngine");
 const APIBackroutes = require("./routes/API/backEngineAPI");
+const APIroutes = require("./routes/API/APIroutes");
 
 
 
@@ -20,21 +21,11 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-// Define API routes here
+
 /* API ROUTES */
 
-app.use("/API", APIBackroutes);
-
-app.route("/getData").get(function(req, res) {
-  db.Action.find({}, function(err, result) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(result);
-    }
-  });
-});
-
+app.use("/backAPI", APIBackroutes);
+app.use("/frontAPI", APIroutes);
 
 
 //connect to mongoDB
