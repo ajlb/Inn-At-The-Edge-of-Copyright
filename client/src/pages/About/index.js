@@ -22,7 +22,7 @@ function About() {
 
         <div className="wrapper">
 
-            <header><h1 className="about-title">Meet our team:</h1></header>
+            <header className="text-center"><h1 className="about-title">Meet our team:</h1></header>
 
             <article className="inside-border">
                 <header className="jumbotron text-center">
@@ -142,7 +142,7 @@ function About() {
 
         </div> {/* end wrapper */}
 
-        <footer id="play-link"><a href="/play">Back to the game!</a></footer>
+        <footer id="play-link" className="text-center"><a href="/play">Back to the game!</a></footer>
 
     </div>);
 }
