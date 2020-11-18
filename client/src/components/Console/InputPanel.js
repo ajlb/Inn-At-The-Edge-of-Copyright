@@ -23,13 +23,16 @@ function InputPanel(props) {
         if (event.which === 38) {
             //stop at 0
             commandIndex > 0 ? commandIndex -= 1 : commandIndex = 0;
-            inputEl.value = gamewideInfo.userCommandsHistory[commandIndex]
+            inputEl.value = gamewideInfo.userCommandsHistory[commandIndex].value
+            console.log(gamewideInfo.userCommandsHistory[commandIndex]);
             //down arrow
         } else if (event.which === 40) {
             //stop at userCommandsHistory length
             commandIndex < gamewideInfo.userCommandsHistory.length ? commandIndex += 1 : commandIndex = gamewideInfo.userCommandsHistory.length;
             //if commandIndex is less than length, show indexed message, otherwise show ""
-            commandIndex < gamewideInfo.userCommandsHistory.length ? inputEl.value = gamewideInfo.userCommandsHistory[commandIndex].text : inputEl.value = "";
+            commandIndex < gamewideInfo.userCommandsHistory.length ? inputEl.value = gamewideInfo.userCommandsHistory[commandIndex].value : inputEl.value = "";
+            console.log(gamewideInfo.userCommandsHistory[commandIndex]);
+
             //enter key
         } else if (event.which === 13) {
             //reset commandIndex to end
