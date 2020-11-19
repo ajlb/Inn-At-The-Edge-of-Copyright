@@ -9,7 +9,7 @@ const cors = require("cors");
 const backEngine = require("./controllers/backEngine");
 const APIBackroutes = require("./routes/API/backEngineAPI");
 const APIroutes = require("./routes/API/APIroutes");
-
+const APIadminRoutes = require("./routes/API/adminAPI");
 
 
 // Define middleware here
@@ -26,6 +26,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.use("/backAPI", APIBackroutes);
 app.use("/frontAPI", APIroutes);
+app.use("/adminAPI", APIadminRoutes);
 
 
 //connect to mongoDB

@@ -2,6 +2,7 @@ import Play from "./pages/Play/Index";
 import Home from "./pages/Home/Index";
 import Signup from "./pages/Singup/Index";
 import About from "./pages/About";
+import Admin from "./pages/Admin";
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
@@ -19,6 +20,7 @@ function App() {
         <Route exact path="/play" component={Play} />
         <Route exact path="/signup" component={Signup} />
         <Route path="/about" component={About} />
+        <Route path="/secrets/admin" component ={Admin} />
       </div>
     </Router>
   );
