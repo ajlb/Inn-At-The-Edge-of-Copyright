@@ -24,33 +24,33 @@ function DropDownItem({ title, onClick }) {
                 >
                     Choose Action:
                     </div>
-                <li key={title + "ViewAll"}>
+                <li key={title + "View:All"}>
                     <a 
-                    href={"#"+title+"-viewAll"}
+                    href={"#"+title+"-View:All"}
                     onClick={onClick}
                     >View All</a>
                 </li>
-                <li key={title + "EditAll"}>
+                <li key={title + "Edit:All"}>
                     <a 
-                    href={"#"+title+"-EditAll"}
+                    href={"#"+title+"-Edit:All"}
                     onClick={onClick}
                     >Edit All</a>
                 </li>
-                <li key={title + "EditOne"}>
+                <li key={title + "Edit:One"}>
                     <a 
-                    href={"#"+title+"-EditOne"}
+                    href={"#"+title+"-Edit:One"}
                     onClick={onClick}
                     >Edit One</a>
                 </li>
-                <li key={title + "CreateNew"}>
+                <li key={title + "Create:New"}>
                     <a 
-                    href={"#"+title+"-CreateNew"}
+                    href={"#"+title+"-Create:New"}
                     onClick={onClick}
                     >Create New</a>
                 </li>
-                <li key={title + "DeleteOne"}>
+                <li key={title + "Delete:One"}>
                     <a 
-                    href={"#"+title+"-DeleteOne"}
+                    href={"#"+title+"-Delete:One"}
                     onClick={onClick}
                     >Delete One</a>
                 </li>
