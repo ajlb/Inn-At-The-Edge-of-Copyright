@@ -10,10 +10,10 @@ function Body({ destinationState }){
         case "Locations":
             switch (destinationState.action) {
                 case "View:All":
-                    return <LocationViewAll />
+                    return <LocationViewAll/>
             
                 case "Edit:One":
-                    return <EditOneLocation />
+                    return <EditOneLocation/>
                 default:
                     return null;
             }

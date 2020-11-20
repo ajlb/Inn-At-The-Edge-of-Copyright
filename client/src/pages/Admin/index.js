@@ -4,9 +4,7 @@ import Editor from "../../components/Editor/Editor";
 function Home() {
     return (
       <div className="wrapper">
-          <header className="jumbotron">
-              <Editor />
-          </header>
+          <Editor />
       </div>
     );
   }

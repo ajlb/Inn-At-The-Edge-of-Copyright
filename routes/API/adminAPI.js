@@ -87,11 +87,15 @@ router.route("/locations/:name")
     });
   })
   .put(function ({ body, params }, res) {
+    console.log("In API, changing location");
     const bodyObj = body;
     const action = body.action;
     delete bodyObj.action
     switch (action) {
       case "set":
+        console.log("We will use set");
+        console.log("This is the body");
+        console.log(bodyObj);
         db.Location.updateOne({ locationName: params.name }, { $set: bodyObj }).then(data => {
           res.json(data)
         })

@@ -37,7 +37,7 @@ function editLocation(action, locationName, locationObject) {
   locationObject.action = action;
   return new Promise(function (resolve, reject) {
     console.log("sending editLocation");
-    axios.get("http://localhost:3001/adminAPI/locations/" + locationName, locationObject).then(data => {
+    axios.put("http://localhost:3001/adminAPI/locations/" + locationName, locationObject).then(data => {
       resolve(data);
     });
   });

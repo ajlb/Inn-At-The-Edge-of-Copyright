@@ -8,6 +8,9 @@
     margin-left: 20px;
 }
 
+
+/*VIEW ALL*/
+
 #LocBox section {
     border: solid black 2px;
     border-radius: 10px;
@@ -42,6 +45,12 @@
     background-color: rgba(0, 167, 233, 0.438) !important;
 }
 
+/*EDITING FORM*/
+
+form {
+    margin-bottom: 40px;
+}
+
 .editForm {
     width: 80vw;
     text-align: left;
@@ -49,4 +58,37 @@
 
 .editForm label {
     margin-right: 40px;
+}
+
+.row {
+    margin-bottom: 16px;
+}
+
+#backTo {
+    margin-bottom: 40px;
+    border: none;
+    border-radius: 3px;
+    background-color: rgb(99, 99, 99);
+    color: white;
+}
+
+input[type="submit"]{
+    border: none;
+    border-radius: 3px;
+    color: white;
+    background-color: rgb(99, 99, 99);
+}
+
+label {
+    margin-right: 10px;
+}
+
+select {
+    margin-right: 10px !important;
+}
+
+@media screen and (min-width: 400px){
+    #LocBox section {
+        width: 70vw;
+    }
 }
