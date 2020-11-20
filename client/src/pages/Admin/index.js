@@ -5,9 +5,8 @@ function Home() {
     return (
       <div className="wrapper">
           <header className="jumbotron">
-              <h1>Admin</h1>
-          </header>
               <Editor />
+          </header>
       </div>
     );
   }
