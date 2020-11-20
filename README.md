@@ -60,7 +60,7 @@ examine      --Look closely at an item
 * [Nancy "Cosmo The Magnificent" Lambert-Brown](https://github.com/n-lambert)
 * [Talia Vazquez](https://github.com/taliavazquez)
 * [Plover "Chordori" Brown](https://github.com/rebgrasshopper)
-* [Nicholas Konzen](https://github.com/NTKonzen)
+* [Nicholas "Shambles" Konzen](https://github.com/NTKonzen)
 * [Kira "Bismuth the KILer" Lowrey](https://github.com/KILowrey)
 * [Mando Estrada](https://github.com/Mando619)
 
@@ -101,6 +101,7 @@ If you have any questions that this README doesn't cover, you can reach out to u
 If you have found an issue with the game, you can open a GitHub Issue [here](https://github.com/n-lambert/Inn-At-The-Edge-of-Copyright/issues)
 
 #### Known Issues:
+
  1. We're in the clear boys... for now -_-
 
 We are working at fixing these bugs as soon as possible! Thank you for your patience.
