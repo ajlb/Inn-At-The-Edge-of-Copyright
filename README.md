@@ -57,11 +57,11 @@ examine      --Look closely at an item
 
 ## Contributing
 
-* [Nancy Lambert-Brown](https://github.com/n-lambert)
+* [Nancy "Cosmo The Magnificent" Lambert-Brown](https://github.com/n-lambert)
 * [Talia Vazquez](https://github.com/taliavazquez)
-* [Plover Brown](https://github.com/rebgrasshopper)
+* [Plover "Chordori" Brown](https://github.com/rebgrasshopper)
 * [Nicholas Konzen](https://github.com/NTKonzen)
-* [Kira Lowrey](https://github.com/KILowrey)
+* [Kira "Bismuth the KILer" Lowrey](https://github.com/KILowrey)
 * [Mando Estrada](https://github.com/Mando619)
 
 ### Past Contributers (NPCs)
