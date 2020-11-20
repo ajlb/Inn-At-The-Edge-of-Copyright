@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getLocations, changeLocations } from "../../../../Utils/adminAPIs";
+import { getLocations } from "../../../../Utils/adminAPIs";
 import "../../css/styles.css";
 
 

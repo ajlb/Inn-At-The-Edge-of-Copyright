@@ -30,12 +30,6 @@ function DropDownItem({ title, onClick }) {
                     onClick={onClick}
                     >View All</a>
                 </li>
-                <li key={title + "Edit:All"}>
-                    <a 
-                    href={"#"+title+"-Edit:All"}
-                    onClick={onClick}
-                    >Edit All</a>
-                </li>
                 <li key={title + "Edit:One"}>
                     <a 
                     href={"#"+title+"-Edit:One"}
@@ -47,12 +41,6 @@ function DropDownItem({ title, onClick }) {
                     href={"#"+title+"-Create:New"}
                     onClick={onClick}
                     >Create New</a>
-                </li>
-                <li key={title + "Delete:One"}>
-                    <a 
-                    href={"#"+title+"-Delete:One"}
-                    onClick={onClick}
-                    >Delete One</a>
                 </li>
             </ul>
         </li>

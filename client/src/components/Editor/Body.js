@@ -1,5 +1,6 @@
 import React from 'react';
 import LocationViewAll from "./bodies/Locations/ViewAll";
+import EditOneLocation from "./bodies/Locations/EditOne";
 
 
 function Body({ destinationState }){
@@ -7,10 +8,19 @@ function Body({ destinationState }){
 
     switch (destinationState.collection) {
         case "Locations":
-            return <LocationViewAll />
+            switch (destinationState.action) {
+                case "View:All":
+                    return <LocationViewAll />
+            
+                case "Edit:One":
+                    return <EditOneLocation />
+                default:
+                    return null;
+            }
+            
     
         default:
-            return <div>Nothing Yet</div>
+            return null;
     }
 }
 

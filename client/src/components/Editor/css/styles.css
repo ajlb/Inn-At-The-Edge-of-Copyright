@@ -42,3 +42,11 @@
     background-color: rgba(0, 167, 233, 0.438) !important;
 }
 
+.editForm {
+    width: 80vw;
+    text-align: left;
+}
+
+.editForm label {
+    margin-right: 40px;
+}
