@@ -24,10 +24,10 @@ module.exports = function dayNight() {
                 sunrise = new Date(sunrise);
                 sunset = new Date(sunset);
 
-                if ((now < sunrise) && (now > sunset)) {
+                if ((now > sunset)) {
                     finalDay = false;
 
-                } else {
+                } else if (now > sunrise) {
                     finalDay = true;
                 }
                 if (!(currentDay === finalDay)) {
@@ -48,3 +48,5 @@ module.exports = function dayNight() {
 
     }, 600000)
 }
+
+// 

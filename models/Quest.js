@@ -25,6 +25,9 @@ const questSchema = new Schema({
     },
     questToken: {
         type: String
+    },
+    completionItem: {
+        type: String
     }
 });
 

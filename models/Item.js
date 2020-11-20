@@ -13,11 +13,11 @@ const itemSchema = new Schema({
         type: String
     },
     inventorySize: {
-        type: String
+        type: Number
     },
     edible: {
         type: Boolean,
-        default: 0
+        default: false
     },
     healthEffect: {
         type: Number,
@@ -39,6 +39,7 @@ const itemSchema = new Schema({
         type: Number,
         default: 0
     },
+    equippable: []
 });
 
 const Item = mongoose.model("Item", itemSchema);
