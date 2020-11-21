@@ -16,7 +16,7 @@ function changeLocations(action = "set", locationObject) {
   locationObject.action = action;
   return new Promise(function (resolve, reject) {
     console.log("sending addLocationField");
-    axios.get("http://localhost:3001/adminAPI/locations/", locationObject).then(data => {
+    axios.put("http://localhost:3001/adminAPI/locations/", locationObject).then(data => {
       resolve(data);
     });
   });
@@ -47,7 +47,7 @@ function editLocation(action, locationName, locationObject) {
 function createLocation(locationObject) {
   return new Promise(function (resolve, reject) {
     console.log("sending createLocation");
-    axios.get("http://localhost:3001/adminAPI/locations/", locationObject).then(data => {
+    axios.post("http://localhost:3001/adminAPI/locations/", locationObject).then(data => {
       resolve(data);
     });
   });
@@ -57,7 +57,7 @@ function createLocation(locationObject) {
 function deleteLocation(locationName) {
   return new Promise(function (resolve, reject) {
     console.log("sending deleteLocation");
-    axios.get("http://localhost:3001/adminAPI/locations/" + locationName).then(data => {
+    axios.delete("http://localhost:3001/adminAPI/locations/" + locationName).then(data => {
       resolve(data);
     });
   });
