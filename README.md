@@ -1,7 +1,7 @@
 # Inn at the Edge of Copyright
 **Version 2.0**
 
-[![Inn at the Edge of Copyright logo](./documentation/master-logo-black-background.png)](https://innattheedge.herokuapp.com/)
+[![Inn at the Edge of Copyright logo](./documentation/master-logo-inverted-02.png)](https://innattheedge.herokuapp.com/)
 
 [![License GNU GPLv3](https://img.shields.io/badge/License-GNU%20GPLv3-orange)](./LICENSE)
 [![Version 2.0](https://img.shields.io/badge/Version-V2.0-blue)](#version-updates)
@@ -58,14 +58,14 @@ examine      --Look closely at an item
 ## Contributing
 
 * [Nancy "Cosmo The Magnificent" Lambert-Brown](https://github.com/n-lambert)
-* [Talia Vazquez](https://github.com/taliavazquez)
+* [Talia "Quill" Vazquez](https://github.com/taliavazquez)
 * [Plover "Chordori" Brown](https://github.com/rebgrasshopper)
 * [Nicholas "Shambles" Konzen](https://github.com/NTKonzen)
 * [Kira "Bismuth the KILer" Lowrey](https://github.com/KILowrey)
 * [Mando Estrada](https://github.com/Mando619)
 
 ### Past Contributers (NPCs)
-* [Jeneth Diesta](https://github.com/jen6one9)
+* [Jeneth "6one9" Diesta](https://github.com/jen6one9)
 
 ## Credits
 
