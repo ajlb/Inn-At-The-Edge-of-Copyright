@@ -62,7 +62,7 @@ examine      --Look closely at an item
 * [Plover "Chordori" Brown](https://github.com/rebgrasshopper)
 * [Nicholas "Shambles" Konzen](https://github.com/NTKonzen)
 * [Kira "Bismuth the KILer" Lowrey](https://github.com/KILowrey)
-* [Mando Estrada](https://github.com/Mando619)
+* [Mando "Mandolorian" Estrada](https://github.com/Mando619)
 
 ### Past Contributers (NPCs)
 * [Jeneth "6one9" Diesta](https://github.com/jen6one9)
