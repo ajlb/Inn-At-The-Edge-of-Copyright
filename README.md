@@ -25,7 +25,7 @@
 
 ## Overview
 
-The Inn at the Edge of Copyright is a text-based framework for anyone with a crave for an adventure. Our project is a MUD or Multi-User-Dungeon RPG based loosely on the Hitchhiker's Guide to the Galaxy series by Douglas Adams and inspired by text-based MUDs of the early days of the internet. The Inn At The Edge is where all who are lost can find a home.
+The Inn at the Edge of Copyright is a text-based program for anyone with a crave for an adventure. Our project is a MUD or Multi-User-Dungeon RPG based loosely on The Hitchhiker's Guide to the Galaxy series by Douglas Adams and inspired by text-based MUDs of the early days of the internet. The Inn At The Edge is where all who are lost can find a home.
 
 [![Gif Tutorial of how to navigate the game](./documentation/tutorial.gif)](https://innattheedge.herokuapp.com/)
 
