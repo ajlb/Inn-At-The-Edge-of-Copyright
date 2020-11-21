@@ -15,12 +15,14 @@
  * [Overview](#overview)
  * [Getting Started](#getting-started)
    * [Game Commands](#game-commands)
- * [Contributing](#contributing)
+ * [Contributers](#contributers)
  * [Credits](#credits)
  * [Questions](#questions)
+   * [Contributing](#contributing)
  * [Issues & Updates](#issues-and-updates)
    * [Issues](#issues)
    * [Version Updates](#version-updates)
+   * [Future Development](#future-development)
  * [License](#license)
 
 ## Overview
@@ -55,7 +57,7 @@ examine      --Look closely at an item
 
 [**Join us in the Inn here!**](https://innattheedge.herokuapp.com)
 
-## Contributing
+## Contributers
 
 * [Nancy "Cosmo The Magnificent" Lambert-Brown](https://github.com/n-lambert)
 * [Talia "Quill" Vazquez](https://github.com/taliavazquez)
@@ -94,6 +96,10 @@ examine      --Look closely at an item
 
 If you have any questions that this README doesn't cover, you can reach out to us at [innattheedgeofcopyright@gmail.com](mailto:innattheedgeofcopyright@gmail.com) or contact a [contributor](#contributing).
 
+### Contributing
+
+If you are interested in contributing to our project, we have a Slack! You can join us [here](https://join.slack.com/t/innattheedgeo-lje8343/shared_invite/zt-jfdeca44-HO8abtKWCWY5dOIWnEmLrQ)
+
 ## Issues and Updates
 
 ### Issues
@@ -117,7 +123,11 @@ We are working at fixing these bugs as soon as possible! Thank you for your pati
 
 ### Future Development
 
-The Inn at the Edge of Copyright team is here for the long haul. We have lots of cool features in store! But, for the time being, we'd like to keep these under wraps.
+The Inn at the Edge of Copyright team is here for the long haul. We have lots of cool features in store! You can check out our plans for the future on our project boards
+
+#### [View Version 2.1 project board here](https://github.com/n-lambert/Inn-At-The-Edge-of-Copyright/projects/3)
+
+#### [View Version 3.0 project board here](https://github.com/n-lambert/Inn-At-The-Edge-of-Copyright/projects/4)
 
 ## License
 
