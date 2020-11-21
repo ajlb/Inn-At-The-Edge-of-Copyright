@@ -1,8 +1,94 @@
 .jumbotron {
     width: 100vw;
     text-align: center;
+    background-color: rgb(236, 235, 235) !important;
+}
+
+#page-content-wrapper {
+    margin-left: 20px;
 }
 
 
+/*VIEW ALL*/
 
+#LocBox section {
+    border: solid black 2px;
+    border-radius: 10px;
+    width: 80vw;
+    margin: 20px;
+    background-color: rgb(236, 235, 235);
+    padding: 5px;
+    text-align: left;
+}
 
+.The-Inn {
+    background-color: rgba(141, 91, 17, 0.308) !important;
+}
+
+.Halloween {
+    background-color: rgba(173, 64, 0, 0.466) !important;
+}
+
+.Country-and-Town {
+    background-color: rgba(9, 173, 3, 0.342) !important;
+}
+
+.Mountain {
+    background-color: rgb(236, 235, 235) !important;
+}
+
+.Vogon-Spaceship {
+    background-color: rgba(177, 177, 177, 0.671) !important;
+}
+
+.Cloud-City {
+    background-color: rgba(0, 167, 233, 0.438) !important;
+}
+
+/*EDITING FORM*/
+
+form {
+    margin-bottom: 40px;
+}
+
+.editForm {
+    width: 80vw;
+    text-align: left;
+}
+
+.editForm label {
+    margin-right: 40px;
+}
+
+.row {
+    margin-bottom: 16px;
+}
+
+#backTo {
+    margin-bottom: 40px;
+    border: none;
+    border-radius: 3px;
+    background-color: rgb(99, 99, 99);
+    color: white;
+}
+
+input[type="submit"]{
+    border: none;
+    border-radius: 3px;
+    color: white;
+    background-color: rgb(99, 99, 99);
+}
+
+label {
+    margin-right: 10px;
+}
+
+select {
+    margin-right: 10px !important;
+}
+
+@media screen and (min-width: 400px){
+    #LocBox section {
+        width: 70vw;
+    }
+}
