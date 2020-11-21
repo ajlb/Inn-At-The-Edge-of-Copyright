@@ -3,7 +3,10 @@ const Schema = mongoose.Schema;
 
 let locationSchema = new Schema({
   locationName: {
-    type: String
+    type: String,
+    trim: true,
+    unique: true,
+    required: "Character name is Required"
   },
   dayDescription: {
     type: String

@@ -1,5 +1,8 @@
 import axios from "axios";
 
+
+//LOCATIONS
+
 //retrieve location data
 function getLocations() {
   return new Promise(function (resolve, reject) {
@@ -64,12 +67,26 @@ function deleteLocation(locationName) {
 }
 
 
+//PLAYERS
+
+//get all players
+function getPlayers(){
+  return new Promise(function (resolve, reject) {
+    console.log("sending getPlayers");
+    axios.get("http://localhost:3001/adminAPI/players").then(data => {
+      resolve(data);
+    });
+  });
+}
+
+
 export {
   getLocations,
   getOneLocation,
   editLocation,
   createLocation,
   changeLocations,
-  deleteLocation
+  deleteLocation,
+  getPlayers
 };
 

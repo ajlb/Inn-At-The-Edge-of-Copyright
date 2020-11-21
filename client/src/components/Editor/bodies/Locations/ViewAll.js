@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { getLocations } from "../../../../Utils/adminAPIs";
 import "../../css/styles.css";
+import AdminInfo from "../../../../Utils/AdminInfo";
 
 
 function LocationViewAll() {
 
     const [locationData, setLocationData] = useState([])
+    const adminInfo = useContext(AdminInfo);
 
 
     useEffect(() => {
@@ -20,7 +22,11 @@ function LocationViewAll() {
         <article id="LocBox">
             {locationData.map(location => {
                 return (
-                    <section key={location.locationName} className={location.region.replace(/\s/g, "-")}>
+                    <section 
+                    key={location.locationName} 
+                    className={location.region.replace(/\s/g, "-")}
+                    style={adminInfo.isClosed ? { marginLeft: 20 + "px" } : { marginLeft: 130 + "px" }}>
+                    
                         <header><h4><strong>Name: </strong>{location.locationName}</h4></header>
 
                         <div><strong>Day Description: </strong>{location.dayDescription}</div>

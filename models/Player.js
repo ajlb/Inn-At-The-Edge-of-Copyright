@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const playerSchema = new Schema({
   characterName: {
     type: String,
+    unique: true,
     trim: true,
     required: "Character name is Required"
   },
