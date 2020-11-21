@@ -6,6 +6,7 @@ const playerSchema = new Schema({
     type: String,
     unique: true,
     trim: true,
+    unique: true,
     required: "Character name is Required"
   },
   password: {
