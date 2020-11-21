@@ -1,7 +1,7 @@
 # Inn at the Edge of Copyright
 **Version 2.0**
 
-[![Inn at the Edge of Copyright logo](./documentation/master-logo-inverted-02.png)](https://innattheedge.herokuapp.com/)
+[![Inn at the Edge of Copyright logo](./documentation/master-logo-readme.png)](https://innattheedge.herokuapp.com/)
 
 [![License GNU GPLv3](https://img.shields.io/badge/License-GNU%20GPLv3-orange)](./LICENSE)
 [![Version 2.0](https://img.shields.io/badge/Version-V2.0-blue)](#version-updates)
