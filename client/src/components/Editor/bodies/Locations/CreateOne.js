@@ -13,7 +13,7 @@ function CreateOneLocation() {
         nightDescription: "",
         region: "",
         inventory: [],
-        NPCs: [],
+        NPCs: "",
         exits: []
     });
 
