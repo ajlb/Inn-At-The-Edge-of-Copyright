@@ -45,6 +45,70 @@ module.exports = function (io) {
                 io.emit('message', { message, userTo: playerTo })
             }
         })
+
+        socket.on('stop juggle', () => {
+
+        });
+
+        socket.on('inventory', () => {
+
+        });
+
+        socket.on('speak', () => {
+
+        });
+
+        socket.on('help', () => {
+            // db for all the actions/their descriptions and whatnot
+            // emit object back to client and parse there
+        });
+
+        socket.on('look', () => {
+            // db the user's location and emit necessary info
+        });
+
+        socket.on('get', () => {
+            // idk what the get function is doing tbh 
+        });
+
+        socket.on('drop', () => {
+
+        });
+
+        socket.on('wear', () => {
+
+        });
+
+        socket.on('remove', () => {
+
+        });
+
+        socket.on('emote', () => {
+
+        });
+
+        socket.on('juggle', () => {
+
+        });
+
+        socket.on('stats', () => {
+            // db for player stats
+            // emit stats to player
+        });
+
+        socket.on('sleep', () => {
+
+        });
+
+        socket.on('wake', () => {
+
+        });
+
+        socket.on('position', () => {
+            //  db for player position
+            // emit position to player
+        });
+
     })
 
 }
