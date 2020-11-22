@@ -5,8 +5,10 @@ import logo from "./images/logo.png";
 import { isBrowser } from 'react-device-detect';
 import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
 
+let user;
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
   const [minState, setMinState] = useState("max");
@@ -19,7 +21,23 @@ function Console() {
     currentMessage: ""
   }
 
-  const user="rellwoos";
+
+  // Socket log in message
+  socket.off('log in').on('log in', message => {
+    console.log("got a log in message from socket");
+    let type = 'displayed-stat';
+    user = message;
+    setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
+    // chat history is mapped down below
+  });
+
+  // Socket failed log in message
+  socket.off('logFail').on('logFail', message => {
+    console.log("got a log in failure message from socket");
+    let type = 'error-message';
+    setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
+    // chat history is mapped down below
+  });
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
 
@@ -67,7 +85,7 @@ function Console() {
     }
 
     // sets a default chat history because chat history needs to be iterable to be mapped
-    setChatHistory(prevState => [...prevState, { type: 'displayed-state', text: 'Welcome to the Inn!' }])
+    setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }])
 
     //avoid trying to set state after component is unmounted
     return function cleanup() {

@@ -2,7 +2,7 @@ import {
     MobileView,
     BrowserView
 } from 'react-device-detect';
-import findIn from "../../clientUtilities/finders";
+import findIn, {takeTheseOffThat} from "../../clientUtilities/finders";
 import socket from "../../clientUtilities/socket";
 
 //set up index for current position in userCommandsHistory
@@ -33,7 +33,16 @@ function InputPanel({
         setInputHistory(prevState => [...prevState, input])
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
-        if (findIn(input, actionCalls.move)) {
+        if (user===undefined){
+            if (findIn(input, ["log in", "logon", "login", "log on"])) {
+                console.log("log on: " + input);
+                let message = takeTheseOffThat(["log in", "logon", "login", "log on"], input);
+                console.log(message);
+                socket.emit("log in", message);
+            } else {
+                socket.emit("log in", "You must log in first!");
+            }
+        } else if (findIn(input, actionCalls.move)) {
             console.log(input);
             let message = input.split(' ').splice(1).join(' ');
             console.log(message);

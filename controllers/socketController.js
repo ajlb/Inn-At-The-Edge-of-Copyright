@@ -13,6 +13,21 @@ module.exports = function (io) {
             // possibly do a DB call to state that the use is offline?
         })
 
+        socket.on('log in', message => {
+            console.log("log in recieved");
+            if (message==="You must log in first!"){
+                console.log("send message saying You must log in first!");
+                io.emit('logFail', message );
+            } else {
+                console.log("log the person in!");
+                io.emit('log in', message );
+            }
+            // get users current location
+            // get northern route from users location
+            // get the location of the route
+            // send that returned location back to the user
+        });
+
         socket.on('move', ({message, user}) => {
             console.log("move recieved");
             console.log(message, user);
