@@ -13,7 +13,9 @@ module.exports = function (io) {
             // possibly do a DB call to state that the use is offline?
         })
 
-        socket.on('move', ({ message, username }) => {
+        socket.on('move', ({message, user}) => {
+            console.log("move recieved");
+            console.log(message, user);
             // get users current location
             // get northern route from users location
             // get the location of the route
@@ -21,6 +23,7 @@ module.exports = function (io) {
         });
 
         socket.on('whisper', message => {
+            console.log(message);
             let playerTo
 
             // How this works:

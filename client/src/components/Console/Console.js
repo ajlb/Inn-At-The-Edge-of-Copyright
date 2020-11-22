@@ -19,6 +19,8 @@ function Console() {
     currentMessage: ""
   }
 
+  const user="rellwoos";
+
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
 
   const [chatHistory, setChatHistory] = useState([]);
@@ -99,6 +101,7 @@ function Console() {
                   <ChatPanel
                     chatHistory={chatHistory}
                     setChatHistory={setChatHistory}
+                    user={user}
                   />
                   <InputPanel
                     actionCalls={actionCalls}
@@ -109,6 +112,7 @@ function Console() {
                     setInput={setInput}
                     inputHistory={inputHistory}
                     setInputHistory={setInputHistory}
+                    user={user}
                   />
                 </div>
               </div>

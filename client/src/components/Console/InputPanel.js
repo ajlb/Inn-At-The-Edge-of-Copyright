@@ -17,7 +17,8 @@ function InputPanel({
     setInput,
     inputHistory,
     setInputHistory,
-    actionCalls
+    actionCalls,
+    user
 }) {
 
     //update currentMessage in gameinfo based on input bar change
@@ -33,8 +34,10 @@ function InputPanel({
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
         if (findIn(input, actionCalls.move)) {
+            console.log(input);
             let message = input.split(' ').splice(1).join(' ');
-            socket.emit('move', message)
+            console.log(message);
+            socket.emit('move', {message, user})
         } else if (input.toLowerCase() === "stop juggling") {
             socket.emit('stop juggle', input)
         } else if (findIn(input, actionCalls.inventory)) {
