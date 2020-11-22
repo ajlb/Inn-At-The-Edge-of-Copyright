@@ -3,7 +3,7 @@ import "./css/styles.css";
 import Nav from "./Nav";
 import "./css/navStyles.css";
 import Body from "./Body";
-import AdminInfo from "../../Utils/AdminInfo";
+import AdminInfo from "../../clientUtilities/AdminInfo";
 
 
 let isClosed = false;
@@ -83,7 +83,7 @@ function Editor() {
                         <span className="hamb-bottom"></span>
                     </button>
                     <Body
-                        destinationState={destinationState}/>
+                        destinationState={destinationState} />
                 </section>
             </AdminInfo.Provider>
         </div>
