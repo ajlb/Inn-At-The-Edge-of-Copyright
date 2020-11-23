@@ -34,7 +34,7 @@ function Console() {
   // Socket failed log in message
   socket.off('logFail').on('logFail', message => {
     console.log("got a log in failure message from socket");
-    let type = 'error-message';
+    let type = 'displayed-error';
     setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
     // chat history is mapped down below
   });
