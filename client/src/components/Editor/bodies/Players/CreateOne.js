@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { createLocation, getLocations } from "../../../../Utils/adminAPIs";
-import AdminInfo from "../../../../Utils/AdminInfo";
+import { createLocation, getLocations } from "../../../../clientUtilities/adminAPIs";
+import AdminInfo from "../../../../clientUtilities/AdminInfo";
 let locationNames = [];
 
 function CreateOneLocation() {
-    
+
     const adminInfo = useContext(AdminInfo);
     const initialAlert = {
         severity: "none",
@@ -47,7 +47,7 @@ function CreateOneLocation() {
         console.log(locationData);
         console.log(locationNames.indexOf(locationData.locationName) === -1);
         console.log(locationNames);
-        if (locationNames.indexOf(locationData.locationName) === -1){
+        if (locationNames.indexOf(locationData.locationName) === -1) {
             createLocation(locationData).then(returnData => {
                 console.log(returnData);
                 locationNames.push(locationData.locationName)
@@ -70,7 +70,7 @@ function CreateOneLocation() {
 
     return (
         <div>
-            {!(alert.severity==="none") && <div style={{textAlign: "center", backgroundColor: alert.severity, marginBottom: 20+"px"}}>{alert.message}</div>}
+            {!(alert.severity === "none") && <div style={{ textAlign: "center", backgroundColor: alert.severity, marginBottom: 20 + "px" }}>{alert.message}</div>}
             <form
                 className="d-flex flex-column editForm"
                 style={adminInfo.isClosed ? { marginLeft: 20 + "px" } : { marginLeft: 130 + "px" }}

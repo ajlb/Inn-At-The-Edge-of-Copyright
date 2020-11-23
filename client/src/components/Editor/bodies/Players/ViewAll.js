@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { getPlayers } from "../../../../Utils/adminAPIs";
+import { getPlayers } from "../../../../clientUtilities/adminAPIs";
 import "../../css/styles.css";
-import AdminInfo from "../../../../Utils/AdminInfo";
+import AdminInfo from "../../../../clientUtilities/AdminInfo";
 
 
 function PlayerViewAll() {
@@ -22,10 +22,10 @@ function PlayerViewAll() {
         <article id="LocBox">
             {PlayerData.map(player => {
                 return (
-                    <section 
-                    key={player.characterName} 
-                    className={player.race + " " + player.profession}
-                    style={adminInfo.isClosed ? { marginLeft: 20 + "px" } : { marginLeft: 130 + "px" }}>
+                    <section
+                        key={player.characterName}
+                        className={player.race + " " + player.profession}
+                        style={adminInfo.isClosed ? { marginLeft: 20 + "px" } : { marginLeft: 130 + "px" }}>
                         <header><h4><strong>Name: </strong>{player.characterName}</h4></header>
 
                         <div><strong>Is the player alive? </strong>{player.isLiving}</div>

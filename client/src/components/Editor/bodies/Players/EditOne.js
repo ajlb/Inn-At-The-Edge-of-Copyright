@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { editLocation, getOneLocation, getLocations } from "../../../../Utils/adminAPIs";
-import AdminInfo from "../../../../Utils/AdminInfo";
+import { editLocation, getOneLocation, getLocations } from "../../../../clientUtilities/adminAPIs";
+import AdminInfo from "../../../../clientUtilities/AdminInfo";
 
 function EditOneLocation() {
 
