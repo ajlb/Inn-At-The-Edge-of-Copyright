@@ -9,6 +9,7 @@ import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
 
 let user = {};
+let location = {};
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -40,14 +41,24 @@ function Console() {
     // chat history is mapped down below
   });
 
-    // Socket initial userData
-    socket.off('playerData').on('playerData', message => {
-      console.log("recieved Player Data");
-      console.log(message);
-      if (!(message === null)) {
-        user = message;
-      }
-    });
+  // Socket initial userData
+  socket.off('playerData').on('playerData', message => {
+    console.log("recieved Player Data");
+    console.log(message);
+    if (!(message === null)) {
+      user = message;
+    }
+  });
+
+  // Socket location chunk
+  socket.off('locationChunk').on('locationChunk', message => {
+    console.log("recieved locationChunk");
+    console.log(message);
+    if (!(message === null)) {
+      location = message;
+      console.log(location);
+    }
+  });
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
 

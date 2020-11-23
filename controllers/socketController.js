@@ -47,9 +47,28 @@ module.exports = function (io) {
                         users[usernameLowerCase].chatRooms.push(userData.lastLocation);
                         //find locations, return initial and then chunk
                         db.Location.findOne({locationName: userData.lastLocation}).then(currentLocationData => {
+
+                            const getLocationChunk = async () => {
+                                let locationObject = {};
+                                locationObject.current = currentLocationData;
+                                console.log(locationObject);
+                                for (const exitObject of locationObject.current.exits){
+                                    const key = Object.keys(exitObject)[0];
+                                    locationObject[key] = await db.Location.findOne({locationName: exitObject[key]});
+                                }
+                                return locationObject;
+                            }
+                            const resolveLocationChunk = () => {
+                                return new Promise((resolve, reject) => {
+                                    resolve(getLocationChunk());
+                                })
+                            }
                             io.to(usernameLowerCase).emit('currentLocation', currentLocationData);
-                            let locationObject = {};
-                            locationObject.current = currentLocationData;
+                            resolveLocationChunk().then(chunk => {
+                                io.to(usernameLowerCase).emit('locationChunk', chunk);
+                            })
+    
+                            
                         })
                     })
                     //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
