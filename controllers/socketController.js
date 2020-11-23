@@ -82,8 +82,6 @@ module.exports = function (io) {
             // if at any point in the loop it recognizes a player's name, it will set the playerTo variable to that player's name
             for (let i = 2; i >= 0; i--) {
                 const messageString = message.toLowerCase().split(' ').slice(0, i + 1).join(' ');
-                console.log("this is the player to");
-                console.log(messageString);
                 players.forEach(player => {
                     if (player === messageString) {
                         playerTo = messageString;
@@ -94,8 +92,6 @@ module.exports = function (io) {
             if (playerTo === undefined) {
                 io.to(socket.id).emit('error', { status: 404, message: "There is nobody by that name" });
             } else {
-                console.log(playerTo);
-                console.log(message);
                 io.to(socket.id).emit('whisperFrom', { message, userTo: playerTo });
                 io.to(playerTo).emit('whisperTo', { message, userFrom: playerTo });
             }

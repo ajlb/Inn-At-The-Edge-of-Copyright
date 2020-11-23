@@ -8,7 +8,8 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
 
-let user;
+let user = {};
+
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
   const [minState, setMinState] = useState("max");
@@ -26,7 +27,7 @@ function Console() {
   socket.off('log in').on('log in', message => {
     console.log("got a log in message from socket");
     let type = 'displayed-stat';
-    user = message;
+    user.characterName = message;
     setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
     // chat history is mapped down below
   });
@@ -38,6 +39,13 @@ function Console() {
     setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
     // chat history is mapped down below
   });
+
+    // Socket initial userData
+    socket.off('playerData').on('playerData', message => {
+      console.log("recieved Player Data");
+      console.log(message);
+      user = message;
+    });
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
 
@@ -130,7 +138,7 @@ function Console() {
                     setInput={setInput}
                     inputHistory={inputHistory}
                     setInputHistory={setInputHistory}
-                    user={user}
+                    user={user.characterName}
                   />
                 </div>
               </div>
