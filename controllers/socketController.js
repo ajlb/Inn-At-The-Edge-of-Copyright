@@ -42,19 +42,25 @@ module.exports = function (io) {
                     console.log(`${message} is now fake logged in.`);
                     //find and retrieve user Data, join location room
                     db.Player.findOne({ characterName: message }).select("-password").then(userData => {
+                        let userLocation
+                        if (userData === null) {
+                            userLocation = "Inn Lobby";
+                        } else {
+                            userLocation = userData.lastLocation;
+                        }
                         io.to(usernameLowerCase).emit('playerData', userData)
-                        socket.join(userData.lastLocation);
-                        users[usernameLowerCase].chatRooms.push(userData.lastLocation);
+                        socket.join(userLocation);
+                        users[usernameLowerCase].chatRooms.push(userLocation);
                         //find locations, return initial and then chunk
-                        db.Location.findOne({locationName: userData.lastLocation}).then(currentLocationData => {
+                        db.Location.findOne({ locationName: userLocation }).then(currentLocationData => {
 
                             const getLocationChunk = async () => {
                                 let locationObject = {};
                                 locationObject.current = currentLocationData;
                                 console.log(locationObject);
-                                for (const exitObject of locationObject.current.exits){
+                                for (const exitObject of locationObject.current.exits) {
                                     const key = Object.keys(exitObject)[0];
-                                    locationObject[key] = await db.Location.findOne({locationName: exitObject[key]});
+                                    locationObject[key] = await db.Location.findOne({ locationName: exitObject[key] });
                                 }
                                 return locationObject;
                             }
@@ -67,8 +73,8 @@ module.exports = function (io) {
                             resolveLocationChunk().then(chunk => {
                                 io.to(usernameLowerCase).emit('locationChunk', chunk);
                             })
-    
-                            
+
+
                         })
                     })
                     //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
