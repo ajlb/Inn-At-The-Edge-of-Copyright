@@ -40,8 +40,17 @@ module.exports = function (io) {
                     players.push(usernameLowerCase);//delete once Auth is complete
                     io.to(usernameLowerCase).emit('log in', message);
                     console.log(`${message} is now fake logged in.`);
+                    //find and retrieve user Data, join location room
                     db.Player.findOne({ characterName: message }).select("-password").then(userData => {
                         io.to(usernameLowerCase).emit('playerData', userData)
+                        socket.join(userData.lastLocation);
+                        users[usernameLowerCase].chatRooms.push(userData.lastLocation);
+                        //find locations, return initial and then chunk
+                        db.Location.findOne({locationName: userData.lastLocation}).then(currentLocationData => {
+                            io.to(usernameLowerCase).emit('currentLocation', currentLocationData);
+                            let locationObject = {};
+                            locationObject.current = currentLocationData;
+                        })
                     })
                     //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
                     users[usernameLowerCase] = {

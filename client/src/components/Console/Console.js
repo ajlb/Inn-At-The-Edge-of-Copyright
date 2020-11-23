@@ -44,7 +44,9 @@ function Console() {
     socket.off('playerData').on('playerData', message => {
       console.log("recieved Player Data");
       console.log(message);
-      user = message;
+      if (!(message === null)) {
+        user = message;
+      }
     });
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
