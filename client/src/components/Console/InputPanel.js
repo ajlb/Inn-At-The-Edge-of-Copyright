@@ -46,7 +46,8 @@ function InputPanel({
             console.log(input);
             let message = input.split(' ').splice(1).join(' ');
             console.log(message);
-            socket.emit('move', {message, user})
+            socket.emit('move', {message, user});
+            console.log('input was move');
         } else if (input.toLowerCase() === "stop juggling") {
             socket.emit('stop juggle', input)
         } else if (findIn(input, actionCalls.inventory)) {
