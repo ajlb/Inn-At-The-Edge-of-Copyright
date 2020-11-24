@@ -156,6 +156,7 @@ figure {
 .displayed-error {
     margin-top: 1px;
     margin-bottom: 1px;
+    margin-left: 20px;
     font-size: 13px;
     margin-right: 15px;
     color: red;
