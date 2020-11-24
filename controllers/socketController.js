@@ -2,6 +2,23 @@ const db = require("../models");
 const mongoose = require("mongoose");
 
 
+//this pair of functions is for returning async location data within the socket response
+const getLocationChunk = async (data) => {
+    let locationObject = {};
+    locationObject.current = data;
+    console.log(locationObject);
+    for (const exitObject of locationObject.current.exits) {
+        const key = Object.keys(exitObject)[0];
+        locationObject[key] = await db.Location.findOne({ locationName: exitObject[key] });
+    }
+    return locationObject;
+}
+const resolveLocationChunk = (data) => {
+    return new Promise((resolve, reject) => {
+        resolve(getLocationChunk(data));
+    })
+}
+
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = ['the mando', 'shambles', 'cosmo the magnificent'];
 let users = {};
@@ -28,9 +45,7 @@ module.exports = function (io) {
         })
 
         socket.on('log in', message => {
-            console.log("log in recieved");
-            if (message === "You must log in first!") {
-                console.log("send message saying You must log in first!");
+            if (message === "You must log in first! Type 'log in [username]'") {
                 io.to(socket.id).emit('logFail', message);
             } else {
                 console.log(`${message} wants to log in.`);
@@ -54,26 +69,10 @@ module.exports = function (io) {
                         //find locations, return initial and then chunk
                         db.Location.findOne({ locationName: userLocation }).then(currentLocationData => {
 
-                            const getLocationChunk = async () => {
-                                let locationObject = {};
-                                locationObject.current = currentLocationData;
-                                console.log(locationObject);
-                                for (const exitObject of locationObject.current.exits) {
-                                    const key = Object.keys(exitObject)[0];
-                                    locationObject[key] = await db.Location.findOne({ locationName: exitObject[key] });
-                                }
-                                return locationObject;
-                            }
-                            const resolveLocationChunk = () => {
-                                return new Promise((resolve, reject) => {
-                                    resolve(getLocationChunk());
-                                })
-                            }
                             io.to(usernameLowerCase).emit('currentLocation', currentLocationData);
-                            resolveLocationChunk().then(chunk => {
+                            resolveLocationChunk(currentLocationData).then(chunk => {
                                 io.to(usernameLowerCase).emit('locationChunk', chunk);
-                            })
-
+                            });
 
                         })
                     })
@@ -90,12 +89,19 @@ module.exports = function (io) {
                     console.log(`${message} is already in players list. Cannot log in.`);
                 }
             }
-            // get users current location
-            // get northern route from users location
-            // get the location of the route
-            // send that returned location back to the user
-        });
+        });//end socket.on log in
 
+        socket.on('logout', message => {
+            for (const user in users){
+                if (users[user].socketID === socket.id){
+                    const playersIndex = players.indexOf(user.username);
+                    players = players.splice(playersIndex, 1);
+                    delete users[user];
+                    console.log("user logged out");
+                    io.to(socket.id).emit('logout', "You are now logged off.");
+                }
+            }
+        })
         socket.on('move', ({ message, user }) => {
             console.log("move recieved");
             console.log(message, user);

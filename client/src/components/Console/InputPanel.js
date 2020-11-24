@@ -99,6 +99,9 @@ function InputPanel({
             socket.emit('give', input)
         } else if (findIn(input, actionCalls.examine)) {
             socket.emit('examine', input)
+        } else if (findIn(input, ["logout", "log out", "log off"])) {
+            takeTheseOffThat(["logout, log out", "log off"], input);
+            socket.emit('logout', input);
         } else {
             console.log("hmmm... that didn't quite make sense. Try 'help' for a list of commands!");
         }

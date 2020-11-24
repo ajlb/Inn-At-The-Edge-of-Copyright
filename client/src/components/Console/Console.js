@@ -41,6 +41,15 @@ function Console() {
     // chat history is mapped down below
   });
 
+  // Socket log out message
+  socket.off('logout').on('logout', message => {
+    let type = 'displayed-stat';
+    setChatHistory(prevState => [...prevState, { type, text: message}]);
+    user = {};
+    location = {};
+    // chat history is mapped down below
+  });
+
   // Socket initial userData
   socket.off('playerData').on('playerData', message => {
     console.log("recieved Player Data");
@@ -53,7 +62,6 @@ function Console() {
   // Socket location chunk
   socket.off('locationChunk').on('locationChunk', message => {
     console.log("recieved locationChunk");
-    console.log(message);
     if (!(message === null)) {
       location = message;
       console.log(location);
@@ -151,7 +159,7 @@ function Console() {
                     setInput={setInput}
                     inputHistory={inputHistory}
                     setInputHistory={setInputHistory}
-                    user={user.characterName}
+                    user={!(user === undefined) ? user.characterName : undefined}
                   />
                 </div>
               </div>
