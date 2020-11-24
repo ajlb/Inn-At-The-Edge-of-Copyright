@@ -40,11 +40,10 @@ function InputPanel({
                 console.log(message);
                 socket.emit("log in", message);
             } else {
-                socket.emit("log in", "You must log in first!");
+                socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (findIn(input, actionCalls.move)) {
-            console.log(input);
-            let message = input.split(' ').splice(1).join(' ');
+            let message = takeTheseOffThat(actionCalls.move, input);
             console.log(message);
             socket.emit('move', {message, user});
             console.log('input was move');
@@ -100,6 +99,9 @@ function InputPanel({
             socket.emit('give', input)
         } else if (findIn(input, actionCalls.examine)) {
             socket.emit('examine', input)
+        } else if (findIn(input, ["logout", "log out", "log off"])) {
+            takeTheseOffThat(["logout, log out", "log off"], input);
+            socket.emit('logout', input);
         } else {
             console.log("hmmm... that didn't quite make sense. Try 'help' for a list of commands!");
         }

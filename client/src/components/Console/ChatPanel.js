@@ -13,7 +13,14 @@ function ChatPanel({
     let anchorDiv;
 
     // This is where most socket client listeners are going to be!
-    socket.off('message').on('message', ({ message, userTo }) => {
+    socket.off('whisperTo').on('whisperTo', ({ message, userFrom }) => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: `Whisper from ${userFrom}: ${message}` }]);
+        // chat history is mapped down below
+    });
+
+    // This is where most socket client listeners are going to be!
+    socket.off('whisperFrom').on('whisperFrom', ({ message, userTo }) => {
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: `Whisper to ${userTo}: ${message}` }]);
         // chat history is mapped down below

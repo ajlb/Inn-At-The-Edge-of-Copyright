@@ -8,7 +8,9 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
 
-let user;
+let user = {};
+let location = {};
+
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
   const [minState, setMinState] = useState("max");
@@ -26,7 +28,7 @@ function Console() {
   socket.off('log in').on('log in', message => {
     console.log("got a log in message from socket");
     let type = 'displayed-stat';
-    user = message;
+    user.characterName = message;
     setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
     // chat history is mapped down below
   });
@@ -34,9 +36,36 @@ function Console() {
   // Socket failed log in message
   socket.off('logFail').on('logFail', message => {
     console.log("got a log in failure message from socket");
-    let type = 'error-message';
+    let type = 'displayed-error';
     setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
     // chat history is mapped down below
+  });
+
+  // Socket log out message
+  socket.off('logout').on('logout', message => {
+    let type = 'displayed-stat';
+    setChatHistory(prevState => [...prevState, { type, text: message}]);
+    user = {};
+    location = {};
+    // chat history is mapped down below
+  });
+
+  // Socket initial userData
+  socket.off('playerData').on('playerData', message => {
+    console.log("recieved Player Data");
+    console.log(message);
+    if (!(message === null)) {
+      user = message;
+    }
+  });
+
+  // Socket location chunk
+  socket.off('locationChunk').on('locationChunk', message => {
+    console.log("recieved locationChunk");
+    if (!(message === null)) {
+      location = message;
+      console.log(location);
+    }
   });
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
@@ -130,7 +159,7 @@ function Console() {
                     setInput={setInput}
                     inputHistory={inputHistory}
                     setInputHistory={setInputHistory}
-                    user={user}
+                    user={!(user === undefined) ? user.characterName : undefined}
                   />
                 </div>
               </div>
