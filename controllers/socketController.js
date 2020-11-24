@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const getLocationChunk = async (data) => {
     let locationObject = {};
     locationObject.current = data;
-    console.log(locationObject);
     for (const exitObject of locationObject.current.exits) {
         const key = Object.keys(exitObject)[0];
         locationObject[key] = await db.Location.findOne({ locationName: exitObject[key] });
@@ -22,6 +21,9 @@ const resolveLocationChunk = (data) => {
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = ['the mando', 'shambles', 'cosmo the magnificent'];
 let users = {};
+
+//temp things to simulate display while working on server side only
+location = {};
 
 module.exports = function (io) {
     // this runs only when the user initially connects
@@ -72,6 +74,8 @@ module.exports = function (io) {
                             io.to(usernameLowerCase).emit('currentLocation', currentLocationData);
                             resolveLocationChunk(currentLocationData).then(chunk => {
                                 io.to(usernameLowerCase).emit('locationChunk', chunk);
+                                location = chunk;
+                                console.log(chunk.current.dayDescription);
                             });
 
                         })
@@ -104,7 +108,17 @@ module.exports = function (io) {
         })
         socket.on('move', ({ message, user }) => {
             console.log("move recieved");
-            console.log(message, user);
+            const currentExits = [];
+            for (const exitObj of location.current.exits){
+                const key = Object.keys(exitObj)[0];
+                if (key.startsWith("exit")){
+                    currentExits.push(key.slice(4));
+                } else {
+                    currentExits.push(key);
+                }
+            }
+            console.log(currentExits);
+            console.log(`user leaves to the`);
             // get users current location
             // get northern route from users location
             // get the location of the route

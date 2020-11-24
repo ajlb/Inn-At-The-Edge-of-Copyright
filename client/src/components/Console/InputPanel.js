@@ -40,11 +40,10 @@ function InputPanel({
                 console.log(message);
                 socket.emit("log in", message);
             } else {
-                socket.emit("log in", "You must log in first!");
+                socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (findIn(input, actionCalls.move)) {
-            console.log(input);
-            let message = input.split(' ').splice(1).join(' ');
+            let message = takeTheseOffThat(actionCalls.move, input);
             console.log(message);
             socket.emit('move', {message, user})
         } else if (input.toLowerCase() === "stop juggling") {
