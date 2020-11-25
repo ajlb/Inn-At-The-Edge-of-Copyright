@@ -108,6 +108,14 @@ function InputPanel({
         setInput('');
     }
 
+// let socketObj;
+
+// // adding a listener for socket object to recieve incoming messages
+
+// socketObj.addListener({
+
+// })
+
     //display previous commands on key up, key down
     const keyDownResults = (event) => {
 

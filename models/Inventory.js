@@ -9,10 +9,11 @@ const inventorySchema = new Schema({
             ref: "Item"
         }
     ],
-    quantitiy: {
+    quantity: {
         type: Number
-    }
-});
+    },
+    
+}, { capped: 1024});
 
 const Inventory = mongoose.model("Inventory", inventorySchema);
 

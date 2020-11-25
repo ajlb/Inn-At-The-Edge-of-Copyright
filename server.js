@@ -41,6 +41,8 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/innatthee
 mongoose.set('useCreateIndex', true);
 const connection = mongoose.connection;
 
+
+
 // log once mongoDB is open
 connection.once("open", function () {
   console.log("\nConnected to mongoose\n\n--------------begin log--------------\n");

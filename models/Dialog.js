@@ -10,7 +10,7 @@ let dialogSchema = new Schema({
     dialogObj: {
         type: String
     }
-});
+}, {capped:1024});
 
 const Dialog = mongoose.model("Dialog", dialogSchema);
 module.exports = Dialog;
