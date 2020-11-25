@@ -95,23 +95,23 @@ function Console() {
   const [inputHistory, setInputHistory] = useState([]);
 
   const [actionCalls, setActionCalls] = useState({
-    move: ['move', '/m'],
+    move: ['move', '/m', 'walk', 'exit'],
     inventory: ['inventory', '/i'],
     speak: ['speak', 'say', '/s'],
     look: ['look', '/l'],
     help: ['help', '/h'],
-    get: ['get', '/g'],
-    drop: ['drop', '/d'],
-    wear: ['wear'],
-    remove: ['remove', '/r'],
+    get: ['get', '/g', 'pick up'],
+    drop: ['drop', 'discard', '/d'],
+    wear: ['wear', 'put on'],
+    remove: ['remove', '/r', 'take off'],
     emote: ['emote', '/e'],
     juggle: ['juggle'],
     stats: ['stats'],
     sleep: ['sleep'],
     wake: ['wake'],
-    position: ['position'],
+    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
-    examine: ['examine', '/e'],
+    examine: ['examine'],
     whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
   });
 
@@ -180,7 +180,7 @@ function Console() {
                     inputHistory={inputHistory}
                     setInputHistory={setInputHistory}
                     location={location}
-                    user={!(player === undefined) ? player.characterName : undefined}
+                    user={player}
                   />
                 </div>
               </div>

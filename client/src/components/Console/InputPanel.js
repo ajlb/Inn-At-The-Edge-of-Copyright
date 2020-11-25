@@ -4,6 +4,7 @@ import {
 } from 'react-device-detect';
 import findIn, {takeTheseOffThat} from "../../clientUtilities/finders";
 import socket from "../../clientUtilities/socket";
+import {getItem, dropItem} from "./js/getDrop";
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -37,7 +38,7 @@ function InputPanel({
         setInputHistory(prevState => [...prevState, input])
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
-        if (user===undefined){
+        if (user.characterName===undefined){
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
                 console.log("log on: " + input);
                 let message = takeTheseOffThat(["log in", "logon", "login", "log on"], input);
@@ -56,7 +57,7 @@ function InputPanel({
             let moved = false;
             for (const param in location){
                 if (param === direction){
-                    socket.emit('move', {previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user});
+                    socket.emit('move', {previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user:user.characterName});
                     moved = true;
                 } 
             }
@@ -87,7 +88,7 @@ function InputPanel({
             socket.emit('whisper', message)
         } else if (findIn(input, actionCalls.speak)) {
             const message = takeTheseOffThat(actionCalls.speak, input);
-            socket.emit('speak', {message, user, location: location.current.locationName});
+            socket.emit('speak', {message, user:user.characterName, location: location.current.locationName});
         } else if (findIn(input, actionCalls.help)) {
             socket.emit('help', input)
         } else if (findIn(input, actionCalls.look)) {
