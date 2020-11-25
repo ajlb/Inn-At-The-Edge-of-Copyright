@@ -201,25 +201,38 @@ module.exports = function (io) {
         socket.on('get', ({ target, user, location }) => {
             console.log(`get ${target} for ${user} from ${location}`);
             db.Location.updateOne({ locationName: location }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
-                db.Location.updateOne({ locationName: location }, { $unset: { "inventory.$[item]": "" } }, {
-                    arrayFilters: [{ "item.quantity": { $lt: 1 } }]
-                }).then(returnData => {
-                    console.log(returnData);
-                })
+                db.Location.updateOne({ locationName: location }, { $pull: { "inventory": {"quantity": {$lt: 1} } } });
             });
 
             db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
                 if (returnData.nModified === 0) {
-                    db.Player.updateOne({ characterName: user }, { $push: { inventory: { name: target, quantity: 1, equipped: 0 } } }).then(returnData => {
-                        console.log(returnData);
-                    })
+                    console.log("got an item that didn't exist in inventory");
+                    db.Player.updateOne({ characterName: user }, { $push: { inventory: { name: target, quantity: 1, equipped: 0 } } });
                 }
                 io.to(location).emit('get', { target, actor:user });
 
             })
         });
 
-        socket.on('drop', () => {
+        socket.on('drop', ({target, user, location}) => {
+            console.log(`drop ${target} from ${user} to ${location}.`);
+            
+            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
+                db.Player.updateOne({ characterName: user }, { $pull: { "inventory": {"quantity": {$lt: 1} } } });
+            });
+
+            db.Location.updateOne({ locationName: location }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
+                if (returnData.nModified === 0) {
+                    console.log("dropped an item that didn't exist in location");
+                    db.Location.updateOne({ locationName: location }, { $push: { inventory: { name: target, quantity: 1} } });
+                }
+                io.to(location).emit('drop', { target, actor:user });
+
+            })
+
+
+
+
 
         });
 

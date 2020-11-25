@@ -96,7 +96,7 @@ function InputPanel({
             socket.emit('look', input)
         } else if (findIn(input, actionCalls.get)) {
             const target = takeTheseOffThat(actionCalls.get, input);
-            const result = getItem(target, location, user);
+            const result = getItem(target, location);
             if (result === true){
                 socket.emit('get', {target, user: user.characterName, location: location.current.locationName});
             } else if (result === false) {
@@ -107,7 +107,18 @@ function InputPanel({
                 socket.emit('green', `I'm not sure which you want to get. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.drop)) {
-            socket.emit('drop', input)
+            const target = takeTheseOffThat(actionCalls.drop, input);
+            const result = dropItem(target, user);
+            if (result === true){
+                socket.emit('drop', {target, user: user.characterName, location: location.current.locationName});
+            } else if (result === false){
+                socket.emit('green', `You don't seem to have ${insertArticleSingleValue(target)} to drop.`);
+            } else if (typeof result === "string"){
+                socket.emit('drop', {target: result, user: user.characterName, location: location.current.locationName});
+            } else if (typeof result === "object"){
+                socket.emit('green', `I'm not sure which you want to drop. I think you might mean one of these - ${result.join(", ")}.`);
+
+            }
         } else if (findIn(input, actionCalls.wear)) {
             socket.emit('wear', input)
         } else if (findIn(input, actionCalls.remove)) {

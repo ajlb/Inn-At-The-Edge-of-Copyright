@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import socket from "../../clientUtilities/socket";
-import {insertArticleSingleValue} from "../../clientUtilities/parsers";
+import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 
 
 //note if user is scrolled to bottom of div
@@ -73,12 +73,22 @@ function ChatPanel({
     });
 
     //a get action
-    socket.off('get').on('get', ({target, actor}) => {
+    socket.off('get').on('get', ({ target, actor }) => {
         let type = 'displayed-stat';
-        if (actor === user.characterName){
-        setChatHistory(prevState => [...prevState, { type, text: `You pick up ${insertArticleSingleValue(target)}.` }]);
+        if (actor === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `You pick up ${insertArticleSingleValue(target)}.` }]);
         } else {
             setChatHistory(prevState => [...prevState, { type, text: `${actor} picks up ${insertArticleSingleValue(target)}.` }]);
+        }
+    });
+
+    //a drop action
+    socket.off('drop').on('drop', ({ target, actor }) => {
+        let type = 'displayed-stat';
+        if (actor === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `You drop ${insertArticleSingleValue(target)}.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} drops ${insertArticleSingleValue(target)}.` }]);
         }
     });
 
