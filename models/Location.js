@@ -21,14 +21,11 @@ let locationSchema = new Schema({
     type: String
   },
   NPCs: {
-    type: String
+    type: Array
   },
-  inventory: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Inventory"
-    }
-  ],
+  inventory: {
+    type: Array
+  },
   indoorOutdoor: {
     type: String
   }

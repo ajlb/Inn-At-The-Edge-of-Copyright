@@ -93,6 +93,8 @@ function InputPanel({
         } else if (findIn(input, actionCalls.look)) {
             socket.emit('look', input)
         } else if (findIn(input, actionCalls.get)) {
+            const target = takeTheseOffThat(actionCalls.get, input);
+            console.log(location);
             socket.emit('get', input)
         } else if (findIn(input, actionCalls.drop)) {
             socket.emit('drop', input)
