@@ -84,7 +84,7 @@ const playerSchema = new Schema({
   },
   inventory: [
     {
-      type: Schema.Types.ObjectId,
+      type: Object,
       ref: "Inventory"
     }
   ],

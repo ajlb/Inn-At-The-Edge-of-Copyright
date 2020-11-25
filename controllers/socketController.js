@@ -67,16 +67,16 @@ module.exports = function (io) {
                         }
                         io.to(usernameLowerCase).emit('playerData', userData)
                         socket.join(userLocation);
+                        io.to(userLocation).emit('move', `${message} arrived.`)
+
                         users[usernameLowerCase].chatRooms.push(userLocation);
                         //find locations, return initial and then chunk
                         db.Location.findOne({ locationName: userLocation }).then(currentLocationData => {
 
                             io.to(usernameLowerCase).emit('currentLocation', currentLocationData);
                             resolveLocationChunk(currentLocationData).then(chunk => {
-                                console.log(chunk);
                                 io.to(usernameLowerCase).emit('locationChunk', chunk);
                                 location = chunk;
-                                console.log(chunk.current.dayDescription);
                             });
 
                         })
@@ -99,8 +99,8 @@ module.exports = function (io) {
         socket.on('logout', message => {
             for (const user in users) {
                 if (users[user].socketID === socket.id) {
-                    const playersIndex = players.indexOf(user.username);
-                    players = players.splice(playersIndex, 1);
+                    console.log(users[user].username + " logged off");
+                    players = players.filter(player => !(player === users[user].username))
                     delete users[user];
                     console.log("user logged out");
                     io.to(socket.id).emit('logout', "You are now logged off.");
@@ -108,31 +108,43 @@ module.exports = function (io) {
             }
         })
         socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
-            
+
 
             console.log(`move recieved, direction ${direction}`);
-            if (["north", "east", "south", "west"].indexOf(direction) !== -1){
+            if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
                 io.to(previousLocation).emit('move', `${user} left to the ${direction}.`)
             } else {
                 io.to(previousLocation).emit('move', `${user} left to by ${direction}.`)
             }
+            //leave and enter rooms
+            socket.leave(previousLocation);
+            users[user.toLowerCase()].chatRooms = users[user.toLowerCase()].chatRooms.filter(room => !(room === previousLocation));
+            users[user.toLowerCase()].chatRooms.push(newLocation);
+            socket.join(newLocation);
 
             io.to(socket.id).emit('yourMove', direction);
-            
+
+            if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
+                io.to(newLocation).emit('move', `${user} arrived from the ${direction}.`)
+            } else {
+                io.to(newLocation).emit('move', `${user} arrived by ${direction}.`)
+            }
+            console.log("about to set player location");
+            console.log(user);
+            console.log(newLocation);
+            db.Player.updateOne({ characterName: user }, { $set: { lastLocation: newLocation } }).then(data => console.log(data));
             //find locations, return chunk
             db.Location.findOne({ locationName: newLocation }).then(currentLocationData => {
 
                 resolveLocationChunk(currentLocationData).then(chunk => {
                     io.to(socket.id).emit('locationChunk', chunk);
                     location = chunk;
-                    console.log(chunk.current.dayDescription);
                 });
 
             })
         });
 
         socket.on('whisper', message => {
-            console.log(message);
             let playerTo
 
             // How this works:
@@ -169,8 +181,8 @@ module.exports = function (io) {
 
         });
 
-        socket.on('speak', () => {
-
+        socket.on('speak', ({ message, user, location }) => {
+            io.to(location).emit('speak', `${user}: ${message}`);
         });
 
         socket.on('help', () => {

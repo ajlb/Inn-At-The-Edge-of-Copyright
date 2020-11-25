@@ -86,7 +86,8 @@ function InputPanel({
             // fyi, checking if the message begins with someone's name is handled on the server side
             socket.emit('whisper', message)
         } else if (findIn(input, actionCalls.speak)) {
-            socket.emit('speak', input)
+            const message = takeTheseOffThat(actionCalls.speak, input);
+            socket.emit('speak', {message, user, location: location.current.locationName});
         } else if (findIn(input, actionCalls.help)) {
             socket.emit('help', input)
         } else if (findIn(input, actionCalls.look)) {

@@ -22,23 +22,32 @@ function ChatPanel({
         // chat history is mapped down below
     });
 
+    //failed user command messages
     socket.off('failure').on('failure', (message) => {
         let type = 'displayed-error';
         setChatHistory(prevState => [...prevState, { type, text: message }]);
     });
 
-
+    //view other people's movement
     socket.off('move').on('move', (message) => {
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: message }]);
     });
 
+    //receive your own move
     socket.off('yourMove').on('yourMove', (direction) => {
         let newDescription = day ? location[direction].dayDescription : location[direction].nightDescription;
-        let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: " " }]);
-        setChatHistory(prevState => [...prevState, { type, text: `You enter: ${location[direction].locationName}` }]);
-        setChatHistory(prevState => [...prevState, { type, text: newDescription }]);
+        setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You enter: ${location[direction].locationName}` }]);
+        setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
+        let exits = [];
+        for (const param in location[direction].exits[0]) {
+            if (param !== "current") {
+                exits.push(param);
+            }
+        }
+        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
+
+
     });
 
     // This is where most socket client listeners are going to be!
@@ -46,6 +55,12 @@ function ChatPanel({
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: `Whisper to ${userTo}: ${message}` }]);
         // chat history is mapped down below
+    });
+
+    //room speech
+    socket.off('speak').on('speak', (message) => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
     });
 
     socket.off('error').on('error', ({ status, message }) => {
