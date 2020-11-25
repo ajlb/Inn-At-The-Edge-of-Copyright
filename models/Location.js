@@ -15,17 +15,18 @@ let locationSchema = new Schema({
     type: String
   },
   exits: {
-    type: Array
+    type: Object
   },
   region: {
     type: String
   },
   NPCs: {
-    type: String
+    type: Array
   },
   inventory: [
     {
-      type: Schema.Types.ObjectId,
+      // is this correct
+      type: Object,
       ref: "Inventory"
     }
   ],
