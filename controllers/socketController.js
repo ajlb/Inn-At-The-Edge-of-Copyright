@@ -173,6 +173,10 @@ module.exports = function (io) {
             io.to(socket.id).emit('failure', message);
         });
 
+        socket.on('green', message => {
+            io.to(socket.id).emit('green', message);
+        });
+
         socket.on('stop juggle', () => {
 
         });
@@ -194,8 +198,25 @@ module.exports = function (io) {
             // db the user's location and emit necessary info
         });
 
-        socket.on('get', () => {
-            // idk what the get function is doing tbh 
+        socket.on('get', ({ target, user, location }) => {
+            console.log(`get ${target} for ${user} from ${location}`);
+            db.Location.updateOne({ locationName: location }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
+                db.Location.updateOne({ locationName: location }, { $unset: { "inventory.$[item]": "" } }, {
+                    arrayFilters: [{ "item.quantity": { $lt: 1 } }]
+                }).then(returnData => {
+                    console.log(returnData);
+                })
+            });
+
+            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
+                if (returnData.nModified === 0) {
+                    db.Player.updateOne({ characterName: user }, { $push: { inventory: { name: target, quantity: 1, equipped: 0 } } }).then(returnData => {
+                        console.log(returnData);
+                    })
+                }
+                io.to(location).emit('get', { target, actor:user });
+
+            })
         });
 
         socket.on('drop', () => {

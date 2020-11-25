@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import socket from "../../clientUtilities/socket";
+import {insertArticleSingleValue} from "../../clientUtilities/parsers";
+
 
 //note if user is scrolled to bottom of div
 let scrolledToBottom = true;
@@ -25,6 +27,13 @@ function ChatPanel({
     //failed user command messages
     socket.off('failure').on('failure', (message) => {
         let type = 'displayed-error';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+
+    //system message to user
+    socket.off('green').on('green', (message) => {
+        let type = 'displayed-green';
         setChatHistory(prevState => [...prevState, { type, text: message }]);
     });
 
@@ -61,6 +70,16 @@ function ChatPanel({
     socket.off('speak').on('speak', (message) => {
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+    //a get action
+    socket.off('get').on('get', ({target, actor}) => {
+        let type = 'displayed-stat';
+        if (actor === user.characterName){
+        setChatHistory(prevState => [...prevState, { type, text: `You pick up ${insertArticleSingleValue(target)}.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} picks up ${insertArticleSingleValue(target)}.` }]);
+        }
     });
 
     socket.off('error').on('error', ({ status, message }) => {

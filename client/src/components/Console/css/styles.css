@@ -146,11 +146,16 @@ figure {
     color: rgb(245, 252, 181);
 }
 
-.displayed-stat, .displayed-intro, .displayed-error, .displayed-indent {
+.displayed-stat, .displayed-intro, .displayed-error, .displayed-indent, .displayed-green {
     margin-top: 1px;
     margin-bottom: 1px;
     font-size: 13px;
     margin-right: 15px;
+}
+
+.displayed-green {
+    margin-left: 20px;
+    color: green;
 }
 
 .displayed-error {

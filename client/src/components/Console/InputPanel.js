@@ -5,6 +5,7 @@ import {
 import findIn, {takeTheseOffThat} from "../../clientUtilities/finders";
 import socket from "../../clientUtilities/socket";
 import {getItem, dropItem} from "./js/getDrop";
+import {insertArticleSingleValue} from "../../clientUtilities/parsers";
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -95,8 +96,16 @@ function InputPanel({
             socket.emit('look', input)
         } else if (findIn(input, actionCalls.get)) {
             const target = takeTheseOffThat(actionCalls.get, input);
-            console.log(location);
-            socket.emit('get', input)
+            const result = getItem(target, location, user);
+            if (result === true){
+                socket.emit('get', {target, user: user.characterName, location: location.current.locationName});
+            } else if (result === false) {
+                socket.emit('green', `There doesn't seem to ${insertArticleSingleValue(target)} to get here.`);
+            } else if (typeof result === "string"){
+                socket.emit('get', {target: result, user: user.characterName, location: location.current.locationName});
+            } else if (typeof result === "object"){
+                socket.emit('green', `I'm not sure which you want to get. I think you might mean one of these - ${result.join(", ")}.`);
+            }
         } else if (findIn(input, actionCalls.drop)) {
             socket.emit('drop', input)
         } else if (findIn(input, actionCalls.wear)) {
