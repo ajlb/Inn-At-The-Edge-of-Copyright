@@ -7,6 +7,9 @@ import socket from "../../clientUtilities/socket";
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
+//constant variables for parsing
+const DIRECTIONS = { n: "north", e: "east", s: "south", w: "west" };
+
 
 function InputPanel({
     // Props being handed to the input by the console component
@@ -18,6 +21,7 @@ function InputPanel({
     inputHistory,
     setInputHistory,
     actionCalls,
+    location,
     user
 }) {
 
@@ -43,9 +47,22 @@ function InputPanel({
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (findIn(input, actionCalls.move)) {
-            let message = takeTheseOffThat(actionCalls.move, input);
-            console.log(message);
-            socket.emit('move', {message, user})
+            let direction = takeTheseOffThat(actionCalls.move, input);
+            for (const param in DIRECTIONS) {
+                if (direction.toLowerCase() === param) {
+                    direction = DIRECTIONS[param];
+                }
+            }
+            let moved = false;
+            for (const param in location){
+                if (param === direction){
+                    socket.emit('move', {previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user});
+                    moved = true;
+                } 
+            }
+            if (moved === false){
+                socket.emit('failure', `There is no exit ${direction}`);
+            }
         } else if (input.toLowerCase() === "stop juggling") {
             socket.emit('stop juggle', input)
         } else if (findIn(input, actionCalls.inventory)) {

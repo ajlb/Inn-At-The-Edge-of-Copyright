@@ -7,7 +7,10 @@ let scrolledToBottom = true;
 function ChatPanel({
     // props being handed to the user via the console component
     chatHistory,
-    setChatHistory
+    setChatHistory,
+    location,
+    user,
+    day
 }) {
     //prepare variable to hold div reference for scrolling
     let anchorDiv;
@@ -17,6 +20,25 @@ function ChatPanel({
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: `Whisper from ${userFrom}: ${message}` }]);
         // chat history is mapped down below
+    });
+
+    socket.off('failure').on('failure', (message) => {
+        let type = 'displayed-error';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+
+    socket.off('move').on('move', (message) => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+    socket.off('yourMove').on('yourMove', (direction) => {
+        let newDescription = day ? location[direction].dayDescription : location[direction].nightDescription;
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: " " }]);
+        setChatHistory(prevState => [...prevState, { type, text: `You enter: ${location[direction].locationName}` }]);
+        setChatHistory(prevState => [...prevState, { type, text: newDescription }]);
     });
 
     // This is where most socket client listeners are going to be!

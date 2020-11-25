@@ -6,9 +6,9 @@ const mongoose = require("mongoose");
 const getLocationChunk = async (data) => {
     let locationObject = {};
     locationObject.current = data;
-    for (const exitObject of locationObject.current.exits) {
-        const key = Object.keys(exitObject)[0];
-        locationObject[key] = await db.Location.findOne({ locationName: exitObject[key] });
+    for (const exit in data.exits[0]) {
+        const thisLocation = data.exits[0][exit];
+        locationObject[exit] = await db.Location.findOne({ locationName: thisLocation });
     }
     return locationObject;
 }
@@ -73,6 +73,7 @@ module.exports = function (io) {
 
                             io.to(usernameLowerCase).emit('currentLocation', currentLocationData);
                             resolveLocationChunk(currentLocationData).then(chunk => {
+                                console.log(chunk);
                                 io.to(usernameLowerCase).emit('locationChunk', chunk);
                                 location = chunk;
                                 console.log(chunk.current.dayDescription);
@@ -96,8 +97,8 @@ module.exports = function (io) {
         });//end socket.on log in
 
         socket.on('logout', message => {
-            for (const user in users){
-                if (users[user].socketID === socket.id){
+            for (const user in users) {
+                if (users[user].socketID === socket.id) {
                     const playersIndex = players.indexOf(user.username);
                     players = players.splice(playersIndex, 1);
                     delete users[user];
@@ -106,23 +107,28 @@ module.exports = function (io) {
                 }
             }
         })
-        socket.on('move', ({ message, user }) => {
-            console.log("move recieved");
-            const currentExits = [];
-            for (const exitObj of location.current.exits){
-                const key = Object.keys(exitObj)[0];
-                if (key.startsWith("exit")){
-                    currentExits.push(key.slice(4));
-                } else {
-                    currentExits.push(key);
-                }
+        socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
+            
+
+            console.log(`move recieved, direction ${direction}`);
+            if (["north", "east", "south", "west"].indexOf(direction) !== -1){
+                io.to(previousLocation).emit('move', `${user} left to the ${direction}.`)
+            } else {
+                io.to(previousLocation).emit('move', `${user} left to by ${direction}.`)
             }
-            console.log(currentExits);
-            console.log(`user leaves to the`);
-            // get users current location
-            // get northern route from users location
-            // get the location of the route
-            // send that returned location back to the user
+
+            io.to(socket.id).emit('yourMove', direction);
+            
+            //find locations, return chunk
+            db.Location.findOne({ locationName: newLocation }).then(currentLocationData => {
+
+                resolveLocationChunk(currentLocationData).then(chunk => {
+                    io.to(socket.id).emit('locationChunk', chunk);
+                    location = chunk;
+                    console.log(chunk.current.dayDescription);
+                });
+
+            })
         });
 
         socket.on('whisper', message => {
@@ -150,6 +156,10 @@ module.exports = function (io) {
                 io.to(playerTo).emit('whisperTo', { message, userFrom: playerTo });
             }
         })
+
+        socket.on('failure', message => {
+            io.to(socket.id).emit('failure', message);
+        });
 
         socket.on('stop juggle', () => {
 

@@ -8,8 +8,6 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
 
-let user = {};
-let location = {};
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -22,15 +20,21 @@ function Console() {
     theme: "",
     currentMessage: ""
   }
+  const [location, setLocation] = useState({});
+  const [player, setPlayer] = useState({});
+
+
 
 
   // Socket log in message
   socket.off('log in').on('log in', message => {
     console.log("got a log in message from socket");
     let type = 'displayed-stat';
-    user.characterName = message;
+    setPlayer({
+      ...player,
+      characterName: message
+    })
     setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
-    // chat history is mapped down below
   });
 
   // Socket failed log in message
@@ -38,16 +42,14 @@ function Console() {
     console.log("got a log in failure message from socket");
     let type = 'displayed-error';
     setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
-    // chat history is mapped down below
   });
 
   // Socket log out message
   socket.off('logout').on('logout', message => {
     let type = 'displayed-stat';
-    setChatHistory(prevState => [...prevState, { type, text: message}]);
-    user = {};
-    location = {};
-    // chat history is mapped down below
+    setChatHistory(prevState => [...prevState, { type, text: message }]);
+    setPlayer({});
+    setLocation({});
   });
 
   // Socket initial userData
@@ -55,20 +57,23 @@ function Console() {
     console.log("recieved Player Data");
     console.log(message);
     if (!(message === null)) {
-      user = message;
+      setPlayer(message);
     }
   });
 
   // Socket location chunk
   socket.off('locationChunk').on('locationChunk', message => {
     console.log("recieved locationChunk");
+    console.log(message);
     if (!(message === null)) {
-      location = message;
-      console.log(location);
+      setLocation(message);
     }
   });
 
+
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
+
+  const [day, setDay] = useState(true);
 
   const [chatHistory, setChatHistory] = useState([]);
 
@@ -148,7 +153,9 @@ function Console() {
                   <ChatPanel
                     chatHistory={chatHistory}
                     setChatHistory={setChatHistory}
-                    user={user}
+                    user={player}
+                    location={location}
+                    day={day}
                   />
                   <InputPanel
                     actionCalls={actionCalls}
@@ -159,7 +166,8 @@ function Console() {
                     setInput={setInput}
                     inputHistory={inputHistory}
                     setInputHistory={setInputHistory}
-                    user={!(user === undefined) ? user.characterName : undefined}
+                    location={location}
+                    user={!(player === undefined) ? player.characterName : undefined}
                   />
                 </div>
               </div>
