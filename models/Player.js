@@ -17,7 +17,7 @@ const playerSchema = new Schema({
   },
   email: {
     type: String,
-    unique: true,
+    // unique: true,
     match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
   },
   isLiving: {
@@ -28,49 +28,49 @@ const playerSchema = new Schema({
     type: Boolean,
     default: false
   },
-  stats: 
-    {
-      WIS: {
-        type: Number,
-        default: 0
-      },
-      DEX: {
-        type: Number,
-        default: 0
-      },
-      STR: {
-        type: Number,
-        default: 0
-      },
-      HP: {
-        type: Number,
-        default: 0
-      },
-      maxWIS: {
-        type: Number,
-        default: 0
-      },
-      maxDEX: {
-        type: Number,
-        default: 0
-      },
-      maxSTR: {
-        type: Number,
-        default: 0
-      },
-      maxHP: {
-        type: Number,
-        default: 0
-      },
-      XP: {
-        type: Number,
-        default: 0
-      },
-      level: {
-        type: Number,
-        default: 1
-      }
+  stats:
+  {
+    WIS: {
+      type: Number,
+      default: 0
     },
+    DEX: {
+      type: Number,
+      default: 0
+    },
+    STR: {
+      type: Number,
+      default: 0
+    },
+    HP: {
+      type: Number,
+      default: 0
+    },
+    maxWIS: {
+      type: Number,
+      default: 0
+    },
+    maxDEX: {
+      type: Number,
+      default: 0
+    },
+    maxSTR: {
+      type: Number,
+      default: 0
+    },
+    maxHP: {
+      type: Number,
+      default: 0
+    },
+    XP: {
+      type: Number,
+      default: 0
+    },
+    level: {
+      type: Number,
+      default: 1
+    }
+  },
   race: {
     type: String,
     default: "Human"
