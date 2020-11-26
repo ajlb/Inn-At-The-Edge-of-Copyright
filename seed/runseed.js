@@ -1,6 +1,6 @@
 const EJS = require('mongodb-extended-json');
 const mongoose = require('mongoose');
-const db = require('../../models');
+const db = require('../models');
 
 //connect to mongoDB
 mongoose.connect("mongodb://localhost:27017/innattheedge", {
@@ -16,34 +16,43 @@ connection.once("open", function () {
     console.log("\nConnected to mongoose\n\n--------------begin log--------------\n");
 });
 
-const parsedPlayerObject = EJS.deserialize(require('./seeds/playersSeed'));
+function replaceOne(Model, seedObj) {
+    Model.replaceOne
+        ({ _id: seedObj._id }, seedObj, { upsert: true, runValidators: true }, (err, returnData) => {
+            if (err) throw err;
+        })
+}
 
-db.Player.insertMany(parsedPlayerObject);
+const parsedPlayerArray = EJS.deserialize(require('./seeds/playersSeed'));
 
-const parsedActionsObject = EJS.deserialize(require('./seeds/actionsSeed'));
+parsedPlayerArray.forEach(playerObj => {
+    replaceOne(db.Player, playerObj);
+})
 
-db.Action.insertMany(parsedActionsObject);
+const parsedActionsArray = EJS.deserialize(require('./seeds/actionsSeed'));
+
+parsedActionsArray.forEach(actionObj => replaceOne(db.Action, actionObj));
 
 const parsedLocationsArray = EJS.deserialize(require('./seeds/locationsSeed'));
 
-db.Location.insertMany(parsedLocationsArray);
+parsedLocationsArray.forEach(locationObj => replaceOne(db.Location, locationObj));
 
 const parsedItemArray = EJS.deserialize(require('./seeds/itemsSeed'));
 
-db.Item.insertMany(parsedItemArray);
+parsedItemArray.forEach(itemObj => replaceOne(db.Item, itemObj));
 
 const parsedProfessionArray = EJS.deserialize(require('./seeds/professionsSeed'));
 
-db.Profession.insertMany(parsedProfessionArray);
+parsedProfessionArray.forEach(professionObj => replaceOne(db.Profession, professionObj));
 
 const parsedQuestArray = EJS.deserialize(require('./seeds/questsSeed'));
 
-db.Quest.insertMany(parsedQuestArray);
+parsedQuestArray.forEach(questObj => replaceOne(db.Quest, questObj));
 
 const parsedRaceArray = EJS.deserialize(require('./seeds/racesSeed'));
 
-db.Race.insertMany(parsedRaceArray);
+parsedRaceArray.forEach(raceObj => replaceOne(db.Race, raceObj));
 
 const parsedWeatherArray = EJS.deserialize(require('./seeds/weatherSeed'));
 
-db.Weather.insertMany(parsedWeatherArray);
+parsedWeatherArray.forEach(weatherObj => replaceOne(db.Weather, weatherObj));
