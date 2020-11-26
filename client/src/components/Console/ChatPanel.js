@@ -92,6 +92,17 @@ function ChatPanel({
         }
     });
 
+    //a give action
+    socket.off('give').on('give', ({ target, item, actor }) => {
+        console.log("give received");
+        let type = 'displayed-stat';
+        if (actor === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `You give ${insertArticleSingleValue(item)} to ${target}.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} gives ${insertArticleSingleValue(item)} to ${target}.` }]);
+        }
+    });
+
     socket.off('error').on('error', ({ status, message }) => {
         let type = 'error-message';
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);

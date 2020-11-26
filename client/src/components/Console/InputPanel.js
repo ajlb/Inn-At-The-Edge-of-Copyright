@@ -6,6 +6,7 @@ import findIn, {takeTheseOffThat} from "../../clientUtilities/finders";
 import socket from "../../clientUtilities/socket";
 import {getItem, dropItem} from "./js/getDrop";
 import {insertArticleSingleValue} from "../../clientUtilities/parsers";
+import { giveItem } from './js/give';
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -135,7 +136,19 @@ function InputPanel({
         } else if (findIn(input, actionCalls.position)) {
             socket.emit('position', input)
         } else if (findIn(input, actionCalls.give)) {
-            socket.emit('give', input)
+            input = takeTheseOffThat(actionCalls.give, input);
+            let item = input.split(" to ")[0];
+            let target = takeTheseOffThat([item + " to "], input);
+            const result = giveItem(item, user);
+            if (result === true){
+                socket.emit('give', {target, item, user: user.characterName});
+            } else if (result === false){
+                socket.emit('green', `You don't seem to have ${insertArticleSingleValue(item)} to give.`);
+            } else if (typeof result === "string"){
+                socket.emit('give', {target, item:result, user: user.characterName});
+            } else if (typeof result === "object"){
+                socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
+            }
         } else if (findIn(input, actionCalls.examine)) {
             socket.emit('examine', input)
         } else if (findIn(input, ["logout", "log out", "log off"])) {

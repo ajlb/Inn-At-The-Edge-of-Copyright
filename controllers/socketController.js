@@ -125,7 +125,7 @@ module.exports = function (io) {
             io.to(socket.id).emit('yourMove', direction);
 
             if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
-                const switchDirections = {north: "south", east: "west", south: "north", west: "east"};
+                const switchDirections = { north: "south", east: "west", south: "north", west: "east" };
                 direction = switchDirections[direction];
                 io.to(newLocation).emit('move', `${user} arrived from the ${direction}.`)
             } else {
@@ -282,6 +282,40 @@ module.exports = function (io) {
 
         socket.on('juggle', () => {
 
+        });
+
+        socket.on('give', ({ target, item, user }) => {
+            console.log(`give ${target} from ${user} to ${target}.`);
+
+            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+                console.log('ran scrub player');
+                db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }).then(returnData => {
+                    console.log(returnData);
+                    console.log("I should be sending a playerInventoryUpdate");
+                    io.to(socket.id).emit('invUpP', returnData.inventory);
+                });
+            });
+
+            db.Player.updateOne({ characterName: target }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+                console.log("This is the target player data:");
+                console.log(returnData);
+                if (returnData.nModified === 0) {
+                    console.log(`gave an item to ${target} that they didn't have`);
+                    db.Player.findOneAndUpdate({ characterName: target }, { $push: { inventory: { name: item, quantity: 1 } } }).then(returnData => {
+                        console.log(returnData);
+                        console.log("I should be sending a playerInventoryUpdate");
+                        io.to(target).emit('invUpP', returnData.inventory);
+
+                    });
+                } else {
+                    db.Location.findOne({ locationName: location }).then(returnData => {
+                        console.log("I should be sending a locationInventoryUpdate");
+                        io.to(target).emit('invUpP', returnData.inventory);
+                    })
+                }
+                io.to(location).emit('give', { target, item, actor: user });
+
+            });
         });
 
         socket.on('stats', () => {
