@@ -117,7 +117,6 @@ function InputPanel({
                 socket.emit('drop', {target: result, user: user.characterName, location: location.current.locationName});
             } else if (typeof result === "object"){
                 socket.emit('green', `I'm not sure which you want to drop. I think you might mean one of these - ${result.join(", ")}.`);
-
             }
         } else if (findIn(input, actionCalls.wear)) {
             socket.emit('wear', input)

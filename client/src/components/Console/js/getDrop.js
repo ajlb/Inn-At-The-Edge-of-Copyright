@@ -1,10 +1,13 @@
 function getItem(inputString, locationData){
+    console.log(locationData);
     let potentialArray = [];
     for (const item of locationData.current.inventory){
         if ((item.name === inputString) && (item.quantity > 0)){
             return true;
         } else if ((item.name.endsWith(inputString)) || (item.name.startsWith(inputString))){
-            potentialArray.push(item.name);
+            if (item.quantity > 0){
+                potentialArray.push(item.name);
+            }
         }
     }
     if (potentialArray.length > 1){
@@ -17,12 +20,15 @@ function getItem(inputString, locationData){
 }
 
 function dropItem(inputString, playerData){
+    console.log(playerData);
     let potentialArray = [];
     for (const item of playerData.inventory){
         if ((item.name === inputString) && (item.quantity > 0)){
             return true;
         } else if ((item.name.endsWith(inputString)) || (item.name.startsWith(inputString))){
-            potentialArray.push(item.name);
+            if (item.quantity > 0){
+                potentialArray.push(item.name);
+            }
         }
     }
     if (potentialArray.length > 1){

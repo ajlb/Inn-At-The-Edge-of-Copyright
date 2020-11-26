@@ -125,6 +125,8 @@ module.exports = function (io) {
             io.to(socket.id).emit('yourMove', direction);
 
             if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
+                const switchDirections = {north: "south", east: "west", south: "north", west: "east"};
+                direction = switchDirections[direction];
                 io.to(newLocation).emit('move', `${user} arrived from the ${direction}.`)
             } else {
                 io.to(newLocation).emit('move', `${user} arrived by ${direction}.`)
@@ -202,41 +204,61 @@ module.exports = function (io) {
             console.log(`get ${target} for ${user} from ${location}`);
             db.Location.updateOne({ locationName: location }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
                 console.log('ran scrub Location');
-                db.Location.updateOne({ locationName: location }, { $pull: { "inventory": {"quantity": {$lt: 1} } } }).then(returnData => {
-                    console.log(returnData);
+                db.Location.findOneAndUpdate({ locationName: location }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }).then(returnData => {
+                    console.log("I should be sending a locationInventoryUpdate");
+                    io.to(location).emit('invUpL', returnData.inventory);
+
                 });
             });
 
             db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
                 if (returnData.nModified === 0) {
                     console.log("got an item that didn't exist in inventory");
-                    db.Player.updateOne({ characterName: user }, { $push: { inventory: { name: target, quantity: 1, equipped: 0 } } }).then(returnData => {
-                        console.log(returnData);
+                    db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { name: target, quantity: 1, equipped: 0 } } }).then(returnData => {
+                        console.log("I should be sending a playerInventoryUpdate");
+                        io.to(socket.id).emit('invUpP', returnData.inventory);
                     });
+                } else {
+                    db.Player.findOne({ characterName: user }).then(returnData => {
+                        console.log("I should be sending a playerInventoryUpdate");
+                        io.to(socket.id).emit('invUpP', returnData.inventory);
+                    })
                 }
-                io.to(location).emit('get', { target, actor:user });
+                io.to(location).emit('get', { target, actor: user });
 
             })
         });
 
-        socket.on('drop', ({target, user, location}) => {
+        socket.on('drop', ({ target, user, location }) => {
             console.log(`drop ${target} from ${user} to ${location}.`);
-            
+
             db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
                 console.log('ran scrub player');
-                db.Player.updateOne({ characterName: user }, { $pull: { "inventory": {"quantity": {$lt: 1} } } }).then(returnData => {
-                    console.log(returnData)
+                db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }).then(returnData => {
+                    console.log(returnData);
+                    console.log("I should be sending a playerInventoryUpdate");
+                    io.to(socket.id).emit('invUpP', returnData.inventory);
                 });
             });
 
             db.Location.updateOne({ locationName: location }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
+                console.log("This is the location data:");
+                console.log(returnData);
                 if (returnData.nModified === 0) {
                     console.log("dropped an item that didn't exist in location");
-                    db.Location.updateOne({ locationName: location }, { $push: { inventory: { name: target, quantity: 1} } }).then(returnData=> {
+                    db.Location.findOneAndUpdate({ locationName: location }, { $push: { inventory: { name: target, quantity: 1 } } }).then(returnData => {
                         console.log(returnData);
+                        console.log("I should be sending a locationInventoryUpdate");
+                        io.to(location).emit('invUpL', returnData.inventory);
+
                     });
+                } else {
+                    db.Location.findOne({ locationName: location }).then(returnData => {
+                        console.log("I should be sending a locationInventoryUpdate");
+                        io.to(location).emit('invUpL', returnData.inventory);
+                    })
                 }
-                io.to(location).emit('drop', { target, actor:user });
+                io.to(location).emit('drop', { target, actor: user });
 
             })
 

@@ -65,21 +65,48 @@ function Console() {
   socket.off('locationChunk').on('locationChunk', message => {
     console.log("recieved locationChunk");
     console.log(message);
-    if (location.current === undefined){
+    if (location.current === undefined) {
       let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
-      setChatHistory(prevState => [...prevState, { type:'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
-      setChatHistory(prevState => [...prevState, { type:'displayed-stat', text: newDescription }]);
+      setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
       let exits = [];
-      for (const param in message){
-          if (param !== "current"){
-              exits.push(param);
-          }
+      for (const param in message) {
+        if (param !== "current") {
+          exits.push(param);
+        }
       }
-      setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
+      setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
 
     }
     if (!(message === null)) {
       setLocation(message);
+    }
+  });
+
+  // Socket player inventory update
+  socket.off('invUpP').on('invUpP', message => {
+    console.log("recieved Player Inventory Update");
+    console.log(message);
+    if (!(message === null)) {
+      setPlayer({
+        ...player,
+        inventory: message
+      });
+    }
+  });
+
+  // Socket location inventory update
+  socket.off('invUpL').on('invUpL', message => {
+    console.log("recieved Location Inventory Update");
+    console.log(message);
+    if (!(message === null)) {
+      setLocation({
+        ...location,
+        current: {
+          ...location.current,
+          inventory: message
+        }
+      });
     }
   });
 
