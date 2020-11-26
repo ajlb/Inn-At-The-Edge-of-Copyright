@@ -7,6 +7,7 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
+import LoginButton from "../auth/LoginButton";
 
 let user = {};
 let location = {};
@@ -173,6 +174,7 @@ function Console() {
       {(minState === "max") &&
         <footer id="about-link"><a style={{ color: "white" }} href="/about">Meet our team!</a></footer>
       }
+      <LoginButton />
     </div>
   );
 }
