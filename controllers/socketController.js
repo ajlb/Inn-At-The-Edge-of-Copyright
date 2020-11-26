@@ -284,7 +284,7 @@ module.exports = function (io) {
 
         });
 
-        socket.on('give', ({ target, item, user }) => {
+        socket.on('give', ({ target, item, user, location }) => {
             console.log(`give ${target} from ${user} to ${target}.`);
 
             db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
@@ -304,13 +304,13 @@ module.exports = function (io) {
                     db.Player.findOneAndUpdate({ characterName: target }, { $push: { inventory: { name: item, quantity: 1 } } }, {new: true}).then(returnData => {
                         console.log(returnData);
                         console.log("I should be sending a playerInventoryUpdate");
-                        io.to(target).emit('invUpP', returnData.inventory);
+                        io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
 
                     });
                 } else {
-                    db.Location.findOne({ locationName: location }).then(returnData => {
-                        console.log("I should be sending a locationInventoryUpdate");
-                        io.to(target).emit('invUpP', returnData.inventory);
+                    db.Player.findOne({ characterName: target }).then(returnData => {
+                        console.log("I should be sending a playerInventoryUpdate");
+                        io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
                     })
                 }
                 io.to(location).emit('give', { target, item, actor: user });

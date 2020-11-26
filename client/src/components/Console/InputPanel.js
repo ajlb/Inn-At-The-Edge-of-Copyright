@@ -151,10 +151,11 @@ function InputPanel({
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
             }
         } else if (findIn(input, actionCalls.give)) {
-            input = takeTheseOffThat(actionCalls.give, input);
-            let item = input.split(" to ")[0];
-            let target = takeTheseOffThat([item + " to "], input);
+            let inputString = takeTheseOffThat(actionCalls.give, input);
+            let item = inputString.split(" to ")[0];
+            let target = takeTheseOffThat([item + " to "], inputString);
             const result = giveItem(item, user);
+<<<<<<< Updated upstream
             if (result === true) {
                 socket.emit('give', { target, item, user: user.characterName });
             } else if (result === false) {
@@ -162,6 +163,15 @@ function InputPanel({
             } else if (typeof result === "string") {
                 socket.emit('give', { target, item: result, user: user.characterName });
             } else if (typeof result === "object") {
+=======
+            if (result === true){
+                socket.emit('give', {target, item, user: user.characterName, location:location.current.locationName});
+            } else if (result === false){
+                socket.emit('green', `You don't seem to have ${insertArticleSingleValue(item)} to give.`);
+            } else if (typeof result === "string"){
+                socket.emit('give', {target, item:result, user: user.characterName, location:location.current.locationName});
+            } else if (typeof result === "object"){
+>>>>>>> Stashed changes
                 socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.examine)) {
