@@ -7,6 +7,7 @@ import socket from "../../clientUtilities/socket";
 import { getItem, dropItem } from "./js/getDrop";
 import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { giveItem } from './js/give';
+import { juggle, stopJuggling } from "./js/juggle";
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -70,7 +71,7 @@ function InputPanel({
                 socket.emit('failure', `There is no exit ${direction}`);
             }
         } else if (input.toLowerCase() === "stop juggling") {
-            socket.emit('stop juggle', input)
+            stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.inventory)) {
             socket.emit('inventory', input)
         } else if (findIn(input, actionCalls.whisper)) {
@@ -129,7 +130,7 @@ function InputPanel({
         } else if (findIn(input, actionCalls.emote)) {
             socket.emit('emote', input)
         } else if (findIn(input, actionCalls.juggle)) {
-            socket.emit('juggle', input)
+            juggle(input, user, location.current.locationName);
         } else if (findIn(input, actionCalls.stats)) {
             socket.emit('stats', input)
         } else if (findIn(input, actionCalls.sleep)) {
@@ -155,15 +156,6 @@ function InputPanel({
             let item = inputString.split(" to ")[0];
             let target = takeTheseOffThat([item + " to "], inputString);
             const result = giveItem(item, user);
-<<<<<<< Updated upstream
-            if (result === true) {
-                socket.emit('give', { target, item, user: user.characterName });
-            } else if (result === false) {
-                socket.emit('green', `You don't seem to have ${insertArticleSingleValue(item)} to give.`);
-            } else if (typeof result === "string") {
-                socket.emit('give', { target, item: result, user: user.characterName });
-            } else if (typeof result === "object") {
-=======
             if (result === true){
                 socket.emit('give', {target, item, user: user.characterName, location:location.current.locationName});
             } else if (result === false){
@@ -171,7 +163,6 @@ function InputPanel({
             } else if (typeof result === "string"){
                 socket.emit('give', {target, item:result, user: user.characterName, location:location.current.locationName});
             } else if (typeof result === "object"){
->>>>>>> Stashed changes
                 socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.examine)) {
