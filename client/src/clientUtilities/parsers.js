@@ -1,11 +1,11 @@
-import {doesThisStartWithThose} from "./finders";
+import {doesThisStartWithOneOfThese} from "./finders";
 import pluralize from "pluralize";
 const MULTIPLES = ["set", "pair", "box", "bag"];
 const VOWELS = ["a", "e", "i", "o", "u"];
 
 //only pluralize things that don't start with multiples words
 function pluralizeAppropriateWords(itemName, itemQuantity) {
-    if (doesThisStartWithThose(itemName, MULTIPLES)) {
+    if (doesThisStartWithOneOfThese(itemName, MULTIPLES)) {
         return itemName;
     } else {
         return pluralize(itemName, itemQuantity);
@@ -14,7 +14,7 @@ function pluralizeAppropriateWords(itemName, itemQuantity) {
 
 //put "a" before consonants and y, put "an" before vowels
 function insertArticleSingleValue(value) {
-    if (doesThisStartWithThose(value, VOWELS)) {
+    if (doesThisStartWithOneOfThese(value, VOWELS)) {
         return `an ${value}`;
     } else {
         return `a ${value}`;

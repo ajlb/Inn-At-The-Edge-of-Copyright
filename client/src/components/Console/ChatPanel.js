@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import socket from "../../clientUtilities/socket";
+import { insertArticleSingleValue } from "../../clientUtilities/parsers";
+
 
 //note if user is scrolled to bottom of div
 let scrolledToBottom = true;
@@ -7,7 +9,10 @@ let scrolledToBottom = true;
 function ChatPanel({
     // props being handed to the user via the console component
     chatHistory,
-    setChatHistory
+    setChatHistory,
+    location,
+    user,
+    day
 }) {
     //prepare variable to hold div reference for scrolling
     let anchorDiv;
@@ -19,11 +24,83 @@ function ChatPanel({
         // chat history is mapped down below
     });
 
+    //failed user command messages
+    socket.off('failure').on('failure', (message) => {
+        let type = 'displayed-error';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+
+    //system message to user
+    socket.off('green').on('green', (message) => {
+        let type = 'displayed-green';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+    //view other people's movement
+    socket.off('move').on('move', (message) => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+    //receive your own move
+    socket.off('yourMove').on('yourMove', (direction) => {
+        let newDescription = day ? location[direction].dayDescription : location[direction].nightDescription;
+        setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You enter: ${location[direction].locationName}` }]);
+        setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
+        let exits = [];
+        for (const param in location[direction].exits[0]) {
+            if (param !== "current") {
+                exits.push(param);
+            }
+        }
+        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
+
+
+    });
+
     // This is where most socket client listeners are going to be!
     socket.off('whisperFrom').on('whisperFrom', ({ message, userTo }) => {
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: `Whisper to ${userTo}: ${message}` }]);
         // chat history is mapped down below
+    });
+
+    //room speech
+    socket.off('speak').on('speak', (message) => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+    //a get action
+    socket.off('get').on('get', ({ target, actor }) => {
+        let type = 'displayed-stat';
+        if (actor === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `You pick up ${insertArticleSingleValue(target)}.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} picks up ${insertArticleSingleValue(target)}.` }]);
+        }
+    });
+
+    //a drop action
+    socket.off('drop').on('drop', ({ target, actor }) => {
+        let type = 'displayed-stat';
+        if (actor === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `You drop ${insertArticleSingleValue(target)}.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} drops ${insertArticleSingleValue(target)}.` }]);
+        }
+    });
+
+    //a give action
+    socket.off('give').on('give', ({ target, item, actor }) => {
+        console.log("give received");
+        let type = 'displayed-stat';
+        if (actor === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `You give ${insertArticleSingleValue(item)} to ${target}.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} gives ${insertArticleSingleValue(item)} to ${target}.` }]);
+        }
     });
 
     socket.off('error').on('error', ({ status, message }) => {
