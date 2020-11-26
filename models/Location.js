@@ -15,7 +15,7 @@ let locationSchema = new Schema({
     type: String
   },
   exits: {
-    type: Array
+    type: Object
   },
   region: {
     type: String
@@ -23,9 +23,13 @@ let locationSchema = new Schema({
   NPCs: {
     type: Array
   },
-  inventory: {
-    type: Array
-  },
+  inventory: [
+    {
+      // is this correct
+      type: Object,
+      ref: "Inventory"
+    }
+  ],
   indoorOutdoor: {
     type: String
   }
