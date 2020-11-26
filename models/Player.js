@@ -6,7 +6,6 @@ const playerSchema = new Schema({
     type: String,
     unique: true,
     trim: true,
-    unique: true,
     required: "Character name is Required"
   },
   password: {
@@ -21,6 +20,10 @@ const playerSchema = new Schema({
     match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
   },
   isLiving: {
+    type: Boolean,
+    default: true
+  },
+  isAwake: {
     type: Boolean,
     default: true
   },
