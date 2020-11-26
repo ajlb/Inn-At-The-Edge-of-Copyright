@@ -101,10 +101,10 @@ function About() {
                 </section>
 
                 <section className="card">
-                    <img src={Kira} alt="headshot of Kira Lowry" className="card-img-left" />
+                    <img src={Kira} alt="headshot of Kira Lowrey" className="card-img-left" />
                     <div className="card-body">
                         <div className="card-text-elements">
-                            <h4 className="card-title">Kira "KIL" Lowry</h4>
+                            <h4 className="card-title">Kira "Bismuth" Lowrey</h4>
                             <p className="card-text">I’m a jack of all trades, master of none. I currently live in San Diego and am entering the coding field. I love databases/SQL and backend JavaScript. I also really care about accessibility. I have a passion for creative writing and games, both video and board, which is part of why I was so excited to work on this project!</p>
                         </div>
                     </div>
