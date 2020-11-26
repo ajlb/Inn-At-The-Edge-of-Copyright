@@ -44,7 +44,7 @@ function Console() {
   // Socket log out message
   socket.off('logout').on('logout', message => {
     let type = 'displayed-stat';
-    setChatHistory(prevState => [...prevState, { type, text: message}]);
+    setChatHistory(prevState => [...prevState, { type, text: message }]);
     user = {};
     location = {};
     // chat history is mapped down below
@@ -76,6 +76,8 @@ function Console() {
 
   const [inputHistory, setInputHistory] = useState([]);
 
+  const [playerPosition, setPlayerPosition] = useState('standing');
+
   const [actionCalls, setActionCalls] = useState({
     move: ['move', '/m'],
     inventory: ['inventory', '/i'],
@@ -91,7 +93,7 @@ function Console() {
     stats: ['stats'],
     sleep: ['sleep'],
     wake: ['wake'],
-    position: ['position'],
+    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
     examine: ['examine', '/e'],
     whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
@@ -159,7 +161,10 @@ function Console() {
                     setInput={setInput}
                     inputHistory={inputHistory}
                     setInputHistory={setInputHistory}
+                    setChatHistory={setChatHistory}
                     user={!(user === undefined) ? user.characterName : undefined}
+                    playerPosition={playerPosition}
+                    setPlayerPosition={setPlayerPosition}
                   />
                 </div>
               </div>

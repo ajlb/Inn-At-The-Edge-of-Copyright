@@ -2,7 +2,7 @@ import {
     MobileView,
     BrowserView
 } from 'react-device-detect';
-import findIn, {takeTheseOffThat} from "../../clientUtilities/finders";
+import findIn, { takeTheseOffThat, getOneOfTheseOffThat } from "../../clientUtilities/finders";
 import socket from "../../clientUtilities/socket";
 
 //set up index for current position in userCommandsHistory
@@ -18,7 +18,10 @@ function InputPanel({
     inputHistory,
     setInputHistory,
     actionCalls,
-    user
+    user,
+    setPlayerPosition,
+    playerPosition,
+    setChatHistory
 }) {
 
     //update currentMessage in gameinfo based on input bar change
@@ -33,7 +36,7 @@ function InputPanel({
         setInputHistory(prevState => [...prevState, input])
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
-        if (user===undefined){
+        if (user === undefined) {
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
                 console.log("log on: " + input);
                 let message = takeTheseOffThat(["log in", "logon", "login", "log on"], input);
@@ -45,7 +48,7 @@ function InputPanel({
         } else if (findIn(input, actionCalls.move)) {
             let message = takeTheseOffThat(actionCalls.move, input);
             console.log(message);
-            socket.emit('move', {message, user})
+            socket.emit('move', { message, user })
         } else if (input.toLowerCase() === "stop juggling") {
             socket.emit('stop juggle', input)
         } else if (findIn(input, actionCalls.inventory)) {
@@ -93,7 +96,19 @@ function InputPanel({
         } else if (findIn(input, actionCalls.wake)) {
             socket.emit('wake', input)
         } else if (findIn(input, actionCalls.position)) {
-            socket.emit('position', input)
+            let command = getOneOfTheseOffThat(actionCalls.position, input);
+            if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
+                setPlayerPosition('lying down');
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now lying down` }]);
+            } else if (findIn(command, ['sit']) && playerPosition !== 'sitting') {
+                setPlayerPosition('sitting');
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting` }]);
+            } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
+                setPlayerPosition('standing');
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing` }]);
+            } else {
+                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
+            }
         } else if (findIn(input, actionCalls.give)) {
             socket.emit('give', input)
         } else if (findIn(input, actionCalls.examine)) {
