@@ -11,6 +11,7 @@
     "client": "cd client && npm run start",
     "server": "nodemon --ignore 'client/*'",
     "install": "cd client && npm install",
+    "seed": "node ./seed/runseed.js",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build"
   },
@@ -26,6 +27,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.16.3",
     "if-env": "^1.0.4",
+    "mongodb-extended-json": "^1.11.0",
     "mongoose": "^5.10.14",
     "socket.io": "^3.0.3"
   }

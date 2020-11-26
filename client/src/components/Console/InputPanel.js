@@ -2,10 +2,10 @@ import {
     MobileView,
     BrowserView
 } from 'react-device-detect';
-import findIn, {takeTheseOffThat} from "../../clientUtilities/finders";
+import findIn, { takeTheseOffThat, getOneOfTheseOffThat } from "../../clientUtilities/finders";
 import socket from "../../clientUtilities/socket";
-import {getItem, dropItem} from "./js/getDrop";
-import {insertArticleSingleValue} from "../../clientUtilities/parsers";
+import { getItem, dropItem } from "./js/getDrop";
+import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { giveItem } from './js/give';
 
 //set up index for current position in userCommandsHistory
@@ -24,8 +24,11 @@ function InputPanel({
     inputHistory,
     setInputHistory,
     actionCalls,
-    location,
-    user
+    user,
+    setPlayerPosition,
+    playerPosition,
+    setChatHistory,
+    location
 }) {
 
     //update currentMessage in gameinfo based on input bar change
@@ -40,7 +43,7 @@ function InputPanel({
         setInputHistory(prevState => [...prevState, input])
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
-        if (user.characterName===undefined){
+        if (user.characterName === undefined) {
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
                 console.log("log on: " + input);
                 let message = takeTheseOffThat(["log in", "logon", "login", "log on"], input);
@@ -57,13 +60,13 @@ function InputPanel({
                 }
             }
             let moved = false;
-            for (const param in location){
-                if (param === direction){
-                    socket.emit('move', {previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user:user.characterName});
+            for (const param in location) {
+                if (param === direction) {
+                    socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user: user.characterName });
                     moved = true;
-                } 
+                }
             }
-            if (moved === false){
+            if (moved === false) {
                 socket.emit('failure', `There is no exit ${direction}`);
             }
         } else if (input.toLowerCase() === "stop juggling") {
@@ -90,7 +93,7 @@ function InputPanel({
             socket.emit('whisper', message)
         } else if (findIn(input, actionCalls.speak)) {
             const message = takeTheseOffThat(actionCalls.speak, input);
-            socket.emit('speak', {message, user:user.characterName, location: location.current.locationName});
+            socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
         } else if (findIn(input, actionCalls.help)) {
             socket.emit('help', input)
         } else if (findIn(input, actionCalls.look)) {
@@ -98,25 +101,25 @@ function InputPanel({
         } else if (findIn(input, actionCalls.get)) {
             const target = takeTheseOffThat(actionCalls.get, input);
             const result = getItem(target, location);
-            if (result === true){
-                socket.emit('get', {target, user: user.characterName, location: location.current.locationName});
+            if (result === true) {
+                socket.emit('get', { target, user: user.characterName, location: location.current.locationName });
             } else if (result === false) {
                 socket.emit('green', `There doesn't seem to ${insertArticleSingleValue(target)} to get here.`);
-            } else if (typeof result === "string"){
-                socket.emit('get', {target: result, user: user.characterName, location: location.current.locationName});
-            } else if (typeof result === "object"){
+            } else if (typeof result === "string") {
+                socket.emit('get', { target: result, user: user.characterName, location: location.current.locationName });
+            } else if (typeof result === "object") {
                 socket.emit('green', `I'm not sure which you want to get. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.drop)) {
             const target = takeTheseOffThat(actionCalls.drop, input);
             const result = dropItem(target, user);
-            if (result === true){
-                socket.emit('drop', {target, user: user.characterName, location: location.current.locationName});
-            } else if (result === false){
+            if (result === true) {
+                socket.emit('drop', { target, user: user.characterName, location: location.current.locationName });
+            } else if (result === false) {
                 socket.emit('green', `You don't seem to have ${insertArticleSingleValue(target)} to drop.`);
-            } else if (typeof result === "string"){
-                socket.emit('drop', {target: result, user: user.characterName, location: location.current.locationName});
-            } else if (typeof result === "object"){
+            } else if (typeof result === "string") {
+                socket.emit('drop', { target: result, user: user.characterName, location: location.current.locationName });
+            } else if (typeof result === "object") {
                 socket.emit('green', `I'm not sure which you want to drop. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.wear)) {
@@ -134,19 +137,31 @@ function InputPanel({
         } else if (findIn(input, actionCalls.wake)) {
             socket.emit('wake', input)
         } else if (findIn(input, actionCalls.position)) {
-            socket.emit('position', input)
+            let command = getOneOfTheseOffThat(actionCalls.position, input);
+            if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
+                setPlayerPosition('lying down');
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now lying down` }]);
+            } else if (findIn(command, ['sit']) && playerPosition !== 'sitting') {
+                setPlayerPosition('sitting');
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting` }]);
+            } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
+                setPlayerPosition('standing');
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing` }]);
+            } else {
+                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
+            }
         } else if (findIn(input, actionCalls.give)) {
             input = takeTheseOffThat(actionCalls.give, input);
             let item = input.split(" to ")[0];
             let target = takeTheseOffThat([item + " to "], input);
             const result = giveItem(item, user);
-            if (result === true){
-                socket.emit('give', {target, item, user: user.characterName});
-            } else if (result === false){
+            if (result === true) {
+                socket.emit('give', { target, item, user: user.characterName });
+            } else if (result === false) {
                 socket.emit('green', `You don't seem to have ${insertArticleSingleValue(item)} to give.`);
-            } else if (typeof result === "string"){
-                socket.emit('give', {target, item:result, user: user.characterName});
-            } else if (typeof result === "object"){
+            } else if (typeof result === "string") {
+                socket.emit('give', { target, item: result, user: user.characterName });
+            } else if (typeof result === "object") {
                 socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.examine)) {

@@ -15,6 +15,17 @@ function doesThisStartWithOneOfThese(givenString, givenArray) {
   return false
 }
 
+function getOneOfTheseOffThat(givenArray, givenString) {
+  for (let value of givenArray) {
+    if (givenString.toLowerCase().startsWith(value) && (value.length > 1)) {
+      return value
+    } else if (givenString.split(" ")[0].toLowerCase() === value.toLowerCase()) {
+      return value
+    }
+  }
+  return false
+}
+
 //single value startWith() that tests for space or equal value
 function startsWithOrIs(thing, stringy) {
   if (stringy.toLowerCase().startsWith(`${thing} `) || ((stringy.toLowerCase().startsWith(thing)) && (stringy.length === thing.length))) {
@@ -50,5 +61,6 @@ export {
   doesThisStartWithOneOfThese,
   startsWithOrIs,
   takeTheseOffThat,
-  doesThisEqualThat
+  doesThisEqualThat,
+  getOneOfTheseOffThat
 }
