@@ -121,6 +121,8 @@ function Console() {
 
   const [inputHistory, setInputHistory] = useState([]);
 
+  const [playerPosition, setPlayerPosition] = useState('standing');
+
   const [actionCalls, setActionCalls] = useState({
     move: ['move', '/m', 'walk', 'exit'],
     inventory: ['inventory', '/i'],
@@ -136,7 +138,7 @@ function Console() {
     stats: ['stats'],
     sleep: ['sleep'],
     wake: ['wake'],
-    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit', 'stand', 'lay', 'lie'],
+    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
     examine: ['examine'],
     whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
@@ -206,6 +208,9 @@ function Console() {
                     setInput={setInput}
                     inputHistory={inputHistory}
                     setInputHistory={setInputHistory}
+                    setChatHistory={setChatHistory}
+                    playerPosition={playerPosition}
+                    setPlayerPosition={setPlayerPosition}
                     location={location}
                     user={player}
                   />
