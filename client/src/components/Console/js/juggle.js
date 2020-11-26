@@ -27,32 +27,37 @@ function juggle(value, playerData, location) {
             const intNum = parseInt(property);
             if (typeof intNum === "number" && intNum > 2) {
                 //search for item in user inventory, determine if there are enough to juggle
-                let potentialArray = [];
+                let potentialItems = 0;
                 for (const item of playerData.inventory) {
                     if (item.name === pluralize(target, 1)) {
-                        if (((playerData.stats.DEX * 2) / (intNum ** 2)) < 2) {
+                        if (((playerData.stats.DEX * 1.2) / (num ** 2)) < 2) {
                             socket.emit('green', 'That may be too many objects for you to juggle.')
                             return false;
-                        } else if (item.quantity >= intNum) {
-                            socket.emit('juggle', { target, intNum, user: playerData, location })
+                        } else if (item.quantity >= num) {
+                            socket.emit('juggle', { target, num, user: playerData, location })
                             return true;
                         } else {
-                            socket.emit('green', `You don't have ${intNum} ${target} to juggle!`);
+                            socket.emit('green', `You don't have ${num} ${target} to juggle!`);
                             return false;
                         }
                     } else if ((item.name.startsWith(pluralize(target, 1))) || (item.name.endsWith(pluralize(target, 1)))) {
-                        potentialArray.push(item.name);
+                        potentialItems += item.quantity;
                     }
                 }
-                if (potentialArray.length === 0) {
+                if (potentialItems === 0) {
                     socket.emit('green', `You don't seem to have any ${target} to juggle!`)
                     return false;
-                } else if (potentialArray.length === 1) {
-                    socket.emit('juggle', { target, num, user: playerData, location })
-                    return true;
-                } else if (potentialArray.length > 1) {
-                    socket.emit('green', `I'm not sure which items you want to juggle. I think you might mean one of these - ${potentialArray.join(", ")}.`);
-                    return false;
+                } else if (potentialItems > 0) {
+                    if (((playerData.stats.DEX * 1.2) / (num ** 2)) < 2) {
+                        socket.emit('green', 'That may be too many objects for you to juggle.')
+                        return false;
+                    } else if (potentialItems >= num) {
+                        socket.emit('juggle', { target, num, user: playerData, location });
+                        return true;
+                    } else {
+                        socket.emit('green', `You don't have ${num} ${target} to juggle!`);
+                        return false;
+                    }
                 }
 
             } else {
