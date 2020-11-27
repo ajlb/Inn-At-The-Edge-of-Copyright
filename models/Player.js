@@ -27,6 +27,10 @@ const playerSchema = new Schema({
     type: Boolean,
     default: true
   },
+  isOnline: {
+    type: Boolean,
+    default: true
+  },
   isNPC: {
     type: Boolean,
     default: false

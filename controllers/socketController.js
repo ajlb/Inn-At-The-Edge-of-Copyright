@@ -61,7 +61,7 @@ module.exports = function (io) {
                     io.to(usernameLowerCase).emit('log in', message);
                     console.log(`${message} is now fake logged in.`);
                     //find and retrieve user Data, join location room
-                    db.Player.findOne({ characterName: message }).select("-password").then(userData => {
+                    db.Player.findOneAndUpdate({ characterName: message }, {$set: {isAwake:true, isOnline:true}}, {new:true}).select("-password").then(userData => {
                         let userLocation
                         if (userData === null) {
                             userLocation = "Inn Lobby";
@@ -299,7 +299,11 @@ module.exports = function (io) {
                 io.to(location).emit('stop juggle', {user:user.characterName, roomMessage:`${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage:`You neatly catch the ${target}, and stop juggling.`});
             } else {
                 io.to(location).emit('stop juggle', {user:user.characterName, roomMessage:`${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage:`You drop all the ${target} and scramble around, picking them up.`});
-                
+                //update player dex
+                console.log("updating player dex");
+                db.Player.findOneAndUpdate({characterName: user.characterName}, {$inc: {"stats.DEX":0.1}}, {new:true}).then(updatedPlayerData => {
+                    io.to(user.characterName.toLowerCase()).emit('playerUpdate', updatedPlayerData);
+                })
             }
         });
 

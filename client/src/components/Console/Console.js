@@ -62,6 +62,13 @@ function Console() {
     }
   });
 
+  //Socket updated userData
+  socket.off('playerUpdate').on('playerUpdate', updatedPlayerData => {
+    if (!(updatedPlayerData === null)){
+      setPlayer(updatedPlayerData);
+    }
+  });
+
   // Socket location chunk
   socket.off('locationChunk').on('locationChunk', message => {
     console.log("recieved locationChunk");
@@ -86,8 +93,6 @@ function Console() {
 
   // Socket player inventory update
   socket.off('invUpP').on('invUpP', message => {
-    console.log("recieved Player Inventory Update");
-    console.log(message);
     if (!(message === null)) {
       setPlayer({
         ...player,
@@ -98,8 +103,6 @@ function Console() {
 
   // Socket location inventory update
   socket.off('invUpL').on('invUpL', message => {
-    console.log("recieved Location Inventory Update");
-    console.log(message);
     if (!(message === null)) {
       setLocation({
         ...location,
@@ -112,7 +115,6 @@ function Console() {
   });
 
   socket.off('juggle').on('juggle', ({ user, target, num }) => {
-    console.log('received juggle');
     if (user === player.characterName) {
       setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You begin to juggle ${num} ${target}.` }]);
       setActivities({
@@ -125,7 +127,6 @@ function Console() {
   })
 
   socket.off('contJuggle').on('contJuggle', ({ user, target, num }) => {
-    console.log('received contJuggle');
     if (user === player.characterName) {
       setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You juggle ${num} ${target}.` }]);
     } else {
@@ -134,7 +135,6 @@ function Console() {
   })
 
   socket.off('stop juggle').on('stop juggle', ({user, roomMessage, userMessage}) => {
-    console.log('received stop juggle');
     if (user === player.characterName){
       setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
       setActivities({
