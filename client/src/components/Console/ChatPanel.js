@@ -11,6 +11,7 @@ function ChatPanel({
     chatHistory,
     setChatHistory,
     location,
+    setLocation,
     user,
     day
 }) {
@@ -59,6 +60,30 @@ function ChatPanel({
 
     });
 
+
+
+    // Socket location chunk
+    socket.off('locationChunk').on('locationChunk', message => {
+        console.log("recieved locationChunk");
+        console.log(message);
+        if (location.current === undefined) {
+            let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
+            setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
+            let exits = [];
+            for (const param in message) {
+                if (param !== "current") {
+                    exits.push(param);
+                }
+            }
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
+
+        }
+        if (!(message === null)) {
+            setLocation(message);
+        }
+    });
+
     // This is where most socket client listeners are going to be!
     socket.off('whisperFrom').on('whisperFrom', ({ message, userTo }) => {
         let type = 'displayed-stat';
@@ -104,6 +129,14 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type, text: `${actor} gives ${insertArticleSingleValue(item)} to ${target}.` }]);
         }
     });
+
+    socket.off('sleep').on('sleep', ({ userToSleep }) => {
+        setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} fell asleep` }]);
+    })
+
+    socket.off('wake').on('wake', ({ userToWake }) => {
+        setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToWake} woke up` }]);
+    })
 
     socket.off('error').on('error', ({ status, message }) => {
         let type = 'error-message';

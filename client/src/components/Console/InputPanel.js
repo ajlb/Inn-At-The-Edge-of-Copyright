@@ -29,7 +29,9 @@ function InputPanel({
     setPlayerPosition,
     playerPosition,
     setChatHistory,
-    location
+    location,
+    activities,
+    setActivities
 }) {
 
     //update currentMessage in gameinfo based on input bar change
@@ -134,9 +136,20 @@ function InputPanel({
         } else if (findIn(input, actionCalls.stats)) {
             socket.emit('stats', input)
         } else if (findIn(input, actionCalls.sleep)) {
-            socket.emit('sleep', input)
+            if (activities.sleeping) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping` }]);
+            } else {
+                setActivities(prevState => { return { ...prevState, sleeping: true } });
+                socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
+            }
+            // socket.emit('sleep', input)
         } else if (findIn(input, actionCalls.wake)) {
-            socket.emit('wake', input)
+            if (!activities.sleeping) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already awake!` }]);
+            } else {
+                setActivities(prevState => { return { ...prevState, sleeping: false } });
+                socket.emit('wake', { userToWake: user.characterName, location: location.current.locationName })
+            }
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
@@ -156,13 +169,13 @@ function InputPanel({
             let item = inputString.split(" to ")[0];
             let target = takeTheseOffThat([item + " to "], inputString);
             const result = giveItem(item, user);
-            if (result === true){
-                socket.emit('give', {target, item, user: user.characterName, location:location.current.locationName});
-            } else if (result === false){
+            if (result === true) {
+                socket.emit('give', { target, item, user: user.characterName, location: location.current.locationName });
+            } else if (result === false) {
                 socket.emit('green', `You don't seem to have ${insertArticleSingleValue(item)} to give.`);
-            } else if (typeof result === "string"){
-                socket.emit('give', {target, item:result, user: user.characterName, location:location.current.locationName});
-            } else if (typeof result === "object"){
+            } else if (typeof result === "string") {
+                socket.emit('give', { target, item: result, user: user.characterName, location: location.current.locationName });
+            } else if (typeof result === "object") {
                 socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.examine)) {
