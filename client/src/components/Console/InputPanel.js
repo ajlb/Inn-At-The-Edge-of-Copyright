@@ -140,7 +140,7 @@ function InputPanel({
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping` }]);
             } else {
                 setActivities(prevState => { return { ...prevState, sleeping: true } });
-                socket.emit('sleep', { userToSleep: user.characterName });
+                socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
             }
             // socket.emit('sleep', input)
         } else if (findIn(input, actionCalls.wake)) {
@@ -148,7 +148,7 @@ function InputPanel({
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already awake!` }]);
             } else {
                 setActivities(prevState => { return { ...prevState, sleeping: false } });
-                socket.emit('wake', { userToWake: user.characterName })
+                socket.emit('wake', { userToWake: user.characterName, location: location.current.locationName })
             }
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);

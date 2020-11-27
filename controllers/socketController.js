@@ -343,26 +343,26 @@ module.exports = function (io) {
             // emit stats to player
         });
 
-        socket.on('sleep', ({ userToSleep }) => {
+        socket.on('sleep', ({ userToSleep, location }) => {
             db.Player.findOneAndUpdate({ characterName: userToSleep }, { $set: { isAwake: false } }, (err, playerData) => {
                 if (err) throw err;
 
                 if (!playerData.isAwake) {
                     io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping" });
                 } else {
-                    io.to(socket.id).emit('sleep', { userToSleep })
+                    io.to(location).emit('sleep', { userToSleep })
                 }
             })
         });
 
-        socket.on('wake', ({ userToWake }) => {
+        socket.on('wake', ({ userToWake, location }) => {
             db.Player.findOneAndUpdate({ characterName: userToWake }, { $set: { isAwake: true } }, (err, playerData) => {
                 if (err) throw err;
 
                 if (playerData.isAwake) {
                     io.to(socket.id).emit('error', { status: 400, message: "You are already awake" });
                 } else {
-                    io.to(socket.id).emit('wake', { userToWake })
+                    io.to(location).emit('wake', { userToWake })
                 }
             })
         });
