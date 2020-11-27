@@ -299,6 +299,7 @@ module.exports = function (io) {
                 io.to(location).emit('stop juggle', {user:user.characterName, roomMessage:`${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage:`You neatly catch the ${target}, and stop juggling.`});
             } else {
                 io.to(location).emit('stop juggle', {user:user.characterName, roomMessage:`${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage:`You drop all the ${target} and scramble around, picking them up.`});
+                
             }
         });
 
