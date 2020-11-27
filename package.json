@@ -11,7 +11,7 @@
     "client": "cd client && npm run start",
     "server": "nodemon --ignore 'client/*'",
     "install": "cd client && npm install",
-    "seed": "node ./controllers/middleware/runseed.js",
+    "seed": "node ./seed/runseed.js",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build"
   },

@@ -7,9 +7,8 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
+import { clearJuggleTime } from "./js/juggle";
 
-let user = {};
-let location = {};
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -22,15 +21,21 @@ function Console() {
     theme: "",
     currentMessage: ""
   }
+  const [location, setLocation] = useState({});
+  const [player, setPlayer] = useState({});
+
+
 
 
   // Socket log in message
   socket.off('log in').on('log in', message => {
     console.log("got a log in message from socket");
     let type = 'displayed-stat';
-    user.characterName = message;
+    setPlayer({
+      ...player,
+      characterName: message
+    })
     setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
-    // chat history is mapped down below
   });
 
   // Socket failed log in message
@@ -38,16 +43,14 @@ function Console() {
     console.log("got a log in failure message from socket");
     let type = 'displayed-error';
     setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
-    // chat history is mapped down below
   });
 
   // Socket log out message
   socket.off('logout').on('logout', message => {
     let type = 'displayed-stat';
-    setChatHistory(prevState => [...prevState, { type, text: message}]);
-    user = {};
-    location = {};
-    // chat history is mapped down below
+    setChatHistory(prevState => [...prevState, { type, text: message }]);
+    setPlayer({});
+    setLocation({});
   });
 
   // Socket initial userData
@@ -55,20 +58,84 @@ function Console() {
     console.log("recieved Player Data");
     console.log(message);
     if (!(message === null)) {
-      user = message;
+      setPlayer(message);
     }
   });
 
-  // Socket location chunk
-  socket.off('locationChunk').on('locationChunk', message => {
-    console.log("recieved locationChunk");
+  // Socket player inventory update
+  socket.off('invUpP').on('invUpP', message => {
+    console.log("recieved Player Inventory Update");
+    console.log(message);
     if (!(message === null)) {
-      location = message;
-      console.log(location);
+      setPlayer({
+        ...player,
+        inventory: message
+      });
     }
   });
+
+  // Socket location inventory update
+  socket.off('invUpL').on('invUpL', message => {
+    console.log("recieved Location Inventory Update");
+    console.log(message);
+    if (!(message === null)) {
+      setLocation({
+        ...location,
+        current: {
+          ...location.current,
+          inventory: message
+        }
+      });
+    }
+  });
+
+  socket.off('juggle').on('juggle', ({ user, target, num }) => {
+    console.log('received juggle');
+    if (user === player.characterName) {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You begin to juggle ${num} ${target}.` }]);
+      setActivities({
+        ...activities,
+        juggling: true
+      });
+    } else {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
+    }
+  })
+
+  socket.off('contJuggle').on('contJuggle', ({ user, target, num }) => {
+    console.log('received contJuggle');
+    if (user === player.characterName) {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You juggle ${num} ${target}.` }]);
+    } else {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
+    }
+  })
+
+  socket.off('stop juggle').on('stop juggle', ({ user, roomMessage, userMessage }) => {
+    console.log('received stop juggle');
+    if (user === player.characterName) {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
+      setActivities({
+        ...activities,
+        juggling: false
+      });
+    } else {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
+    }
+    clearJuggleTime();
+  })
+
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
+
+  const [day, setDay] = useState(true);
+
+  const [activities, setActivities] = useState({
+    sleeping: false,
+    juggling: false,
+    fighting: false,
+    singing: false
+  })
 
   const [chatHistory, setChatHistory] = useState([]);
 
@@ -76,24 +143,26 @@ function Console() {
 
   const [inputHistory, setInputHistory] = useState([]);
 
+  const [playerPosition, setPlayerPosition] = useState('standing');
+
   const [actionCalls, setActionCalls] = useState({
-    move: ['move', '/m'],
+    move: ['move', '/m', 'walk', 'exit'],
     inventory: ['inventory', '/i'],
     speak: ['speak', 'say', '/s'],
     look: ['look', '/l'],
     help: ['help', '/h'],
-    get: ['get', '/g'],
-    drop: ['drop', '/d'],
-    wear: ['wear'],
-    remove: ['remove', '/r'],
+    get: ['get', '/g', 'pick up'],
+    drop: ['drop', 'discard', '/d'],
+    wear: ['wear', 'put on'],
+    remove: ['remove', '/r', 'take off'],
     emote: ['emote', '/e'],
     juggle: ['juggle'],
     stats: ['stats'],
-    sleep: ['sleep'],
-    wake: ['wake'],
-    position: ['position'],
+    sleep: ['sleep', 'fall asleep'],
+    wake: ['wake', 'wake up', 'awaken'],
+    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
-    examine: ['examine', '/e'],
+    examine: ['examine'],
     whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
   });
 
@@ -148,7 +217,10 @@ function Console() {
                   <ChatPanel
                     chatHistory={chatHistory}
                     setChatHistory={setChatHistory}
-                    user={user}
+                    user={player}
+                    location={location}
+                    setLocation={setLocation}
+                    day={day}
                   />
                   <InputPanel
                     actionCalls={actionCalls}
@@ -159,7 +231,13 @@ function Console() {
                     setInput={setInput}
                     inputHistory={inputHistory}
                     setInputHistory={setInputHistory}
-                    user={!(user === undefined) ? user.characterName : undefined}
+                    setChatHistory={setChatHistory}
+                    playerPosition={playerPosition}
+                    setPlayerPosition={setPlayerPosition}
+                    location={location}
+                    user={player}
+                    activities={activities}
+                    setActivities={setActivities}
                   />
                 </div>
               </div>
