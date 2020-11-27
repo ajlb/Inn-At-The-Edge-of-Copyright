@@ -41,7 +41,7 @@ const itemSchema = new Schema({
     },
     equippable: [],
     
-}, {capped: 1024});
+});
 
 const Item = mongoose.model("Item", itemSchema);
 

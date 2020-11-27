@@ -13,7 +13,7 @@ const inventorySchema = new Schema({
         type: Number
     },
     
-}, { capped: 1024});
+});
 
 const Inventory = mongoose.model("Inventory", inventorySchema);
 

@@ -20,6 +20,6 @@ let actionSchema = new Schema({
   exampleResult: {
     type: String
   }
-}, {capped: 1024});
+});
 const Action = mongoose.model("Action", actionSchema);
 module.exports = Action;
