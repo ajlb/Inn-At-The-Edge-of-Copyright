@@ -56,21 +56,26 @@ function InputPanel({
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (findIn(input, actionCalls.move)) {
-            let direction = takeTheseOffThat(actionCalls.move, input);
-            for (const param in DIRECTIONS) {
-                if (direction.toLowerCase() === param) {
-                    direction = DIRECTIONS[param];
+            if (playerPosition === "standing"){
+                let direction = takeTheseOffThat(actionCalls.move, input);
+                for (const param in DIRECTIONS) {
+                    if (direction.toLowerCase() === param) {
+                        direction = DIRECTIONS[param];
+                    }
                 }
-            }
-            let moved = false;
-            for (const param in location) {
-                if (param === direction) {
-                    socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user: user.characterName });
-                    moved = true;
+                let moved = false;
+                for (const param in location) {
+                    if (param === direction) {
+                        socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user: user.characterName });
+                        moved = true;
+                    }
                 }
-            }
-            if (moved === false) {
-                socket.emit('failure', `There is no exit ${direction}`);
+                if (moved === false) {
+                    socket.emit('failure', `There is no exit ${direction}`);
+                }
+            } else {
+                setChatHistory(prevState => [...prevState, {type: "displayed-error", text: 'You have to stand up to do that!'}]);
+                
             }
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
@@ -137,10 +142,12 @@ function InputPanel({
             socket.emit('stats', input)
         } else if (findIn(input, actionCalls.sleep)) {
             if (activities.sleeping) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping` }]);
-            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);
+            } else if (playerPosition === "lying down") {
                 setActivities(prevState => { return { ...prevState, sleeping: true } });
                 socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
+            } else {
+                setChatHistory(prevState => [...prevState, {type: 'displayed-error', text: `You need to lie down to do that!`}]);
             }
             // socket.emit('sleep', input)
         } else if (findIn(input, actionCalls.wake)) {
@@ -154,13 +161,13 @@ function InputPanel({
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
                 setPlayerPosition('lying down');
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now lying down` }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now lying down.` }]);
             } else if (findIn(command, ['sit']) && playerPosition !== 'sitting') {
                 setPlayerPosition('sitting');
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting` }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting.` }]);
             } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
                 setPlayerPosition('standing');
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing` }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
             }

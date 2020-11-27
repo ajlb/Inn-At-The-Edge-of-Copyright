@@ -348,11 +348,13 @@ module.exports = function (io) {
         });
 
         socket.on('sleep', ({ userToSleep, location }) => {
+            console.log(userToSleep);
             db.Player.findOneAndUpdate({ characterName: userToSleep }, { $set: { isAwake: false } }, (err, playerData) => {
+                console.log(playerData);
                 if (err) throw err;
 
                 if (!playerData.isAwake) {
-                    io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping" });
+                    io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping." });
                 } else {
                     io.to(location).emit('sleep', { userToSleep })
                 }
@@ -364,7 +366,7 @@ module.exports = function (io) {
                 if (err) throw err;
 
                 if (playerData.isAwake) {
-                    io.to(socket.id).emit('error', { status: 400, message: "You are already awake" });
+                    io.to(socket.id).emit('error', { status: 400, message: "You are already awake." });
                 } else {
                     io.to(location).emit('wake', { userToWake })
                 }

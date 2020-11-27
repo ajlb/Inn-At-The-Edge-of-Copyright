@@ -7,7 +7,6 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
-import { clearJuggleTime } from "./js/juggle";
 
 
 function Console() {
@@ -91,40 +90,6 @@ function Console() {
       });
     }
   });
-
-  socket.off('juggle').on('juggle', ({ user, target, num }) => {
-    if (user === player.characterName) {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You begin to juggle ${num} ${target}.` }]);
-      setActivities({
-        ...activities,
-        juggling: true
-      });
-    } else {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
-    }
-  })
-
-  socket.off('contJuggle').on('contJuggle', ({ user, target, num }) => {
-    if (user === player.characterName) {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You juggle ${num} ${target}.` }]);
-    } else {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
-    }
-  })
-
-  socket.off('stop juggle').on('stop juggle', ({ user, roomMessage, userMessage }) => {
-    if (user === player.characterName) {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
-      setActivities({
-        ...activities,
-        juggling: false
-      });
-    } else {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
-    }
-    clearJuggleTime();
-  })
-
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
 
@@ -217,6 +182,8 @@ function Console() {
                   <ChatPanel
                     chatHistory={chatHistory}
                     setChatHistory={setChatHistory}
+                    activities={activities}
+                    setActivities={setActivities}
                     user={player}
                     location={location}
                     setLocation={setLocation}
