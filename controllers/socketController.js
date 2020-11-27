@@ -43,7 +43,8 @@ module.exports = function (io) {
                 if (users[user].socketID === socket.id) {
                     //next two lines will not be necessary once Auth is in pace
                     const playerIndex = players.indexOf(user);
-                    players = players.splice(playerIndex, 1);
+                    console.log(playerIndex);
+                    players.splice(playerIndex, 1);
                     delete users[user];
                 }
             }
