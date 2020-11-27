@@ -98,6 +98,8 @@ function ChatPanel({
         let type = 'displayed-stat';
         if (actor === user.characterName) {
             setChatHistory(prevState => [...prevState, { type, text: `You give ${insertArticleSingleValue(item)} to ${target}.` }]);
+        } else if (target === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} gives ${insertArticleSingleValue(item)} to you.` }]);
         } else {
             setChatHistory(prevState => [...prevState, { type, text: `${actor} gives ${insertArticleSingleValue(item)} to ${target}.` }]);
         }
