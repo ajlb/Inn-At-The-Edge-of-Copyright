@@ -268,7 +268,22 @@ module.exports = function (io) {
 
         });
 
-        socket.on('wear', () => {
+        //add: db call to change player, remove item from inventory, add way to sort though string to get target slot, add receiver for succesful wear
+
+        socket.on('wear', ({user, item}) => {
+            console.log(`${user} wants to wear their ${item}.`);
+            db.Item.findOne({itemName: item}).then(returnData => {
+                if (returnData.equippable.length === 1){
+                    io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${returnData.equippable[0].slice(0, -4)}.`);
+                } else if (returnData.equippable.length > 1) {
+                    const options = returnData.equippable.filter(slot => {
+                        slot.slice(0,-4);
+                    })
+                    io.to(user.toLowerCase()).emit('green', `Where do you want to wear it? (${options.join(", ")})`);
+                } else {
+                    io.to(user.toLowerCase()).emit('green', `You can't wear that.`);
+                }
+            })
 
         });
 

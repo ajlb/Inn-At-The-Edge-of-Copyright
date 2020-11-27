@@ -8,6 +8,7 @@ import { getItem, dropItem } from "./js/getDrop";
 import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
+import { wear, remove } from "./js/wearRemove";
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -131,9 +132,9 @@ function InputPanel({
                 socket.emit('green', `I'm not sure which you want to drop. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.wear)) {
-            socket.emit('wear', input)
+            wear(input, user, actionCalls.wear);
         } else if (findIn(input, actionCalls.remove)) {
-            socket.emit('remove', input)
+            remove(input, user, actionCalls.remove);
         } else if (findIn(input, actionCalls.emote)) {
             socket.emit('emote', input)
         } else if (findIn(input, actionCalls.juggle)) {
