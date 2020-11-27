@@ -140,8 +140,7 @@ function InputPanel({
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping` }]);
             } else {
                 setActivities(prevState => { return { ...prevState, sleeping: true } });
-                // console.log(user.characterName)
-                // socket.emit('fall asleep', { userToSleep: user.characterName })
+                socket.emit('sleep', { userToSleep: user.characterName });
             }
             // socket.emit('sleep', input)
         } else if (findIn(input, actionCalls.wake)) {

@@ -130,6 +130,10 @@ function ChatPanel({
         }
     });
 
+    socket.off('sleep').on('sleep', ({ userToSleep }) => {
+        setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} fell asleep` }]);
+    })
+
     socket.off('error').on('error', ({ status, message }) => {
         let type = 'error-message';
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);

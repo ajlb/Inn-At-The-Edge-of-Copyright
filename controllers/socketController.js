@@ -343,8 +343,16 @@ module.exports = function (io) {
             // emit stats to player
         });
 
-        socket.on('sleep', () => {
+        socket.on('sleep', ({ userToSleep }) => {
+            db.Player.findOneAndUpdate({ characterName: userToSleep }, { $set: { isAwake: false } }, (err, playerData) => {
+                if (err) throw err;
 
+                if (!playerData.isAwake) {
+                    io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping" });
+                } else {
+                    io.to(socket.id).emit('sleep', { userToSleep })
+                }
+            })
         });
 
         socket.on('wake', () => {
