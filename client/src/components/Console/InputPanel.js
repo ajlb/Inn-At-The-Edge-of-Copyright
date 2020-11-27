@@ -32,6 +32,10 @@ function InputPanel({
 
         setInputHistory(prevState => [...prevState, input])
 
+
+
+    
+
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
         if (user===undefined){
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
@@ -50,7 +54,10 @@ function InputPanel({
         } else if (input.toLowerCase() === "stop juggling") {
             socket.emit('stop juggle', input)
         } else if (findIn(input, actionCalls.inventory)) {
+            let message = takeTheseOffThat(actionCalls.move, input)
+            console.log(message);
             socket.emit('inventory', input)
+            console.log('input is inventory');
         } else if (findIn(input, actionCalls.whisper)) {
             let message;
             // If it starts with one of these two-word commands, it will remove the first two words from the message, if not, it will just remove the first word
@@ -70,9 +77,12 @@ function InputPanel({
             // fyi, checking if the message begins with someone's name is handled on the server side
             socket.emit('whisper', message)
         } else if (findIn(input, actionCalls.speak)) {
-            socket.emit('speak', input)
+            socket.emit('speak', input);
         } else if (findIn(input, actionCalls.help)) {
-            socket.emit('help', input)
+            let help = takeTheseOffThat(actionCalls.help, input);
+            console.log(help);
+            socket.emit('help', {help, input});
+            console.log('input was help');
         } else if (findIn(input, actionCalls.look)) {
             socket.emit('look', input)
         } else if (findIn(input, actionCalls.get)) {
@@ -108,14 +118,24 @@ function InputPanel({
         setInput('');
     }
 
-// let socketObj;
 
-// // adding a listener for socket object to recieve incoming messages
+// display help commands to serve side
 
-// socketObj.addListener({
-    
-// })
 
+
+//     if (actionCalls.help === undefined) {
+//         if (findIn(input, ['help', '/h'])) {
+//             console.log('help' + input);
+//             let message = takeTheseOffThat(['help', 'h/'], input);
+//             console.log(message);
+//             socket.emit('help', input);
+//     } else if (findIn(input, actionCalls.help)) {
+//         let message = takeTheseOffThat(actionCalls.help, input);
+//         console.log(message);
+//         socket.emit('help', { message })
+//         console.log('input was help');
+//     }
+// }
     //display previous commands on key up, key down
     const keyDownResults = (event) => {
 

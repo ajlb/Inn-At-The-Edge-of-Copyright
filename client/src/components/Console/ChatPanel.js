@@ -31,6 +31,12 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
     });
 
+    socket.off('help').on('help', ({ actionData }) => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: `${actionData}` }]);
+        console.log(actionData);
+    });
+
     //where is the user scrolled to?
     const handleScroll = (e) => {
         const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;

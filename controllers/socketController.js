@@ -155,17 +155,26 @@ module.exports = function (io) {
 
         });
 
-        socket.on('inventory', () => {
-
+        socket.on('inventory', ({ itemRecieved, itemRemoved}) => {
+            console.log('item is tracking');
+            console.log(itemRemoved);
         });
 
         socket.on('speak', () => {
 
         });
 
-        socket.on('help', () => {
+        socket.on('help', ({message}) => {
             // db for all the actions/their descriptions and whatnot
             // emit object back to client and parse there
+            console.log('helped message recieved');
+            console.log(message);
+            db.Action.find({})
+            .then(actionData => {
+           io.to(socket.id).emit('help', {actionData});
+           console.log(`This is our data ${actionData}`);
+            })
+
         });
 
         socket.on('look', () => {
