@@ -11,6 +11,7 @@ function ChatPanel({
     chatHistory,
     setChatHistory,
     location,
+    setLocation,
     user,
     day
 }) {
@@ -57,6 +58,30 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
 
 
+    });
+
+
+
+    // Socket location chunk
+    socket.off('locationChunk').on('locationChunk', message => {
+        console.log("recieved locationChunk");
+        console.log(message);
+        if (location.current === undefined) {
+            let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
+            setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
+            let exits = [];
+            for (const param in message) {
+                if (param !== "current") {
+                    exits.push(param);
+                }
+            }
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
+
+        }
+        if (!(message === null)) {
+            setLocation(message);
+        }
     });
 
     // This is where most socket client listeners are going to be!

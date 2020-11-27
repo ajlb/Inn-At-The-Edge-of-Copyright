@@ -61,28 +61,6 @@ function Console() {
     }
   });
 
-  // Socket location chunk
-  socket.off('locationChunk').on('locationChunk', message => {
-    console.log("recieved locationChunk");
-    console.log(message);
-    if (location.current === undefined) {
-      let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
-      setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
-      let exits = [];
-      for (const param in message) {
-        if (param !== "current") {
-          exits.push(param);
-        }
-      }
-      setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
-
-    }
-    if (!(message === null)) {
-      setLocation(message);
-    }
-  });
-
   // Socket player inventory update
   socket.off('invUpP').on('invUpP', message => {
     console.log("recieved Player Inventory Update");
@@ -197,6 +175,7 @@ function Console() {
                     setChatHistory={setChatHistory}
                     user={player}
                     location={location}
+                    setLocation={setLocation}
                     day={day}
                   />
                   <InputPanel
