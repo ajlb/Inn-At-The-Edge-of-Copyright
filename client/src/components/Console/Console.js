@@ -7,6 +7,7 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
+import { clearJuggleTime } from "./js/juggle";
 
 
 function Console() {
@@ -88,10 +89,53 @@ function Console() {
     }
   });
 
+  socket.off('juggle').on('juggle', ({ user, target, num }) => {
+    console.log('received juggle');
+    if (user === player.characterName) {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You begin to juggle ${num} ${target}.` }]);
+      setActivities({
+        ...activities,
+        juggling: true
+      });
+    } else {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
+    }
+  })
+
+  socket.off('contJuggle').on('contJuggle', ({ user, target, num }) => {
+    console.log('received contJuggle');
+    if (user === player.characterName) {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You juggle ${num} ${target}.` }]);
+    } else {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
+    }
+  })
+
+  socket.off('stop juggle').on('stop juggle', ({user, roomMessage, userMessage}) => {
+    console.log('received stop juggle');
+    if (user === player.characterName){
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
+      setActivities({
+        ...activities,
+        juggling: false
+      });
+    } else {
+      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
+    }
+    clearJuggleTime();
+  })
+
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
 
   const [day, setDay] = useState(true);
+
+  const [activities, setActivities] = useState({
+    sleeping: false,
+    juggling: false,
+    fighting: false,
+    singing: false
+  })
 
   const [chatHistory, setChatHistory] = useState([]);
 
