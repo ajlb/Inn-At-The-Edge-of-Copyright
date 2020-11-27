@@ -159,7 +159,7 @@ function Console() {
     juggle: ['juggle'],
     stats: ['stats'],
     sleep: ['sleep', 'fall asleep'],
-    wake: ['wake'],
+    wake: ['wake', 'wake up', 'awaken'],
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
     examine: ['examine'],
