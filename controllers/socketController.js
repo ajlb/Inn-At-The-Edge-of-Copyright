@@ -356,7 +356,10 @@ module.exports = function (io) {
                 if (!playerData.isAwake) {
                     io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping." });
                 } else {
-                    io.to(location).emit('sleep', { userToSleep })
+                    io.to(location).emit('sleep', { userToSleep });
+                    socket.leave(location);
+                    users[userToSleep.toLowerCase()].chatRooms = users[userToSleep.toLowerCase()].chatRooms.filter(room => !(room === location));
+
                 }
             })
         });
@@ -368,7 +371,9 @@ module.exports = function (io) {
                 if (playerData.isAwake) {
                     io.to(socket.id).emit('error', { status: 400, message: "You are already awake." });
                 } else {
-                    io.to(location).emit('wake', { userToWake })
+                    socket.join(location);
+                    io.to(location).emit('wake', { userToWake });
+
                 }
             })
         });
