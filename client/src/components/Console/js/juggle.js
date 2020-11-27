@@ -30,7 +30,7 @@ function juggle(value, playerData, location) {
                 let potentialItems = 0;
                 for (const item of playerData.inventory) {
                     if (item.name === pluralize(target, 1)) {
-                        if (((playerData.stats.DEX * 1.2) / (num ** 2)) < 2) {
+                        if (((playerData.stats.DEX * 1.7) / (num ** 2)) < 2) {
                             socket.emit('green', 'That may be too many objects for you to juggle.')
                             return false;
                         } else if (item.quantity >= num) {
@@ -48,7 +48,7 @@ function juggle(value, playerData, location) {
                     socket.emit('green', `You don't seem to have any ${target} to juggle!`)
                     return false;
                 } else if (potentialItems > 0) {
-                    if (((playerData.stats.DEX * 1.2) / (num ** 2)) < 2) {
+                    if (((playerData.stats.DEX * 1.7) / (num ** 2)) < 2) {
                         socket.emit('green', 'That may be too many objects for you to juggle.')
                         return false;
                     } else if (potentialItems >= num) {
