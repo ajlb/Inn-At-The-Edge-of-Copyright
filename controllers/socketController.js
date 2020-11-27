@@ -21,7 +21,7 @@ const resolveLocationChunk = (data) => {
 }
 
 // this array is fully temporary and is only here in place of the database until that is set up
-let players = ['the mando', 'shambles', 'cosmo the magnificent'];
+let players = [];
 let users = {};
 
 //temp things to simulate display while working on server side only
@@ -281,25 +281,25 @@ module.exports = function (io) {
 
         socket.on('juggle', ({ target, num, user, location }) => {
             console.log(`${user.characterName} juggles ${num} ${target}`);
-            io.to(location).emit('juggle', { user:user.characterName, target, num })
-            io.to(user.characterName.toLowerCase()).emit('continueJuggle', {target, num, user, location});
+            io.to(location).emit('juggle', { user: user.characterName, target, num })
+            io.to(user.characterName.toLowerCase()).emit('continueJuggle', { target, num, user, location });
 
         });
 
-        socket.on('contJuggle', ({target, num, user, location}) => {
-            io.to(location).emit('contJuggle', {user:user.characterName, target, num});
+        socket.on('contJuggle', ({ target, num, user, location }) => {
+            io.to(location).emit('contJuggle', { user: user.characterName, target, num });
         })
 
-        
-        socket.on('stop juggle', ({user, location, target, intent}) => {
+
+        socket.on('stop juggle', ({ user, location, target, intent }) => {
             console.log('received stop juggle');
             console.log(intent);
             console.log(location);
-            if (intent){
-                io.to(location).emit('stop juggle', {user:user.characterName, roomMessage:`${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage:`You neatly catch the ${target}, and stop juggling.`});
+            if (intent) {
+                io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage: `You neatly catch the ${target}, and stop juggling.` });
             } else {
-                io.to(location).emit('stop juggle', {user:user.characterName, roomMessage:`${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage:`You drop all the ${target} and scramble around, picking them up.`});
-                
+                io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
+
             }
         });
 
