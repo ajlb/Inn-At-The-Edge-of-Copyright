@@ -144,7 +144,12 @@ function InputPanel({
             }
             // socket.emit('sleep', input)
         } else if (findIn(input, actionCalls.wake)) {
-            socket.emit('wake', input)
+            if (!activities.sleeping) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already awake!` }]);
+            } else {
+                setActivities(prevState => { return { ...prevState, sleeping: false } });
+                socket.emit('wake', { userToWake: user.characterName })
+            }
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {

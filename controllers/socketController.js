@@ -355,8 +355,16 @@ module.exports = function (io) {
             })
         });
 
-        socket.on('wake', () => {
+        socket.on('wake', ({ userToWake }) => {
+            db.Player.findOneAndUpdate({ characterName: userToWake }, { $set: { isAwake: true } }, (err, playerData) => {
+                if (err) throw err;
 
+                if (playerData.isAwake) {
+                    io.to(socket.id).emit('error', { status: 400, message: "You are already awake" });
+                } else {
+                    io.to(socket.id).emit('wake', { userToWake })
+                }
+            })
         });
 
         socket.on('position', () => {
