@@ -62,28 +62,6 @@ function Console() {
     }
   });
 
-  // Socket location chunk
-  socket.off('locationChunk').on('locationChunk', message => {
-    console.log("recieved locationChunk");
-    console.log(message);
-    if (location.current === undefined) {
-      let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
-      setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
-      let exits = [];
-      for (const param in message) {
-        if (param !== "current") {
-          exits.push(param);
-        }
-      }
-      setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
-
-    }
-    if (!(message === null)) {
-      setLocation(message);
-    }
-  });
-
   // Socket player inventory update
   socket.off('invUpP').on('invUpP', message => {
     console.log("recieved Player Inventory Update");
@@ -133,9 +111,9 @@ function Console() {
     }
   })
 
-  socket.off('stop juggle').on('stop juggle', ({user, roomMessage, userMessage}) => {
+  socket.off('stop juggle').on('stop juggle', ({ user, roomMessage, userMessage }) => {
     console.log('received stop juggle');
-    if (user === player.characterName){
+    if (user === player.characterName) {
       setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
       setActivities({
         ...activities,
@@ -180,8 +158,8 @@ function Console() {
     emote: ['emote', '/e'],
     juggle: ['juggle'],
     stats: ['stats'],
-    sleep: ['sleep'],
-    wake: ['wake'],
+    sleep: ['sleep', 'fall asleep'],
+    wake: ['wake', 'wake up', 'awaken'],
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
     examine: ['examine'],
@@ -241,6 +219,7 @@ function Console() {
                     setChatHistory={setChatHistory}
                     user={player}
                     location={location}
+                    setLocation={setLocation}
                     day={day}
                   />
                   <InputPanel
@@ -257,6 +236,8 @@ function Console() {
                     setPlayerPosition={setPlayerPosition}
                     location={location}
                     user={player}
+                    activities={activities}
+                    setActivities={setActivities}
                   />
                 </div>
               </div>
