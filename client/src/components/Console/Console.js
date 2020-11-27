@@ -111,9 +111,9 @@ function Console() {
     }
   })
 
-  socket.off('stop juggle').on('stop juggle', ({user, roomMessage, userMessage}) => {
+  socket.off('stop juggle').on('stop juggle', ({ user, roomMessage, userMessage }) => {
     console.log('received stop juggle');
-    if (user === player.characterName){
+    if (user === player.characterName) {
       setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
       setActivities({
         ...activities,
@@ -158,7 +158,7 @@ function Console() {
     emote: ['emote', '/e'],
     juggle: ['juggle'],
     stats: ['stats'],
-    sleep: ['sleep'],
+    sleep: ['sleep', 'fall asleep'],
     wake: ['wake'],
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
@@ -236,6 +236,8 @@ function Console() {
                     setPlayerPosition={setPlayerPosition}
                     location={location}
                     user={player}
+                    activities={activities}
+                    setActivities={setActivities}
                   />
                 </div>
               </div>
