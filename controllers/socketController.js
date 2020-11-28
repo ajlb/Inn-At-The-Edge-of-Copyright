@@ -270,7 +270,8 @@ module.exports = function (io) {
 
         //add: db call to change player, check if slot is full, remove item from inventory
 
-        socket.on('wear', ({ user, item, targetSlot }) => {
+        socket.on('wear', ({ user, item, targetWords }) => {
+            const targetSlot = targetWords ? targetWords.replace(/\s/g, "").toLowerCase() : false;
             console.log(`${user} wants to wear their ${item}.`);
             db.Item.findOne({ itemName: item }).then(returnData => {
                 if (returnData.equippable.length === 1) {
@@ -300,25 +301,44 @@ module.exports = function (io) {
                     })
                 } else if (returnData.equippable.length > 1) {
                     //there are multiple slot options
-                    const options = returnData.equippable.filter(slot => {
-                        slot.slice(0, -4);
+                    console.log(returnData.equippable);
+                    const options = returnData.equippable.map(slot => {
+                        slot = slot.slice(0, -4);
+                        switch (slot) {
+                            case "rightHand":
+                                slot = "right hand";
+                                break;
+                            case "leftHand":
+                                slot = "left hand";
+                                break;
+                            case "twoHands":
+                                slot = "two hands";
+                                break;
+                            default:
+                                break;
+                        }
+                        return slot;
                     })
+                    const uneditedSlots = returnData.equippable;
+                    console.log(options);
                     //only wear on matching slot
-                    if (targetSlot) {
+                    if (targetWords) {
+                        console.log(targetWords);
                         let worn = false;
-                        for (const slot of options) {
-                            if (slot === targetSlot.toLowerCase()) {
+                        for (const editedSlot of options) {
+                            if (editedSlot === targetWords.toLowerCase()) {
+                                let slotIndex = options.indexOf(editedSlot);
                                 console.log('there was a match');
                                 worn = true;
                                 db.Player.findOne({ characterName: user }).then(returnData => {
                                     console.log(returnData);
-                                    if (returnData.wornItems[slot] === null) {
+                                    if (returnData.wornItems[uneditedSlots[slotIndex]] === null) {
                                         console.log("it's empty!");
-                                        db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }).then(returnData => {
+                                        db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${uneditedSlots[slotIndex]}`]: item } }).then(returnData => {
                                             db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(incrementData => {
                                                 db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
                                                     console.log(finalData);
-                                                    io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${slot.slice(0, -4)}.`);
+                                                    io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${editedSlot}.`);
                                                     io.to(user.toLowerCase()).emit('playerUpdate', finalData);
                                                 })
                                             })
@@ -326,7 +346,7 @@ module.exports = function (io) {
                                     } else {
                                         console.log('it was not empty');
                                         console.log(returnData.wornItems);
-                                        io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[slot]} from your ${slot.slice(0, -4)} before you can wear the ${item}.`);
+                                        io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[uneditedSlots[slotIndex]]} from your ${editedSlot} before you can wear the ${item}.`);
                                     }
                                 })
                             }
@@ -344,7 +364,7 @@ module.exports = function (io) {
 
         });
 
-        socket.on('remove', ({user, item, targetSlot}) => {
+        socket.on('remove', ({ user, item, targetSlot }) => {
             console.log(`remove - user: ${user}, item: ${item}, targetSlot: ${targetSlot}.`);
 
         });

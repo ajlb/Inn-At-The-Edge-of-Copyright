@@ -2,23 +2,24 @@ import socket from "../../../clientUtilities/socket";
 import { takeTheseOffThat } from "../../../clientUtilities/finders";
 import { insertArticleSingleValue } from "../../../clientUtilities/parsers";
 
+
+//wear is erroring in two known ways - cannot wear dagger in a specified hand slot, and when multiple potential slots exists and none is specified, no slots are printed in the message.
 function wear(input, playerData, wearCalls) {
 
     input = takeTheseOffThat(wearCalls, input);
+    input = takeTheseOffThat(["a", "the", "an", "my", "these"], input);
     if (input.indexOf(" on ") >= 0) {
-        input = takeTheseOffThat(["a", "the", "an", "my", "these"], input).split(" on ");
-    } else if (input.indexOf(" in ") >= 0) {
-        input = takeTheseOffThat(["a", "the", "an", "my", "these"], input).split(" in ");
-    }
+        input = input.split(" on ");
+    } else {
+        input = input.split(" in ");
+    } 
     const inputItem = input[0].toLowerCase();
-    let targetSlot = input.length > 1 ? input[1] : false;
-    targetSlot = targetSlot ? takeTheseOffThat(["my", "the"], targetSlot) : false;
-    targetSlot = targetSlot.replace(/\s/g, "").toLowerCase();
-
+    let targetWords = input.length > 1 ? input[1] : false;
+    targetWords = targetWords ? takeTheseOffThat(["my", "the"], targetWords) : false;
     const potentialArray = [];
     for (const item of playerData.inventory) {
         if (item.name.toLowerCase() === inputItem) {
-            socket.emit('wear', { user: playerData.characterName, item: inputItem, targetSlot });
+            socket.emit('wear', { user: playerData.characterName, item: inputItem, targetWords });
             return true;
         } else if (item.name.startsWith(inputItem) || item.name.endsWith(inputItem)) {
             potentialArray.push(item.name);
@@ -28,7 +29,7 @@ function wear(input, playerData, wearCalls) {
         socket.emit('green', `You don't seem to have ${insertArticleSingleValue(inputItem)} to wear!`)
         return false;
     } else if (potentialArray.length === 1) {
-        socket.emit('wear', { user: playerData.characterName, item: potentialArray[0], targetSlot });
+        socket.emit('wear', { user: playerData.characterName, item: potentialArray[0], targetWords });
         return true;
     } else if (potentialArray.length > 1) {
         socket.emit('green', `I'm not sure which item you want to wear. Perhaps one of these - ${potentialArray.join(", ")}.`);
@@ -78,7 +79,7 @@ function remove(input, playerData, removeCalls) {
         socket.emit('remove', { user: playerData.characterName, item: itemMatches[0], targetSlot });
         return true;
     } else if (itemMatches.length > 1) {
-        socket.emit('green', `You seem to be wearing multiple items matching that description. Perhaps one of these - ${itemMatches.join(", ")}`);
+        socket.emit('green', `You seem to be wearing multiple items matching that description - ${itemMatches.join(", ")}. Perhaps try examining yourself to see what you're wearing?`);
         return false;
     }
     if (potentialArray.length === 0) {
