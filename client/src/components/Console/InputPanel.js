@@ -7,6 +7,7 @@ import socket from "../../clientUtilities/socket";
 import { getItem, dropItem } from "./js/getDrop";
 import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { giveItem } from './js/give';
+import { juggle, stopJuggling } from "./js/juggle";
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -28,7 +29,9 @@ function InputPanel({
     setPlayerPosition,
     playerPosition,
     setChatHistory,
-    location
+    location,
+    activities,
+    setActivities
 }) {
 
     //update currentMessage in gameinfo based on input bar change
@@ -70,7 +73,7 @@ function InputPanel({
                 socket.emit('failure', `There is no exit ${direction}`);
             }
         } else if (input.toLowerCase() === "stop juggling") {
-            socket.emit('stop juggle', input)
+            stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.inventory)) {
             socket.emit('inventory', input)
         } else if (findIn(input, actionCalls.whisper)) {
@@ -131,14 +134,25 @@ function InputPanel({
             console.log(emoteThis);
             socket.emit('emote', { user: user.characterName, emotion: emoteThis, location: location.current.locationName });
         } else if (findIn(input, actionCalls.juggle)) {
-            socket.emit('juggle', input)
+            juggle(input, user, location.current.locationName);
         } else if (findIn(input, actionCalls.stats)) {
             console.log(`${user.characterName} is looking for their stats`);
             socket.emit('stats', {user: user.characterName });
         } else if (findIn(input, actionCalls.sleep)) {
-            socket.emit('sleep', input)
+            if (activities.sleeping) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping` }]);
+            } else {
+                setActivities(prevState => { return { ...prevState, sleeping: true } });
+                socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
+            }
+            // socket.emit('sleep', input)
         } else if (findIn(input, actionCalls.wake)) {
-            socket.emit('wake', input)
+            if (!activities.sleeping) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already awake!` }]);
+            } else {
+                setActivities(prevState => { return { ...prevState, sleeping: false } });
+                socket.emit('wake', { userToWake: user.characterName, location: location.current.locationName })
+            }
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
@@ -154,16 +168,16 @@ function InputPanel({
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
             }
         } else if (findIn(input, actionCalls.give)) {
-            input = takeTheseOffThat(actionCalls.give, input);
-            let item = input.split(" to ")[0];
-            let target = takeTheseOffThat([item + " to "], input);
+            let inputString = takeTheseOffThat(actionCalls.give, input);
+            let item = inputString.split(" to ")[0];
+            let target = takeTheseOffThat([item + " to "], inputString);
             const result = giveItem(item, user);
             if (result === true) {
-                socket.emit('give', { target, item, user: user.characterName });
+                socket.emit('give', { target, item, user: user.characterName, location: location.current.locationName });
             } else if (result === false) {
                 socket.emit('green', `You don't seem to have ${insertArticleSingleValue(item)} to give.`);
             } else if (typeof result === "string") {
-                socket.emit('give', { target, item: result, user: user.characterName });
+                socket.emit('give', { target, item: result, user: user.characterName, location: location.current.locationName });
             } else if (typeof result === "object") {
                 socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
             }

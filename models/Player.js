@@ -6,7 +6,6 @@ const playerSchema = new Schema({
     type: String,
     unique: true,
     trim: true,
-    unique: true,
     required: "Character name is Required"
   },
   password: {
@@ -17,10 +16,14 @@ const playerSchema = new Schema({
   },
   email: {
     type: String,
-    unique: true,
+    // unique: true,
     match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
   },
   isLiving: {
+    type: Boolean,
+    default: true
+  },
+  isAwake: {
     type: Boolean,
     default: true
   },
@@ -28,49 +31,49 @@ const playerSchema = new Schema({
     type: Boolean,
     default: false
   },
-  stats: 
-    {
-      WIS: {
-        type: Number,
-        default: 0
-      },
-      DEX: {
-        type: Number,
-        default: 0
-      },
-      STR: {
-        type: Number,
-        default: 0
-      },
-      HP: {
-        type: Number,
-        default: 0
-      },
-      maxWIS: {
-        type: Number,
-        default: 0
-      },
-      maxDEX: {
-        type: Number,
-        default: 0
-      },
-      maxSTR: {
-        type: Number,
-        default: 0
-      },
-      maxHP: {
-        type: Number,
-        default: 0
-      },
-      XP: {
-        type: Number,
-        default: 0
-      },
-      level: {
-        type: Number,
-        default: 1
-      }
+  stats:
+  {
+    WIS: {
+      type: Number,
+      default: 0
     },
+    DEX: {
+      type: Number,
+      default: 0
+    },
+    STR: {
+      type: Number,
+      default: 0
+    },
+    HP: {
+      type: Number,
+      default: 0
+    },
+    maxWIS: {
+      type: Number,
+      default: 0
+    },
+    maxDEX: {
+      type: Number,
+      default: 0
+    },
+    maxSTR: {
+      type: Number,
+      default: 0
+    },
+    maxHP: {
+      type: Number,
+      default: 0
+    },
+    XP: {
+      type: Number,
+      default: 0
+    },
+    level: {
+      type: Number,
+      default: 1
+    }
+  },
   race: {
     type: String,
     default: "Human"
@@ -83,7 +86,15 @@ const playerSchema = new Schema({
     type: String
   },
   inventory: {
-    type: Array
+      item: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Item"
+        }
+    ],
+    quantitiy: {
+        type: Number
+    }
   },
   lastLocation: {
     type: String

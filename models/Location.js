@@ -15,7 +15,7 @@ let locationSchema = new Schema({
     type: String
   },
   exits: {
-    type: Array
+    type: Object
   },
   region: {
     type: String
@@ -24,7 +24,15 @@ let locationSchema = new Schema({
     type: Array
   },
   inventory: {
-    type: Array
+    item: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Item"
+        }
+    ],
+    quantitiy: {
+        type: Number
+    }
   },
   indoorOutdoor: {
     type: String
