@@ -276,8 +276,9 @@ module.exports = function (io) {
 
         });
 
-        socket.on('emote', () => {
-
+        socket.on('emote', ({ user, emotion, location }) => {
+            console.log(`${user} ${emotion}`);
+            io.to(location).emit('emote', { user, emotion });
         });
 
         socket.on('juggle', () => {
@@ -321,6 +322,7 @@ module.exports = function (io) {
         socket.on('stats', () => {
             // db for player stats
             // emit stats to player
+            
         });
 
         socket.on('sleep', () => {

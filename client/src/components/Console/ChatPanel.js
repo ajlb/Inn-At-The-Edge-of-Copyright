@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import socket from "../../clientUtilities/socket";
-import { insertArticleSingleValue } from "../../clientUtilities/parsers";
+import { insertArticleSingleValue, emoteCorrection } from "../../clientUtilities/parsers";
 
 
 //note if user is scrolled to bottom of div
@@ -102,6 +102,13 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type, text: `${actor} gives ${insertArticleSingleValue(item)} to ${target}.` }]);
         }
     });
+
+    //emote
+    socket.off('emote').on('emote', ({ user, emotion }) => {
+        console.log(`${user} emotes ${emotion}`);
+        let type = 'displayed-stat';
+        setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}`}]))
+    })
 
     socket.off('error').on('error', ({ status, message }) => {
         let type = 'error-message';

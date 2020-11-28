@@ -127,11 +127,14 @@ function InputPanel({
         } else if (findIn(input, actionCalls.remove)) {
             socket.emit('remove', input)
         } else if (findIn(input, actionCalls.emote)) {
-            socket.emit('emote', input)
+            const emoteThis = takeTheseOffThat(actionCalls.emote, input);
+            console.log(emoteThis);
+            socket.emit('emote', { user: user.characterName, emotion: emoteThis, location: location.current.locationName });
         } else if (findIn(input, actionCalls.juggle)) {
             socket.emit('juggle', input)
         } else if (findIn(input, actionCalls.stats)) {
-            socket.emit('stats', input)
+            console.log(`${user.characterName} is looking for their stats`);
+            socket.emit('stats', {user: user.characterName });
         } else if (findIn(input, actionCalls.sleep)) {
             socket.emit('sleep', input)
         } else if (findIn(input, actionCalls.wake)) {
