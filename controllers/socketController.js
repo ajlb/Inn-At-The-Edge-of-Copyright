@@ -62,7 +62,7 @@ module.exports = function (io) {
                     io.to(usernameLowerCase).emit('log in', message);
                     console.log(`${message} is now fake logged in.`);
                     //find and retrieve user Data, join location room
-                    db.Player.findOneAndUpdate({ characterName: message }, {$set: {isAwake:true, isOnline:true}}, {new:true}).select("-password").then(userData => {
+                    db.Player.findOneAndUpdate({ characterName: message }, { $set: { isAwake: true, isOnline: true } }, { new: true }).select("-password").then(userData => {
                         let userLocation
                         if (userData === null) {
                             userLocation = "Inn Lobby";
@@ -268,19 +268,62 @@ module.exports = function (io) {
 
         });
 
-        //add: db call to change player, remove item from inventory, add way to sort though string to get target slot, add receiver for succesful wear
+        //add: db call to change player, check if slot is full, remove item from inventory
 
-        socket.on('wear', ({user, item}) => {
+        socket.on('wear', ({ user, item, targetSlot }) => {
             console.log(`${user} wants to wear their ${item}.`);
-            db.Item.findOne({itemName: item}).then(returnData => {
-                if (returnData.equippable.length === 1){
-                    io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${returnData.equippable[0].slice(0, -4)}.`);
-                } else if (returnData.equippable.length > 1) {
-                    const options = returnData.equippable.filter(slot => {
-                        slot.slice(0,-4);
+            db.Item.findOne({ itemName: item }).then(returnData => {
+                if (returnData.equippable.length === 1) {
+                    let slot = returnData.equippable[0]
+                    db.Player.findOne({ characterName: user }).then(returnData => {
+                        console.log(returnData);
+                        if (returnData.wornItems[slot] === null) {
+                            console.log("it's empty!");
+                            db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).then(returnData => {
+                                console.log(returnData);
+                                io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${slot.slice(0, -4)}.`);
+
+                            })
+                        } else {
+                            console.log('it was not empty');
+                            console.log(returnData.wornItems);
+                            io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[slot]} from your ${slot.slice(0, -4)} before you can wear the ${item}.`);
+                        }
                     })
-                    io.to(user.toLowerCase()).emit('green', `Where do you want to wear it? (${options.join(", ")})`);
-                } else {
+                } else if (returnData.equippable.length > 1) {
+                    //there are multiple slot options
+                    const options = returnData.equippable.filter(slot => {
+                        slot.slice(0, -4);
+                    })
+                    //only wear on matching slot
+                    if (targetSlot) {
+                        let worn = false;
+                        for (const slot of options) {
+                            if (slot === targetSlot.toLowerCase()) {
+                                console.log('there was a match');
+                                worn = true;
+                                db.Player.findOne({ characterName: user }).then(returnData => {
+                                    const slotName = slot + "Slot";
+                                    if (returnData.wornItems[slotName] === "NULL") {
+                                        console.log("it's empty!");
+                                        io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${slot}.`);
+                                        db.Player.findOneAndUpdate({ characterName: user }, { $set: { 'wornItems.$[slot]': item } }, { arrayFilters: { slot: slotName }, new: true }).then(returnData => {
+                                            console.log(returnData);
+                                        })
+                                    } else {
+                                        console.log('it was not empty');
+                                        io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[slotName]} from your ${slot} before you can wear the ${item}.`);
+                                    }
+                                })
+                            }
+                        }
+                        if (!worn) {//if user didn't put in a matching slot
+                            io.to(user.toLowerCase()).emit('green', `You can't wear that item there.`);
+                        }
+                    } else {//if multiple slots but user didn't specify
+                        io.to(user.toLowerCase()).emit('green', `Where do you want to wear it? (${options.join(", ")})`);
+                    }
+                } else {//non wearable item
                     io.to(user.toLowerCase()).emit('green', `You can't wear that.`);
                 }
             })
@@ -314,10 +357,10 @@ module.exports = function (io) {
             if (intent) {
                 io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage: `You neatly catch the ${target}, and stop juggling.` });
             } else {
-                io.to(location).emit('stop juggle', {user:user.characterName, roomMessage:`${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage:`You drop all the ${target} and scramble around, picking them up.`});
+                io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
                 //update player dex
                 console.log("updating player dex");
-                db.Player.findOneAndUpdate({characterName: user.characterName}, {$inc: {"stats.DEX":0.1}}, {new:true}).then(updatedPlayerData => {
+                db.Player.findOneAndUpdate({ characterName: user.characterName }, { $inc: { "stats.DEX": 0.1 } }, { new: true }).then(updatedPlayerData => {
                     io.to(user.characterName.toLowerCase()).emit('playerUpdate', updatedPlayerData);
                 })
             }

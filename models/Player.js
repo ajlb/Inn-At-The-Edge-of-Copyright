@@ -101,7 +101,7 @@ const playerSchema = new Schema({
   description: {
     type: String
   },
-  wornItems: [
+  wornItems:
     {
       headSlot: {
         type: String
@@ -133,8 +133,7 @@ const playerSchema = new Schema({
       twoHands: {
         type: String
       }
-    }
-  ],
+    },
   day: {
     type: Boolean
   }

@@ -135,7 +135,7 @@ function ChatPanel({
     });
 
     socket.off('sleep').on('sleep', ({ userToSleep }) => {
-        if (userToSleep === user.characterName){
+        if (userToSleep === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
         } else {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} falls asleep.` }]);
@@ -143,47 +143,56 @@ function ChatPanel({
     })
 
     socket.off('wake').on('wake', ({ userToWake }) => {
-        if (userToWake === user.characterName){
-        setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
+        if (userToWake === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
         } else {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToWake} wakes up.` }]);
         }
     })
 
-    
-  socket.off('juggle').on('juggle', ({ user, target, num }) => {
-    if (user === user.characterName) {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You begin to juggle ${num} ${target}.` }]);
-      setActivities({
-        ...activities,
-        juggling: true
-      });
-    } else {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
-    }
-  })
 
-  socket.off('contJuggle').on('contJuggle', ({ user, target, num }) => {
-    if (user === user.characterName) {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You juggle ${num} ${target}.` }]);
-    } else {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
-    }
-  })
+    socket.off('juggle').on('juggle', ({ user, target, num }) => {
+        if (user === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You begin to juggle ${num} ${target}.` }]);
+            setActivities({
+                ...activities,
+                juggling: true
+            });
+        } else {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
+        }
+    })
 
-  socket.off('stop juggle').on('stop juggle', ({ user, roomMessage, userMessage }) => {
-    if (user === user.characterName) {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
-      setActivities({
-        ...activities,
-        juggling: false
-      });
-    } else {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
-    }
-    clearJuggleTime();
-  })
+    socket.off('contJuggle').on('contJuggle', ({ user, target, num }) => {
+        if (user === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You juggle ${num} ${target}.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
+        }
+    })
 
+    socket.off('stop juggle').on('stop juggle', ({ user, roomMessage, userMessage }) => {
+        if (user === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
+            setActivities({
+                ...activities,
+                juggling: false
+            });
+        } else {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
+        }
+        clearJuggleTime();
+    })
+
+    socket.off('wear').on('wear', message => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+    socket.off('remove').on('remove', message => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
 
     socket.off('error').on('error', ({ status, message }) => {
         let type = 'error-message';
