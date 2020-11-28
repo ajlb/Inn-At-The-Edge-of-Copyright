@@ -63,6 +63,82 @@ figure {
     padding: 5px;
     margin-bottom: 58px;
 }
+/* scroll bar above and fixed */
+/* add region classes to html */
+
+
+/* Backgrounds begin */
+.cavern-elevator {
+    background-image: url("../images/the-cavern-elevator.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.cavern-lake {
+    background-image: url("../images/the-cavern-lake.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.cavern {
+    background-image: url("../images/the-cavern.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.clouds {
+    background-image: url("../images/the-clouds.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.forest {
+    background-image: url("../images/the-forest.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.inn-welcome-page {
+    background-image: url("../images/the-inn.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.meadow {
+    background-image: url("../images/the-meadow.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.mountains {
+    background-image: url("../images/the-mountains.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.pumpkin-patch {
+    background-image: url("../images/the-pumpkin-patch.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.spaceship {
+    background-image: url("../images/the-spaceship.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.town-crossroads {
+    background-image: url("../images/the-town-crossroads.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+/* Background ends */
+
+.new-panel {
+    /* background-position: center; */
+    /* background-color: rgb(180, 180, 180); */
+    /* color: white; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 15px solid rgb(180, 180, 180); */
+    height: 70vh;
+    width: 80vw;
+    border-radius: 25px;
+    font-size: 12px;
+}
 
 .panel-default {
     background-color: rgb(180, 180, 180);
