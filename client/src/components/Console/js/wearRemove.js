@@ -1,36 +1,128 @@
 import socket from "../../../clientUtilities/socket";
 import { takeTheseOffThat } from "../../../clientUtilities/finders";
+import { insertArticleSingleValue } from "../../../clientUtilities/parsers";
 
-function wear(input, playerData, wearCalls){
-    console.log(playerData.inventory);
-    input = takeTheseOffThat(wearCalls, input).split(" on ");
-    const inputItem = input[0];
-    const targetSlot = input.length > 1 ? input[1] : false;
-    console.log(inputItem);
+function wear(input, playerData, wearCalls) {
+
+    input = takeTheseOffThat(wearCalls, input);
+    if (input.indexOf(" on ") >= 0) {
+        input = takeTheseOffThat(["a", "the", "an", "my", "these"], input).split(" on ");
+    } else if (input.indexOf(" in ") >= 0) {
+        input = takeTheseOffThat(["a", "the", "an", "my", "these"], input).split(" in ");
+    }
+    const inputItem = input[0].toLowerCase();
+    let targetSlot = input.length > 1 ? input[1] : false;
+    targetSlot = targetSlot ? takeTheseOffThat(["my", "the"], targetSlot) : false;
+    targetSlot = targetSlot.replace(/\s/g, "").toLowerCase();
+
     const potentialArray = [];
-    for (const item of playerData.inventory){
-        console.log(item.name);
-        if (item.name === inputItem){
-            socket.emit('wear', {user:playerData.characterName, item:inputItem, targetSlot});
+    for (const item of playerData.inventory) {
+        if (item.name.toLowerCase() === inputItem) {
+            socket.emit('wear', { user: playerData.characterName, item: inputItem, targetSlot });
             return true;
-        } else if (item.name.startsWith(inputItem) || item.name.endsWith(inputItem)){
+        } else if (item.name.startsWith(inputItem) || item.name.endsWith(inputItem)) {
             potentialArray.push(item.name);
         }
     }
-    if (potentialArray.length === 0){
-        socket.emit('green', `You don't seem to have a ${inputItem} to wear!`)
+    if (potentialArray.length === 0) {
+        socket.emit('green', `You don't seem to have ${insertArticleSingleValue(inputItem)} to wear!`)
         return false;
-    } else if (potentialArray.length === 1){
-        socket.emit('wear', {user:playerData.characterName, item:potentialArray[0], targetSlot});
+    } else if (potentialArray.length === 1) {
+        socket.emit('wear', { user: playerData.characterName, item: potentialArray[0], targetSlot });
         return true;
-    } else if (potentialArray.length > 1){
+    } else if (potentialArray.length > 1) {
         socket.emit('green', `I'm not sure which item you want to wear. Perhaps one of these - ${potentialArray.join(", ")}.`);
         return false;
     }
 }
 
-function remove(input, playerData, removeCalls){
-    return null
+function remove(input, playerData, removeCalls) {
+    input = takeTheseOffThat(removeCalls, input);
+    input = takeTheseOffThat(["a", "the", "an", "my", "these"], input).split(" from ");
+    const inputItem = input[0].toLowerCase();
+    let targetWords = input.length > 1 ? input[1] : false;
+    targetWords = targetWords ? takeTheseOffThat(["my", "the"], targetWords) : false;
+    const targetSlot = targetWords ? targetWords.replace(/\s/g, "").toLowerCase() : false;
+    console.log(`targetSlot: ${targetSlot}`);
+    console.log(`inputItem: ${inputItem}`);
+    let potentialArray = [];
+    let itemMatches = [];
+    console.log("------------");
+    console.log("------------");
+
+    for (const slot in playerData.wornItems) {
+        console.log(slot, playerData.wornItems[slot]);
+        if (playerData.wornItems[slot] === inputItem) {
+            potentialArray.push(slot);
+            if ((slot.toLowerCase() === (targetSlot + 'slot')) || (targetSlot === false)) {
+                console.log("first if");
+                socket.emit('remove', { user: playerData.characterName, item: inputItem, targetSlot });
+                return true;
+            }
+        } else if (!(playerData.wornItems[slot] === null)) {
+            console.log("second if");
+            if (((playerData.wornItems[slot].startsWith(inputItem)) || (playerData.wornItems[slot].endsWith(inputItem))) && (slot.toLowerCase() === (targetSlot + 'slot'))) {
+                console.log("if 2.1");
+                socket.emit('remove', { user: playerData.characterName, item: playerData.wornItems[slot], targetSlot });
+                return true;
+            } else if (((playerData.wornItems[slot].startsWith(inputItem)) || (playerData.wornItems[slot].endsWith(inputItem))) && (targetSlot === false)) {
+                console.log("if 2.2");
+                console.log("---partial match---");
+                itemMatches.push(playerData.wornItems[slot]);
+                console.log("-----");
+            }
+
+        }
+    }
+    if (itemMatches.length === 1) {
+        socket.emit('remove', { user: playerData.characterName, item: itemMatches[0], targetSlot });
+        return true;
+    } else if (itemMatches.length > 1) {
+        socket.emit('green', `You seem to be wearing multiple items matching that description. Perhaps one of these - ${itemMatches.join(", ")}`);
+        return false;
+    }
+    if (potentialArray.length === 0) {
+        socket.emit('green', `You don't seem to be wearing ${insertArticleSingleValue(inputItem)}!`)
+        return false;
+    } else if (potentialArray.length === 1) {
+        let placeOfExistence = potentialArray[0].slice(0, -4);
+        switch (placeOfExistence) {
+            case "rightHand":
+                placeOfExistence = "in your right hand";
+                break;
+            case "leftHand":
+                placeOfExistence = "in your left hand";
+                break;
+            case "twoHands":
+                placeOfExistence = "in your two hands";
+                break;
+            default:
+                placeOfExistence = "on your " + placeOfExistence;
+                break;
+        }
+        socket.emit('green', `Your ${inputItem} is not on your ${targetWords}, it's ${placeOfExistence}`);
+        return false;
+    } else if (potentialArray.length > 1) {
+        potentialArray = potentialArray.filter(slot => {
+            slot = slot.slice(0, -4);
+            switch (slot) {
+                case 'rightHand':
+                    slot = 'right hand';
+                    break;
+                case 'leftHand':
+                    slot = 'left hand';
+                    break;
+                case 'twoHands':
+                    slot = 'two hands';
+                    break;
+                default:
+                    break;
+            }
+            return slot;
+        })
+        socket.emit('green', `I'm not sure where you want to remove that from. Perhaps one of these - ${potentialArray.join(", ")}.`);
+        return false;
+    }
 }
 
 export {

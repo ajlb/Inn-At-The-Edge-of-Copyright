@@ -280,8 +280,16 @@ module.exports = function (io) {
                         if (returnData.wornItems[slot] === null) {
                             console.log("it's empty!");
                             db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).then(returnData => {
+                                db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+                                    console.log('ran scrub player');
+                                    db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
+                                        console.log("I should be sending a playerUpdate");
+                                        io.to(socket.id).emit('playerUpdate', finalData);
+                                    });
+                                });
                                 console.log(returnData);
                                 io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${slot.slice(0, -4)}.`);
+
 
                             })
                         } else {
@@ -303,16 +311,22 @@ module.exports = function (io) {
                                 console.log('there was a match');
                                 worn = true;
                                 db.Player.findOne({ characterName: user }).then(returnData => {
-                                    const slotName = slot + "Slot";
-                                    if (returnData.wornItems[slotName] === "NULL") {
+                                    console.log(returnData);
+                                    if (returnData.wornItems[slot] === null) {
                                         console.log("it's empty!");
-                                        io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${slot}.`);
-                                        db.Player.findOneAndUpdate({ characterName: user }, { $set: { 'wornItems.$[slot]': item } }, { arrayFilters: { slot: slotName }, new: true }).then(returnData => {
-                                            console.log(returnData);
+                                        db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }).then(returnData => {
+                                            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(incrementData => {
+                                                db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
+                                                    console.log(finalData);
+                                                    io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${slot.slice(0, -4)}.`);
+                                                    io.to(user.toLowerCase()).emit('playerUpdate', finalData);
+                                                })
+                                            })
                                         })
                                     } else {
                                         console.log('it was not empty');
-                                        io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[slotName]} from your ${slot} before you can wear the ${item}.`);
+                                        console.log(returnData.wornItems);
+                                        io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[slot]} from your ${slot.slice(0, -4)} before you can wear the ${item}.`);
                                     }
                                 })
                             }
@@ -330,7 +344,8 @@ module.exports = function (io) {
 
         });
 
-        socket.on('remove', () => {
+        socket.on('remove', ({user, item, targetSlot}) => {
+            console.log(`remove - user: ${user}, item: ${item}, targetSlot: ${targetSlot}.`);
 
         });
 
