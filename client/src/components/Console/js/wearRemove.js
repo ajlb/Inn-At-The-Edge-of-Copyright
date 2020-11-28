@@ -44,39 +44,27 @@ function remove(input, playerData, removeCalls) {
     let targetWords = input.length > 1 ? input[1] : false;
     targetWords = targetWords ? takeTheseOffThat(["my", "the"], targetWords) : false;
     const targetSlot = targetWords ? targetWords.replace(/\s/g, "").toLowerCase() : false;
-    console.log(`targetSlot: ${targetSlot}`);
-    console.log(`inputItem: ${inputItem}`);
     let potentialArray = [];
     let itemMatches = [];
-    console.log("------------");
-    console.log("------------");
 
     for (const slot in playerData.wornItems) {
-        console.log(slot, playerData.wornItems[slot]);
         if (playerData.wornItems[slot] === inputItem) {
             potentialArray.push(slot);
             if ((slot.toLowerCase() === (targetSlot + 'slot')) || (targetSlot === false)) {
-                console.log("first if");
                 socket.emit('remove', { user: playerData.characterName, item: inputItem, targetSlot:slot });
                 return true;
             }
         } else if (!(playerData.wornItems[slot] === null)) {
-            console.log("second if");
             if (((playerData.wornItems[slot].startsWith(inputItem)) || (playerData.wornItems[slot].endsWith(inputItem))) && (slot.toLowerCase() === (targetSlot + 'slot'))) {
-                console.log("if 2.1");
                 socket.emit('remove', { user: playerData.characterName, item: playerData.wornItems[slot], targetSlot:slot });
                 return true;
             } else if (((playerData.wornItems[slot].startsWith(inputItem)) || (playerData.wornItems[slot].endsWith(inputItem))) && (targetSlot === false)) {
-                console.log("if 2.2");
-                console.log("---partial match---");
                 itemMatches.push(playerData.wornItems[slot]);
-                console.log("-----");
             }
 
         }
     }
     if (itemMatches.length === 1) {
-        console.log(potentialArray);
         socket.emit('remove', { user: playerData.characterName, item: itemMatches[0], targetSlot: potentialArray[0] });
         return true;
     } else if (itemMatches.length > 1) {
