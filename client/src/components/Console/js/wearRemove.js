@@ -57,14 +57,14 @@ function remove(input, playerData, removeCalls) {
             potentialArray.push(slot);
             if ((slot.toLowerCase() === (targetSlot + 'slot')) || (targetSlot === false)) {
                 console.log("first if");
-                socket.emit('remove', { user: playerData.characterName, item: inputItem, targetSlot });
+                socket.emit('remove', { user: playerData.characterName, item: inputItem, targetSlot:slot });
                 return true;
             }
         } else if (!(playerData.wornItems[slot] === null)) {
             console.log("second if");
             if (((playerData.wornItems[slot].startsWith(inputItem)) || (playerData.wornItems[slot].endsWith(inputItem))) && (slot.toLowerCase() === (targetSlot + 'slot'))) {
                 console.log("if 2.1");
-                socket.emit('remove', { user: playerData.characterName, item: playerData.wornItems[slot], targetSlot });
+                socket.emit('remove', { user: playerData.characterName, item: playerData.wornItems[slot], targetSlot:slot });
                 return true;
             } else if (((playerData.wornItems[slot].startsWith(inputItem)) || (playerData.wornItems[slot].endsWith(inputItem))) && (targetSlot === false)) {
                 console.log("if 2.2");
@@ -76,7 +76,8 @@ function remove(input, playerData, removeCalls) {
         }
     }
     if (itemMatches.length === 1) {
-        socket.emit('remove', { user: playerData.characterName, item: itemMatches[0], targetSlot });
+        console.log(potentialArray);
+        socket.emit('remove', { user: playerData.characterName, item: itemMatches[0], targetSlot: potentialArray[0] });
         return true;
     } else if (itemMatches.length > 1) {
         socket.emit('green', `You seem to be wearing multiple items matching that description - ${itemMatches.join(", ")}. Perhaps try examining yourself to see what you're wearing?`);

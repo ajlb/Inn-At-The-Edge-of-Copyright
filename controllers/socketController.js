@@ -366,6 +366,56 @@ module.exports = function (io) {
 
         socket.on('remove', ({ user, item, targetSlot }) => {
             console.log(`remove - user: ${user}, item: ${item}, targetSlot: ${targetSlot}.`);
+            switch (targetSlot) {
+                case "lefthand":
+                    targetSlot = "leftHand";
+                    break;
+                case "righthand":
+                    targetSlot = "rightHand";
+                    break;
+                case "twohands":
+                    targetSlot = "twoHands";
+                    break;
+                default:
+                    break;
+            }
+            db.Player.updateOne({characterName: user}, {$set: { [`wornItems.${targetSlot}`]: null }}).then(returnData => {
+                console.log("edit wornItems:");
+                console.log(returnData);
+                if (returnData.nModified === 1){
+                    db.Player.updateOne({characterName: user}, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+                        console.log("increment inventory: ");
+                        console.log(returnData);
+                        targetSlot = targetSlot.slice(0, -4).toLowerCase();
+                        switch (targetSlot) {
+                            case "lefthand":
+                                targetSlot = "left hand";
+                                break;
+                            case "righthand":
+                                targetSlot = "right hand";
+                                break;
+                            case "twohands":
+                                targetSlot = "two hands";
+                                break;
+                            default:
+                                break;
+                        }
+                        if (returnData.nModified === 1){
+                            //send success
+                            db.Player.findOne({characterName: user}).then(returnData=>{
+                                io.to(socket.id).emit('playerUpdate', returnData);
+                            })
+                            io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
+                        } else {
+                            db.Player.findOneAndUpdate({characterName: user}, {$push: {inventory: {name: item, quantity: 1}}}, {new:true}).then(returnData => {
+                                //send success
+                                io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
+                                io.to(socket.id).emit('playerUpdate', returnData);
+                            })
+                        }
+                    })
+                }
+            })
 
         });
 
