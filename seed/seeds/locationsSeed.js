@@ -66,6 +66,16 @@ module.exports = [{
   "indoorOutdoor": "indoor",
   "NPCs": [],
   "inventory": [],
+  "discoverables": [
+    {
+      "names": [
+        "mouse hole",
+        "hole"
+      ],
+      "description": "a mousehole on the western wall that seems like the perfect size for a curious explorer to squeeze through...",
+      "exampleCommand": "move west"
+    }
+  ],
   "exits": {
     "north": "Inn Lobby",
     "west": "Library",
