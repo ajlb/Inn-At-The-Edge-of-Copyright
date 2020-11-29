@@ -201,7 +201,7 @@ function ChatPanel({
     });
 
     socket.off('error').on('error', ({ status, message }) => {
-        let type = 'error-message';
+        let type = 'displayed-error';
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
     });
 
