@@ -60,29 +60,10 @@ function InputPanel({
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (findIn(input, actionCalls.move)) {
-<<<<<<< HEAD
             let message = takeTheseOffThat(actionCalls.move, input);
             console.log(message);
             socket.emit('move', {message, user});
             console.log('input was move');
-=======
-            let direction = takeTheseOffThat(actionCalls.move, input);
-            for (const param in DIRECTIONS) {
-                if (direction.toLowerCase() === param) {
-                    direction = DIRECTIONS[param];
-                }
-            }
-            let moved = false;
-            for (const param in location) {
-                if (param === direction) {
-                    socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user: user.characterName });
-                    moved = true;
-                }
-            }
-            if (moved === false) {
-                socket.emit('failure', `There is no exit ${direction}`);
-            }
->>>>>>> 2d8323b5d27e515732595ab9a0597c29143e8a2e
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.inventory)) {
@@ -109,12 +90,7 @@ function InputPanel({
             // fyi, checking if the message begins with someone's name is handled on the server side
             socket.emit('whisper', message)
         } else if (findIn(input, actionCalls.speak)) {
-<<<<<<< HEAD
             socket.emit('speak', input);
-=======
-            const message = takeTheseOffThat(actionCalls.speak, input);
-            socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
->>>>>>> 2d8323b5d27e515732595ab9a0597c29143e8a2e
         } else if (findIn(input, actionCalls.help)) {
             let help = takeTheseOffThat(actionCalls.help, input);
             console.log(help);

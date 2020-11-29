@@ -183,9 +183,9 @@ module.exports = function (io) {
             io.to(socket.id).emit('green', message);
         });
 
-        socket.on('inventory', ({ itemRecieved, itemRemoved}) => {
-            console.log('item is tracking');
-            console.log(itemRemoved);
+        socket.on('inventory', message  => {
+            io.to(socket.id).emit('inventory', message);
+            
         });
 
         socket.on('speak', ({ message, user, location }) => {
@@ -199,7 +199,7 @@ module.exports = function (io) {
             console.log(message);
             db.Action.find({})
             .then(actionData => {
-           io.to(socket.id).emit('help', {actionData});
+           io.to(socket.id).emit('help', {actionData, message});
            console.log(`This is our data ${actionData}`);
             })
 

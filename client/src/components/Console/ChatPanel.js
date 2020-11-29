@@ -109,7 +109,7 @@ function ChatPanel({
 
     //a drop action
     socket.off('drop').on('drop', ({ target, actor }) => {
-        let type = 'displayed-stat';
+        let type = 'displayed-indent';
         if (actor === user.characterName) {
             setChatHistory(prevState => [...prevState, { type, text: `You drop ${insertArticleSingleValue(target)}.` }]);
         } else {
@@ -144,9 +144,16 @@ function ChatPanel({
     });
 
     socket.off('help').on('help', ({ actionData }) => {
-        let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: `${actionData}` }]);
-        console.log(actionData);
+        let type = 'displayed-indent';
+       // let help = [];
+        let newAction = actionData;
+         const helpData = newAction.map((helpItem) => {
+             return [helpItem.actionName, helpItem.commandBriefDescription];
+         })
+       
+        setChatHistory(prevState => [...prevState, { type, text: `${helpData}` }]);
+        console.log(helpData);
+       // console.log(actionData);
     });
 
     //where is the user scrolled to?
