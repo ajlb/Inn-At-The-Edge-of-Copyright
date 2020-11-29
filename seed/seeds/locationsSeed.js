@@ -110,7 +110,7 @@ module.exports = [{
   "NPCs": [],
   "inventory": [],
   "exits": {
-    "north": "Front yard"
+    "north": "Front Yard"
   }
 }, {
   "_id": {
