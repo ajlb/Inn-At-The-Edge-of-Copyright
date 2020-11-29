@@ -29,6 +29,10 @@ function ChatPanel({
         // chat history is mapped down below
     });
 
+    socket.off('from NPC').on('from NPC', ({ NPCName, NPCMessage, exampleResponses, leavingConversation }) => {
+        console.log(`${NPCName}: ${NPCMessage}`)
+    })
+
     //failed user command messages
     socket.off('failure').on('failure', (message) => {
         let type = 'displayed-error';

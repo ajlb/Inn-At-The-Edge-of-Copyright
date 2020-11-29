@@ -103,6 +103,7 @@ function InputPanel({
             NPCCheck(location.current.NPCs, message)
                 .then(({ NPCName, message }) => {
                     console.log(`To NPC named ${NPCName}: ${message}`)
+                    socket.emit('to NPC', { toNPC: NPCName, message })
                 })
                 .catch(err => {
                     console.log(err.message)
