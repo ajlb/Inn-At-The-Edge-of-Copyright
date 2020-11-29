@@ -7,7 +7,6 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
-import { clearJuggleTime } from "./js/juggle";
 
 
 function Console() {
@@ -62,10 +61,15 @@ function Console() {
     }
   });
 
+  //Socket updated userData
+  socket.off('playerUpdate').on('playerUpdate', updatedPlayerData => {
+    if (!(updatedPlayerData === null)) {
+      setPlayer(updatedPlayerData);
+    }
+  });
+
   // Socket player inventory update
   socket.off('invUpP').on('invUpP', message => {
-    console.log("recieved Player Inventory Update");
-    console.log(message);
     if (!(message === null)) {
       setPlayer({
         ...player,
@@ -76,8 +80,6 @@ function Console() {
 
   // Socket location inventory update
   socket.off('invUpL').on('invUpL', message => {
-    console.log("recieved Location Inventory Update");
-    console.log(message);
     if (!(message === null)) {
       setLocation({
         ...location,
@@ -88,43 +90,6 @@ function Console() {
       });
     }
   });
-
-  socket.off('juggle').on('juggle', ({ user, target, num }) => {
-    console.log('received juggle');
-    if (user === player.characterName) {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You begin to juggle ${num} ${target}.` }]);
-      setActivities({
-        ...activities,
-        juggling: true
-      });
-    } else {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
-    }
-  })
-
-  socket.off('contJuggle').on('contJuggle', ({ user, target, num }) => {
-    console.log('received contJuggle');
-    if (user === player.characterName) {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You juggle ${num} ${target}.` }]);
-    } else {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
-    }
-  })
-
-  socket.off('stop juggle').on('stop juggle', ({ user, roomMessage, userMessage }) => {
-    console.log('received stop juggle');
-    if (user === player.characterName) {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
-      setActivities({
-        ...activities,
-        juggling: false
-      });
-    } else {
-      setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
-    }
-    clearJuggleTime();
-  })
-
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
 
@@ -217,6 +182,8 @@ function Console() {
                   <ChatPanel
                     chatHistory={chatHistory}
                     setChatHistory={setChatHistory}
+                    activities={activities}
+                    setActivities={setActivities}
                     user={player}
                     location={location}
                     setLocation={setLocation}
