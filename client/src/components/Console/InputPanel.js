@@ -210,7 +210,7 @@ function InputPanel({
                         if (exampleCommand) {
                             return [...prevState,
                             { type: 'displayed-stat', text: `You see ${description}` },
-                            { type: 'displayed-stat', text: `Try entering: ${exampleCommand}` }]
+                            { type: 'displayed-commands', text: `Try entering: ${exampleCommand}` }]
                         } else {
                             return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
                         }
