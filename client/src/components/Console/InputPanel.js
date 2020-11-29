@@ -189,14 +189,14 @@ function InputPanel({
         } else if (findIn(input, actionCalls.examine)) {
             const toExamine = takeTheseOffThat(actionCalls.examine, input);
             console.log("You are attempting to examine", toExamine)
-
+            console.log(user)
             if (location.current.discoverables) {
                 let discoverables = location.current.discoverables;
                 let description;
                 let exampleCommand;
                 discoverables.forEach(discoverable => {
                     discoverable.names.forEach(name => {
-                        if (name.startsWith(toExamine.toLowerCase())) {
+                        if (name.startsWith(toExamine.toLowerCase()) && toExamine.trim() !== '') {
                             console.log("You found the", name);
                             description = discoverable.description;
                             exampleCommand = discoverable.exampleCommand;
