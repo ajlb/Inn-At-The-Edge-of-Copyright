@@ -187,10 +187,11 @@ function InputPanel({
                 socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.examine)) {
-            const toExamine = takeTheseOffThat(actionCalls.examine, input);
+            const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
+            const toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
             console.log("You are attempting to examine", toExamine)
             console.log(user)
-            if (location.current.discoverables) {
+            if (location.current.discoverables && toExamine.trim() !== '') {
                 let discoverables = location.current.discoverables;
                 let description;
                 let exampleCommand;
@@ -213,7 +214,13 @@ function InputPanel({
                             return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
                         }
                     })
+                } else {
+                    setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
                 }
+            } else if (toExamine.trim() === '') {
+                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
+            } else {
+                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
             }
 
         } else if (findIn(input, ["logout", "log out", "log off"])) {
