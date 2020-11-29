@@ -27,6 +27,10 @@ const playerSchema = new Schema({
     type: Boolean,
     default: true
   },
+  isOnline: {
+    type: Boolean,
+    default: true
+  },
   isNPC: {
     type: Boolean,
     default: false
@@ -101,7 +105,7 @@ const playerSchema = new Schema({
   description: {
     type: String
   },
-  wornItems: [
+  wornItems:
     {
       headSlot: {
         type: String
@@ -133,8 +137,7 @@ const playerSchema = new Schema({
       twoHands: {
         type: String
       }
-    }
-  ],
+    },
   day: {
     type: Boolean
   }

@@ -429,7 +429,6 @@ module.exports = function (io) {
         socket.on('stats', () => {
             // db for player stats
             // emit stats to player
-            
         });
 
         socket.on('sleep', ({ userToSleep, location }) => {

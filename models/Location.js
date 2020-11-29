@@ -29,6 +29,10 @@ let locationSchema = new Schema({
     quantity: Number
     } 
   ],
+  discoverables: {
+    type: Array,
+    default: undefined
+  },
   indoorOutdoor: {
     type: String
   }
