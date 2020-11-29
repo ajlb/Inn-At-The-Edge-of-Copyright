@@ -31,6 +31,8 @@ function ChatPanel({
 
     socket.off('from NPC').on('from NPC', ({ NPCName, NPCMessage, exampleResponses, leavingConversation }) => {
         console.log(`${NPCName}: ${NPCMessage}`)
+        setChatHistory(prevState => [...prevState, { type: 'displayed-npc', text: `${NPCName}: ${NPCMessage}` }]);
+        setChatHistory(prevState => [...prevState, { type: 'displayed-commands', text: `Respond with: ${exampleResponses}` }]);
     })
 
     //failed user command messages
