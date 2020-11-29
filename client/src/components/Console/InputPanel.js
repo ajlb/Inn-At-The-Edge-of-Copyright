@@ -4,7 +4,6 @@ import {
 } from 'react-device-detect';
 import findIn, {takeTheseOffThat} from "../../clientUtilities/finders";
 import socket from "../../clientUtilities/socket";
-import auth from "../../clientUtilities/authentication";
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
