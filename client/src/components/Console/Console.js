@@ -20,7 +20,9 @@ function Console() {
     theme: "",
     currentMessage: ""
   }
+
   const [location, setLocation] = useState({});
+
   const [player, setPlayer] = useState({});
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
