@@ -18,11 +18,8 @@ function juggle(value, playerData, location) {
     place = location;
     num = value.split(" ")[0];
     target = value.replace(`${num} `, "");
-    console.log(`num ${num}, target ${target}`);
     //turn typed number into int
     for (const property in numbers) {
-        console.log(typeof num);
-        console.log(num, numbers[property].includes(num.toLowerCase()));
         if (numbers[property].includes(num.toLowerCase())) {
             const intNum = parseInt(property);
             if (typeof intNum === "number" && intNum > 2) {
@@ -74,7 +71,6 @@ function juggle(value, playerData, location) {
 
 //send stopJuggling to socket
 function stopJuggling(user, intent) {
-    console.log('sending out a stop juggle announcement');
     socket.emit('stop juggle', {user, location:place, target, intent})
 }
 
@@ -83,7 +79,6 @@ function stopJuggling(user, intent) {
 
 //set difficulty of juggling based on dex and number of objects
 function chancesOfSuccessJuggling(dex, num) {
-    console.log(`Chancing. Dex: ${dex}, Num: ${num}`);
     if (Math.floor(Math.random() * 10) > ((dex * 2) / (num ** 2))) {
         stopJuggling(player, false);
     }
@@ -95,12 +90,10 @@ function chancesOfSuccessJuggling(dex, num) {
 let juggleTime;
 
 socket.off('continueJuggle').on('continueJuggle', ({target, num, user, location})=>{
-    console.log('continue juggle');
     juggleTime = setInterval(function(){
-        console.log('juggling');
         socket.emit('contJuggle', {target, num, user, location});
         chancesOfSuccessJuggling(user.stats.DEX, num);
-    }, 2000);
+    }, 5000);
 })
 
 function clearJuggleTime(){
