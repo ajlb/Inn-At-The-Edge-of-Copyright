@@ -60,7 +60,7 @@ module.exports = [{
     "$oid": "5f90fecfd7a98e239c1609dd"
   },
   "locationName": "Inn Laundry Room",
-  "dayDescription": "You've entered the Inn Laundry Room. Washers and dryers line the back wall and folding station sits in the corner in front of the window. A door to the east leads outside. There appears to be an oversized mouse hole hidden behind a stack of boxes to the west. A wooden door labeled 'Lobby' sits on the north wall.",
+  "dayDescription": "You've entered the Inn Laundry Room. Washers and dryers line the back wall and folding station sits in the corner in front of the window. A door to the east leads outside. There appears to be an oversized mouse hole hidden behind a stack of boxes. A wooden door labeled 'Lobby' sits on the north wall.",
   "nightDescription": "NULL",
   "region": "The Inn",
   "indoorOutdoor": "indoor",
@@ -164,12 +164,26 @@ module.exports = [{
     "$oid": "5f90fecfd7a98e239c1609e3"
   },
   "locationName": "Library",
-  "dayDescription": "You've entered the Inn Library. Rows upon rows of old wooden bookshelves house an innumerable amount of dusty books. A door labeled 'Lobby' sits on the east wall, though it seems that the right book on the south wall might lead elsewhere.",
+  "dayDescription": "You've entered the Inn Library. Rows upon rows of old wooden bookshelves house an innumerable amount of dusty books. A door labeled 'Lobby' sits on the east wall, though it seems that the right book on the shelf might take you elsewhere...",
   "nightDescription": "NULL",
   "region": "The Inn",
   "indoorOutdoor": "indoor",
   "NPCs": [],
   "inventory": [],
+  "discoverables": [
+    {
+      "names": [
+        "book shelf",
+        "book case",
+        "bookshelf",
+        "bookcase",
+        "shelf",
+        "book"
+      ],
+      "description": "an odd-looking book sitting on the bookcase against the southern wall that seems to be attached to some kind of lever mechanism",
+      "exampleCommand": "move south"
+    }
+  ],
   "exits": {
     "south": "Inn Laundry Room",
     "east": "Inn Lobby"
