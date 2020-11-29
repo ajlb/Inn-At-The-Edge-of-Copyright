@@ -188,7 +188,8 @@ function InputPanel({
             }
         } else if (findIn(input, actionCalls.examine)) {
             const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
-            const toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
+            let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
+            toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
             console.log("You are attempting to examine", toExamine)
             console.log(user)
             if (location.current.discoverables && toExamine.trim() !== '') {
