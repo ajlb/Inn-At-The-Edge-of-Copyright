@@ -193,17 +193,25 @@ function InputPanel({
             if (location.current.discoverables) {
                 let discoverables = location.current.discoverables;
                 let description;
+                let exampleCommand;
                 discoverables.forEach(discoverable => {
                     discoverable.names.forEach(name => {
                         if (name.startsWith(toExamine.toLowerCase())) {
-                            console.log("You found the", name)
-                            description = discoverable.description
+                            console.log("You found the", name);
+                            description = discoverable.description;
+                            exampleCommand = discoverable.exampleCommand;
                         }
                     })
                 })
                 if (description) {
                     setChatHistory(prevState => {
-                        return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
+                        if (exampleCommand) {
+                            return [...prevState,
+                            { type: 'displayed-stat', text: `You see ${description}` },
+                            { type: 'displayed-stat', text: `Try entering: ${exampleCommand}` }]
+                        } else {
+                            return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
+                        }
                     })
                 }
             }
