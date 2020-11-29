@@ -448,6 +448,18 @@ module.exports = [{
   "indoorOutdoor": "cave",
   "NPCs": [],
   "inventory": [],
+  "discoverables": [
+    {
+      "names": [
+        "river",
+        "river edge",
+        "raging river",
+        "river's edge"
+      ],
+      "description": "the river flowing directly into a tunnel in the cave wall. Is it really safe to get in?",
+      "exampleCommand": "move west"
+    }
+  ],
   "exits": {
     "west": "Murky Pond",
     "south": "Crystal Cavern",
