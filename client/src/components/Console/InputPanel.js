@@ -57,7 +57,7 @@ function InputPanel({
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (findIn(input, actionCalls.move)) {
-            if (playerPosition === "standing"){
+            if (playerPosition === "standing") {
                 let direction = takeTheseOffThat(actionCalls.move, input);
                 for (const param in DIRECTIONS) {
                     if (direction.toLowerCase() === param) {
@@ -75,8 +75,8 @@ function InputPanel({
                     socket.emit('failure', `There is no exit ${direction}`);
                 }
             } else {
-                setChatHistory(prevState => [...prevState, {type: "displayed-error", text: 'You have to stand up to do that!'}]);
-                
+                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: 'You have to stand up to do that!' }]);
+
             }
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
@@ -148,7 +148,7 @@ function InputPanel({
                 setActivities(prevState => { return { ...prevState, sleeping: true } });
                 socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
             } else {
-                setChatHistory(prevState => [...prevState, {type: 'displayed-error', text: `You need to lie down to do that!`}]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You need to lie down to do that!` }]);
             }
             // socket.emit('sleep', input)
         } else if (findIn(input, actionCalls.wake)) {
@@ -187,7 +187,27 @@ function InputPanel({
                 socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.examine)) {
-            socket.emit('examine', input)
+            const toExamine = takeTheseOffThat(actionCalls.examine, input);
+            console.log("You are attempting to examine", toExamine)
+
+            if (location.current.discoverables) {
+                let discoverables = location.current.discoverables;
+                let description;
+                discoverables.forEach(discoverable => {
+                    discoverable.names.forEach(name => {
+                        if (name.startsWith(toExamine.toLowerCase())) {
+                            console.log("You found the", name)
+                            description = discoverable.description
+                        }
+                    })
+                })
+                if (description) {
+                    setChatHistory(prevState => {
+                        return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
+                    })
+                }
+            }
+
         } else if (findIn(input, ["logout", "log out", "log off"])) {
             takeTheseOffThat(["logout, log out", "log off"], input);
             socket.emit('logout', input);

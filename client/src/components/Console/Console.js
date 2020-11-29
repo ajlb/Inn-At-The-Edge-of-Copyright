@@ -61,7 +61,7 @@ function Console() {
     wake: ['wake', 'wake up', 'awaken'],
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
-    examine: ['examine'],
+    examine: ['examine', 'study'],
     whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
   });
 
