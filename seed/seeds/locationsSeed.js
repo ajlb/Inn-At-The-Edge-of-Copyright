@@ -689,6 +689,33 @@ module.exports = [{
   "indoorOutdoor": "outdoor",
   "NPCs": [],
   "inventory": [],
+  "discoverables": [
+    {
+      "names": [
+        "grasses",
+        "grass",
+        "wild grasses"
+      ],
+      "description": "small flowers of numerous different colors scattered through the tall grass"
+    },
+    {
+      "names": [
+        "trees",
+        "small trees",
+        "tree"
+      ],
+      "description": "different kinds of fruit hanging from the trees that dot the grassy meadow around you"
+    },
+    {
+      "names": [
+        "flowers",
+        "flower",
+        "wild flowers",
+        "wildflowers"
+      ],
+      "description": "a generous amount of nectar in nearly every flower in the field"
+    }
+  ],
   "exits": {
     "west": "Crossroads",
     "east": "Creek Bridge"
