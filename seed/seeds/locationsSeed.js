@@ -60,12 +60,22 @@ module.exports = [{
     "$oid": "5f90fecfd7a98e239c1609dd"
   },
   "locationName": "Inn Laundry Room",
-  "dayDescription": "You've entered the Inn Laundry Room. Washers and dryers line the back wall and folding station sits in the corner in front of the window. A door to the east leads outside. There appears to be an oversized mouse hole hidden behind a stack of boxes to the west. A wooden door labeled 'Lobby' sits on the north wall.",
+  "dayDescription": "You've entered the Inn Laundry Room. Washers and dryers line the back wall and folding station sits in the corner in front of the window. A door to the east leads outside. There appears to be an oversized mouse hole hidden behind a stack of boxes. A wooden door labeled 'Lobby' sits on the north wall.",
   "nightDescription": "NULL",
   "region": "The Inn",
   "indoorOutdoor": "indoor",
   "NPCs": [],
   "inventory": [],
+  "discoverables": [
+    {
+      "names": [
+        "mouse hole",
+        "hole"
+      ],
+      "description": "a mousehole on the western wall that seems like the perfect size for a curious explorer to squeeze through...",
+      "exampleCommand": "move west"
+    }
+  ],
   "exits": {
     "north": "Inn Lobby",
     "west": "Library",
@@ -100,7 +110,7 @@ module.exports = [{
   "NPCs": [],
   "inventory": [],
   "exits": {
-    "north": "Front yard"
+    "north": "Front Yard"
   }
 }, {
   "_id": {
@@ -154,12 +164,26 @@ module.exports = [{
     "$oid": "5f90fecfd7a98e239c1609e3"
   },
   "locationName": "Library",
-  "dayDescription": "You've entered the Inn Library. Rows upon rows of old wooden bookshelves house an innumerable amount of dusty books. A door labeled 'Lobby' sits on the east wall, though it seems that the right book on the south wall might lead elsewhere.",
+  "dayDescription": "You've entered the Inn Library. Rows upon rows of old wooden bookshelves house an innumerable amount of dusty books. A door labeled 'Lobby' sits on the east wall, though it seems that the right book on the shelf might take you elsewhere...",
   "nightDescription": "NULL",
   "region": "The Inn",
   "indoorOutdoor": "indoor",
   "NPCs": [],
   "inventory": [],
+  "discoverables": [
+    {
+      "names": [
+        "book shelf",
+        "book case",
+        "bookshelf",
+        "bookcase",
+        "shelf",
+        "book"
+      ],
+      "description": "an odd-looking book sitting on the bookcase against the southern wall that seems to be attached to some kind of lever mechanism",
+      "exampleCommand": "move south"
+    }
+  ],
   "exits": {
     "south": "Inn Laundry Room",
     "east": "Inn Lobby"
@@ -424,6 +448,18 @@ module.exports = [{
   "indoorOutdoor": "cave",
   "NPCs": [],
   "inventory": [],
+  "discoverables": [
+    {
+      "names": [
+        "river",
+        "river edge",
+        "raging river",
+        "river's edge"
+      ],
+      "description": "the river flowing directly into a tunnel in the cave wall. Is it really safe to get in?",
+      "exampleCommand": "move west"
+    }
+  ],
   "exits": {
     "west": "Murky Pond",
     "south": "Crystal Cavern",
@@ -653,6 +689,33 @@ module.exports = [{
   "indoorOutdoor": "outdoor",
   "NPCs": [],
   "inventory": [],
+  "discoverables": [
+    {
+      "names": [
+        "grasses",
+        "grass",
+        "wild grasses"
+      ],
+      "description": "small flowers of numerous different colors scattered through the tall grass"
+    },
+    {
+      "names": [
+        "trees",
+        "small trees",
+        "tree"
+      ],
+      "description": "different kinds of fruit hanging from the trees that dot the grassy meadow around you"
+    },
+    {
+      "names": [
+        "flowers",
+        "flower",
+        "wild flowers",
+        "wildflowers"
+      ],
+      "description": "a generous amount of nectar in nearly every flower in the field"
+    }
+  ],
   "exits": {
     "west": "Crossroads",
     "east": "Creek Bridge"

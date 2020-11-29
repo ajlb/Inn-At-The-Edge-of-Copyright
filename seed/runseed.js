@@ -5,8 +5,8 @@ const db = require('../models');
 let success = true;
 
 function replaceOne(Model, seedObj) {
-    Model.replaceOne
-        ({ _id: seedObj._id }, seedObj, { upsert: true, runValidators: true }, (err, returnData) => {
+    Model.findOneAndReplace
+        ({ _id: seedObj._id }, seedObj, { upsert: true, runValidators: true, returnNewDocument: true, new: true }, (err, returnData) => {
             if (err) {
                 success = false;
                 throw err;

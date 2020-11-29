@@ -57,7 +57,7 @@ function InputPanel({
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (findIn(input, actionCalls.move)) {
-            if (playerPosition === "standing"){
+            if (playerPosition === "standing") {
                 let direction = takeTheseOffThat(actionCalls.move, input);
                 for (const param in DIRECTIONS) {
                     if (direction.toLowerCase() === param) {
@@ -75,8 +75,8 @@ function InputPanel({
                     socket.emit('failure', `There is no exit ${direction}`);
                 }
             } else {
-                setChatHistory(prevState => [...prevState, {type: "displayed-error", text: 'You have to stand up to do that!'}]);
-                
+                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: 'You have to stand up to do that!' }]);
+
             }
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
@@ -148,7 +148,7 @@ function InputPanel({
                 setActivities(prevState => { return { ...prevState, sleeping: true } });
                 socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
             } else {
-                setChatHistory(prevState => [...prevState, {type: 'displayed-error', text: `You need to lie down to do that!`}]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You need to lie down to do that!` }]);
             }
             // socket.emit('sleep', input)
         } else if (findIn(input, actionCalls.wake)) {
@@ -187,7 +187,43 @@ function InputPanel({
                 socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
             }
         } else if (findIn(input, actionCalls.examine)) {
-            socket.emit('examine', input)
+            const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
+            let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
+            toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
+            console.log("You are attempting to examine", toExamine)
+            console.log(user)
+            if (location.current.discoverables && toExamine.trim() !== '') {
+                let discoverables = location.current.discoverables;
+                let description;
+                let exampleCommand;
+                discoverables.forEach(discoverable => {
+                    discoverable.names.forEach(name => {
+                        if (name.startsWith(toExamine.toLowerCase()) && toExamine.trim() !== '') {
+                            console.log("You found the", name);
+                            description = discoverable.description;
+                            exampleCommand = discoverable.exampleCommand;
+                        }
+                    })
+                })
+                if (description) {
+                    setChatHistory(prevState => {
+                        if (exampleCommand) {
+                            return [...prevState,
+                            { type: 'displayed-stat', text: `You see ${description}` },
+                            { type: 'displayed-commands', text: `Try entering: ${exampleCommand}` }]
+                        } else {
+                            return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
+                        }
+                    })
+                } else {
+                    setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
+                }
+            } else if (toExamine.trim() === '') {
+                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
+            } else {
+                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
+            }
+
         } else if (findIn(input, ["logout", "log out", "log off"])) {
             takeTheseOffThat(["logout, log out", "log off"], input);
             socket.emit('logout', input);
