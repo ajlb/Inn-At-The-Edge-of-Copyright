@@ -21,11 +21,7 @@ module.exports = [{
   "nightDescription": "NULL",
   "region": "The Inn",
   "indoorOutdoor": "indoor",
-  "NPCs": [
-    "Ford",
-    "Clerk",
-    "Towel"
-  ],
+  "NPCs": [],
   "inventory": [],
   "exits": {
     "east": "Inn Lobby"
@@ -40,8 +36,10 @@ module.exports = [{
   "region": "The Inn",
   "indoorOutdoor": "indoor",
   "NPCs": [
-    "Clerk",
-    "Ford"
+    {
+      names: ['ford', 'clerk', 'towel'],
+      primaryName: 'Ford'
+    }
   ],
   "inventory": [
     {

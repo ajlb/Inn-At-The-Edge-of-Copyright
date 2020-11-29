@@ -9,6 +9,7 @@ import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
 import { wear, remove } from "./js/wearRemove";
+import NPCCheck from "../../clientUtilities/NPCChecks";
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -98,8 +99,16 @@ function InputPanel({
             } else {
                 message = input.split(' ').slice(1).join(' ');
             }
-            // fyi, checking if the message begins with someone's name is handled on the server side
-            socket.emit('whisper', message)
+
+            NPCCheck(location.current.NPCs, message)
+                .then(({ NPCName, message }) => {
+                    console.log(`To NPC named ${NPCName}: ${message}`)
+                })
+                .catch(err => {
+                    console.log(err.message)
+                    // fyi, checking if the message begins with someone's name is handled on the server side
+                    socket.emit('whisper', message)
+                })
         } else if (findIn(input, actionCalls.speak)) {
             const message = takeTheseOffThat(actionCalls.speak, input);
             socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
