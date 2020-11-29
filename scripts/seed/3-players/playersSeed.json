@@ -1,4 +1,4 @@
-module.exports = [
+[
   {
     "characterName": "Boomels",
     "password": "$2a$10$BE5fPitvz.mDKhLWGGKyOOhSjh7/Zj6.JPWVxbhB0XRzPED32OkSa",
@@ -19,7 +19,12 @@ module.exports = [
     "race": "Faerie",
     "profession": "Bard",
     "abilities": "NULL",
-    "inventory": [],
+    "inventory": [{
+      "item": {"$oid": "5fc32531b2009d226ef5b85e"},
+      "quantity":1,
+      "equipped":1
+    }
+    ],
     "lastLocation": "Inn Lobby",
     "backstory": "Boomels is a Fae young adult, out seeking their own way in a harsh world.",
     "description": "A tan skinned Faerie with curly dark green hair and brown feathered wings",

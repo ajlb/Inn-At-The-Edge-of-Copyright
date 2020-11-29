@@ -1,4 +1,4 @@
-module.exports = [
+[
   {
   "locationName": "Start Room",
   "dayDescription": "Looking around, you notice a large mirror hung on the wall next to a large open wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with white curtains but a large tree seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
@@ -6,7 +6,11 @@ module.exports = [
   "region": "The Inn",
   "indoorOutdoor": "indoor",
   "NPCs": [],
-  "inventory": [],
+  "inventory": [{
+    "item": {"$oid": "5fc32531b2009d226ef5b85e"},
+    "quantity":1
+  }
+  ],
   "exits": {
     "east": "Hallway"
   }
@@ -16,12 +20,13 @@ module.exports = [
   "nightDescription": "NULL",
   "region": "The Inn",
   "indoorOutdoor": "indoor",
-  "NPCs": [
-    "Ford",
-    "Clerk",
-    "Towel"
+  "NPCs": [],
+  "inventory": [
+    {
+      "item": {"$oid": "5fc32531b2009d226ef5b862"},
+      "quantity": 500
+    }
   ],
-  "inventory": [],
   "exits": {
     "east": "Inn Lobby"
   }
@@ -33,11 +38,12 @@ module.exports = [
   "indoorOutdoor": "indoor",
   "NPCs": [
     "Clerk",
-    "Ford"
+    "Ford",
+    "Towel"
   ],
   "inventory": [
     {
-      "name": "pumpkin pie",
+      "item": {"$oid": "5fc32531b2009d226ef5b858"},
       "quantity": 50
     }
   ],

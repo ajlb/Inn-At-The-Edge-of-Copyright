@@ -23,17 +23,12 @@ let locationSchema = new Schema({
   NPCs: {
     type: Array
   },
-  inventory: {
-    item: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Item"
-        }
-    ],
-    quantitiy: {
-        type: Number
-    }
-  },
+  inventory: [
+    {
+    item: {type: Schema.Types.ObjectId, ref: "Item"},
+    quantity: Number
+    } 
+  ],
   indoorOutdoor: {
     type: String
   }
