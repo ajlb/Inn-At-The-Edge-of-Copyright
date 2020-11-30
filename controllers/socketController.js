@@ -170,13 +170,10 @@ module.exports = function (io) {
         })
 
         socket.on('to NPC', ({ toNPC, message }) => {
-            console.log(`To NPC named ${toNPC}: ${message}`)
             db.Dialog.findOne({ NPC: toNPC }, (err, result) => {
                 if (err) throw err;
 
                 runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
-
-                console.log(result)
 
             })
         })
