@@ -33,7 +33,9 @@ function InputPanel({
     setChatHistory,
     location,
     activities,
-    setActivities
+    setActivities,
+    inConversation,
+    setConversation
 }) {
 
     //update currentMessage in gameinfo based on input bar change
@@ -57,32 +59,6 @@ function InputPanel({
             } else {
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
-        } else if (findIn(input, actionCalls.move)) {
-            if (playerPosition === "standing") {
-                let direction = takeTheseOffThat(actionCalls.move, input);
-                for (const param in DIRECTIONS) {
-                    if (direction.toLowerCase() === param) {
-                        direction = DIRECTIONS[param];
-                    }
-                }
-                let moved = false;
-                for (const param in location) {
-                    if (param === direction) {
-                        socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user: user.characterName });
-                        moved = true;
-                    }
-                }
-                if (moved === false) {
-                    socket.emit('failure', `There is no exit ${direction}`);
-                }
-            } else {
-                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: 'You have to stand up to do that!' }]);
-
-            }
-        } else if (input.toLowerCase() === "stop juggling") {
-            stopJuggling(user.characterName, true);
-        } else if (findIn(input, actionCalls.inventory)) {
-            socket.emit('inventory', input)
         } else if (findIn(input, actionCalls.whisper)) {
             let message;
             // If it starts with one of these two-word commands, it will remove the first two words from the message, if not, it will just remove the first word
@@ -110,64 +86,14 @@ function InputPanel({
                     // fyi, checking if the message begins with someone's name is handled on the server side
                     socket.emit('whisper', message)
                 })
-        } else if (findIn(input, actionCalls.speak)) {
-            const message = takeTheseOffThat(actionCalls.speak, input);
-            socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
-        } else if (findIn(input, actionCalls.help)) {
-            socket.emit('help', input)
-        } else if (findIn(input, actionCalls.look)) {
-            socket.emit('look', input)
-        } else if (findIn(input, actionCalls.get)) {
-            const target = takeTheseOffThat(actionCalls.get, input);
-            const result = getItem(target, location);
-            if (result === true) {
-                socket.emit('get', { target, user: user.characterName, location: location.current.locationName });
-            } else if (result === false) {
-                socket.emit('green', `There doesn't seem to ${insertArticleSingleValue(target)} to get here.`);
-            } else if (typeof result === "string") {
-                socket.emit('get', { target: result, user: user.characterName, location: location.current.locationName });
-            } else if (typeof result === "object") {
-                socket.emit('green', `I'm not sure which you want to get. I think you might mean one of these - ${result.join(", ")}.`);
-            }
-        } else if (findIn(input, actionCalls.drop)) {
-            const target = takeTheseOffThat(actionCalls.drop, input);
-            const result = dropItem(target, user);
-            if (result === true) {
-                socket.emit('drop', { target, user: user.characterName, location: location.current.locationName });
-            } else if (result === false) {
-                socket.emit('green', `You don't seem to have ${insertArticleSingleValue(target)} to drop.`);
-            } else if (typeof result === "string") {
-                socket.emit('drop', { target: result, user: user.characterName, location: location.current.locationName });
-            } else if (typeof result === "object") {
-                socket.emit('green', `I'm not sure which you want to drop. I think you might mean one of these - ${result.join(", ")}.`);
-            }
-        } else if (findIn(input, actionCalls.wear)) {
-            wear(input, user, actionCalls.wear);
-        } else if (findIn(input, actionCalls.remove)) {
-            remove(input, user, actionCalls.remove);
-        } else if (findIn(input, actionCalls.emote)) {
-            socket.emit('emote', input)
+        } else if (findIn(input, actionCalls.inventory)) {
+            socket.emit('inventory', input)
         } else if (findIn(input, actionCalls.juggle)) {
             juggle(input, user, location.current.locationName);
+        } else if (input.toLowerCase() === "stop juggling") {
+            stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.stats)) {
             socket.emit('stats', input)
-        } else if (findIn(input, actionCalls.sleep)) {
-            if (activities.sleeping) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);
-            } else if (playerPosition === "lying down") {
-                setActivities(prevState => { return { ...prevState, sleeping: true } });
-                socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
-            } else {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You need to lie down to do that!` }]);
-            }
-            // socket.emit('sleep', input)
-        } else if (findIn(input, actionCalls.wake)) {
-            if (!activities.sleeping) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already awake!` }]);
-            } else {
-                setActivities(prevState => { return { ...prevState, sleeping: false } });
-                socket.emit('wake', { userToWake: user.characterName, location: location.current.locationName })
-            }
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
@@ -182,64 +108,159 @@ function InputPanel({
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
             }
-        } else if (findIn(input, actionCalls.give)) {
-            let inputString = takeTheseOffThat(actionCalls.give, input);
-            let item = inputString.split(" to ")[0];
-            let target = takeTheseOffThat([item + " to "], inputString);
-            const result = giveItem(item, user);
-            if (result === true) {
-                socket.emit('give', { target, item, user: user.characterName, location: location.current.locationName });
-            } else if (result === false) {
-                socket.emit('green', `You don't seem to have ${insertArticleSingleValue(item)} to give.`);
-            } else if (typeof result === "string") {
-                socket.emit('give', { target, item: result, user: user.characterName, location: location.current.locationName });
-            } else if (typeof result === "object") {
-                socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
-            }
-        } else if (findIn(input, actionCalls.examine)) {
-            const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
-            let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
-            toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
-            console.log("You are attempting to examine", toExamine)
-            console.log(user)
-            if (location.current.discoverables && toExamine.trim() !== '') {
-                let discoverables = location.current.discoverables;
-                let description;
-                let exampleCommand;
-                discoverables.forEach(discoverable => {
-                    discoverable.names.forEach(name => {
-                        if (name.startsWith(toExamine.toLowerCase()) && toExamine.trim() !== '') {
-                            console.log("You found the", name);
-                            description = discoverable.description;
-                            exampleCommand = discoverable.exampleCommand;
+        } else if (!inConversation) {
+            // Everything in here cannot be run while in a conversation with an NPC
+            if (findIn(input, actionCalls.help)) {
+                // if in conversation, tell user how to leave conversation
+                // else emit help
+                socket.emit('help', input)
+            } else if (findIn(input, actionCalls.move)) {
+                if (playerPosition === "standing") {
+                    let direction = takeTheseOffThat(actionCalls.move, input);
+                    for (const param in DIRECTIONS) {
+                        if (direction.toLowerCase() === param) {
+                            direction = DIRECTIONS[param];
                         }
-                    })
-                })
-                if (description) {
-                    setChatHistory(prevState => {
-                        if (exampleCommand) {
-                            return [...prevState,
-                            { type: 'displayed-stat', text: `You see ${description}` },
-                            { type: 'displayed-commands', text: `Try entering: ${exampleCommand}` }]
-                        } else {
-                            return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
+                    }
+                    let moved = false;
+                    for (const param in location) {
+                        if (param === direction) {
+                            socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user: user.characterName });
+                            moved = true;
                         }
+                    }
+                    if (moved === false) {
+                        socket.emit('failure', `There is no exit ${direction}`);
+                    }
+                } else {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-error", text: 'You have to stand up to do that!' }]);
+
+                }
+            } else if (findIn(input, actionCalls.speak)) {
+                const message = takeTheseOffThat(actionCalls.speak, input);
+                socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
+            } else if (findIn(input, actionCalls.look)) {
+                socket.emit('look', input)
+            } else if (findIn(input, actionCalls.get)) {
+                const target = takeTheseOffThat(actionCalls.get, input);
+                const result = getItem(target, location);
+                if (result === true) {
+                    socket.emit('get', { target, user: user.characterName, location: location.current.locationName });
+                } else if (result === false) {
+                    socket.emit('green', `There doesn't seem to ${insertArticleSingleValue(target)} to get here.`);
+                } else if (typeof result === "string") {
+                    socket.emit('get', { target: result, user: user.characterName, location: location.current.locationName });
+                } else if (typeof result === "object") {
+                    socket.emit('green', `I'm not sure which you want to get. I think you might mean one of these - ${result.join(", ")}.`);
+                }
+            } else if (findIn(input, actionCalls.drop)) {
+                const target = takeTheseOffThat(actionCalls.drop, input);
+                const result = dropItem(target, user);
+                if (result === true) {
+                    socket.emit('drop', { target, user: user.characterName, location: location.current.locationName });
+                } else if (result === false) {
+                    socket.emit('green', `You don't seem to have ${insertArticleSingleValue(target)} to drop.`);
+                } else if (typeof result === "string") {
+                    socket.emit('drop', { target: result, user: user.characterName, location: location.current.locationName });
+                } else if (typeof result === "object") {
+                    socket.emit('green', `I'm not sure which you want to drop. I think you might mean one of these - ${result.join(", ")}.`);
+                }
+            } else if (findIn(input, actionCalls.wear)) {
+                wear(input, user, actionCalls.wear);
+            } else if (findIn(input, actionCalls.remove)) {
+                remove(input, user, actionCalls.remove);
+            } else if (findIn(input, actionCalls.emote)) {
+                socket.emit('emote', input)
+            } else if (findIn(input, actionCalls.sleep)) {
+                if (activities.sleeping) {
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);
+                } else if (playerPosition === "lying down") {
+                    setActivities(prevState => { return { ...prevState, sleeping: true } });
+                    socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
+                } else {
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You need to lie down to do that!` }]);
+                }
+                // socket.emit('sleep', input)
+            } else if (findIn(input, actionCalls.wake)) {
+                if (!activities.sleeping) {
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already awake!` }]);
+                } else {
+                    setActivities(prevState => { return { ...prevState, sleeping: false } });
+                    socket.emit('wake', { userToWake: user.characterName, location: location.current.locationName })
+                }
+            } else if (findIn(input, actionCalls.give)) {
+                let inputString = takeTheseOffThat(actionCalls.give, input);
+                let item = inputString.split(" to ")[0];
+                let target = takeTheseOffThat([item + " to "], inputString);
+                const result = giveItem(item, user);
+                if (result === true) {
+                    socket.emit('give', { target, item, user: user.characterName, location: location.current.locationName });
+                } else if (result === false) {
+                    socket.emit('green', `You don't seem to have ${insertArticleSingleValue(item)} to give.`);
+                } else if (typeof result === "string") {
+                    socket.emit('give', { target, item: result, user: user.characterName, location: location.current.locationName });
+                } else if (typeof result === "object") {
+                    socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
+                }
+            } else if (findIn(input, actionCalls.examine)) {
+                const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
+                let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
+                toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
+                console.log("You are attempting to examine", toExamine)
+                console.log(user)
+                if (location.current.discoverables && toExamine.trim() !== '') {
+                    let discoverables = location.current.discoverables;
+                    let description;
+                    let exampleCommand;
+                    discoverables.forEach(discoverable => {
+                        discoverable.names.forEach(name => {
+                            if (name.startsWith(toExamine.toLowerCase()) && toExamine.trim() !== '') {
+                                console.log("You found the", name);
+                                description = discoverable.description;
+                                exampleCommand = discoverable.exampleCommand;
+                            }
+                        })
                     })
+                    if (description) {
+                        setChatHistory(prevState => {
+                            if (exampleCommand) {
+                                return [...prevState,
+                                { type: 'displayed-stat', text: `You see ${description}` },
+                                { type: 'displayed-commands', text: `Try entering: ${exampleCommand}` }]
+                            } else {
+                                return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
+                            }
+                        })
+                    } else {
+                        setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
+                    }
+                } else if (toExamine.trim() === '') {
+                    setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
                 } else {
                     setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
                 }
-            } else if (toExamine.trim() === '') {
-                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
-            } else {
-                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
-            }
 
-        } else if (findIn(input, ["logout", "log out", "log off"])) {
-            takeTheseOffThat(["logout, log out", "log off"], input);
-            socket.emit('logout', input);
+            } else if (findIn(input, ["logout", "log out", "log off"])) {
+                takeTheseOffThat(["logout, log out", "log off"], input);
+                socket.emit('logout', input);
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Hmmmm... that didn't quite make sense. Try 'help' for a list of commands!` }]);
+            }
+        } else if (inConversation) {
+            NPCCheck(location.current.NPCs, inConversation.with)
+                .then(({ NPCName, message }) => {
+                    console.log(`To NPC named ${inConversation.with}: ${input}`)
+                    socket.emit('to NPC', { toNPC: inConversation.with, message: input })
+                })
+                .catch(err => {
+                    setConversation(false);
+                    console.log(err.message);
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `It looks like ${inConversation.with} has left` }]);
+                })
         } else {
-            console.log("hmmm... that didn't quite make sense. Try 'help' for a list of commands!");
+            setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Hmmmm... that didn't quite make sense. Try 'help' for a list of commands!` }]);
         }
+
         setInput('');
     }
 

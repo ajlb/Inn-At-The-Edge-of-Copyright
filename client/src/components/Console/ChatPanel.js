@@ -17,7 +17,9 @@ function ChatPanel({
     activities,
     setActivities,
     user,
-    day
+    day,
+    inConversation,
+    setConversation
 }) {
     //prepare variable to hold div reference for scrolling
     let anchorDiv;
@@ -30,9 +32,16 @@ function ChatPanel({
     });
 
     socket.off('from NPC').on('from NPC', ({ NPCName, NPCMessage, exampleResponses, leavingConversation }) => {
-        console.log(`${NPCName}: ${NPCMessage}`)
+        if (leavingConversation) {
+            setConversation(false)
+        } else {
+            setConversation({ with: NPCName })
+        }
+
         setChatHistory(prevState => [...prevState, { type: 'displayed-npc', text: `${NPCName}: ${NPCMessage}` }]);
-        setChatHistory(prevState => [...prevState, { type: 'displayed-commands', text: `Respond with: ${exampleResponses}` }]);
+        if (exampleResponses && !leavingConversation) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-commands', text: `Respond with: ${exampleResponses}` }]);
+        }
     })
 
     //failed user command messages
