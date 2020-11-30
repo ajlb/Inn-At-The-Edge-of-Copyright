@@ -156,7 +156,9 @@ function ChatPanel({
         if (userToSleep === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
         } else {
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} falls asleep.` }]);
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} falls asleep.` }]);
+            }
         }
     })
 
@@ -164,7 +166,9 @@ function ChatPanel({
         if (userToWake === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
         } else {
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToWake} wakes up.` }]);
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToWake} wakes up.` }]);
+            }
         }
     })
 
@@ -177,7 +181,9 @@ function ChatPanel({
                 juggling: true
             });
         } else {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
+            }
         }
     })
 
@@ -185,7 +191,9 @@ function ChatPanel({
         if (user === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You juggle ${num} ${target}.` }]);
         } else {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
+            }
         }
     })
 
@@ -197,7 +205,9 @@ function ChatPanel({
                 juggling: false
             });
         } else {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
+            }
         }
         clearJuggleTime();
     })
