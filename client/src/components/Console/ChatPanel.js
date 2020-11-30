@@ -113,7 +113,10 @@ function ChatPanel({
     //room speech
     socket.off('speak').on('speak', (message) => {
         let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: message }]);
+        console.log(inConversation)
+        if (!inConversation) {
+            setChatHistory(prevState => [...prevState, { type, text: message }]);
+        }
     });
 
     //a get action
