@@ -226,6 +226,7 @@ module.exports = function (io) {
             // db the user's location and emit necessary info
         });
 
+
         /*****************************/
         /*             GET           */
         /*****************************/
@@ -474,22 +475,22 @@ module.exports = function (io) {
         /*****************************/
         socket.on('give', ({ target, item, user, location }) => {
             //remove item from giver's inventory
-            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
-                db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(returnData => {
+            decrementItemUpdateOne(item, user, "player").then(returnData => {
+                scrubInventoryReturnData(user, "player").then(returnData => {
                     io.to(socket.id).emit('invUpP', returnData.inventory);
                 });
             });
             //add item to target's inventory
-            db.Player.updateOne({ characterName: target }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+            incrementItemUpdateOne(item, target, "player").then(returnData => {
                 //if increment succeeded, there was already one there
-                if (returnData.nModified === 0) {
-                    db.Player.findOneAndUpdate({ characterName: target }, { $push: { inventory: { name: item, quantity: 1 } } }, { new: true }).then(returnData => {
+                if (!returnData) {
+                    pushItemToInventoryReturnData(item, target, "player").then(returnData => {
                         io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
 
                     });
                 //if increment failed, add a new entry to inventory
                 } else {
-                    db.Player.findOne({ characterName: target }).then(returnData => {
+                    findPlayerData(target).then(returnData => {
                         io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
                     })
                 }
