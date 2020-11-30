@@ -36,6 +36,8 @@ function Console() {
     singing: false
   })
 
+  const [inConversation, setConversation] = useState(false);
+
   const [chatHistory, setChatHistory] = useState([]);
 
   const [input, setInput] = useState('');
@@ -187,6 +189,8 @@ function Console() {
                     location={location}
                     setLocation={setLocation}
                     day={day}
+                    inConversation={inConversation}
+                    setConversation={setConversation}
                   />
                   <InputPanel
                     actionCalls={actionCalls}
@@ -204,6 +208,8 @@ function Console() {
                     user={player}
                     activities={activities}
                     setActivities={setActivities}
+                    inConversation={inConversation}
+                    setConversation={setConversation}
                   />
                 </div>
               </div>

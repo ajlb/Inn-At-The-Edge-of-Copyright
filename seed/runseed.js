@@ -59,6 +59,10 @@ connection.once("open", function () {
 
     parsedWeatherArray.forEach(weatherObj => replaceOne(db.Weather, weatherObj));
 
+    const parsedDialogArray = EJS.deserialize(require('./seeds/dialogSeed'));
+
+    parsedDialogArray.forEach(dialogObj => replaceOne(db.Dialog, dialogObj));
+
     if (success) {
         // right now this logs no matter what because of asynchronous database setters but it gets lost in giant error logs if errors are logged so leave it until a better fix is found(like making all the functions asynchronous and using await )
         console.log('Success! Local Database updated! Enter ctrl + C to exit')
