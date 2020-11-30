@@ -36,9 +36,10 @@
   "region": "The Inn",
   "indoorOutdoor": "indoor",
   "NPCs": [
-    "Clerk",
-    "Ford",
-    "Towel"
+    {
+      "names": ["ford", "clerk", "towel"],
+      "primaryName": "Ford"
+    }
   ],
   "inventory": 
     {

@@ -1,7 +1,8 @@
 const db = require("../models");
-const mongoose = require("mongoose");
-const { response } = require("express");
-const ObjectId = require('mongoose').Types.ObjectId;
+// const mongoose = require("mongoose");
+// const { response } = require("express");
+// const ObjectId = require('mongoose').Types.ObjectId;
+const runNPC = require("./NPCEngine");
 
 
 //this pair of functions is for returning async location data within the socket response
@@ -178,6 +179,15 @@ module.exports = function (io) {
             }
         })
 
+        socket.on('to NPC', ({ toNPC, message }) => {
+            db.Dialog.findOne({ NPC: toNPC }, (err, result) => {
+                if (err) throw err;
+
+                runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
+
+            })
+        })
+
         socket.on('failure', message => {
             io.to(socket.id).emit('failure', message);
         });
@@ -349,9 +359,9 @@ module.exports = function (io) {
                 default:
                     break;
             }
-            db.Player.updateOne({characterName: user}, {$set: { [`wornItems.${targetSlot}`]: null }}).then(returnData => {
-                if (returnData.nModified === 1){
-                    db.Player.updateOne({characterName: user}, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+            db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${targetSlot}`]: null } }).then(returnData => {
+                if (returnData.nModified === 1) {
+                    db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
                         targetSlot = targetSlot.slice(0, -4).toLowerCase();
                         switch (targetSlot) {
                             case "lefthand":
@@ -366,14 +376,14 @@ module.exports = function (io) {
                             default:
                                 break;
                         }
-                        if (returnData.nModified === 1){
+                        if (returnData.nModified === 1) {
                             //send success
-                            db.Player.findOne({characterName: user}).then(returnData=>{
+                            db.Player.findOne({ characterName: user }).then(returnData => {
                                 io.to(socket.id).emit('playerUpdate', returnData);
                             })
                             io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
                         } else {
-                            db.Player.findOneAndUpdate({characterName: user}, {$push: {inventory: {name: item, quantity: 1}}}, {new:true}).then(returnData => {
+                            db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { name: item, quantity: 1 } } }, { new: true }).then(returnData => {
                                 //send success
                                 io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
                                 io.to(socket.id).emit('playerUpdate', returnData);
