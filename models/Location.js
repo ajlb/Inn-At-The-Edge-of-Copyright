@@ -23,12 +23,12 @@ let locationSchema = new Schema({
   NPCs: {
     type: Array
   },
-  inventory: [
+  inventory: 
     {
     item: {type: Schema.Types.ObjectId, ref: "Item"},
     quantity: Number
     } 
-  ],
+  ,
   discoverables: {
     type: Array,
     default: undefined

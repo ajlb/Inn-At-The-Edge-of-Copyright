@@ -6,11 +6,10 @@
   "region": "The Inn",
   "indoorOutdoor": "indoor",
   "NPCs": [],
-  "inventory": [{
+  "inventory": {
     "item": {"$oid": "5fc32531b2009d226ef5b85e"},
     "quantity":1
-  }
-  ],
+  },
   "exits": {
     "east": "Hallway"
   }
@@ -21,12 +20,12 @@
   "region": "The Inn",
   "indoorOutdoor": "indoor",
   "NPCs": [],
-  "inventory": [
+  "inventory": 
     {
       "item": {"$oid": "5fc32531b2009d226ef5b862"},
       "quantity": 500
     }
-  ],
+  ,
   "exits": {
     "east": "Inn Lobby"
   }
@@ -41,12 +40,12 @@
     "Ford",
     "Towel"
   ],
-  "inventory": [
+  "inventory": 
     {
       "item": {"$oid": "5fc32531b2009d226ef5b858"},
       "quantity": 50
     }
-  ],
+  ,
   "exits": {
     "north": "Inn Kitchen",
     "west": "Library",
