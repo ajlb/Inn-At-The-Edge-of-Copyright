@@ -1,22 +1,7 @@
 const db = require("../models");
 const mongoose = require("mongoose");
-
-
-//this pair of functions is for returning async location data within the socket response
-const getLocationChunk = async (data) => {
-    let locationObject = {};
-    locationObject.current = data;
-    for (const exit in data.exits) {
-        const thisLocation = data.exits[exit];
-        locationObject[exit] = await db.Location.findOne({ locationName: thisLocation });
-    }
-    return locationObject;
-}
-const resolveLocationChunk = (data) => {
-    return new Promise((resolve, reject) => {
-        resolve(getLocationChunk(data));
-    })
-}
+const { resolveLocationChunk, findLocationData, rememberLocation } = require("./userInput/move");
+const { decrementItemUpdateOne, incrementItemUpdateOne, pushItemToInventoryReturnData, scrubInventoryReturnData, findPlayerData } = require("./userInput/getDrop");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -25,28 +10,45 @@ let users = {};
 //temp things to simulate display while working on server side only
 location = {};
 
-module.exports = function (io) {
 
+module.exports = function (io) {
+    function removePlayer(socketID) {
+        return new Promise(function (resolve, reject) {
+            for (const user in users) {
+                if (users[user].socketID === socketID) {
+                    console.log(users[user].username + " logged off");
+                    players = players.filter(player => !(player === users[user].username))
+                    delete users[user];
+                }
+            }
+        })
+    }
+
+
+    /*****************************/
+    /*          CONNECT          */
+    /*****************************/
     // this runs only when the user initially connects
     // if the user refreshes their browser, it will disconnect and reconnect them
     io.on('connection', (socket) => {
         console.log(`${socket.id} connected!`);
         // possibly do a DB call to state that the use is online?
 
+
+        /*****************************/
+        /*         DISCONNECT        */
+        /*****************************/
         socket.on('disconnect', () => {
             console.log(`${socket.id} disconnected...`);
             // possibly do a DB call to state that the use is offline?
             //for now just deleting the user
-            for (const user in users) {
-                if (users[user].socketID === socket.id) {
-                    //next two lines will not be necessary once Auth is in pace
-                    const playerIndex = players.indexOf(user);
-                    players.splice(playerIndex, 1);
-                    delete users[user];
-                }
-            }
+            removePlayer(socket.id);
         })
 
+
+        /*****************************/
+        /*           LOG IN          */
+        /*****************************/
         socket.on('log in', message => {
             if (message === "You must log in first! Type 'log in [username]'") {
                 io.to(socket.id).emit('logFail', message);
@@ -68,7 +70,7 @@ module.exports = function (io) {
                         }
                         io.to(usernameLowerCase).emit('playerData', userData)
                         socket.join(userLocation);
-                        io.to(userLocation).emit('move', `${message} arrived.`)
+                        io.to(userLocation).emit('move', { actor: message, direction: "ether", cardinal: true, action: "arrive" })
 
                         users[usernameLowerCase].chatRooms.push(userLocation);
                         //find locations, return initial and then chunk
@@ -97,25 +99,28 @@ module.exports = function (io) {
             }
         });//end socket.on log in
 
+
+        /*****************************/
+        /*           LOGOUT          */
+        /*****************************/
         socket.on('logout', message => {
-            for (const user in users) {
-                if (users[user].socketID === socket.id) {
-                    console.log(users[user].username + " logged off");
-                    players = players.filter(player => !(player === users[user].username))
-                    delete users[user];
-                    console.log("user logged out");
-                    io.to(socket.id).emit('logout', "You are now logged off.");
-                }
-            }
+            removePlayer(socket.id);
+            io.to(socket.id).emit('logout', "You are now logged off.");
         })
+
+
+        /*****************************/
+        /*            MOVE           */
+        /*****************************/
         socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
 
 
             if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
-                io.to(previousLocation).emit('move', `${user} left to the ${direction}.`)
+                io.to(previousLocation).emit('move', { actor: user, direction, cardinal: true, action: "leave" });
             } else {
-                io.to(previousLocation).emit('move', `${user} left to by ${direction}.`)
+                io.to(previousLocation).emit('move', { actor: user, direction, cardinal: false, action: "leave" });
             }
+
             //leave and enter rooms
             socket.leave(previousLocation);
             users[user.toLowerCase()].chatRooms = users[user.toLowerCase()].chatRooms.filter(room => !(room === previousLocation));
@@ -127,13 +132,13 @@ module.exports = function (io) {
             if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
                 const switchDirections = { north: "south", east: "west", south: "north", west: "east" };
                 direction = switchDirections[direction];
-                io.to(newLocation).emit('move', `${user} arrived from the ${direction}.`)
+                io.to(newLocation).emit('move', { actor: user, direction, cardinal: true, action: "arrive" });
             } else {
-                io.to(newLocation).emit('move', `${user} arrived by ${direction}.`)
+                io.to(newLocation).emit('move', { actor: user, direction, cardinal: false, action: "arrive" });
             }
-            db.Player.updateOne({ characterName: user }, { $set: { lastLocation: newLocation } })
+            rememberLocation(user, newLocation);
             //find locations, return chunk
-            db.Location.findOne({ locationName: newLocation }).then(currentLocationData => {
+            findLocationData(newLocation).then(currentLocationData => {
 
                 resolveLocationChunk(currentLocationData).then(chunk => {
                     io.to(socket.id).emit('locationChunk', chunk);
@@ -143,6 +148,10 @@ module.exports = function (io) {
             })
         });
 
+
+        /*****************************/
+        /*          WHISPER          */
+        /*****************************/
         socket.on('whisper', message => {
             let playerTo
 
@@ -168,46 +177,74 @@ module.exports = function (io) {
             }
         })
 
+
+        /*****************************/
+        /*    RED - INFO TO USER     */
+        /*****************************/
         socket.on('failure', message => {
             io.to(socket.id).emit('failure', message);
         });
 
+
+        /*****************************/
+        /*   GREEN - INFO TO USER    */
+        /*****************************/
         socket.on('green', message => {
             io.to(socket.id).emit('green', message);
         });
 
+
+        /*****************************/
+        /*         INVENTORY         */
+        /*****************************/
         socket.on('inventory', () => {
 
         });
 
+
+        /*****************************/
+        /*           SPEAK           */
+        /*****************************/
         socket.on('speak', ({ message, user, location }) => {
             io.to(location).emit('speak', `${user}: ${message}`);
         });
 
+
+        /*****************************/
+        /*            HELP           */
+        /*****************************/
         socket.on('help', () => {
             // db for all the actions/their descriptions and whatnot
             // emit object back to client and parse there
         });
 
+
+        /*****************************/
+        /*           LOOK            */
+        /*****************************/
         socket.on('look', () => {
             // db the user's location and emit necessary info
         });
 
+        /*****************************/
+        /*             GET           */
+        /*****************************/
         socket.on('get', ({ target, user, location }) => {
-            db.Location.updateOne({ locationName: location }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
-                db.Location.findOneAndUpdate({ locationName: location }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(returnData => {
+            //remove item from location
+            decrementItemUpdateOne(target, location, "location").then(returnData => {
+                scrubInventoryReturnData(location, "location").then(returnData => {
                     io.to(location).emit('invUpL', returnData.inventory);
 
                 });
             });
-
-            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
-                if (returnData.nModified === 0) {
-                    db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { name: target, quantity: 1, equipped: 0 } } }, { new: true }).then(returnData => {
+            //give item to player
+            incrementItemUpdateOne(target, user, "player").then(returnData => {
+                if (!returnData) { //increment was not successful
+                    pushItemToInventoryReturnData(target, user, "player").then(returnData => {
                         io.to(socket.id).emit('invUpP', returnData.inventory);
                     });
-                } else {
-                    db.Player.findOne({ characterName: user }).then(returnData => {
+                } else { //increment was successful
+                    findPlayerData(user).then(returnData => {
                         io.to(socket.id).emit('invUpP', returnData.inventory);
                     })
                 }
@@ -216,22 +253,26 @@ module.exports = function (io) {
             })
         });
 
+
+        /*****************************/
+        /*           DROP            */
+        /*****************************/
         socket.on('drop', ({ target, user, location }) => {
 
-            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
-                db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(returnData => {
+            decrementItemUpdateOne(target, user, "player").then(returnData => {
+                scrubInventoryReturnData(user, "player").then(returnData => {
                     io.to(socket.id).emit('invUpP', returnData.inventory);
                 });
             });
 
-            db.Location.updateOne({ locationName: location }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": target }] }).then(returnData => {
-                if (returnData.nModified === 0) {
-                    db.Location.findOneAndUpdate({ locationName: location }, { $push: { inventory: { name: target, quantity: 1 } } }, { new: true }).then(returnData => {
+            incrementItemUpdateOne(target, location, "location").then(returnData => {
+                if (!returnData) {
+                    pushItemToInventoryReturnData(target, location, "location").then(returnData => {
                         io.to(location).emit('invUpL', returnData.inventory);
 
                     });
                 } else {
-                    db.Location.findOne({ locationName: location }).then(returnData => {
+                    findLocationData(location).then(returnData => {
                         io.to(location).emit('invUpL', returnData.inventory);
                     })
                 }
@@ -245,15 +286,20 @@ module.exports = function (io) {
 
         });
 
-        //add: db call to change player, check if slot is full, remove item from inventory
 
+        /*****************************/
+        /*            WEAR           */
+        /*****************************/
         socket.on('wear', ({ user, item, targetWords }) => {
             const targetSlot = targetWords ? targetWords.replace(/\s/g, "").toLowerCase() : false;
+            //find item info
             db.Item.findOne({ itemName: item }).then(returnData => {
                 if (returnData.equippable.length === 1) {
                     let slot = returnData.equippable[0]
+                    //return info about what the user is already wearing
                     db.Player.findOne({ characterName: user }).then(returnData => {
                         if (returnData.wornItems[slot] === null) {
+                            //let user wear item if they are not already wearing something there
                             db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).then(returnData => {
                                 db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
                                     db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
@@ -261,10 +307,9 @@ module.exports = function (io) {
                                     });
                                 });
                                 io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${slot.slice(0, -4)}.`);
-
-
                             })
                         } else {
+                            //failure message on no empty space to wear item
                             io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[slot]} from your ${slot.slice(0, -4)} before you can wear the ${item}.`);
                         }
                     })
@@ -296,6 +341,7 @@ module.exports = function (io) {
                                 let slotIndex = options.indexOf(editedSlot);
                                 worn = true;
                                 db.Player.findOne({ characterName: user }).then(returnData => {
+                                    //If player's matching equipment slot is empty
                                     if (returnData.wornItems[uneditedSlots[slotIndex]] === null) {
                                         db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${uneditedSlots[slotIndex]}`]: item } }).then(returnData => {
                                             db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(incrementData => {
@@ -305,6 +351,7 @@ module.exports = function (io) {
                                                 })
                                             })
                                         })
+                                        //if player's matching equipment slot is full
                                     } else {
                                         io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[uneditedSlots[slotIndex]]} from your ${editedSlot} before you can wear the ${item}.`);
                                     }
@@ -324,6 +371,10 @@ module.exports = function (io) {
 
         });
 
+
+        /*****************************/
+        /*          REMOVE           */
+        /*****************************/
         socket.on('remove', ({ user, item, targetSlot }) => {
             switch (targetSlot) {
                 case "lefthand":
@@ -338,9 +389,11 @@ module.exports = function (io) {
                 default:
                     break;
             }
-            db.Player.updateOne({characterName: user}, {$set: { [`wornItems.${targetSlot}`]: null }}).then(returnData => {
-                if (returnData.nModified === 1){
-                    db.Player.updateOne({characterName: user}, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+            //empty player's equipment slot
+            db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${targetSlot}`]: null } }).then(returnData => {
+                //only add item to inventory if the empty goes through
+                if (returnData.nModified === 1) {
+                    db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
                         targetSlot = targetSlot.slice(0, -4).toLowerCase();
                         switch (targetSlot) {
                             case "lefthand":
@@ -355,14 +408,16 @@ module.exports = function (io) {
                             default:
                                 break;
                         }
-                        if (returnData.nModified === 1){
+                        //if increment succeeded, there was already one there
+                        if (returnData.nModified === 1) {
                             //send success
-                            db.Player.findOne({characterName: user}).then(returnData=>{
+                            db.Player.findOne({ characterName: user }).then(returnData => {
                                 io.to(socket.id).emit('playerUpdate', returnData);
                             })
                             io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
+                            //if increment failed, add a new entry to inventory
                         } else {
-                            db.Player.findOneAndUpdate({characterName: user}, {$push: {inventory: {name: item, quantity: 1}}}, {new:true}).then(returnData => {
+                            db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { name: item, quantity: 1 } } }, { new: true }).then(returnData => {
                                 //send success
                                 io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
                                 io.to(socket.id).emit('playerUpdate', returnData);
@@ -374,24 +429,36 @@ module.exports = function (io) {
 
         });
 
+
+        /*****************************/
+        /*           EMOTE           */
+        /*****************************/
         socket.on('emote', () => {
 
         });
 
+
+        /*****************************/
+        /*           JUGGLE          */
+        /*****************************/
+        //initial juggle message
         socket.on('juggle', ({ target, num, user, location }) => {
             io.to(location).emit('juggle', { user: user.characterName, target, num })
             io.to(user.characterName.toLowerCase()).emit('continueJuggle', { target, num, user, location });
 
         });
 
+        //juggle every five seconds, with chance of drop
         socket.on('contJuggle', ({ target, num, user, location }) => {
             io.to(location).emit('contJuggle', { user: user.characterName, target, num });
         })
 
-
+        //stop juggle
         socket.on('stop juggle', ({ user, location, target, intent }) => {
+            //user stopped on purpose
             if (intent) {
                 io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage: `You neatly catch the ${target}, and stop juggling.` });
+                //user dropped their items, but got a little better at it
             } else {
                 io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
                 //update player dex
@@ -401,20 +468,26 @@ module.exports = function (io) {
             }
         });
 
-        socket.on('give', ({ target, item, user, location }) => {
 
+        /*****************************/
+        /*            GIVE           */
+        /*****************************/
+        socket.on('give', ({ target, item, user, location }) => {
+            //remove item from giver's inventory
             db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
                 db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(returnData => {
                     io.to(socket.id).emit('invUpP', returnData.inventory);
                 });
             });
-
+            //add item to target's inventory
             db.Player.updateOne({ characterName: target }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+                //if increment succeeded, there was already one there
                 if (returnData.nModified === 0) {
                     db.Player.findOneAndUpdate({ characterName: target }, { $push: { inventory: { name: item, quantity: 1 } } }, { new: true }).then(returnData => {
                         io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
 
                     });
+                //if increment failed, add a new entry to inventory
                 } else {
                     db.Player.findOne({ characterName: target }).then(returnData => {
                         io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
@@ -425,11 +498,19 @@ module.exports = function (io) {
             });
         });
 
+
+        /*****************************/
+        /*           STATS           */
+        /*****************************/
         socket.on('stats', () => {
             // db for player stats
             // emit stats to player
         });
 
+
+        /*****************************/
+        /*            SLEEP          */
+        /*****************************/
         socket.on('sleep', ({ userToSleep, location }) => {
             db.Player.findOneAndUpdate({ characterName: userToSleep }, { $set: { isAwake: false } }, (err, playerData) => {
                 if (err) throw err;
@@ -445,6 +526,10 @@ module.exports = function (io) {
             })
         });
 
+
+        /*****************************/
+        /*             WAKE          */
+        /*****************************/
         socket.on('wake', ({ userToWake, location }) => {
             db.Player.findOneAndUpdate({ characterName: userToWake }, { $set: { isAwake: true } }, (err, playerData) => {
                 if (err) throw err;
@@ -459,6 +544,10 @@ module.exports = function (io) {
             })
         });
 
+
+        /*****************************/
+        /*          POSITION         */
+        /*****************************/
         socket.on('position', () => {
             //  db for player position
             // emit position to player

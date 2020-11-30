@@ -43,9 +43,23 @@ function ChatPanel({
     });
 
     //view other people's movement
-    socket.off('move').on('move', (message) => {
+    socket.off('move').on('move', ({actor, direction, cardinal, action}) => {
+        let messageDisplay = '';
+        if (actor === user.characterName) {
+            if (action === "leave") {
+                cardinal ? messageDisplay = `You leave to the ${direction}.` : messageDisplay = `You leave by the ${direction}.`;
+            } else {
+                messageDisplay = `You arrive from the ${direction}.`;
+            }
+        } else {
+            if (action === "leave") {
+                cardinal ? messageDisplay = `${actor} leaves to the ${direction}.` : messageDisplay = `${actor} leaves by the ${direction}.`;
+            } else {
+                messageDisplay = `${actor} arrives from the ${direction}.`;
+            }
+        }
         let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: message }]);
+        setChatHistory(prevState => [...prevState, { type, text: messageDisplay }]);
     });
 
     //receive your own move
