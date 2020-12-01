@@ -67,6 +67,7 @@ function Console() {
     whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
   });
 
+  let roomOccupants;
   //blur and select functions for input - to set min state
   const onSelect = () => {
     setMinState("min");
@@ -139,6 +140,25 @@ function Console() {
       });
     }
   });
+
+  
+  socket.off('who').on('who', ({currentUsersOfRoom, userLocation}) => {
+    currentUsersOfRoom = currentUsersOfRoom.map(elem=>{
+      return (elem === player.characterName) ? "You" : elem;
+    })
+    //sort to keep "You" in the beginning of the array
+    currentUsersOfRoom = currentUsersOfRoom.sort(function(a, b){
+      if (a === "You"){
+        return -1;
+      } else if (b === "You"){
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    document.getElementById("location-info").innerHTML = `${userLocation}: ${currentUsersOfRoom.join(", ")}`;
+  })
+
 
   //initialize console with black background, minState="max", and then fetch data for GamewideData
   useEffect(() => {

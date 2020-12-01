@@ -5,7 +5,7 @@ const { findPlayerData, getItem, dropItem, giveItem } = require("./userInput/get
 const { findItem } = require("./userInput/wearRemove");
 const { incrementDex } = require("./userInput/juggle");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
-const { login } = require("./userInput/loginLogout");
+const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
 const runNPC = require("./NPCEngine");
 
@@ -70,21 +70,7 @@ module.exports = function (io) {
                     };
                     playerNickNames[socket.id] = {nickname: socket.nickName, lowerName: socket.lowerName};
 
-                    let roster = io.sockets.adapter.rooms;
-                    console.log("roster");
-                    console.log(roster);
-                    console.log('roster[userLocation]:');
-                    roomUsers = roster.get(userLocation);
-                    console.log(roster.get(userLocation));
-                    // console.log(roomUsers.keys().forEach((key)=>{
-                    //     console.log(io.sockets.adapter.connected[key].nickName);
-                    // }));
-                    console.log('roomUsers');
-                    console.log(roomUsers.keys());
-                    for (const socketID of roomUsers.keys()) {
-                        console.log(playerNickNames[socketID]);
-                        // do stuff with nickname
-                      }
+                    getUsers(io, userLocation, playerNickNames);
 
                     //find locations, return initial and then chunk
                     findLocationData(userLocation).then(currentLocationData => {

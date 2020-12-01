@@ -39,6 +39,20 @@ function login(socket, io, message, players){
     });
 }
 
+const getUsers = (io, userLocation, playerNickNames) => {
+    let roster = io.sockets.adapter.rooms;
+    roomUsers = roster.get(userLocation);
+    currentUsersOfRoom = [];
+    for (const socketID of roomUsers.keys()) {
+        console.log(playerNickNames[socketID]);
+        currentUsersOfRoom.push(playerNickNames[socketID].nickname)
+        // do stuff with nickname
+    }
+    console.log(currentUsersOfRoom);
+    io.to(userLocation).emit('who', {currentUsersOfRoom, userLocation});
+}
+
 module.exports = {
-    login
+    login,
+    getUsers
 }
