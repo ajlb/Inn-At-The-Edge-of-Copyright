@@ -9,6 +9,7 @@ import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
 import { wear, remove } from "./js/wearRemove";
+import { showStats } from "./js/stats";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 
 //set up index for current position in userCommandsHistory
@@ -93,7 +94,7 @@ function InputPanel({
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.stats)) {
-            socket.emit('stats', input)
+            showStats(user, setChatHistory);
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {

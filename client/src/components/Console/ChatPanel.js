@@ -58,8 +58,9 @@ function ChatPanel({
     });
 
     //view other people's movement
-    socket.off('move').on('move', ({actor, direction, cardinal, action}) => {
+    socket.off('move').on('move', ({actor, direction, cardinal, action, roster}) => {
         let messageDisplay = '';
+        console.log(roster);
         if (actor === user.characterName) {
             if (action === "leave") {
                 cardinal ? messageDisplay = `You leave to the ${direction}.` : messageDisplay = `You leave by the ${direction}.`;

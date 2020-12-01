@@ -1,4 +1,7 @@
+import { takeTheseOffThat } from "../../../clientUtilities/finders";
+
 function giveItem(inputString, playerData){
+    inputString = takeTheseOffThat(["a", "an", "my", "the"], inputString);
     console.log(playerData);
     let potentialArray = [];
     for (const item of playerData.inventory){

@@ -1,4 +1,7 @@
+import { takeTheseOffThat } from "../../../clientUtilities/finders";
+
 function getItem(inputString, locationData){
+    inputString = takeTheseOffThat(["a", "an", "my", "the"], inputString);
     console.log(locationData);
     let potentialArray = [];
     for (const item of locationData.current.inventory){
@@ -20,6 +23,7 @@ function getItem(inputString, locationData){
 }
 
 function dropItem(inputString, playerData){
+    inputString = takeTheseOffThat(["a", "an", "my", "the"], inputString);
     console.log(playerData);
     let potentialArray = [];
     for (const item of playerData.inventory){

@@ -12,6 +12,7 @@ const runNPC = require("./NPCEngine");
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
 let users = {};
+let playerNickNames = {};
 
 //temp things to simulate display while working on server side only
 location = {};
@@ -59,12 +60,31 @@ module.exports = function (io) {
             login(socket, io, message, players).then(userLocation => {
                 if (!(userLocation === false)) {
                     //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
+                    socket.nickName = message;
+                    socket.lowerName = message.toLowerCase();
                     users[message.toLowerCase()] = {
                         socketID: socket.id,
                         username: message.toLowerCase(),
                         online: true,
                         chatRooms: [userLocation]
                     };
+                    playerNickNames[socket.id] = {nickname: socket.nickName, lowerName: socket.lowerName};
+
+                    let roster = io.sockets.adapter.rooms;
+                    console.log("roster");
+                    console.log(roster);
+                    console.log('roster[userLocation]:');
+                    roomUsers = roster.get(userLocation);
+                    console.log(roster.get(userLocation));
+                    // console.log(roomUsers.keys().forEach((key)=>{
+                    //     console.log(io.sockets.adapter.connected[key].nickName);
+                    // }));
+                    console.log('roomUsers');
+                    console.log(roomUsers.keys());
+                    for (const socketID of roomUsers.keys()) {
+                        console.log(playerNickNames[socketID]);
+                        // do stuff with nickname
+                      }
 
                     //find locations, return initial and then chunk
                     findLocationData(userLocation).then(currentLocationData => {

@@ -24,7 +24,9 @@ function login(socket, io, message, players){
                     }
                     io.to(usernameLowerCase).emit('playerData', userData)
                     socket.join(userLocation);
-                    io.to(userLocation).emit('move', { actor: message, direction: "ether", cardinal: true, action: "arrive" })
+                     
+
+                    io.to(userLocation).emit('move', { actor: message, direction: "ether", cardinal: true, action: "arrive"});
     
                     resolve(userLocation);
                 });
