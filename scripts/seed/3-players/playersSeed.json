@@ -21,14 +21,32 @@
     "race": "Faerie",
     "profession": "Bard",
     "abilities": "NULL",
-    "inventory": {
-      "item": {"$oid": "5fc32531b2009d226ef5b85e"}, 
-      "quantity": 1
-    },
+    "inventory": [
+      {
+        "item": {"$oid": "5fc32531b2009d226ef5b85e"}, 
+        "quantity": 1
+      },
+      {
+        "item": {"$oid": "5fc32531b2009d226ef5b85c"}, 
+        "quantity": 1
+      }
+    ],
     "lastLocation": "Inn Lobby",
     "backstory": "Boomels is a Fae young adult, out seeking their own way in a harsh world.",
     "description": "A tan skinned Faerie with curly dark green hair and brown feathered wings",
-    "wornItems": [],
+    "wornItems": 
+    {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "ringSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
     "day": true
   },
   {
@@ -58,7 +76,19 @@
     "lastLocation": "Inn Lobby",
     "backstory": "NULL",
     "description": "NULL",
-    "wornItems": [],
+    "wornItems": 
+    {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "ringSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
     "day": true
   },
   {
@@ -86,7 +116,19 @@
     "lastLocation": "Inn Lobby",
     "backstory": "NULL",
     "description": "NULL",
-    "wornItems": [],
+        "wornItems": 
+    {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "ringSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
     "day": true
   },
   {
@@ -114,7 +156,19 @@
     "lastLocation": "Inn Lobby",
     "backstory": "NULL",
     "description": "Arthur is a human sandwich-maker",
-    "wornItems": [],
+        "wornItems": 
+    {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "ringSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
     "day": false
   },
   {
@@ -142,7 +196,19 @@
     "lastLocation": "Inn Lobby",
     "backstory": "NULL",
     "description": "Cosmo The Magnificent is a human sandwich-maker",
-    "wornItems": [],
+        "wornItems": 
+    {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "ringSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
     "day": true
   },
   {
@@ -170,7 +236,19 @@
     "lastLocation": "Inn Lobby",
     "backstory": "NULL",
     "description": "Bismuth is a human sandwich-maker",
-    "wornItems": [],
+        "wornItems": 
+    {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "ringSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
     "day": true
   },
   {
@@ -198,7 +276,19 @@
     "lastLocation": "Inn Lobby",
     "backstory": "NULL",
     "description": "Chordori is a human sandwich-maker",
-    "wornItems": [],
+        "wornItems": 
+    {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "ringSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
     "day": true
   },
   {
@@ -226,7 +316,19 @@
     "lastLocation": "Inn Lobby",
     "backstory": "NULL",
     "description": "Severian is a human sandwich-maker",
-    "wornItems": [],
+        "wornItems": 
+    {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "ringSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
     "day": true
   }
 ]

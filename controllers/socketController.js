@@ -1,7 +1,7 @@
 const db = require("../models");
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 // const { response } = require("express");
-// const ObjectId = require('mongoose').Types.ObjectId;
+const ObjectId = require('mongoose').Types.ObjectId;
 const runNPC = require("./NPCEngine");
 
 
@@ -267,81 +267,81 @@ module.exports = function (io) {
 
         //add: db call to change player, check if slot is full, remove item from inventory
 
-        socket.on('wear', ({ user, item, targetWords }) => {
+        socket.on('wear', ({ user, item, id, targetWords }) => {
             const targetSlot = targetWords ? targetWords.replace(/\s/g, "").toLowerCase() : false;
-            console.log(`${user} wants to wear ${item} and these ${targetWords} are what?`)
-            // db.Item.findOne({ itemName: item }).then(returnData => {
-            //     if (returnData.equippable.length === 1) {
-            //         let slot = returnData.equippable[0]
-            //         db.Player.findOne({ characterName: user }).then(returnData => {
-            //             if (returnData.wornItems[slot] === null) {
-            //                 db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).then(returnData => {
-            //                     db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
-            //                         db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
-            //                             io.to(socket.id).emit('playerUpdate', finalData);
-            //                         });
-            //                     });
-            //                     io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${slot.slice(0, -4)}.`);
+            console.log(`${user} wants to wear ${item} with item ID of ${id} in this equipment slot: ${targetWords}`)
+            db.Item.findOne({ itemName: item }).then(returnData => {
+                if (returnData.equippable.length === 1) {
+                    let slot = returnData.equippable[0]
+                    db.Player.findOne({ characterName: user }).then(returnData => {
+                        if (returnData.wornItems[slot] === null) {
+                            db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).then(returnData => {
+                                db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(returnData => {
+                                    db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
+                                        io.to(socket.id).emit('playerUpdate', finalData);
+                                    });
+                                });
+                                io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${slot.slice(0, -4)}.`);
 
 
-            //                 })
-            //             } else {
-            //                 io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[slot]} from your ${slot.slice(0, -4)} before you can wear the ${item}.`);
-            //             }
-            //         })
-            //     } else if (returnData.equippable.length > 1) {
-            //         //there are multiple slot options
-            //         const options = returnData.equippable.map(slot => {
-            //             slot = slot.slice(0, -4);
-            //             switch (slot) {
-            //                 case "rightHand":
-            //                     slot = "right hand";
-            //                     break;
-            //                 case "leftHand":
-            //                     slot = "left hand";
-            //                     break;
-            //                 case "twoHands":
-            //                     slot = "two hands";
-            //                     break;
-            //                 default:
-            //                     break;
-            //             }
-            //             return slot;
-            //         })
-            //         const uneditedSlots = returnData.equippable;
-            //         //only wear on matching slot
-            //         if (targetWords) {
-            //             let worn = false;
-            //             for (const editedSlot of options) {
-            //                 if (editedSlot === targetWords.toLowerCase()) {
-            //                     let slotIndex = options.indexOf(editedSlot);
-            //                     worn = true;
-            //                     db.Player.findOne({ characterName: user }).then(returnData => {
-            //                         if (returnData.wornItems[uneditedSlots[slotIndex]] === null) {
-            //                             db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${uneditedSlots[slotIndex]}`]: item } }).then(returnData => {
-            //                                 db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(incrementData => {
-            //                                     db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
-            //                                         io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${editedSlot}.`);
-            //                                         io.to(user.toLowerCase()).emit('playerUpdate', finalData);
-            //                                     })
-            //                                 })
-            //                             })
-            //                         } else {
-            //                             io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[uneditedSlots[slotIndex]]} from your ${editedSlot} before you can wear the ${item}.`);
-            //                         }
-            //                     })
-            //                 }
-            //             }
-            //             if (!worn) {//if user didn't put in a matching slot
-            //                 io.to(user.toLowerCase()).emit('green', `You can't wear that item there.`);
-            //             }
-            //         } else {//if multiple slots but user didn't specify
-            //             io.to(user.toLowerCase()).emit('green', `Where do you want to wear it? (${options.join(", ")})`);
-            //         }
-            //     } else {//non wearable item
-            //         io.to(user.toLowerCase()).emit('green', `You can't wear that.`);
-            //     }
-            // })
+                            })
+                        } else {
+                            io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[slot]} from your ${slot.slice(0, -4)} before you can wear the ${item}.`);
+                        }
+                    })
+                } else if (returnData.equippable.length > 1) {
+                    //there are multiple slot options
+                    const options = returnData.equippable.map(slot => {
+                        slot = slot.slice(0, -4);
+                        switch (slot) {
+                            case "rightHand":
+                                slot = "right hand";
+                                break;
+                            case "leftHand":
+                                slot = "left hand";
+                                break;
+                            case "twoHands":
+                                slot = "two hands";
+                                break;
+                            default:
+                                break;
+                        }
+                        return slot;
+                    })
+                    const uneditedSlots = returnData.equippable;
+                    //only wear on matching slot
+                    if (targetWords) {
+                        let worn = false;
+                        for (const editedSlot of options) {
+                            if (editedSlot === targetWords.toLowerCase()) {
+                                let slotIndex = options.indexOf(editedSlot);
+                                worn = true;
+                                db.Player.findOne({ characterName: user }).then(returnData => {
+                                    if (returnData.wornItems[uneditedSlots[slotIndex]] === null) {
+                                        db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${uneditedSlots[slotIndex]}`]: item } }).then(returnData => {
+                                            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(incrementData => {
+                                                db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
+                                                    io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${editedSlot}.`);
+                                                    io.to(user.toLowerCase()).emit('playerUpdate', finalData);
+                                                })
+                                            })
+                                        })
+                                    } else {
+                                        io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[uneditedSlots[slotIndex]]} from your ${editedSlot} before you can wear the ${item}.`);
+                                    }
+                                })
+                            }
+                        }
+                        if (!worn) {//if user didn't put in a matching slot
+                            io.to(user.toLowerCase()).emit('green', `You can't wear that item there.`);
+                        }
+                    } else {//if multiple slots but user didn't specify
+                        io.to(user.toLowerCase()).emit('green', `Where do you want to wear it? (${options.join(", ")})`);
+                    }
+                } else {//non wearable item
+                    io.to(user.toLowerCase()).emit('green', `You can't wear that.`);
+                }
+            })
 
         });
 

@@ -24,10 +24,10 @@ let locationSchema = new Schema({
     type: Array
   },
   inventory: 
-    {
+    [{
     item: {type: Schema.Types.ObjectId, ref: "Item"},
     quantity: Number
-    } 
+    } ]
   ,
   discoverables: {
     type: Array,
