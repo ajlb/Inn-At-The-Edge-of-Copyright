@@ -2,6 +2,9 @@ const db = require("../models");
 const mongoose = require("mongoose");
 const { resolveLocationChunk, findLocationData, rememberLocation } = require("./userInput/move");
 const { decrementItemUpdateOne, incrementItemUpdateOne, pushItemToInventoryReturnData, scrubInventoryReturnData, findPlayerData } = require("./userInput/getDrop");
+const { findItem } = require("./userInput/wearRemove");
+const { incrementDex } = require("./userInput/juggle");
+const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -259,20 +262,20 @@ module.exports = function (io) {
         /*           DROP            */
         /*****************************/
         socket.on('drop', ({ target, user, location }) => {
-
+            //remove item from giver's inventory
             decrementItemUpdateOne(target, user, "player").then(returnData => {
                 scrubInventoryReturnData(user, "player").then(returnData => {
                     io.to(socket.id).emit('invUpP', returnData.inventory);
                 });
             });
-
+            //add item to recipient's inventory
             incrementItemUpdateOne(target, location, "location").then(returnData => {
-                if (!returnData) {
+                if (!returnData) {//increment item failure, add item
                     pushItemToInventoryReturnData(target, location, "location").then(returnData => {
                         io.to(location).emit('invUpL', returnData.inventory);
 
                     });
-                } else {
+                } else {//increment item success
                     findLocationData(location).then(returnData => {
                         io.to(location).emit('invUpL', returnData.inventory);
                     })
@@ -294,11 +297,11 @@ module.exports = function (io) {
         socket.on('wear', ({ user, item, targetWords }) => {
             const targetSlot = targetWords ? targetWords.replace(/\s/g, "").toLowerCase() : false;
             //find item info
-            db.Item.findOne({ itemName: item }).then(returnData => {
+            findItem(item).then(returnData => {
                 if (returnData.equippable.length === 1) {
                     let slot = returnData.equippable[0]
                     //return info about what the user is already wearing
-                    db.Player.findOne({ characterName: user }).then(returnData => {
+                    findPlayerData(user).then(returnData => {
                         if (returnData.wornItems[slot] === null) {
                             //let user wear item if they are not already wearing something there
                             db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).then(returnData => {
@@ -463,7 +466,7 @@ module.exports = function (io) {
             } else {
                 io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
                 //update player dex
-                db.Player.findOneAndUpdate({ characterName: user.characterName }, { $inc: { "stats.DEX": 0.1 } }, { new: true }).then(updatedPlayerData => {
+                incrementDex(user.characterName).then(updatedPlayerData => {
                     io.to(user.characterName.toLowerCase()).emit('playerUpdate', updatedPlayerData);
                 })
             }
@@ -488,7 +491,7 @@ module.exports = function (io) {
                         io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
 
                     });
-                //if increment failed, add a new entry to inventory
+                    //if increment failed, add a new entry to inventory
                 } else {
                     findPlayerData(target).then(returnData => {
                         io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
@@ -513,36 +516,30 @@ module.exports = function (io) {
         /*            SLEEP          */
         /*****************************/
         socket.on('sleep', ({ userToSleep, location }) => {
-            db.Player.findOneAndUpdate({ characterName: userToSleep }, { $set: { isAwake: false } }, (err, playerData) => {
-                if (err) throw err;
-
-                if (!playerData.isAwake) {
-                    io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping." });
-                } else {
+            goToSleep(userToSleep).then(userWasAwake=>{
+                if (userWasAwake) {
                     io.to(location).emit('sleep', { userToSleep });
                     socket.leave(location);
                     users[userToSleep.toLowerCase()].chatRooms = users[userToSleep.toLowerCase()].chatRooms.filter(room => !(room === location));
-
+                } else {
+                    io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping." });
                 }
-            })
+            });
         });
-
 
         /*****************************/
         /*             WAKE          */
         /*****************************/
         socket.on('wake', ({ userToWake, location }) => {
-            db.Player.findOneAndUpdate({ characterName: userToWake }, { $set: { isAwake: true } }, (err, playerData) => {
-                if (err) throw err;
-
-                if (playerData.isAwake) {
-                    io.to(socket.id).emit('error', { status: 400, message: "You are already awake." });
-                } else {
+            wakeUp(userToWake).then(userWasSleeping => {
+                if (userWasSleeping) {
                     socket.join(location);
+                    users[userToWake.toLowerCase()].chatRooms.push(location);
                     io.to(location).emit('wake', { userToWake });
-
+                } else {
+                    io.to(socket.id).emit('error', { status: 400, message: "You are already awake." });
                 }
-            })
+            });
         });
 
 

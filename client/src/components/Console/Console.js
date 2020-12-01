@@ -123,7 +123,7 @@ function Console() {
     emote: ['emote', '/e'],
     juggle: ['juggle'],
     stats: ['stats'],
-    sleep: ['sleep', 'fall asleep'],
+    sleep: ['go to sleep', 'sleep', 'fall asleep'],
     wake: ['wake', 'wake up', 'awaken'],
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
