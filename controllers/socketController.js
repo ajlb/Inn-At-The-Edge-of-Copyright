@@ -19,11 +19,18 @@ location = {};
 
 
 module.exports = function (io) {
-    function removePlayer(socketID) {
+    function removePlayer(socketID, socket, io, playerNickNames) {
         return new Promise(function (resolve, reject) {
             for (const user in users) {
                 if (users[user].socketID === socketID) {
+                    io.to(socket.id).emit('logout', "You are now logged off.");
                     console.log(users[user].username + " logged off");
+                    users[user].chatRooms.forEach(room=>{
+                        socket.leave(room);
+                        console.log(`leaving message data: ${room}, ${socket.nickName}`);
+                        io.to(room).emit('logout', `${socket.nickName} disappears into the ether.`)
+                        getUsers(io, room, playerNickNames);
+                    })
                     players = players.filter(player => !(player === users[user].username))
                     delete users[user];
                 }
@@ -49,7 +56,7 @@ module.exports = function (io) {
             console.log(`${socket.id} disconnected...`);
             // possibly do a DB call to state that the use is offline?
             //for now just deleting the user
-            removePlayer(socket.id);
+            removePlayer(socket.id, socket, io, playerNickNames);
         })
 
 
@@ -89,9 +96,9 @@ module.exports = function (io) {
         /*****************************/
         /*           LOGOUT          */
         /*****************************/
-        socket.on('logout', message => {
-            removePlayer(socket.id);
-            io.to(socket.id).emit('logout', "You are now logged off.");
+        socket.on('logout', location => {
+            removePlayer(socket.id, socket, io, playerNickNames);
+            
         })
 
 
@@ -104,8 +111,10 @@ module.exports = function (io) {
             //leave and enter rooms
             socket.leave(previousLocation);
             users[user.toLowerCase()].chatRooms = users[user.toLowerCase()].chatRooms.filter(room => !(room === previousLocation));
+            getUsers(io, previousLocation, playerNickNames);
             users[user.toLowerCase()].chatRooms.push(newLocation);
             socket.join(newLocation);
+            getUsers(io, newLocation, playerNickNames);
 
         });
 

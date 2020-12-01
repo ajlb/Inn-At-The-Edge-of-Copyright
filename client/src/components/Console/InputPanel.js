@@ -243,7 +243,7 @@ function InputPanel({
 
             } else if (findIn(input, ["logout", "log out", "log off"])) {
                 takeTheseOffThat(["logout, log out", "log off"], input);
-                socket.emit('logout', input);
+                socket.emit('logout', location.current.locationName);
             } else {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Hmmmm... that didn't quite make sense. Try 'help' for a list of commands!` }]);
             }
