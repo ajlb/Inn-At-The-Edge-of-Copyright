@@ -146,7 +146,7 @@ figure {
     color: rgb(245, 252, 181);
 }
 
-.displayed-stat, .displayed-intro, .displayed-error, .displayed-indent, .displayed-green {
+.displayed-stat, .displayed-intro, .displayed-error, .displayed-indent, .displayed-green, .displayed-commands, .displayed-npc {
     margin-top: 1px;
     margin-bottom: 1px;
     font-size: 13px;
@@ -169,6 +169,15 @@ figure {
 
 .displayed-indent {
     margin-left: 20px;
+}
+
+.displayed-npc {
+    font-weight: bold;
+}
+
+.displayed-commands {
+    margin-left: 20px;
+    font-style: italic;
 }
 
 #anchor {

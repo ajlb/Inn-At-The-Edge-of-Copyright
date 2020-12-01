@@ -7,6 +7,7 @@ const { incrementDex } = require("./userInput/juggle");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
+const runNPC = require("./NPCEngine");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -112,7 +113,19 @@ module.exports = function (io) {
 
 
         /*****************************/
-        /*    RED - INFO TO USER     */
+        /*            NPC            */
+        /*****************************/
+        socket.on('to NPC', ({ toNPC, message }) => {
+            db.Dialog.findOne({ NPC: toNPC }, (err, result) => {
+                if (err) throw err;
+
+                runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
+
+            })
+        })
+
+        /*****************************/
+        /*   RED - INFO TO USER      */
         /*****************************/
         socket.on('failure', message => {
             io.to(socket.id).emit('failure', message);

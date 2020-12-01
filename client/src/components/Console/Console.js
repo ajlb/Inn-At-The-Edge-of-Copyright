@@ -20,11 +20,60 @@ function Console() {
     theme: "",
     currentMessage: ""
   }
+
   const [location, setLocation] = useState({});
+
   const [player, setPlayer] = useState({});
 
+  const [gameInfo, setGameInfo] = useState(initialGameInfo);
 
+  const [day, setDay] = useState(true);
 
+  const [activities, setActivities] = useState({
+    sleeping: false,
+    juggling: false,
+    fighting: false,
+    singing: false
+  })
+
+  const [inConversation, setConversation] = useState(false);
+
+  const [chatHistory, setChatHistory] = useState([]);
+
+  const [input, setInput] = useState('');
+
+  const [inputHistory, setInputHistory] = useState([]);
+
+  const [playerPosition, setPlayerPosition] = useState('standing');
+
+  const [actionCalls, setActionCalls] = useState({
+    move: ['move', '/m', 'walk', 'exit'],
+    inventory: ['inventory', '/i'],
+    speak: ['speak', 'say', '/s'],
+    look: ['look', '/l'],
+    help: ['help', '/h'],
+    get: ['get', '/g', 'pick up'],
+    drop: ['drop', 'discard', '/d'],
+    wear: ['wear', 'put on'],
+    remove: ['remove', '/r', 'take off'],
+    emote: ['emote', '/e'],
+    juggle: ['juggle'],
+    stats: ['stats'],
+    sleep: ['sleep', 'fall asleep'],
+    wake: ['wake', 'wake up', 'awaken'],
+    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
+    give: ['give'],
+    examine: ['examine', 'study'],
+    whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
+  });
+
+  //blur and select functions for input - to set min state
+  const onSelect = () => {
+    setMinState("min");
+  }
+  const onBlur = () => {
+    setMinState("max")
+  }
 
   // Socket log in message
   socket.off('log in').on('log in', message => {
@@ -91,54 +140,6 @@ function Console() {
     }
   });
 
-  const [gameInfo, setGameInfo] = useState(initialGameInfo);
-
-  const [day, setDay] = useState(true);
-
-  const [activities, setActivities] = useState({
-    sleeping: false,
-    juggling: false,
-    fighting: false,
-    singing: false
-  })
-
-  const [chatHistory, setChatHistory] = useState([]);
-
-  const [input, setInput] = useState('');
-
-  const [inputHistory, setInputHistory] = useState([]);
-
-  const [playerPosition, setPlayerPosition] = useState('standing');
-
-  const [actionCalls, setActionCalls] = useState({
-    move: ['move', '/m', 'walk', 'exit'],
-    inventory: ['inventory', '/i'],
-    speak: ['speak', 'say', '/s'],
-    look: ['look', '/l'],
-    help: ['help', '/h'],
-    get: ['get', '/g', 'pick up'],
-    drop: ['drop', 'discard', '/d'],
-    wear: ['wear', 'put on'],
-    remove: ['remove', '/r', 'take off'],
-    emote: ['emote', '/e'],
-    juggle: ['juggle'],
-    stats: ['stats'],
-    sleep: ['go to sleep', 'sleep', 'fall asleep'],
-    wake: ['wake', 'wake up', 'awaken'],
-    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
-    give: ['give'],
-    examine: ['examine'],
-    whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
-  });
-
-  //blur and select functions for input - to set min state
-  const onSelect = () => {
-    setMinState("min");
-  }
-  const onBlur = () => {
-    setMinState("max")
-  }
-
   //initialize console with black background, minState="max", and then fetch data for GamewideData
   useEffect(() => {
     let mounted = true;
@@ -188,6 +189,8 @@ function Console() {
                     location={location}
                     setLocation={setLocation}
                     day={day}
+                    inConversation={inConversation}
+                    setConversation={setConversation}
                   />
                   <InputPanel
                     actionCalls={actionCalls}
@@ -205,6 +208,8 @@ function Console() {
                     user={player}
                     activities={activities}
                     setActivities={setActivities}
+                    inConversation={inConversation}
+                    setConversation={setConversation}
                   />
                 </div>
               </div>

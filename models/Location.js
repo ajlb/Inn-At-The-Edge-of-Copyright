@@ -30,6 +30,10 @@ let locationSchema = new Schema({
       ref: "Inventory"
     }
   ],
+  discoverables: {
+    type: Array,
+    default: undefined
+  },
   indoorOutdoor: {
     type: String
   }
