@@ -99,7 +99,7 @@ function InputPanel({
                 message = input.split(' ').slice(1).join(' ');
             }
             // fyi, checking if the message begins with someone's name is handled on the server side
-            socket.emit('whisper', message)
+            socket.emit('whisper', {message, user:user.characterName})
         } else if (findIn(input, actionCalls.speak)) {
             const message = takeTheseOffThat(actionCalls.speak, input);
             socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });

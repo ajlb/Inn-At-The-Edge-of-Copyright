@@ -1,5 +1,6 @@
 const db = require("../../models");
 const mongoose = require("mongoose");
+const { findLocationData } = require("./move");
 
 function decrementItemUpdateOne(item, targetName, type) {
     type = type ? type.toLowerCase() : undefined;
@@ -64,14 +65,14 @@ function findPlayerData(username) {
     });
 }
 
-function scrubInventoryReturnData(target, type){
-    return new Promise(function(resolve, reject){
-        if (type === "location"){
-            db.Location.findOneAndUpdate({ locationName: target }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(data=>{
+function scrubInventoryReturnData(target, type) {
+    return new Promise(function (resolve, reject) {
+        if (type === "location") {
+            db.Location.findOneAndUpdate({ locationName: target }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(data => {
                 resolve(data);
             });
-        } else if (type === "player"){
-            db.Player.findOneAndUpdate({ characterName: target }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(data=>{
+        } else if (type === "player") {
+            db.Player.findOneAndUpdate({ characterName: target }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(data => {
                 resolve(data);
             })
         } else {
@@ -81,10 +82,86 @@ function scrubInventoryReturnData(target, type){
 }
 
 
+function getItem(socket, io, target, user, location) {
+    //remove item from location
+    decrementItemUpdateOne(target, location, "location").then(returnData => {
+        scrubInventoryReturnData(location, "location").then(returnData => {
+            io.to(location).emit('invUpL', returnData.inventory);
+
+        });
+    });
+    //give item to player
+    incrementItemUpdateOne(target, user, "player").then(returnData => {
+        if (!returnData) { //increment was not successful
+            pushItemToInventoryReturnData(target, user, "player").then(returnData => {
+                io.to(socket.id).emit('invUpP', returnData.inventory);
+            });
+        } else { //increment was successful
+            findPlayerData(user).then(returnData => {
+                io.to(socket.id).emit('invUpP', returnData.inventory);
+            })
+        }
+        io.to(location).emit('get', { target, actor: user });
+    });
+}
+
+function dropItem(socket, io, target, user, location) {
+    //remove item from giver's inventory
+    decrementItemUpdateOne(target, user, "player").then(returnData => {
+        scrubInventoryReturnData(user, "player").then(returnData => {
+            io.to(socket.id).emit('invUpP', returnData.inventory);
+        });
+    });
+    //add item to recipient's inventory
+    incrementItemUpdateOne(target, location, "location").then(returnData => {
+        if (!returnData) {//increment item failure, add item
+            pushItemToInventoryReturnData(target, location, "location").then(returnData => {
+                io.to(location).emit('invUpL', returnData.inventory);
+
+            });
+        } else {//increment item success
+            findLocationData(location).then(returnData => {
+                io.to(location).emit('invUpL', returnData.inventory);
+            })
+        }
+        io.to(location).emit('drop', { target, actor: user });
+    })
+}
+
+function giveItem(socket, io, target, item, user, location) {
+    //remove item from giver's inventory
+    decrementItemUpdateOne(item, user, "player").then(returnData => {
+        scrubInventoryReturnData(user, "player").then(returnData => {
+            io.to(socket.id).emit('invUpP', returnData.inventory);
+        });
+    });
+    //add item to target's inventory
+    incrementItemUpdateOne(item, target, "player").then(returnData => {
+        //if increment succeeded, there was already one there
+        if (!returnData) {
+            pushItemToInventoryReturnData(item, target, "player").then(returnData => {
+                io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
+
+            });
+            //if increment failed, add a new entry to inventory
+        } else {
+            findPlayerData(target).then(returnData => {
+                io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
+            })
+        }
+        io.to(location).emit('give', { target, item, actor: user });
+
+    });
+}
+
+
 module.exports = {
     decrementItemUpdateOne,
     incrementItemUpdateOne,
     pushItemToInventoryReturnData,
     findPlayerData,
-    scrubInventoryReturnData
+    scrubInventoryReturnData,
+    getItem,
+    dropItem,
+    giveItem
 }

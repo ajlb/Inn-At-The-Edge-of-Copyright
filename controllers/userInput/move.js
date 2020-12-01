@@ -33,8 +33,38 @@ const findLocationData = (locationName) => {
     });
 }
 
+
+const move = (socket, io, previousLocation, newLocation, direction, user) => {
+    if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
+        io.to(previousLocation).emit('move', { actor: user, direction, cardinal: true, action: "leave" });
+    } else {
+        io.to(previousLocation).emit('move', { actor: user, direction, cardinal: false, action: "leave" });
+    }
+
+    io.to(socket.id).emit('yourMove', direction);
+
+    if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
+        const switchDirections = { north: "south", east: "west", south: "north", west: "east" };
+        direction = switchDirections[direction];
+        io.to(newLocation).emit('move', { actor: user, direction, cardinal: true, action: "arrive" });
+    } else {
+        io.to(newLocation).emit('move', { actor: user, direction, cardinal: false, action: "arrive" });
+    }
+    rememberLocation(user, newLocation);
+    //find locations, return chunk
+    findLocationData(newLocation).then(currentLocationData => {
+
+        resolveLocationChunk(currentLocationData).then(chunk => {
+            io.to(socket.id).emit('locationChunk', chunk);
+            location = chunk;
+        });
+
+    })
+}
+
 module.exports = {
     resolveLocationChunk,
     rememberLocation,
-    findLocationData
+    findLocationData,
+    move
 }
