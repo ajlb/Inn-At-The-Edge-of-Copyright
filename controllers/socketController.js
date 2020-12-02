@@ -176,25 +176,25 @@ module.exports = function (io) {
             io.to(socket.id).emit('green', message);
         });
 
-        socket.on('inventory', message  => {
+        socket.on('inventory', message => {
             io.to(socket.id).emit('inventory', message);
-            
+
         });
 
         socket.on('speak', ({ message, user, location }) => {
             io.to(location).emit('speak', `${user}: ${message}`);
         });
 
-        socket.on('help', ({message}) => {
+        socket.on('help', ({ message }) => {
             // db for all the actions/their descriptions and whatnot
             // emit object back to client and parse there
             console.log('helped message recieved');
             console.log(message);
             db.Action.find({})
-            .then(actionData => {
-           io.to(socket.id).emit('help', {actionData, message});
-           console.log(`This is our data ${actionData}`);
-            })
+                .then(actionData => {
+                    io.to(socket.id).emit('help', { actionData, message });
+                    console.log(`This is our data ${actionData}`);
+                })
 
         });
 
@@ -347,9 +347,9 @@ module.exports = function (io) {
                 default:
                     break;
             }
-            db.Player.updateOne({characterName: user}, {$set: { [`wornItems.${targetSlot}`]: null }}).then(returnData => {
-                if (returnData.nModified === 1){
-                    db.Player.updateOne({characterName: user}, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+            db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${targetSlot}`]: null } }).then(returnData => {
+                if (returnData.nModified === 1) {
+                    db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
                         targetSlot = targetSlot.slice(0, -4).toLowerCase();
                         switch (targetSlot) {
                             case "lefthand":
@@ -364,14 +364,14 @@ module.exports = function (io) {
                             default:
                                 break;
                         }
-                        if (returnData.nModified === 1){
+                        if (returnData.nModified === 1) {
                             //send success
-                            db.Player.findOne({characterName: user}).then(returnData=>{
+                            db.Player.findOne({ characterName: user }).then(returnData => {
                                 io.to(socket.id).emit('playerUpdate', returnData);
                             })
                             io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
                         } else {
-                            db.Player.findOneAndUpdate({characterName: user}, {$push: {inventory: {name: item, quantity: 1}}}, {new:true}).then(returnData => {
+                            db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { name: item, quantity: 1 } } }, { new: true }).then(returnData => {
                                 //send success
                                 io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
                                 io.to(socket.id).emit('playerUpdate', returnData);
@@ -437,6 +437,11 @@ module.exports = function (io) {
         socket.on('stats', () => {
             // db for player stats
             // emit stats to player
+
+            db.Player.find({}).then((statsData) => {
+                io.to(socket.id).emit('stats', { statsData });
+                console.log(userStats);
+            })
         });
 
         socket.on('sleep', ({ userToSleep, location }) => {

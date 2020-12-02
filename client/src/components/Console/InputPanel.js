@@ -9,7 +9,7 @@ import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
 import { wear, remove } from "./js/wearRemove";
-
+import {showStats} from './js/stats'
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
 //constant variables for parsing
@@ -61,12 +61,6 @@ function InputPanel({
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (findIn(input, actionCalls.move)) {
-<<<<<<< HEAD
-            let message = takeTheseOffThat(actionCalls.move, input);
-            console.log(message);
-            socket.emit('move', {message, user});
-            console.log('input was move');
-=======
             if (playerPosition === "standing"){
                 let direction = takeTheseOffThat(actionCalls.move, input);
                 for (const param in DIRECTIONS) {
@@ -88,7 +82,6 @@ function InputPanel({
                 setChatHistory(prevState => [...prevState, {type: "displayed-error", text: 'You have to stand up to do that!'}]);
                 
             }
->>>>>>> 9cb375ac034a6cea68b85c88708d24e5c729c54b
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.inventory)) {
@@ -156,7 +149,9 @@ function InputPanel({
         } else if (findIn(input, actionCalls.juggle)) {
             juggle(input, user, location.current.locationName);
         } else if (findIn(input, actionCalls.stats)) {
-            socket.emit('stats', input)
+            showStats(actionCalls.stats, user, input);
+            console.log('Input is stats');
+            socket.emit('stats',input);
         } else if (findIn(input, actionCalls.sleep)) {
             if (activities.sleeping) {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);
@@ -214,22 +209,7 @@ function InputPanel({
     }
 
 
-// display help commands to serve side
 
-
-
-//     if (actionCalls.help === undefined) {
-//         if (findIn(input, ['help', '/h'])) {
-//             console.log('help' + input);
-//             let message = takeTheseOffThat(['help', 'h/'], input);
-//             console.log(message);
-//             socket.emit('help', input);
-//     } else if (findIn(input, actionCalls.help)) {
-//         let message = takeTheseOffThat(actionCalls.help, input);
-//         console.log(message);
-//         socket.emit('help', { message })
-//         console.log('input was help');
-//     }
 // }
     //display previous commands on key up, key down
     const keyDownResults = (event) => {
