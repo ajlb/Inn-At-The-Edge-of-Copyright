@@ -142,6 +142,14 @@ function Console() {
   });
 
   
+  socket.off('dayNight').on('dayNight', day=>{
+    console.log("day", day);
+    setPlayer({
+      ...player,
+      day
+    });
+  })
+
   socket.off('who').on('who', ({currentUsersOfRoom, userLocation}) => {
     currentUsersOfRoom = currentUsersOfRoom.map(elem=>{
       return (elem === player.characterName) ? "You" : elem;
@@ -167,6 +175,10 @@ function Console() {
     if (isBrowser) {
       setMinState("max");
     }
+
+    fetch('https://ipapi.co/json/')
+  .then(response => response.json())
+  .then(locationData => socket.emit('location', locationData));
 
     // sets a default chat history because chat history needs to be iterable to be mapped
     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }])

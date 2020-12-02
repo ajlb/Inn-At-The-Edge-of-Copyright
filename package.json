@@ -29,6 +29,7 @@
     "if-env": "^1.0.4",
     "mongodb-extended-json": "^1.11.0",
     "mongoose": "^5.10.14",
-    "socket.io": "^3.0.3"
+    "socket.io": "^3.0.3",
+    "socket.io-client": "^3.0.3"
   }
 }

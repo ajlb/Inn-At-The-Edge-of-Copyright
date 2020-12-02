@@ -12,32 +12,36 @@ const runNPC = require("./NPCEngine");
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
 let users = {};
-let playerNickNames = {};
+let playernicknames = {};
 
 //temp things to simulate display while working on server side only
 location = {};
 
 
-module.exports = function (io) {
-    function removePlayer(socketID, socket, io, playerNickNames) {
-        return new Promise(function (resolve, reject) {
-            for (const user in users) {
-                if (users[user].socketID === socketID) {
-                    io.to(socket.id).emit('logout', "You are now logged off.");
-                    console.log(users[user].username + " logged off");
-                    users[user].chatRooms.forEach(room=>{
-                        socket.leave(room);
-                        console.log(`leaving message data: ${room}, ${socket.nickName}`);
-                        io.to(room).emit('logout', `${socket.nickName} disappears into the ether.`)
-                        getUsers(io, room, playerNickNames);
-                    })
-                    players = players.filter(player => !(player === users[user].username))
-                    delete users[user];
-                }
-            }
-        })
-    }
 
+//This function is called in logout and disconnect, and remains here due to it editing several of the user variables that live in this file
+function removePlayer(socketID, socket, io, playernicknames) {
+    return new Promise(function (resolve, reject) {
+        for (const user in users) {
+            if (users[user].socketID === socketID) {
+                io.to(socket.id).emit('logout', "You are now logged off.");
+                console.log(users[user].username + " logged off");
+                users[user].chatRooms.forEach(room => {
+                    socket.leave(room);
+                    io.to(room).emit('logout', `${socket.nickname} disappears into the ether.`)
+                    getUsers(io, room, playernicknames);
+                })
+                players = players.filter(player => !(player === users[user].username))
+                delete users[user];
+            }
+        }
+    })
+}
+
+
+
+
+module.exports = function (io) {
 
     /*****************************/
     /*          CONNECT          */
@@ -56,7 +60,7 @@ module.exports = function (io) {
             console.log(`${socket.id} disconnected...`);
             // possibly do a DB call to state that the use is offline?
             //for now just deleting the user
-            removePlayer(socket.id, socket, io, playerNickNames);
+            removePlayer(socket.id, socket, io, playernicknames);
         })
 
 
@@ -67,7 +71,7 @@ module.exports = function (io) {
             login(socket, io, message, players).then(userLocation => {
                 if (!(userLocation === false)) {
                     //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
-                    socket.nickName = message;
+                    socket.nickname = message;
                     socket.lowerName = message.toLowerCase();
                     users[message.toLowerCase()] = {
                         socketID: socket.id,
@@ -75,9 +79,9 @@ module.exports = function (io) {
                         online: true,
                         chatRooms: [userLocation]
                     };
-                    playerNickNames[socket.id] = {nickname: socket.nickName, lowerName: socket.lowerName};
+                    playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
 
-                    getUsers(io, userLocation, playerNickNames);
+                    getUsers(io, userLocation, playernicknames);
 
                     //find locations, return initial and then chunk
                     findLocationData(userLocation).then(currentLocationData => {
@@ -97,8 +101,8 @@ module.exports = function (io) {
         /*           LOGOUT          */
         /*****************************/
         socket.on('logout', location => {
-            removePlayer(socket.id, socket, io, playerNickNames);
-            
+            removePlayer(socket.id, socket, io, playernicknames);
+
         })
 
 
@@ -111,10 +115,10 @@ module.exports = function (io) {
             //leave and enter rooms
             socket.leave(previousLocation);
             users[user.toLowerCase()].chatRooms = users[user.toLowerCase()].chatRooms.filter(room => !(room === previousLocation));
-            getUsers(io, previousLocation, playerNickNames);
+            getUsers(io, previousLocation, playernicknames);
             users[user.toLowerCase()].chatRooms.push(newLocation);
             socket.join(newLocation);
-            getUsers(io, newLocation, playerNickNames);
+            getUsers(io, newLocation, playernicknames);
 
         });
 
@@ -122,7 +126,7 @@ module.exports = function (io) {
         /*****************************/
         /*          WHISPER          */
         /*****************************/
-        socket.on('whisper', ({message, user}) => {
+        socket.on('whisper', ({ message, user }) => {
             whisper(socket, io, message, players, user);
         })
 
@@ -442,6 +446,40 @@ module.exports = function (io) {
             // emit position to player
         });
 
+
+
+
+        /*****************************/
+        /*        DAY/NIGHT          */
+        /*****************************/
+        socket.on('dayNight', (day) => {
+            io.emit('dayNight', day)
+        });
+
+
+        /*****************************/
+        /* DAY/NIGHT - DATA REQUEST  */
+        /*****************************/
+        socket.on('dataRequest', () => {
+            io.emit('dataRequest', users)
+        });
+
+
+        /*****************************/
+        /* DAY/NIGHT - USER LOCATION */
+        /*****************************/
+        socket.on('location', (locationData) => {
+            io.to('backEngine').emit('location', {locationData, id:socket.id});
+        });
+
+
+        /*****************************/
+        /* DAY/NIGHT - USER LOCATION */
+        /*****************************/
+        socket.on('joinRequest', (message) => {
+            console.log('backEngine wants to join backEngine');
+            socket.join(message);
+        });
     })
 
 }
