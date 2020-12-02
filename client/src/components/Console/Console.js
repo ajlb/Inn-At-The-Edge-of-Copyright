@@ -141,15 +141,6 @@ function Console() {
     }
   });
 
-  
-  socket.off('dayNight').on('dayNight', day=>{
-    console.log("day", day);
-    setPlayer({
-      ...player,
-      day
-    });
-  })
-
   socket.off('who').on('who', ({currentUsersOfRoom, userLocation}) => {
     currentUsersOfRoom = currentUsersOfRoom.map(elem=>{
       return (elem === player.characterName) ? "You" : elem;
@@ -223,6 +214,7 @@ function Console() {
                     day={day}
                     inConversation={inConversation}
                     setConversation={setConversation}
+                    setPlayer={setPlayer}
                   />
                   <InputPanel
                     actionCalls={actionCalls}

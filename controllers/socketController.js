@@ -75,7 +75,8 @@ module.exports = function (io) {
                     socket.lowerName = message.toLowerCase();
                     users[message.toLowerCase()] = {
                         socketID: socket.id,
-                        username: message.toLowerCase(),
+                        nickname: message,
+                        lowerName: message.toLowerCase(), 
                         online: true,
                         chatRooms: [userLocation]
                     };
@@ -452,8 +453,8 @@ module.exports = function (io) {
         /*****************************/
         /*        DAY/NIGHT          */
         /*****************************/
-        socket.on('dayNight', (day) => {
-            io.emit('dayNight', day)
+        socket.on('dayNight', ({day, user}) => {
+            io.to(user.toLowerCase()).emit('dayNight', day);
         });
 
 
