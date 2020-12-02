@@ -171,7 +171,9 @@ function InputPanel({
             } else if (findIn(input, actionCalls.remove)) {
                 remove(input, user, actionCalls.remove);
             } else if (findIn(input, actionCalls.emote)) {
-                socket.emit('emote', input)
+                const emoteThis = takeTheseOffThat(actionCalls.emote, input);
+                console.log(emoteThis);
+                socket.emit('emote', { user: user.characterName, emotion: emoteThis, location: location.current.locationName });
             } else if (findIn(input, actionCalls.sleep)) {
                 if (activities.sleeping) {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);

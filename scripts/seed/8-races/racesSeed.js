@@ -1,7 +1,4 @@
 module.exports = [{
-  "_id": {
-    "$oid": "5f9226e3d7a98e239c160a9d"
-  },
   "raceName": "Human",
   "description": "a typical human from Earth wearing a bathrobe",
   "specialAbility": "NULL",
@@ -10,9 +7,6 @@ module.exports = [{
   "wisdomBonus": "0",
   "healthBonus": "0"
 }, {
-  "_id": {
-    "$oid": "5f9226e3d7a98e239c160a9e"
-  },
   "raceName": "Cat",
   "description": "like a housecat but the size of an average human",
   "specialAbility": "NULL",
@@ -21,9 +15,6 @@ module.exports = [{
   "wisdomBonus": "0",
   "healthBonus": "0"
 }, {
-  "_id": {
-    "$oid": "5f9226e3d7a98e239c160a9f"
-  },
   "raceName": "Faerie",
   "description": "a delicate fairy-like creature, but wickedly clever",
   "specialAbility": "NULL",
@@ -32,9 +23,6 @@ module.exports = [{
   "wisdomBonus": "3",
   "healthBonus": "0"
 }, {
-  "_id": {
-    "$oid": "5f9226e3d7a98e239c160aa0"
-  },
   "raceName": "Ogre",
   "description": "your basic not-so-smart super tough brute",
   "specialAbility": "NULL",
@@ -43,9 +31,6 @@ module.exports = [{
   "wisdomBonus": "0",
   "healthBonus": "3"
 }, {
-  "_id": {
-    "$oid": "5f9226e3d7a98e239c160aa1"
-  },
   "raceName": "Gnome",
   "description": "tiny but nimble and tenacious",
   "specialAbility": "NULL",
@@ -54,9 +39,6 @@ module.exports = [{
   "wisdomBonus": "0",
   "healthBonus": "0"
 }, {
-  "_id": {
-    "$oid": "5f9226e3d7a98e239c160aa2"
-  },
   "raceName": "Unicorn",
   "description": "stunningly magestic creature - but no hands",
   "specialAbility": "NULL",
@@ -65,11 +47,8 @@ module.exports = [{
   "wisdomBonus": "8",
   "healthBonus": "0"
 }, {
-  "_id": {
-    "$oid": "5f9226e3d7a98e239c160aa3"
-  },
   "raceName": "Flamingo",
-  "description": "a plastic neon pink lawn flamingo that has survived several severe hurricanes",
+  "description": "a plastic neon pink lawn flamingo that has survived several severe hurricanes. You perform best as lawn art.",
   "specialAbility": "NULL",
   "strengthBonus": "0",
   "dexterityBonus": "0",

@@ -37,7 +37,7 @@ function Console() {
   })
 
   const [inConversation, setConversation] = useState(false);
-
+  
   const [chatHistory, setChatHistory] = useState([]);
 
   const [input, setInput] = useState('');
@@ -105,6 +105,7 @@ function Console() {
   // Socket initial userData
   socket.off('playerData').on('playerData', message => {
     console.log("recieved Player Data");
+    
     console.log(message);
     if (!(message === null)) {
       setPlayer(message);

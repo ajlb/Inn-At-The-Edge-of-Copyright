@@ -7,6 +7,9 @@ const { incrementDex } = require("./userInput/juggle");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
+// const { response } = require("express");
+const ObjectId = require('mongoose').Types.ObjectId;
+
 const runNPC = require("./NPCEngine");
 
 // this array is fully temporary and is only here in place of the database until that is set up
@@ -209,13 +212,10 @@ module.exports = function (io) {
         });
 
 
-        /*****************************/
-        /*            WEAR           */
-        /*****************************/
-        socket.on('wear', ({ user, item, targetWords }) => {
+        socket.on('wear', ({ user, item, id, targetWords }) => {
             const targetSlot = targetWords ? targetWords.replace(/\s/g, "").toLowerCase() : false;
-            //find item info
-            findItem(item).then(returnData => {
+            console.log(`${user} wants to wear ${item} with item ID of ${id} in this equipment slot: ${targetWords}`)
+            db.Item.findOne({ itemName: item }).then(returnData => {
                 if (returnData.equippable.length === 1) {
                     let slot = returnData.equippable[0]
                     //return info about what the user is already wearing
@@ -223,7 +223,7 @@ module.exports = function (io) {
                         if (returnData.wornItems[slot] === null) {
                             //let user wear item if they are not already wearing something there
                             db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).then(returnData => {
-                                db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+                                db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(returnData => {
                                     db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
                                         io.to(socket.id).emit('playerUpdate', finalData);
                                     });
@@ -266,7 +266,7 @@ module.exports = function (io) {
                                     //If player's matching equipment slot is empty
                                     if (returnData.wornItems[uneditedSlots[slotIndex]] === null) {
                                         db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${uneditedSlots[slotIndex]}`]: item } }).then(returnData => {
-                                            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(incrementData => {
+                                            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(incrementData => {
                                                 db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
                                                     io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${editedSlot}.`);
                                                     io.to(user.toLowerCase()).emit('playerUpdate', finalData);
@@ -351,12 +351,9 @@ module.exports = function (io) {
 
         });
 
-
-        /*****************************/
-        /*           EMOTE           */
-        /*****************************/
-        socket.on('emote', () => {
-
+        socket.on('emote', ({ user, emotion, location }) => {
+            console.log(`${user} ${emotion}`);
+            io.to(location).emit('emote', { user, emotion });
         });
 
 
