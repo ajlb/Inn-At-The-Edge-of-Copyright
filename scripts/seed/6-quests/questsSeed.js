@@ -1,8 +1,5 @@
 module.exports = [
   {
-    "_id": {
-      "$oid": "5f922707d7a98e239c160aa4"
-    },
     "questTitle": "Find my missing sock.",
     "dialogue": [
       "I'm pretty sure I put it in the washing machine, but it didn't come out of the dryer. Can you help me?",

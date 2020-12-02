@@ -1,5 +1,7 @@
 const db = require("../models");
 const mongoose = require("mongoose");
+// const { response } = require("express");
+const ObjectId = require('mongoose').Types.ObjectId;
 const runNPC = require("./NPCEngine");
 
 
@@ -60,36 +62,44 @@ module.exports = function (io) {
                     io.to(usernameLowerCase).emit('log in', message);
                     console.log(`${message} is now fake logged in.`);
                     //find and retrieve user Data, join location room
-                    db.Player.findOneAndUpdate({ characterName: message }, { $set: { isAwake: true, isOnline: true } }, { new: true }).select("-password").then(userData => {
-                        let userLocation
-                        if (userData === null) {
-                            userLocation = "Inn Lobby";
-                        } else {
-                            userLocation = userData.lastLocation;
-                        }
-                        io.to(usernameLowerCase).emit('playerData', userData)
-                        socket.join(userLocation);
-                        io.to(userLocation).emit('move', `${message} arrived.`)
+                    // db.Player.findOne({ characterName: message })
+                    // .populate('inventory.item')
+                    // .then(userData => {
+                    db.Player.findOneAndUpdate({ characterName: message }, { $set: { isAwake: true, isOnline: true } }, { new: true })
+                        .select("-password")
+                        .populate('inventory.item')
+                        .then(userData => {
+                    
+                            let userLocation
+                            if (userData === null) {
+                                userLocation = "Inn Lobby";
+                            } else {
+                                userLocation = userData.lastLocation;
+                            }
+                            io.to(usernameLowerCase).emit('playerData', userData)
+                            socket.join(userLocation);
+                            io.to(userLocation).emit('move', `${message} arrived.`)
 
-                        users[usernameLowerCase].chatRooms.push(userLocation);
-                        //find locations, return initial and then chunk
-                        db.Location.findOne({ locationName: userLocation }).then(currentLocationData => {
+                            users[usernameLowerCase].chatRooms.push(userLocation);
+                            //find locations, return initial and then chunk
+                            db.Location.findOne({ locationName: userLocation }).then(currentLocationData => {
 
-                            io.to(usernameLowerCase).emit('currentLocation', currentLocationData);
-                            resolveLocationChunk(currentLocationData).then(chunk => {
-                                io.to(usernameLowerCase).emit('locationChunk', chunk);
-                                location = chunk;
-                            });
+                                io.to(usernameLowerCase).emit('currentLocation', currentLocationData);
+                                resolveLocationChunk(currentLocationData).then(chunk => {
+                                    io.to(usernameLowerCase).emit('locationChunk', chunk);
+                                    location = chunk;
+                                });
 
+                            })
+                            console.log(`${message}'s inventory is `, userData.inventory);
                         })
-                    })
-                    //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
-                    users[usernameLowerCase] = {
-                        socketID: socket.id,
-                        username: usernameLowerCase,
-                        online: true,
-                        chatRooms: []
-                    };
+                        //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
+                        users[usernameLowerCase] = {
+                            socketID: socket.id,
+                            username: usernameLowerCase,
+                            online: true,
+                            chatRooms: []
+                        };
 
                 } else {
                     io.to(socket.id).emit('logFail', `${message} is already logged in.`);
@@ -257,15 +267,16 @@ module.exports = function (io) {
 
         //add: db call to change player, check if slot is full, remove item from inventory
 
-        socket.on('wear', ({ user, item, targetWords }) => {
+        socket.on('wear', ({ user, item, id, targetWords }) => {
             const targetSlot = targetWords ? targetWords.replace(/\s/g, "").toLowerCase() : false;
+            console.log(`${user} wants to wear ${item} with item ID of ${id} in this equipment slot: ${targetWords}`)
             db.Item.findOne({ itemName: item }).then(returnData => {
                 if (returnData.equippable.length === 1) {
                     let slot = returnData.equippable[0]
                     db.Player.findOne({ characterName: user }).then(returnData => {
                         if (returnData.wornItems[slot] === null) {
                             db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).then(returnData => {
-                                db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+                                db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(returnData => {
                                     db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
                                         io.to(socket.id).emit('playerUpdate', finalData);
                                     });
@@ -308,7 +319,7 @@ module.exports = function (io) {
                                 db.Player.findOne({ characterName: user }).then(returnData => {
                                     if (returnData.wornItems[uneditedSlots[slotIndex]] === null) {
                                         db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${uneditedSlots[slotIndex]}`]: item } }).then(returnData => {
-                                            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(incrementData => {
+                                            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(incrementData => {
                                                 db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
                                                     io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${editedSlot}.`);
                                                     io.to(user.toLowerCase()).emit('playerUpdate', finalData);
@@ -384,8 +395,9 @@ module.exports = function (io) {
 
         });
 
-        socket.on('emote', () => {
-
+        socket.on('emote', ({ user, emotion, location }) => {
+            console.log(`${user} ${emotion}`);
+            io.to(location).emit('emote', { user, emotion });
         });
 
         socket.on('juggle', ({ target, num, user, location }) => {

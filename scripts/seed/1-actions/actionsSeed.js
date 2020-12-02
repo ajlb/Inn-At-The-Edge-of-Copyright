@@ -1,8 +1,5 @@
 module.exports = [
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a66"
-    },
     "actionName": "get",
     "commandBriefDescription": "Pick up an item",
     "commandLongDescription": "When you type a get command word followed by an item in your location that is free to pick up, you will add it to your inventory. If the item isn't free to pick up, you will get a result of 'You can't pick that up!'",
@@ -11,9 +8,6 @@ module.exports = [
     "exampleResult": "You pick up a branch"
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a67"
-    },
     "actionName": "look",
     "commandBriefDescription": "You look around you.",
     "commandLongDescription": "When you type a look command word with nothing after it, you will look around your location, seeing the description, possible exits, and items nearby.",
@@ -22,9 +16,6 @@ module.exports = [
     "exampleResult": "You look around. --DESCRIPTION OF LOCATION, EXITS, ITEMS, IF ANY--"
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a68"
-    },
     "actionName": "drop",
     "commandBriefDescription": "You drop an item",
     "commandLongDescription": "When you type a drop command word followed by an item in your inventory, you will drop it into your location.",
@@ -33,9 +24,6 @@ module.exports = [
     "exampleResult": "You drop a branch"
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a69"
-    },
     "actionName": "inventory",
     "commandBriefDescription": "You check your inventory",
     "commandLongDescription": "When you type an inventory command, you will recieve a list of all items in your inventory",
@@ -44,9 +32,6 @@ module.exports = [
     "exampleResult": "You have 3 mushrooms, 1 branch, and a frog."
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a6a"
-    },
     "actionName": "move",
     "commandBriefDescription": "You move through an exit",
     "commandLongDescription": "When you type a move command word followed by an available exit from your location, you will move in that direction.",
@@ -55,9 +40,6 @@ module.exports = [
     "exampleResult": "You exit."
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a6b"
-    },
     "actionName": "speak",
     "commandBriefDescription": "You speak.",
     "commandLongDescription": "When you type a speak command word followed by other text, your other text will be spoken aloud to your location. For yelling, see yell.",
@@ -66,9 +48,6 @@ module.exports = [
     "exampleResult": "character: Hello!"
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a6c"
-    },
     "actionName": "wear",
     "commandBriefDescription": "You put on a wearable item.",
     "commandLongDescription": "When you type a wear command followed by a valid item in your inventory, you will put it on if you're not already wearing something there.",
@@ -77,9 +56,6 @@ module.exports = [
     "exampleResult": "You put on green socks."
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a6d"
-    },
     "actionName": "remove",
     "commandBriefDescription": "You take off an item you are wearing.",
     "commandLongDescription": "When you type a remove command followed by an item you are wearing, you will take it off and add it to your inventory.",
@@ -88,9 +64,6 @@ module.exports = [
     "exampleResult": "You take off green socks."
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a6e"
-    },
     "actionName": "stats",
     "commandBriefDescription": "You call up your character stats.",
     "commandLongDescription": "When you type stats, you will see a list of your stats and their values.",
@@ -99,9 +72,6 @@ module.exports = [
     "exampleResult": "--LIST OF YOUR CHARACTER'S CURRENT STATS--"
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a6f"
-    },
     "actionName": "juggle",
     "commandBriefDescription": "You juggle something.",
     "commandLongDescription": "When you type juggle, followed by a number, followed by an appropriate item, you will attempt to juggle that number of those items if you have them.",
@@ -110,9 +80,6 @@ module.exports = [
     "exampleResult": "You begin to juggle."
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a70"
-    },
     "actionName": "emote",
     "commandBriefDescription": "you describe an action",
     "commandLongDescription": "When you type an emote command word followed by text, the result will be displayed to the room as an action of your character.",
@@ -121,9 +88,6 @@ module.exports = [
     "exampleResult": "You lean against a tree"
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a71"
-    },
     "actionName": "sleep",
     "commandBriefDescription": "You go to sleep",
     "commandLongDescription": "When you type a sleep command while lying down, you will go to sleep and recover HP, but you will not be able to see or hear around you. If you are attacked, you will automatically wake up.",
@@ -132,9 +96,6 @@ module.exports = [
     "exampleResult": "You fall into a deep slumber."
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a72"
-    },
     "actionName": "wake",
     "commandBriefDescription": "You wake up",
     "commandLongDescription": "When you type a wake command while sleeping, you will wake up.",
@@ -143,9 +104,6 @@ module.exports = [
     "exampleResult": "You wake up."
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a73"
-    },
     "actionName": "position",
     "commandBriefDescription": "You change position.",
     "commandLongDescription": "When you type a position command, you will move from your current position into the new one.",
@@ -154,9 +112,6 @@ module.exports = [
     "exampleResult": "You stand up."
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a74"
-    },
     "actionName": "help",
     "commandBriefDescription": "check command usage",
     "commandLongDescription": "When you type help, you will get a list of all game commands. When you type help followed by a game command, you will get that command's details.",
@@ -165,9 +120,6 @@ module.exports = [
     "exampleResult": "--LIST OF GAME COMMANDS--"
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a75"
-    },
     "actionName": "examine",
     "commandBriefDescription": "Look closely at an item",
     "commandLongDescription": "When you type an examine command word followed by an appropriate item, you will get a detailed description.",
@@ -176,9 +128,6 @@ module.exports = [
     "exampleResult": "You look closely at a stick. You see a dry, brown branch."
   },
   {
-    "_id": {
-      "$oid": "5f910175d7a98e239c160a76"
-    },
     "actionName": "give",
     "commandBriefDescription": "give an item to someone",
     "commandLongDescription": "When you type give followed by an item in your inventory, and someone else in your location, you will give the item to them.",

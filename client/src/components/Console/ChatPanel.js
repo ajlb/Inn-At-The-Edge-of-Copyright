@@ -152,6 +152,14 @@ function ChatPanel({
         }
     });
 
+    //emote
+    socket.off('emote').on('emote', ({ user, emotion }) => {
+        console.log(`${user} emotes ${emotion}`);
+        let type = 'displayed-stat';
+        setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}`}]))
+    })
+
+    //sleep
     socket.off('sleep').on('sleep', ({ userToSleep }) => {
         if (userToSleep === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
@@ -162,6 +170,7 @@ function ChatPanel({
         }
     })
 
+    //wake
     socket.off('wake').on('wake', ({ userToWake }) => {
         if (userToWake === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
