@@ -16,11 +16,16 @@ function wear(input, playerData, wearCalls) {
     const inputItem = input[0].toLowerCase();
     let targetWords = input.length > 1 ? input[1] : false;
     targetWords = targetWords ? takeTheseOffThat(["my", "the"], targetWords) : false;
+    
+    console.log(`WEAR: item - ${inputItem}, target: ${targetWords}`);
+    
     const potentialArray = [];
     let thisItem;
     let thisItemId;
     
     for (const item of playerData.inventory) {
+        console.log(`potential item: `);
+        console.log(item);
         thisItem = item.item.itemName;
 
         console.log(`Input item is: ${inputItem} and `, thisItem.toLowerCase());

@@ -19,7 +19,8 @@ function ChatPanel({
     user,
     day,
     inConversation,
-    setConversation
+    setConversation,
+    setPlayer
 }) {
     //prepare variable to hold div reference for scrolling
     let anchorDiv;
@@ -58,9 +59,23 @@ function ChatPanel({
     });
 
     //view other people's movement
-    socket.off('move').on('move', (message) => {
+    socket.off('move').on('move', ({actor, direction, cardinal, action}) => {
+        let messageDisplay = '';
+        if (actor === user.characterName) {
+            if (action === "leave") {
+                cardinal ? messageDisplay = `You leave to the ${direction}.` : messageDisplay = `You leave by the ${direction}.`;
+            } else {
+                messageDisplay = `You arrive from the ${direction}.`;
+            }
+        } else {
+            if (action === "leave") {
+                cardinal ? messageDisplay = `${actor} leaves to the ${direction}.` : messageDisplay = `${actor} leaves by the ${direction}.`;
+            } else {
+                messageDisplay = `${actor} arrives from the ${direction}.`;
+            }
+        }
         let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: message }]);
+        setChatHistory(prevState => [...prevState, { type, text: messageDisplay }]);
     });
 
     //receive your own move
@@ -230,6 +245,17 @@ function ChatPanel({
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: message }]);
     });
+
+      
+  socket.off('dayNight').on('dayNight', day=>{
+    const time = day ? "day" : "night"
+    setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `It has become ${time}.`}]);
+    
+    setPlayer({
+      ...user,
+      day
+    });
+  })
 
     socket.off('error').on('error', ({ status, message }) => {
         let type = 'displayed-error';

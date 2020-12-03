@@ -3,13 +3,17 @@ import {
     BrowserView
 } from 'react-device-detect';
 import findIn, { takeTheseOffThat, getOneOfTheseOffThat } from "../../clientUtilities/finders";
+import { useEffect } from 'react';
 import socket from "../../clientUtilities/socket";
 import { getItem, dropItem } from "./js/getDrop";
 import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
 import { wear, remove } from "./js/wearRemove";
+import { showStats } from "./js/stats";
 import NPCCheck from "../../clientUtilities/NPCChecks";
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -18,6 +22,7 @@ const DIRECTIONS = { n: "north", e: "east", s: "south", w: "west" };
 
 
 function InputPanel({
+
     // Props being handed to the input by the console component
     onBlur,
     onSelect,
@@ -38,6 +43,17 @@ function InputPanel({
     setConversation
 }) {
 
+
+    const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+    const authUser = useAuth0().user;
+
+    useEffect(()=>{
+        isAuthenticated && socket.emit("log in", authUser.email);
+        console.log(authUser);
+        if (!(authUser === undefined)){
+            (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
+        }
+    }, [isAuthenticated])
     //update currentMessage in gameinfo based on input bar change
     const onInputBarChange = (e) => {
         setInput(e.target.value)
@@ -53,9 +69,8 @@ function InputPanel({
         if (user.characterName === undefined) {
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
                 console.log("log on: " + input);
-                let message = takeTheseOffThat(["log in", "logon", "login", "log on"], input);
-                console.log(message);
-                socket.emit("log in", message);
+                loginWithRedirect();
+                // let message = takeTheseOffThat(["log in", "logon", "login", "log on"], input);
             } else {
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
@@ -72,8 +87,12 @@ function InputPanel({
             //   Shambles General Kenobi...
             if (findIn(input, ['whisper to', 'speak to', 'tell to', 'say to', 'talk to'])) {
                 message = input.split(' ').slice(2).join(' ');
+                console.log('option 1');
+                console.log(message);
             } else {
                 message = input.split(' ').slice(1).join(' ');
+                console.log('option 2');
+                console.log(message);
             }
 
             NPCCheck(location.current.NPCs, message)
@@ -84,7 +103,7 @@ function InputPanel({
                 .catch(err => {
                     console.log(err.message)
                     // fyi, checking if the message begins with someone's name is handled on the server side
-                    socket.emit('whisper', message)
+                    socket.emit('whisper', { message, user: user.characterName })
                 })
         } else if (findIn(input, actionCalls.inventory)) {
             socket.emit('inventory', input)
@@ -93,7 +112,7 @@ function InputPanel({
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.stats)) {
-            socket.emit('stats', input)
+            showStats(user, setChatHistory);
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
@@ -143,28 +162,10 @@ function InputPanel({
                 socket.emit('look', input)
             } else if (findIn(input, actionCalls.get)) {
                 const target = takeTheseOffThat(actionCalls.get, input);
-                const result = getItem(target, location);
-                if (result === true) {
-                    socket.emit('get', { target, user: user.characterName, location: location.current.locationName });
-                } else if (result === false) {
-                    socket.emit('green', `There doesn't seem to ${insertArticleSingleValue(target)} to get here.`);
-                } else if (typeof result === "string") {
-                    socket.emit('get', { target: result, user: user.characterName, location: location.current.locationName });
-                } else if (typeof result === "object") {
-                    socket.emit('green', `I'm not sure which you want to get. I think you might mean one of these - ${result.join(", ")}.`);
-                }
+                getItem(socket, user, target, location);
             } else if (findIn(input, actionCalls.drop)) {
                 const target = takeTheseOffThat(actionCalls.drop, input);
-                const result = dropItem(target, user);
-                if (result === true) {
-                    socket.emit('drop', { target, user: user.characterName, location: location.current.locationName });
-                } else if (result === false) {
-                    socket.emit('green', `You don't seem to have ${insertArticleSingleValue(target)} to drop.`);
-                } else if (typeof result === "string") {
-                    socket.emit('drop', { target: result, user: user.characterName, location: location.current.locationName });
-                } else if (typeof result === "object") {
-                    socket.emit('green', `I'm not sure which you want to drop. I think you might mean one of these - ${result.join(", ")}.`);
-                }
+                dropItem(socket, location, target, user);
             } else if (findIn(input, actionCalls.wear)) {
                 wear(input, user, actionCalls.wear);
             } else if (findIn(input, actionCalls.remove)) {
@@ -194,16 +195,8 @@ function InputPanel({
                 let inputString = takeTheseOffThat(actionCalls.give, input);
                 let item = inputString.split(" to ")[0];
                 let target = takeTheseOffThat([item + " to "], inputString);
-                const result = giveItem(item, user);
-                if (result === true) {
-                    socket.emit('give', { target, item, user: user.characterName, location: location.current.locationName });
-                } else if (result === false) {
-                    socket.emit('green', `You don't seem to have ${insertArticleSingleValue(item)} to give.`);
-                } else if (typeof result === "string") {
-                    socket.emit('give', { target, item: result, user: user.characterName, location: location.current.locationName });
-                } else if (typeof result === "object") {
-                    socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
-                }
+                giveItem(socket, item, target, user, location);
+
             } else if (findIn(input, actionCalls.examine)) {
                 const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
                 let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
@@ -244,7 +237,8 @@ function InputPanel({
 
             } else if (findIn(input, ["logout", "log out", "log off"])) {
                 takeTheseOffThat(["logout, log out", "log off"], input);
-                socket.emit('logout', input);
+                logout({ returnTo: window.location.origin });
+                // socket.emit('logout', location.current.locationName);
             } else {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Hmmmm... that didn't quite make sense. Try 'help' for a list of commands!` }]);
             }

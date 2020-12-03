@@ -30,6 +30,7 @@
     "inn": "file:client",
     "mongo-seeding-cli": "^3.5.0",
     "mongoose": "^5.10.14",
-    "socket.io": "^3.0.3"
+    "socket.io": "^3.0.3",
+    "socket.io-client": "^3.0.3"
   }
 }
