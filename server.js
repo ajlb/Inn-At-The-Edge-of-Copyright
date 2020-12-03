@@ -5,12 +5,14 @@ const app = express();
 const server = require('http').createServer(app);
 const mongoose = require("mongoose");
 const db = require("./models");
-const dotenv = require("dotenv").config();
+require("dotenv").config();
+const dotenvExpand = require('dotenv-expand');
 const cors = require("cors");
 const backEngine = require("./controllers/backEngine");
 const APIBackroutes = require("./routes/API/backEngineAPI");
 const APIroutes = require("./routes/API/APIroutes");
 const APIadminRoutes = require("./routes/API/adminAPI");
+
 
 // creating the io variable via the config folder
 const io = require('./config/io-config')(server);
