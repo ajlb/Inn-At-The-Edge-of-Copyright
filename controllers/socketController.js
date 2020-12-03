@@ -131,6 +131,9 @@ module.exports = function (io) {
         /*          WHISPER          */
         /*****************************/
         socket.on('whisper', ({ message, user }) => {
+            console.log('in socketController');
+            console.log("message", message);
+            console.log("user", user);
             whisper(socket, io, message, players, user);
         })
 
@@ -199,19 +202,21 @@ module.exports = function (io) {
         /*****************************/
         /*             GET           */
         /*****************************/
-        socket.on('get', ({ target, user, location }) => {
-            getItem(socket, io, target, user, location);
+        socket.on('get', ({ target, itemId, user, location }) => {
+            getItem(socket, io, target, itemId, user, location);
         });
 
 
         /*****************************/
         /*           DROP            */
         /*****************************/
-        socket.on('drop', ({ target, user, location }) => {
-            dropItem(socket, io, target, user, location);
+        socket.on('drop', ({ target, itemId, user, location }) => {
+            dropItem(socket, io, target, itemId, user, location);
         });
 
-
+        /*****************************/
+        /*           WEAR            */
+        /*****************************/
         socket.on('wear', ({ user, item, id, targetWords }) => {
             const targetSlot = targetWords ? targetWords.replace(/\s/g, "").toLowerCase() : false;
             console.log(`${user} wants to wear ${item} with item ID of ${id} in this equipment slot: ${targetWords}`)
@@ -222,9 +227,9 @@ module.exports = function (io) {
                     findPlayerData(user).then(returnData => {
                         if (returnData.wornItems[slot] === null) {
                             //let user wear item if they are not already wearing something there
-                            db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).then(returnData => {
+                            db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).populate('inventory.item').then(returnData => {
                                 db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(returnData => {
-                                    db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
+                                    db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).populate('inventory.item').then(finalData => {
                                         io.to(socket.id).emit('playerUpdate', finalData);
                                     });
                                 });
@@ -267,7 +272,7 @@ module.exports = function (io) {
                                     if (returnData.wornItems[uneditedSlots[slotIndex]] === null) {
                                         db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${uneditedSlots[slotIndex]}`]: item } }).then(returnData => {
                                             db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(incrementData => {
-                                                db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).then(finalData => {
+                                                db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).populate('inventory.item').then(finalData => {
                                                     io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${editedSlot}.`);
                                                     io.to(user.toLowerCase()).emit('playerUpdate', finalData);
                                                 })
@@ -339,7 +344,8 @@ module.exports = function (io) {
                             io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
                             //if increment failed, add a new entry to inventory
                         } else {
-                            db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { name: item, quantity: 1 } } }, { new: true }).then(returnData => {
+                            db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { name: item, quantity: 1 } } }, { new: true })
+                            .populate('inventory.item').then(returnData => {
                                 //send success
                                 io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
                                 io.to(socket.id).emit('playerUpdate', returnData);

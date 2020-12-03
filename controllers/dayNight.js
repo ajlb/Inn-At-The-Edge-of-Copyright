@@ -11,7 +11,11 @@ module.exports = function dayNight(socket) {
         for (const user in objectOfUsers) {
             let socketID = objectOfUsers[user].socketID;
             console.log(socketID);
-            userIPs[socketID].nickname = objectOfUsers[user].nickname;
+            if (userIPs[socketID] === undefined) {
+                userIPs[socketID] = { nickname: objectOfUsers[user], latitude: Math.floor(Math.random() * 80), longitude: Math.floor(Math.random() * 130) };
+            } else {
+                userIPs[socketID].nickname = objectOfUsers[user].nickname
+            }
         }
         console.log(userIPs);
     });
@@ -55,11 +59,11 @@ module.exports = function dayNight(socket) {
                             finalDay = true;
                         }
                         if (!(currentDay === finalDay)) {
-                            axios.put("http://localhost:3001/backAPI/playerTime", { day: finalDay, playerName:userName }).then(data => {
+                            axios.put("http://localhost:3001/backAPI/playerTime", { day: finalDay, playerName: userName }).then(data => {
                                 finalDay ? console.log("It has become day") : console.log("It has become night");
                                 //SEND OUT SOCKET.IO MESSAGE TO TRIGGER SESSION DATA CHANGE
                                 console.log(userName);
-                                socket.emit('dayNight', {day:finalDay, user:userName});
+                                socket.emit('dayNight', { day: finalDay, user: userName });
                             })
                         }
 

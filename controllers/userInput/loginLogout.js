@@ -15,7 +15,10 @@ function login(socket, io, message, players){
                 io.to(usernameLowerCase).emit('log in', message);
                 console.log(`${message} is now fake logged in.`);
                 //find and retrieve user Data, join location room
-                db.Player.findOneAndUpdate({ characterName: message }, { $set: { isAwake: true, isOnline: true } }, { new: true }).select("-password").then(userData => {
+                db.Player.findOneAndUpdate({ characterName: message }, { $set: { isAwake: true, isOnline: true } }, { new: true })
+                .select("-password")
+                .populate('inventory.item')
+                .then(userData => {
                     let userLocation
                     if (userData === null) {
                         userLocation = "Inn Lobby";

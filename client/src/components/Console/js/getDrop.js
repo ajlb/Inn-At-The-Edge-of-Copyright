@@ -1,48 +1,68 @@
 import { takeTheseOffThat } from "../../../clientUtilities/finders";
+import { insertArticleSingleValue } from "../../../clientUtilities/parsers";
 
-function getItem(inputString, locationData){
+function getItem(socket, user, inputString, locationData){
+    let itemName;
+    let itemId;
     inputString = takeTheseOffThat(["a", "an", "my", "the"], inputString);
-    console.log(locationData);
+    console.log("GET: ", inputString);
     let potentialArray = [];
     for (const item of locationData.current.inventory){
-        if ((item.name === inputString) && (item.quantity > 0)){
+        console.log(item);
+        itemName = item.item.itemName;
+        if ((itemName === inputString) && (item.quantity > 0)){
+            itemId = item.item._id;
+            socket.emit('get', { target:itemName, itemId, user: user.characterName, location: locationData.current.locationName });
             return true;
-        } else if ((item.name.endsWith(inputString)) || (item.name.startsWith(inputString))){
+        } else if ((itemName.endsWith(inputString)) || (itemName.startsWith(inputString))){
             if (item.quantity > 0){
-                potentialArray.push(item.name);
+                potentialArray.push(itemName);
+                itemId = item.item._id;
             }
         }
     }
     if (potentialArray.length > 1){
-        return potentialArray;
+        socket.emit('green', `I'm not sure which you want to get. I think you might mean one of these - ${potentialArray.join(", ")}.`);
+        return false;
     } else if (potentialArray.length === 1){
-        return potentialArray[0];
+        socket.emit('get', { target:potentialArray[0], itemId, user: user.characterName, location: locationData.current.locationName });
+        return true;
     } else {
+        socket.emit('green', `There doesn't seem to ${insertArticleSingleValue(inputString)} to get here.`);
         return false;
     }
 }
 
-function dropItem(inputString, playerData){
+function dropItem(socket, location, inputString, playerData){
+    let itemName;
+    let itemId;
     inputString = takeTheseOffThat(["a", "an", "my", "the"], inputString);
-    console.log(playerData);
     let potentialArray = [];
     for (const item of playerData.inventory){
-        if ((item.name === inputString) && (item.quantity > 0)){
+        itemName = item.item.itemName;
+        if ((itemName === inputString) && (item.quantity > 0)){
+            itemId = item.item._id;
+            socket.emit('drop', { target:itemName, itemId, user: playerData.characterName, location: location.current.locationName });
             return true;
-        } else if ((item.name.endsWith(inputString)) || (item.name.startsWith(inputString))){
+        } else if ((itemName.endsWith(inputString)) || (itemName.startsWith(inputString))){
             if (item.quantity > 0){
-                potentialArray.push(item.name);
+                potentialArray.push(itemName);
+                itemId = item.item._id;
             }
         }
     }
     if (potentialArray.length > 1){
-        return potentialArray;
+    socket.emit('green', `I'm not sure which you want to drop. I think you might mean one of these - ${potentialArray.join(", ")}.`);
+        return false;
     } else if (potentialArray.length === 1){
-        return potentialArray[0];
+        socket.emit('drop', { target:potentialArray[0], itemId, user: playerData.characterName, location: location.current.locationName });
+        return true;
     } else {
+    socket.emit('green', `You don't seem to have ${insertArticleSingleValue(inputString)} to drop.`);
         return false;
     }
 }
+
 
 export {
     getItem,

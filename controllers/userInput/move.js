@@ -7,7 +7,7 @@ const getLocationChunk = async (data) => {
     locationObject.current = data;
     for (const exit in data.exits) {
         const thisLocation = data.exits[exit];
-        locationObject[exit] = await db.Location.findOne({ locationName: thisLocation });
+        locationObject[exit] = await db.Location.findOne({ locationName: thisLocation }).populate('inventory.item');
     }
     return locationObject;
 }
@@ -27,7 +27,9 @@ const rememberLocation = (username, newLocation) => {
 
 const findLocationData = (locationName) => {
     return new Promise((resolve, reject)=>{
-        db.Location.findOne({ locationName: locationName }).then(returnData=>{
+        db.Location.findOne({ locationName: locationName })
+        .populate('inventory.item')
+        .then(returnData=>{
             resolve(returnData);
         });
     });

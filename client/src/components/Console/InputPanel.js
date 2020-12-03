@@ -73,8 +73,12 @@ function InputPanel({
             //   Shambles General Kenobi...
             if (findIn(input, ['whisper to', 'speak to', 'tell to', 'say to', 'talk to'])) {
                 message = input.split(' ').slice(2).join(' ');
+                console.log('option 1');
+                console.log(message);
             } else {
                 message = input.split(' ').slice(1).join(' ');
+                console.log('option 2');
+                console.log(message);
             }
 
             NPCCheck(location.current.NPCs, message)
@@ -85,7 +89,7 @@ function InputPanel({
                 .catch(err => {
                     console.log(err.message)
                     // fyi, checking if the message begins with someone's name is handled on the server side
-                    socket.emit('whisper', message)
+                    socket.emit('whisper', {message, user:user.characterName})
                 })
         } else if (findIn(input, actionCalls.inventory)) {
             socket.emit('inventory', input)
@@ -144,28 +148,10 @@ function InputPanel({
                 socket.emit('look', input)
             } else if (findIn(input, actionCalls.get)) {
                 const target = takeTheseOffThat(actionCalls.get, input);
-                const result = getItem(target, location);
-                if (result === true) {
-                    socket.emit('get', { target, user: user.characterName, location: location.current.locationName });
-                } else if (result === false) {
-                    socket.emit('green', `There doesn't seem to ${insertArticleSingleValue(target)} to get here.`);
-                } else if (typeof result === "string") {
-                    socket.emit('get', { target: result, user: user.characterName, location: location.current.locationName });
-                } else if (typeof result === "object") {
-                    socket.emit('green', `I'm not sure which you want to get. I think you might mean one of these - ${result.join(", ")}.`);
-                }
+                getItem(socket, user, target, location);
             } else if (findIn(input, actionCalls.drop)) {
                 const target = takeTheseOffThat(actionCalls.drop, input);
-                const result = dropItem(target, user);
-                if (result === true) {
-                    socket.emit('drop', { target, user: user.characterName, location: location.current.locationName });
-                } else if (result === false) {
-                    socket.emit('green', `You don't seem to have ${insertArticleSingleValue(target)} to drop.`);
-                } else if (typeof result === "string") {
-                    socket.emit('drop', { target: result, user: user.characterName, location: location.current.locationName });
-                } else if (typeof result === "object") {
-                    socket.emit('green', `I'm not sure which you want to drop. I think you might mean one of these - ${result.join(", ")}.`);
-                }
+                dropItem(socket, location, target, user);
             } else if (findIn(input, actionCalls.wear)) {
                 wear(input, user, actionCalls.wear);
             } else if (findIn(input, actionCalls.remove)) {
