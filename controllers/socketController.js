@@ -34,7 +34,10 @@ function removePlayer(socketID, socket, io, playernicknames) {
                     io.to(room).emit('logout', `${socket.nickname} disappears into the ether.`)
                     getUsers(io, room, playernicknames);
                 })
-                players = players.filter(player => !(player === users[user].username))
+                console.log(players);
+                console.log(socket.lowerName);
+                players = players.filter(player => !(player === socket.lowerName))
+                console.log(players);
                 delete users[user];
             }
         }
@@ -79,7 +82,7 @@ module.exports = function (io) {
                     users[message.toLowerCase()] = {
                         socketID: socket.id,
                         nickname: message,
-                        lowerName: message.toLowerCase(), 
+                        lowerName: message.toLowerCase(),
                         online: true,
                         chatRooms: [userLocation]
                     };
@@ -273,7 +276,8 @@ module.exports = function (io) {
                                         db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${uneditedSlots[slotIndex]}`]: item } }).then(returnData => {
                                             db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(incrementData => {
                                                 db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).populate('inventory.item').then(finalData => {
-                                                    if (["right hand", "left hand", "two hands"].indexOf(editedSlot > -1)){
+                                                    console.log(editedSlot, ["right hand", "left hand", "two hands"].indexOf(editedSlot) > -1);
+                                                    if (["right hand", "left hand", "two hands"].indexOf(editedSlot) < 0) {
                                                         io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${editedSlot}.`);
                                                     } else {
                                                         io.to(user.toLowerCase()).emit('wear', `You wear your ${item} in your ${editedSlot}.`);
@@ -345,18 +349,18 @@ module.exports = function (io) {
                         //if increment succeeded, there was already one there
                         if (returnData.nModified === 1) {
                             //send success
-                            db.Player.findOne({ characterName: user }).then(returnData => {
+                            db.Player.findOne({ characterName: user }).populate('inventory.item').then(returnData => {
                                 io.to(socket.id).emit('playerUpdate', returnData);
                             })
                             io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
                             //if increment failed, add a new entry to inventory
                         } else {
                             db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { item: itemId, quantity: 1 } } }, { new: true })
-                            .populate('inventory.item').then(returnData => {
-                                //send success
-                                io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
-                                io.to(socket.id).emit('playerUpdate', returnData);
-                            })
+                                .populate('inventory.item').then(returnData => {
+                                    //send success
+                                    io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
+                                    io.to(socket.id).emit('playerUpdate', returnData);
+                                })
                         }
                     })
                 }
@@ -463,7 +467,7 @@ module.exports = function (io) {
         /*****************************/
         /*        DAY/NIGHT          */
         /*****************************/
-        socket.on('dayNight', ({day, user}) => {
+        socket.on('dayNight', ({ day, user }) => {
             io.to(user.toLowerCase()).emit('dayNight', day);
         });
 
@@ -480,7 +484,7 @@ module.exports = function (io) {
         /* DAY/NIGHT - USER LOCATION */
         /*****************************/
         socket.on('location', (locationData) => {
-            io.to('backEngine').emit('location', {locationData, id:socket.id});
+            io.to('backEngine').emit('location', { locationData, id: socket.id });
         });
 
 
