@@ -273,7 +273,11 @@ module.exports = function (io) {
                                         db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${uneditedSlots[slotIndex]}`]: item } }).then(returnData => {
                                             db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(incrementData => {
                                                 db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).populate('inventory.item').then(finalData => {
-                                                    io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${editedSlot}.`);
+                                                    if (["right hand", "left hand", "two hands"].indexOf(editedSlot > -1)){
+                                                        io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${editedSlot}.`);
+                                                    } else {
+                                                        io.to(user.toLowerCase()).emit('wear', `You wear your ${item} in your ${editedSlot}.`);
+                                                    }
                                                     io.to(user.toLowerCase()).emit('playerUpdate', finalData);
                                                 })
                                             })
@@ -303,6 +307,8 @@ module.exports = function (io) {
         /*          REMOVE           */
         /*****************************/
         socket.on('remove', ({ user, item, targetSlot }) => {
+            let itemId;
+            findItem(item).then(data => itemId = data._id);
             switch (targetSlot) {
                 case "lefthand":
                     targetSlot = "leftHand";
@@ -320,7 +326,8 @@ module.exports = function (io) {
             db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${targetSlot}`]: null } }).then(returnData => {
                 //only add item to inventory if the empty goes through
                 if (returnData.nModified === 1) {
-                    db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.name": item }] }).then(returnData => {
+                    console.log('itemId: ' + itemId);
+                    db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.item": itemId }] }).then(returnData => {
                         targetSlot = targetSlot.slice(0, -4).toLowerCase();
                         switch (targetSlot) {
                             case "lefthand":
@@ -344,7 +351,7 @@ module.exports = function (io) {
                             io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
                             //if increment failed, add a new entry to inventory
                         } else {
-                            db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { name: item, quantity: 1 } } }, { new: true })
+                            db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { item: itemId, quantity: 1 } } }, { new: true })
                             .populate('inventory.item').then(returnData => {
                                 //send success
                                 io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
@@ -397,8 +404,8 @@ module.exports = function (io) {
         /*****************************/
         /*            GIVE           */
         /*****************************/
-        socket.on('give', ({ target, item, user, location }) => {
-            giveItem(socket, io, target, item, user, location);
+        socket.on('give', ({ target, item, itemId, user, location }) => {
+            giveItem(socket, io, target, item, itemId, user, location);
         });
 
 

@@ -134,18 +134,18 @@ function dropItem(socket, io, target, itemId, user, location) {
     })
 }
 
-function giveItem(socket, io, target, item, user, location) {
+function giveItem(socket, io, target, item, itemId, user, location) {
     //remove item from giver's inventory
-    decrementItemUpdateOne(item, user, "player").then(returnData => {
+    decrementItemUpdateOne(itemId, user, "player").then(returnData => {
         scrubInventoryReturnData(user, "player").then(returnData => {
             io.to(socket.id).emit('invUpP', returnData.inventory);
         });
     });
     //add item to target's inventory
-    incrementItemUpdateOne(item, target, "player").then(returnData => {
+    incrementItemUpdateOne(itemId, target, "player").then(returnData => {
         //if increment succeeded, there was already one there
         if (!returnData) {
-            pushItemToInventoryReturnData(item, target, "player").then(returnData => {
+            pushItemToInventoryReturnData(itemId, target, "player").then(returnData => {
                 io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
 
             });

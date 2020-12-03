@@ -114,6 +114,8 @@ function Console() {
 
   //Socket updated userData
   socket.off('playerUpdate').on('playerUpdate', updatedPlayerData => {
+    console.log("player update");
+    console.log(updatedPlayerData.inventory);
     if (!(updatedPlayerData === null)) {
       setPlayer(updatedPlayerData);
     }
@@ -121,6 +123,8 @@ function Console() {
 
   // Socket player inventory update
   socket.off('invUpP').on('invUpP', message => {
+    console.log('Player Inventory');
+    console.log(message);
     if (!(message === null)) {
       setPlayer({
         ...player,
@@ -131,6 +135,8 @@ function Console() {
 
   // Socket location inventory update
   socket.off('invUpL').on('invUpL', message => {
+    console.log("location Inventory");
+    console.log(message);
     if (!(message === null)) {
       setLocation({
         ...location,

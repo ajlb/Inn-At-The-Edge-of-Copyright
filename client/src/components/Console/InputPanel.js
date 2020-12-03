@@ -181,16 +181,8 @@ function InputPanel({
                 let inputString = takeTheseOffThat(actionCalls.give, input);
                 let item = inputString.split(" to ")[0];
                 let target = takeTheseOffThat([item + " to "], inputString);
-                const result = giveItem(item, user);
-                if (result === true) {
-                    socket.emit('give', { target, item, user: user.characterName, location: location.current.locationName });
-                } else if (result === false) {
-                    socket.emit('green', `You don't seem to have ${insertArticleSingleValue(item)} to give.`);
-                } else if (typeof result === "string") {
-                    socket.emit('give', { target, item: result, user: user.characterName, location: location.current.locationName });
-                } else if (typeof result === "object") {
-                    socket.emit('green', `I'm not sure which item you want to give. I think you might mean one of these - ${result.join(", ")}.`);
-                }
+                giveItem(socket, item, target, user, location);
+
             } else if (findIn(input, actionCalls.examine)) {
                 const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
                 let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
