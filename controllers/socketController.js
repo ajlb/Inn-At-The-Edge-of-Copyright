@@ -185,7 +185,7 @@ module.exports = function (io) {
             io.to(location).emit('speak', `${user}: ${message}`);
         });
 
-        socket.on('help', ({ message }) => {
+        socket.on('help', ({ message, input }) => {
             // db for all the actions/their descriptions and whatnot
             // emit object back to client and parse there
             console.log('helped message recieved');

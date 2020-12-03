@@ -147,7 +147,6 @@ function InputPanel({
             juggle(input, user, location.current.locationName);
         } else if (findIn(input, actionCalls.stats)) {
             showStats(user, setChatHistory, actionCalls.stats, input);
-            console.log('Input is stats');
             socket.emit('stats', input);
         } else if (findIn(input, actionCalls.sleep)) {
             if (activities.sleeping) {
