@@ -73,34 +73,47 @@ module.exports = function (io) {
         /*****************************/
         /*           LOG IN          */
         /*****************************/
-        socket.on('log in', message => {
-            login(socket, io, message, players).then(userLocation => {
-                if (!(userLocation === false)) {
-                    //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
-                    socket.nickname = message;
-                    socket.lowerName = message.toLowerCase();
-                    users[message.toLowerCase()] = {
-                        socketID: socket.id,
-                        nickname: message,
-                        lowerName: message.toLowerCase(),
-                        online: true,
-                        chatRooms: [userLocation]
-                    };
-                    playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
+        socket.on('log in', email => {
+            if (email === "You must log in first! Type 'log in [username]'") {
+                io.to(socket.id).emit('logFail', email);
+            } else {
+                db.Player.findOne({ email }).then(returnData => {
+                    if (returnData === null) {
+                        socket.emit('logFail', `I'm sorry, we have no record of a character with email matching ${email}.`)
+                    } else {
+                        const userCharacter = returnData.characterName;
 
-                    getUsers(io, userLocation, playernicknames);
+                        login(socket, io, userCharacter, players).then(userLocation => {
 
-                    //find locations, return initial and then chunk
-                    findLocationData(userLocation).then(currentLocationData => {
-                        io.to(message.toLowerCase()).emit('currentLocation', currentLocationData);
-                        resolveLocationChunk(currentLocationData).then(chunk => {
-                            io.to(message.toLowerCase()).emit('locationChunk', chunk);
-                            location = chunk;
+                            if (!(userLocation === false)) {
+                                //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
+                                socket.nickname = userCharacter;
+                                socket.lowerName = userCharacter.toLowerCase();
+                                users[socket.lowerName] = {
+                                    socketID: socket.id,
+                                    nickname: socket.nickname,
+                                    lowerName: socket.lowerName,
+                                    online: true,
+                                    chatRooms: [userLocation]
+                                };
+                                playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
+
+                                getUsers(io, userLocation, playernicknames);
+
+                                //find locations, return initial and then chunk
+                                findLocationData(userLocation).then(currentLocationData => {
+                                    io.to(socket.lowerName).emit('currentLocation', currentLocationData);
+                                    resolveLocationChunk(currentLocationData).then(chunk => {
+                                        io.to(socket.lowerName).emit('locationChunk', chunk);
+                                        location = chunk;
+                                    });
+
+                                })
+                            }
                         });
-
-                    })
-                }
-            });
+                    }
+                })
+            }
         });//end socket.on log in
 
 

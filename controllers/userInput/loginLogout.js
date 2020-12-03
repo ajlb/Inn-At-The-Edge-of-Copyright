@@ -2,20 +2,17 @@ const db = require("../../models");
 const mongoose = require("mongoose");
 
 
-function login(socket, io, message, players){
+function login(socket, io, userCharacter, players){
     return new Promise(function(resolve, reject){
-        if (message === "You must log in first! Type 'log in [username]'") {
-            io.to(socket.id).emit('logFail', message);
-        } else {
-            console.log(`${message} wants to log in.`);
-            const usernameLowerCase = message.toLowerCase();
+            console.log(`${userCharacter} wants to log in.`);
+            const usernameLowerCase = userCharacter.toLowerCase();
             if (players.indexOf(usernameLowerCase) === -1) {
                 socket.join(usernameLowerCase);
                 players.push(usernameLowerCase);//delete once Auth is complete
-                io.to(usernameLowerCase).emit('log in', message);
-                console.log(`${message} is now fake logged in.`);
+                io.to(usernameLowerCase).emit('log in', userCharacter);
+                console.log(`${userCharacter} is now fake logged in.`);
                 //find and retrieve user Data, join location room
-                db.Player.findOneAndUpdate({ characterName: message }, { $set: { isAwake: true, isOnline: true } }, { new: true })
+                db.Player.findOneAndUpdate({ characterName: userCharacter }, { $set: { isAwake: true, isOnline: true } }, { new: true })
                 .select("-password")
                 .populate('inventory.item')
                 .then(userData => {
@@ -29,16 +26,16 @@ function login(socket, io, message, players){
                     socket.join(userLocation);
                      
 
-                    io.to(userLocation).emit('move', { actor: message, direction: "ether", cardinal: true, action: "arrive"});
+                    io.to(userLocation).emit('move', { actor: userCharacter, direction: "ether", cardinal: true, action: "arrive"});
     
                     resolve(userLocation);
                 });
             } else {
-                io.to(socket.id).emit('logFail', `${message} is already logged in.`);
-                console.log(`${message} is already in players list. Cannot log in.`);
+                io.to(socket.id).emit('logFail', `${userCharacter} is already logged in.`);
+                console.log(`${userCharacter} is already in players list. Cannot log in.`);
                 resolve(false);
             }
-        }
+        
     });
 }
 

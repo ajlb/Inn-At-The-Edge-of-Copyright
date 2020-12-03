@@ -3,6 +3,7 @@ import {
     BrowserView
 } from 'react-device-detect';
 import findIn, { takeTheseOffThat, getOneOfTheseOffThat } from "../../clientUtilities/finders";
+import { useEffect } from 'react';
 import socket from "../../clientUtilities/socket";
 import { getItem, dropItem } from "./js/getDrop";
 import { insertArticleSingleValue } from "../../clientUtilities/parsers";
@@ -11,6 +12,8 @@ import { juggle, stopJuggling } from "./js/juggle";
 import { wear, remove } from "./js/wearRemove";
 import { showStats } from "./js/stats";
 import NPCCheck from "../../clientUtilities/NPCChecks";
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -19,6 +22,7 @@ const DIRECTIONS = { n: "north", e: "east", s: "south", w: "west" };
 
 
 function InputPanel({
+
     // Props being handed to the input by the console component
     onBlur,
     onSelect,
@@ -39,6 +43,17 @@ function InputPanel({
     setConversation
 }) {
 
+
+    const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+    const authUser = useAuth0().user;
+
+    useEffect(()=>{
+        isAuthenticated && socket.emit("log in", authUser.email);
+        console.log(authUser);
+        if (!(authUser === undefined)){
+            (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
+        }
+    }, [isAuthenticated])
     //update currentMessage in gameinfo based on input bar change
     const onInputBarChange = (e) => {
         setInput(e.target.value)
@@ -54,9 +69,8 @@ function InputPanel({
         if (user.characterName === undefined) {
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
                 console.log("log on: " + input);
-                let message = takeTheseOffThat(["log in", "logon", "login", "log on"], input);
-                console.log(message);
-                socket.emit("log in", message);
+                loginWithRedirect();
+                // let message = takeTheseOffThat(["log in", "logon", "login", "log on"], input);
             } else {
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
@@ -89,7 +103,7 @@ function InputPanel({
                 .catch(err => {
                     console.log(err.message)
                     // fyi, checking if the message begins with someone's name is handled on the server side
-                    socket.emit('whisper', {message, user:user.characterName})
+                    socket.emit('whisper', { message, user: user.characterName })
                 })
         } else if (findIn(input, actionCalls.inventory)) {
             socket.emit('inventory', input)
@@ -223,7 +237,8 @@ function InputPanel({
 
             } else if (findIn(input, ["logout", "log out", "log off"])) {
                 takeTheseOffThat(["logout, log out", "log off"], input);
-                socket.emit('logout', location.current.locationName);
+                logout({ returnTo: window.location.origin });
+                // socket.emit('logout', location.current.locationName);
             } else {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Hmmmm... that didn't quite make sense. Try 'help' for a list of commands!` }]);
             }

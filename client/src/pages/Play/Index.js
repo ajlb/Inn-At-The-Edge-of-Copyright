@@ -10,7 +10,7 @@ const Play = () => {
   }
 
     return (
-      isAuthenticated && (<Console/>)
+      isAuthenticated && (<Console authUser={user}/>)
     );
 }
   

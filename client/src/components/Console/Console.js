@@ -8,6 +8,8 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
 import LoginButton from "../auth/LoginButton";
+import { useAuth0 } from "@auth0/auth0-react";
+import LogoutButton from "../auth/LogoutButton";
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -20,6 +22,8 @@ function Console() {
     theme: "",
     currentMessage: ""
   }
+
+  const { user, isAuthenticated }= useAuth0();
 
   const [location, setLocation] = useState({});
 
@@ -86,6 +90,9 @@ function Console() {
     })
     setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
   });
+
+  console.log("AUTH USER: ");
+  console.log(user);
 
   // Socket failed log in message
   socket.off('logFail').on('logFail', message => {
@@ -254,7 +261,7 @@ function Console() {
       {(minState === "max") &&
         <footer id="about-link"><a style={{ color: "white" }} href="/about">Meet our team!</a></footer>
       }
-      <LoginButton />
+      {/* {isAuthenticated ? <LogoutButton /> : <LoginButton />} */}
     </div>
   );
 }
