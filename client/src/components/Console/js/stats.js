@@ -1,24 +1,36 @@
-import setChatHistory from '../ChatPanel'
+//import setChatHistory from '../ChatPanel'
 
 
-function showStats(user) {
+function showStats(user, setChatHistory) {
     console.log(user)
-const statsArray = [];
+    const statsArray = [];
 
-for (const param in user.stats) {
+        for (const param in user.stats) {
 
-  statsArray.push(`${user.stats[param]}`);
+            statsArray.push(`${param}:  ${user.stats[param]}`);
+        }
 
-    // does user go here?
-    statsArray.forEach((user) => {
-      
-    
-    setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: user}]);
-})
+        
+
+        const deletedItems = statsArray.slice(0, 4);         
+        const newDeletedItems = statsArray.slice(8, 10);
+
+        const newArray = deletedItems.concat(newDeletedItems)
+
+
+            newArray.forEach((user) => {
+
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${user}`}]);
+            console.log(newArray);
+           // console.log(deletedItems)
+           // console.log(newDeletedItems)
+           // console.log(newStatsArray);
+    });
+
 }
-};
 
 
-export  {
+
+export {
     showStats
 }

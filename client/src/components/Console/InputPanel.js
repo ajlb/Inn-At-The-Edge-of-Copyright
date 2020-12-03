@@ -85,10 +85,8 @@ function InputPanel({
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.inventory)) {
-            let message = takeTheseOffThat(actionCalls.move, input)
-            console.log(message);
             socket.emit('inventory', input)
-            console.log('input is inventory');
+
         } else if (findIn(input, actionCalls.whisper)) {
             let message;
             // If it starts with one of these two-word commands, it will remove the first two words from the message, if not, it will just remove the first word
@@ -112,8 +110,7 @@ function InputPanel({
         } else if (findIn(input, actionCalls.help)) {
             let help = takeTheseOffThat(actionCalls.help, input);
             console.log(help);
-            socket.emit('help', {help, input});
-            console.log('input was help');
+            socket.emit('help', input);
         } else if (findIn(input, actionCalls.look)) {
             socket.emit('look', input)
         } else if (findIn(input, actionCalls.get)) {
@@ -149,9 +146,9 @@ function InputPanel({
         } else if (findIn(input, actionCalls.juggle)) {
             juggle(input, user, location.current.locationName);
         } else if (findIn(input, actionCalls.stats)) {
-            showStats(actionCalls.stats, user, input);
+            showStats(user, setChatHistory, actionCalls.stats, input);
             console.log('Input is stats');
-            socket.emit('stats',input);
+            socket.emit('stats', input);
         } else if (findIn(input, actionCalls.sleep)) {
             if (activities.sleeping) {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);

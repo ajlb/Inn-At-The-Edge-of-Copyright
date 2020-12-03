@@ -193,7 +193,6 @@ module.exports = function (io) {
             db.Action.find({})
                 .then(actionData => {
                     io.to(socket.id).emit('help', { actionData, message });
-                    console.log(`This is our data ${actionData}`);
                 })
 
         });
@@ -440,7 +439,7 @@ module.exports = function (io) {
 
             db.Player.find({}).then((statsData) => {
                 io.to(socket.id).emit('stats', { statsData });
-                console.log(userStats);
+                
             })
         });
 

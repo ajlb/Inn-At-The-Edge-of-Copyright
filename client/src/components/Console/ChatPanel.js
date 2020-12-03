@@ -200,34 +200,33 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
     });
 
-    socket.off('help').on('help', ({ actionData,  }) => {
+    socket.off('help').on('help', ({actionData}) => {
         let type = 'displayed-indent';
-        let currentString = ``;
-              actionData.map((helpItem) => {
-                 currentString += `
-${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
+       // let currentString = ``;
+       let newArray = [];
+
+       actionData.map((helpItem) => {
+        
+        newArray = (`[${helpItem.actionName}] -  ${helpItem.commandBriefDescription}.`);
+    
+
+        setChatHistory(prevState => [...prevState, { type, text: newArray}]);
+       // console.log(newArray);
+        });
+        });
+        //newArray.forEach((help) => {
+
+//               actionData.map((helpItem) => {
+//                  currentString += `
+// ${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
  //${helpItem.commandLongDescription}    ${helpItem.waysToCall}
 // ${helpItem.exampleCall}     ${helpItem.exampleResult}
-          })
-        setChatHistory(prevState => [...prevState, { type, text: currentString}]);
-        console.log(currentString);
-    });
+          
+        
 
-    // socket.off('stats').on('stats',  ({statsData}) => {
-    //     let type = 'displayed stat';
-    // //     let currentString = ``;
-
-    
-    // // //     let stats = statsData;
-    // //    statsData.map((statsMap) => {
-    // //               currentString += `
-    // //       DEX: ${statsMap.stats.DEX}  WIS: ${statsMap.stats.WIS}`
-    // //         //   return statsMap.characterName + statsMap.stats;
+    socket.off('stats').on('stats',  () => {
        
-    //     setChatHistory(prevState => [...prevState, { type, text: `${}` }]);
-    //   //  console.log(statsData);
-    //     console.log(statsData);   
-    // });
+    });
        
 
 
