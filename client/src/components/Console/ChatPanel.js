@@ -200,34 +200,34 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
     });
 
-    socket.off('help').on('help', ({actionData}) => {
+    socket.off('help').on('help', ({ actionData }) => {
         let type = 'displayed-indent';
-       // let currentString = ``;
-       let newArray = [];
+        // let currentString = ``;
+        let newArray = [];
 
-       actionData.map((helpItem) => {
-        
-        newArray = (`[${helpItem.actionName}] -  ${helpItem.commandBriefDescription}.`);
-    
+        actionData.map((helpItem) => {
 
-        setChatHistory(prevState => [...prevState, { type, text: newArray}]);
-       // console.log(newArray);
+            newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
+
+
+            setChatHistory(prevState => [...prevState, { type, text: newArray }]);
+            // console.log(newArray);
         });
-        });
-        //newArray.forEach((help) => {
-
-//               actionData.map((helpItem) => {
-//                  currentString += `
-// ${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
- //${helpItem.commandLongDescription}    ${helpItem.waysToCall}
-// ${helpItem.exampleCall}     ${helpItem.exampleResult}
-          
-        
-
-    socket.off('stats').on('stats',  () => {
-       
     });
-       
+    //newArray.forEach((help) => {
+
+    //               actionData.map((helpItem) => {
+    //                  currentString += `
+    // ${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
+    //${helpItem.commandLongDescription}    ${helpItem.waysToCall}
+    // ${helpItem.exampleCall}     ${helpItem.exampleResult}
+
+
+
+    socket.off('stats').on('stats', () => {
+
+    });
+
 
 
     //where is the user scrolled to?

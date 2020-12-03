@@ -10,23 +10,18 @@ function showStats(user, setChatHistory) {
             statsArray.push(`${param}:  ${user.stats[param]}`);
         }
 
-        
-
         const deletedItems = statsArray.slice(0, 4);         
         const newDeletedItems = statsArray.slice(8, 10);
 
         const newArray = deletedItems.concat(newDeletedItems)
 
-
             newArray.forEach((user) => {
 
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${user}`}]);
-            console.log(newArray);
-           // console.log(deletedItems)
-           // console.log(newDeletedItems)
-           // console.log(newStatsArray);
+           // console.log(newArray);
+          
+           
     });
-
 }
 
 
