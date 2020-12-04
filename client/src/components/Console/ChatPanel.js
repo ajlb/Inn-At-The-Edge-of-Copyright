@@ -60,7 +60,7 @@ function ChatPanel({
     });
 
     //view other people's movement
-    socket.off('move').on('move', ({actor, direction, cardinal, action}) => {
+    socket.off('move').on('move', ({ actor, direction, cardinal, action }) => {
         let messageDisplay = '';
         if (actor === user.characterName) {
             if (action === "leave") {
@@ -172,7 +172,7 @@ function ChatPanel({
     socket.off('emote').on('emote', ({ user, emotion }) => {
         console.log(`${user} emotes ${emotion}`);
         let type = 'displayed-stat';
-        setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}`}]))
+        setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}` }]))
     })
 
     //sleep
@@ -247,16 +247,16 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: message }]);
     });
 
-      
-  socket.off('dayNight').on('dayNight', day=>{
-    const time = day ? "day" : "night"
-    setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `It has become ${time}.`}]);
-    
-    setPlayer({
-      ...user,
-      day
-    });
-  })
+
+    socket.off('dayNight').on('dayNight', day => {
+        const time = day ? "day" : "night"
+        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `It has become ${time}.` }]);
+
+        setPlayer({
+            ...user,
+            day
+        });
+    })
 
     socket.off('error').on('error', ({ status, message }) => {
         let type = 'displayed-error';
@@ -273,30 +273,31 @@ function ChatPanel({
             // console.log(newArray);
         });
 
-    //     let exampleArray = [];
+        //     let exampleArray = [];
 
-    //     actionData.map((helpItem) => {
-    //         exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
-    //         setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
-    //     });
-    
+        //     actionData.map((helpItem) => {
+        //         exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
+        //         setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
+        //     });
 
-    //     let commandLongArray = [];
 
-    //     actionData.map((helpItem) => {
-    //         commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
-    //         setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
-    //     });
-    // });
+        //     let commandLongArray = [];
 
-    
-    //newArray.forEach((help) => {
+        //     actionData.map((helpItem) => {
+        //         commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
+        //         setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
+        //     });
+        // });
 
-    //               actionData.map((helpItem) => {
-    //                  currentString += `
-    // ${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
-    //${helpItem.commandLongDescription}    ${helpItem.waysToCall}
-    // ${helpItem.exampleCall}     ${helpItem.exampleResult}
+
+        //newArray.forEach((help) => {
+
+        //               actionData.map((helpItem) => {
+        //                  currentString += `
+        // ${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
+        //${helpItem.commandLongDescription}    ${helpItem.waysToCall}
+        // ${helpItem.exampleCall}     ${helpItem.exampleResult}
+    });
 
 
 
