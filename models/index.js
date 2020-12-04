@@ -3,7 +3,6 @@
 module.exports = {
     Action: require("./Action"),
     Item: require("./Item"),
-    Inventory: require("./Inventory"),
     Player: require("./Player"),
     Location: require("./Location"),
     Dialog: require("./Dialog"),

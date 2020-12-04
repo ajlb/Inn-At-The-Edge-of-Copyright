@@ -16,20 +16,36 @@ function wear(input, playerData, wearCalls) {
     const inputItem = input[0].toLowerCase();
     let targetWords = input.length > 1 ? input[1] : false;
     targetWords = targetWords ? takeTheseOffThat(["my", "the"], targetWords) : false;
+    
+    console.log(`WEAR: item - ${inputItem}, target: ${targetWords}`);
+    
     const potentialArray = [];
+    let thisItem;
+    let thisItemId;
+    
     for (const item of playerData.inventory) {
-        if (item.name.toLowerCase() === inputItem) {
-            socket.emit('wear', { user: playerData.characterName, item: inputItem, targetWords });
+        console.log(`potential item: `);
+        console.log(item);
+        thisItem = item.item.itemName;
+
+        console.log(`Input item is: ${inputItem} and `, thisItem.toLowerCase());
+        if (thisItem.toLowerCase() === inputItem) {
+            thisItemId = item.item._id;
+            console.log(`${thisItem} has an ID of ${thisItemId}`);
+            socket.emit('wear', { user: playerData.characterName, item: inputItem, id: thisItemId, targetWords });
             return true;
-        } else if (item.name.startsWith(inputItem) || item.name.endsWith(inputItem)) {
-            potentialArray.push(item.name);
+        } else if (thisItem.startsWith(inputItem) || thisItem.endsWith(inputItem)) {
+            thisItemId = item.item._id;
+            console.log(`${thisItem} has an ID of ${thisItemId}`);
+            potentialArray.push(thisItem);
         }
     }
+
     if (potentialArray.length === 0) {
         socket.emit('green', `You don't seem to have ${insertArticleSingleValue(inputItem)} to wear!`)
         return false;
     } else if (potentialArray.length === 1) {
-        socket.emit('wear', { user: playerData.characterName, item: potentialArray[0], targetWords });
+        socket.emit('wear', { user: playerData.characterName, item: potentialArray[0], id: thisItemId, targetWords });
         return true;
     } else if (potentialArray.length > 1) {
         socket.emit('green', `I'm not sure which item you want to wear. Perhaps one of these - ${potentialArray.join(", ")}.`);
