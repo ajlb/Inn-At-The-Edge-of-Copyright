@@ -44,6 +44,8 @@ mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 const connection = mongoose.connection;
 
+
+
 // log once mongoDB is open
 connection.once("open", function () {
   console.log("\nConnected to mongoose\n\n--------------begin log--------------\n");

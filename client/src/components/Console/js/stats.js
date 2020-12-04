@@ -1,14 +1,31 @@
-function showStats(user, setChatHistory){
+//import setChatHistory from '../ChatPanel'
+
+
+function showStats(user, setChatHistory) {
+    console.log(user)
     const statsArray = [];
-    for (const param in user.stats){
-        statsArray.push(`${param}: ${user.stats[param]}`);
+
+    for (const param in user.stats) {
+
+        statsArray.push(`${param}:  ${user.stats[param]}`);
     }
-    statsArray.forEach(stat=>{
-        setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: stat}]);
-        
-    })
+
+    const deletedItems = statsArray.slice(0, 4);
+    const newDeletedItems = statsArray.slice(8, 10);
+
+    const newArray = deletedItems.concat(newDeletedItems)
+
+    newArray.forEach((user) => {
+
+        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${user}` }]);
+        // console.log(newArray);
+
+
+    });
 }
 
-module.exports = {
+
+
+export {
     showStats
 }

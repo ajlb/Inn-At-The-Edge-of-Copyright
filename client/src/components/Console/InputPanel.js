@@ -47,10 +47,10 @@ function InputPanel({
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
     const authUser = useAuth0().user;
 
-    useEffect(()=>{
+    useEffect(() => {
         isAuthenticated && socket.emit("log in", authUser.email);
         console.log(authUser);
-        if (!(authUser === undefined)){
+        if (!(authUser === undefined)) {
             (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
         }
     }, [isAuthenticated])
@@ -64,6 +64,10 @@ function InputPanel({
         event.preventDefault();
 
         setInputHistory(prevState => [...prevState, input])
+
+
+
+
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
         if (user.characterName === undefined) {
@@ -112,7 +116,7 @@ function InputPanel({
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.stats)) {
-            showStats(user, setChatHistory);
+            showStats(user, setChatHistory, actionCalls.stats, input);
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
@@ -124,16 +128,16 @@ function InputPanel({
             } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
                 setPlayerPosition('standing');
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
+            } else if (findIn(input, actionCalls.help)) {
+                let help = takeTheseOffThat(actionCalls.help, input);
+                console.log(help);
+                socket.emit('help', input);
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
             }
         } else if (!inConversation) {
             // Everything in here cannot be run while in a conversation with an NPC
-            if (findIn(input, actionCalls.help)) {
-                // if in conversation, tell user how to leave conversation
-                // else emit help
-                socket.emit('help', input)
-            } else if (findIn(input, actionCalls.move)) {
+            if (findIn(input, actionCalls.move)) {
                 if (playerPosition === "standing") {
                     let direction = takeTheseOffThat(actionCalls.move, input);
                     for (const param in DIRECTIONS) {
@@ -260,6 +264,9 @@ function InputPanel({
         setInput('');
     }
 
+
+
+    // }
     //display previous commands on key up, key down
     const keyDownResults = (event) => {
 
