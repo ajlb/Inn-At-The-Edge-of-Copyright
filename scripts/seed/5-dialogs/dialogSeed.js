@@ -134,7 +134,7 @@ module.exports = [
         dialogObj: {
             messages: [
                 { // 0
-                    message: 'Hallo. Guten Tag',
+                    message: 'Welcome Little One... what is it you require of me?',
                     exampleResponses: ["Where am I?", "Who are you?", "Goodbye"],
                     allowedResponses: [{
                         "responses": ["where am i", "where am i?"],
@@ -144,7 +144,7 @@ module.exports = [
                         "route": 1
                     }, {
                         "responses": ["goodbye", "bye", "adios"],
-                        "route": 5
+                        "route": 3
                     }]
                 },
                 { // 1
@@ -174,6 +174,20 @@ module.exports = [
                         "responses": ["goodbye", "bye", "adios"],
                         "route": 5
                     }]
+                },
+                { // 3
+                    message: `Take care, Little One, for these woods can be an unfriendly beast`,
+                    // exampleResponses: ["Where am I?", "Who are you?", "Goodbye"],
+                    // allowedResponses: [{
+                    //     "responses": ["where am i", "where am i?"],
+                    //     "route": 1
+                    // }, {
+                    //     "responses": ["who are you", "who are you?"],
+                    //     "route": 2
+                    // }, {
+                    //     "responses": ["goodbye", "bye", "adios"],
+                    //     "route": 5
+                    // }]
                 }
             ]
         }

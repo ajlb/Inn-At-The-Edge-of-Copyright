@@ -3,5 +3,5 @@ const dayNight = require("./dayNight");
 
 
 
-dayNight(socket);
+// dayNight(socket);
 
