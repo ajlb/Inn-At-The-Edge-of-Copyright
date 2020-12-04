@@ -209,22 +209,23 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type, text: newArray }]);
             // console.log(newArray);
         });
+    });
 
-    //     let exampleArray = [];
+//         let exampleArray = [];
 
-    //     actionData.map((helpItem) => {
-    //         exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
-    //         setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
-    //     });
-    
+//         actionData.map((helpItem) => {
+//             exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
+//             setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
+//         });
+//    // });
 
-    //     let commandLongArray = [];
+//         let commandLongArray = [];
 
-    //     actionData.map((helpItem) => {
-    //         commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
-    //         setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
-    //     });
-    // });
+//         actionData.map((helpItem) => {
+//             commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
+//             setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
+//         });
+//     });
 
     
     //newArray.forEach((help) => {
