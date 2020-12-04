@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import socket from "../../clientUtilities/socket";
 import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { clearJuggleTime } from "./js/juggle";
+import { getOneOfTheseOffThat, takeTheseOffThat } from '../../clientUtilities/finders';
 
 
 
@@ -59,7 +60,7 @@ function ChatPanel({
     });
 
     //view other people's movement
-    socket.off('move').on('move', ({actor, direction, cardinal, action}) => {
+    socket.off('move').on('move', ({ actor, direction, cardinal, action }) => {
         let messageDisplay = '';
         if (actor === user.characterName) {
             if (action === "leave") {
@@ -146,7 +147,7 @@ function ChatPanel({
 
     //a drop action
     socket.off('drop').on('drop', ({ target, actor }) => {
-        let type = 'displayed-stat';
+        let type = 'displayed-indent';
         if (actor === user.characterName) {
             setChatHistory(prevState => [...prevState, { type, text: `You drop ${insertArticleSingleValue(target)}.` }]);
         } else {
@@ -171,7 +172,7 @@ function ChatPanel({
     socket.off('emote').on('emote', ({ user, emotion }) => {
         console.log(`${user} emotes ${emotion}`);
         let type = 'displayed-stat';
-        setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}`}]))
+        setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}` }]))
     })
 
     //sleep
@@ -246,21 +247,65 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: message }]);
     });
 
-      
-  socket.off('dayNight').on('dayNight', day=>{
-    const time = day ? "day" : "night"
-    setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `It has become ${time}.`}]);
-    
-    setPlayer({
-      ...user,
-      day
-    });
-  })
+
+    socket.off('dayNight').on('dayNight', day => {
+        const time = day ? "day" : "night"
+        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `It has become ${time}.` }]);
+
+        setPlayer({
+            ...user,
+            day
+        });
+    })
 
     socket.off('error').on('error', ({ status, message }) => {
         let type = 'displayed-error';
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
     });
+
+    socket.off('help').on('help', ({ actionData }) => {
+        let type = 'displayed-indent';
+        // let currentString = ``;
+        let newArray = [];
+        actionData.map((helpItem) => {
+            newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
+            setChatHistory(prevState => [...prevState, { type, text: newArray }]);
+            // console.log(newArray);
+        });
+
+        //     let exampleArray = [];
+
+        //     actionData.map((helpItem) => {
+        //         exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
+        //         setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
+        //     });
+
+
+        //     let commandLongArray = [];
+
+        //     actionData.map((helpItem) => {
+        //         commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
+        //         setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
+        //     });
+        // });
+
+
+        //newArray.forEach((help) => {
+
+        //               actionData.map((helpItem) => {
+        //                  currentString += `
+        // ${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
+        //${helpItem.commandLongDescription}    ${helpItem.waysToCall}
+        // ${helpItem.exampleCall}     ${helpItem.exampleResult}
+    });
+
+
+
+    socket.off('stats').on('stats', () => {
+
+    });
+
+
 
     //where is the user scrolled to?
     const handleScroll = (e) => {

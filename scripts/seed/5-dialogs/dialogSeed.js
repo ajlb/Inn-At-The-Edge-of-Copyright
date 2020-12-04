@@ -128,5 +128,68 @@ module.exports = [
                 },
             ]
         }
+    },
+    {
+        NPC: "Great Tree",
+        dialogObj: {
+            messages: [
+                { // 0
+                    message: 'Welcome Little One... what is it you require of me?',
+                    exampleResponses: ["Where am I?", "Who are you?", "Goodbye"],
+                    allowedResponses: [{
+                        "responses": ["where am i", "where am i?"],
+                        "route": 2
+                    }, {
+                        "responses": ["who are you", "who are you?"],
+                        "route": 1
+                    }, {
+                        "responses": ["goodbye", "bye", "adios"],
+                        "route": 3
+                    }]
+                },
+                { // 1
+                    message: 'I am the Great Tree of Old! All those who have knelt before me have been gifted with the abilities of legend! They shall never be defeated',
+                    exampleResponses: ["I kneel", "Who are you?", "Goodbye"],
+                    allowedResponses: [{
+                        "responses": ["kneel", "i kneel"],
+                        "route": 2
+                    }, {
+                        "responses": ["who are you", "who are you?"],
+                        "route": 2
+                    }, {
+                        "responses": ["goodbye", "bye", "adios"],
+                        "route": 5
+                    }]
+                },
+                { // 2
+                    message: `Oh sorry I didn't mention that was a limited offer I was running last summer... but I can give you this apple?`,
+                    exampleResponses: ["Where am I?", "Who are you?", "Goodbye"],
+                    allowedResponses: [{
+                        "responses": ["where am i", "where am i?"],
+                        "route": 1
+                    }, {
+                        "responses": ["who are you", "who are you?"],
+                        "route": 2
+                    }, {
+                        "responses": ["goodbye", "bye", "adios"],
+                        "route": 5
+                    }]
+                },
+                { // 3
+                    message: `Take care, Little One, for these woods can be an unfriendly beast`,
+                    // exampleResponses: ["Where am I?", "Who are you?", "Goodbye"],
+                    // allowedResponses: [{
+                    //     "responses": ["where am i", "where am i?"],
+                    //     "route": 1
+                    // }, {
+                    //     "responses": ["who are you", "who are you?"],
+                    //     "route": 2
+                    // }, {
+                    //     "responses": ["goodbye", "bye", "adios"],
+                    //     "route": 5
+                    // }]
+                }
+            ]
+        }
     }
 ]

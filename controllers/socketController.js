@@ -200,9 +200,16 @@ module.exports = function (io) {
         /*****************************/
         /*            HELP           */
         /*****************************/
-        socket.on('help', () => {
+        socket.on('help', ({ message, input }) => {
             // db for all the actions/their descriptions and whatnot
             // emit object back to client and parse there
+            console.log('helped message recieved');
+            console.log(message);
+            db.Action.find({})
+                .then(actionData => {
+                    io.to(socket.id).emit('help', { actionData, message });
+                })
+
         });
 
 
@@ -295,6 +302,11 @@ module.exports = function (io) {
         socket.on('stats', () => {
             // db for player stats
             // emit stats to player
+
+            db.Player.find({}).then((statsData) => {
+                io.to(socket.id).emit('stats', { statsData });
+
+            })
         });
 
 
