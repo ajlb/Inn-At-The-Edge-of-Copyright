@@ -91,8 +91,8 @@ function Console() {
     setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
   });
 
-  console.log("AUTH USER: ");
-  console.log(user);
+  // console.log("AUTH USER: ");
+  // console.log(user);
 
   // Socket failed log in message
   socket.off('logFail').on('logFail', message => {
