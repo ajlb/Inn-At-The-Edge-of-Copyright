@@ -7,7 +7,9 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
-
+import LoginButton from "../auth/LoginButton";
+import { useAuth0 } from "@auth0/auth0-react";
+import LogoutButton from "../auth/LogoutButton";
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -20,76 +22,12 @@ function Console() {
     theme: "",
     currentMessage: ""
   }
+
+  const { user, isAuthenticated }= useAuth0();
+
   const [location, setLocation] = useState({});
+
   const [player, setPlayer] = useState({});
-
-
-
-
-  // Socket log in message
-  socket.off('log in').on('log in', message => {
-    console.log("got a log in message from socket");
-    let type = 'displayed-stat';
-    setPlayer({
-      ...player,
-      characterName: message
-    })
-    setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
-  });
-
-  // Socket failed log in message
-  socket.off('logFail').on('logFail', message => {
-    console.log("got a log in failure message from socket");
-    let type = 'displayed-error';
-    setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
-  });
-
-  // Socket log out message
-  socket.off('logout').on('logout', message => {
-    let type = 'displayed-stat';
-    setChatHistory(prevState => [...prevState, { type, text: message }]);
-    setPlayer({});
-    setLocation({});
-  });
-
-  // Socket initial userData
-  socket.off('playerData').on('playerData', message => {
-    console.log("recieved Player Data");
-    console.log(message);
-    if (!(message === null)) {
-      setPlayer(message);
-    }
-  });
-
-  //Socket updated userData
-  socket.off('playerUpdate').on('playerUpdate', updatedPlayerData => {
-    if (!(updatedPlayerData === null)) {
-      setPlayer(updatedPlayerData);
-    }
-  });
-
-  // Socket player inventory update
-  socket.off('invUpP').on('invUpP', message => {
-    if (!(message === null)) {
-      setPlayer({
-        ...player,
-        inventory: message
-      });
-    }
-  });
-
-  // Socket location inventory update
-  socket.off('invUpL').on('invUpL', message => {
-    if (!(message === null)) {
-      setLocation({
-        ...location,
-        current: {
-          ...location.current,
-          inventory: message
-        }
-      });
-    }
-  });
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
 
@@ -102,6 +40,8 @@ function Console() {
     singing: false
   })
 
+  const [inConversation, setConversation] = useState(false);
+  
   const [chatHistory, setChatHistory] = useState([]);
 
   const [input, setInput] = useState('');
@@ -127,10 +67,11 @@ function Console() {
     wake: ['wake', 'wake up', 'awaken'],
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
-    examine: ['examine'],
+    examine: ['examine', 'study'],
     whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
   });
 
+  let roomOccupants;
   //blur and select functions for input - to set min state
   const onSelect = () => {
     setMinState("min");
@@ -139,6 +80,99 @@ function Console() {
     setMinState("max")
   }
 
+  // Socket log in message
+  socket.off('log in').on('log in', message => {
+    console.log("got a log in message from socket");
+    let type = 'displayed-stat';
+    setPlayer({
+      ...player,
+      characterName: message
+    })
+    setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
+  });
+
+  console.log("AUTH USER: ");
+  console.log(user);
+
+  // Socket failed log in message
+  socket.off('logFail').on('logFail', message => {
+    console.log("got a log in failure message from socket");
+    let type = 'displayed-error';
+    setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
+  });
+
+  // Socket log out message
+  socket.off('logout').on('logout', message => {
+    let type = 'displayed-stat';
+    setChatHistory(prevState => [...prevState, { type, text: message }]);
+    setPlayer({});
+    setLocation({});
+  });
+
+  // Socket initial userData
+  socket.off('playerData').on('playerData', message => {
+    console.log("recieved Player Data");
+    
+    console.log(message);
+    if (!(message === null)) {
+      setPlayer(message);
+    }
+  });
+
+  //Socket updated userData
+  socket.off('playerUpdate').on('playerUpdate', updatedPlayerData => {
+    console.log("player update");
+    console.log(updatedPlayerData.inventory);
+    if (!(updatedPlayerData === null)) {
+      setPlayer(updatedPlayerData);
+    }
+  });
+
+  // Socket player inventory update
+  socket.off('invUpP').on('invUpP', message => {
+    console.log('Player Inventory');
+    console.log(message);
+    if (!(message === null)) {
+      setPlayer({
+        ...player,
+        inventory: message
+      });
+    }
+  });
+
+  // Socket location inventory update
+  socket.off('invUpL').on('invUpL', message => {
+    console.log("location Inventory");
+    console.log(message);
+    if (!(message === null)) {
+      setLocation({
+        ...location,
+        current: {
+          ...location.current,
+          inventory: message
+        }
+      });
+    }
+  });
+
+  socket.off('who').on('who', ({currentUsersOfRoom, userLocation}) => {
+    currentUsersOfRoom = currentUsersOfRoom.map(elem=>{
+      return (elem === player.characterName) ? "You" : elem;
+    })
+    //sort to keep "You" in the beginning of the array
+    currentUsersOfRoom = currentUsersOfRoom.sort(function(a, b){
+      if (a === "You"){
+        return -1;
+      } else if (b === "You"){
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    document.getElementById("location-info").innerHTML = `${userLocation}: ${currentUsersOfRoom.join(", ")}`;
+  })
+
+
   //initialize console with black background, minState="max", and then fetch data for GamewideData
   useEffect(() => {
     let mounted = true;
@@ -146,6 +180,10 @@ function Console() {
     if (isBrowser) {
       setMinState("max");
     }
+
+    fetch('https://ipapi.co/json/')
+  .then(response => response.json())
+  .then(locationData => socket.emit('location', locationData));
 
     // sets a default chat history because chat history needs to be iterable to be mapped
     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }])
@@ -188,6 +226,9 @@ function Console() {
                     location={location}
                     setLocation={setLocation}
                     day={day}
+                    inConversation={inConversation}
+                    setConversation={setConversation}
+                    setPlayer={setPlayer}
                   />
                   <InputPanel
                     actionCalls={actionCalls}
@@ -205,6 +246,8 @@ function Console() {
                     user={player}
                     activities={activities}
                     setActivities={setActivities}
+                    inConversation={inConversation}
+                    setConversation={setConversation}
                   />
                 </div>
               </div>
@@ -218,6 +261,7 @@ function Console() {
       {(minState === "max") &&
         <footer id="about-link"><a style={{ color: "white" }} href="/about">Meet our team!</a></footer>
       }
+      {/* {isAuthenticated ? <LogoutButton /> : <LoginButton />} */}
     </div>
   );
 }

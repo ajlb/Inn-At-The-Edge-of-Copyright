@@ -8,7 +8,7 @@ let dialogSchema = new Schema({
         type: String
     },
     dialogObj: {
-        type: String
+        type: Object
     }
 });
 

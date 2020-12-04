@@ -18,7 +18,10 @@ function ChatPanel({
     activities,
     setActivities,
     user,
-    day
+    day,
+    inConversation,
+    setConversation,
+    setPlayer
 }) {
     //prepare variable to hold div reference for scrolling
     let anchorDiv;
@@ -29,6 +32,19 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: `Whisper from ${userFrom}: ${message}` }]);
         // chat history is mapped down below
     });
+
+    socket.off('from NPC').on('from NPC', ({ NPCName, NPCMessage, exampleResponses, leavingConversation }) => {
+        if (leavingConversation) {
+            setConversation(false)
+        } else {
+            setConversation({ with: NPCName })
+        }
+
+        setChatHistory(prevState => [...prevState, { type: 'displayed-npc', text: `${NPCName}: ${NPCMessage}` }]);
+        if (exampleResponses && !leavingConversation) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-commands', text: `Respond with: ${exampleResponses}` }]);
+        }
+    })
 
     //failed user command messages
     socket.off('failure').on('failure', (message) => {
@@ -44,9 +60,23 @@ function ChatPanel({
     });
 
     //view other people's movement
-    socket.off('move').on('move', (message) => {
+    socket.off('move').on('move', ({actor, direction, cardinal, action}) => {
+        let messageDisplay = '';
+        if (actor === user.characterName) {
+            if (action === "leave") {
+                cardinal ? messageDisplay = `You leave to the ${direction}.` : messageDisplay = `You leave by the ${direction}.`;
+            } else {
+                messageDisplay = `You arrive from the ${direction}.`;
+            }
+        } else {
+            if (action === "leave") {
+                cardinal ? messageDisplay = `${actor} leaves to the ${direction}.` : messageDisplay = `${actor} leaves by the ${direction}.`;
+            } else {
+                messageDisplay = `${actor} arrives from the ${direction}.`;
+            }
+        }
         let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: message }]);
+        setChatHistory(prevState => [...prevState, { type, text: messageDisplay }]);
     });
 
     //receive your own move
@@ -99,7 +129,10 @@ function ChatPanel({
     //room speech
     socket.off('speak').on('speak', (message) => {
         let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: message }]);
+        console.log(inConversation)
+        if (!inConversation) {
+            setChatHistory(prevState => [...prevState, { type, text: message }]);
+        }
     });
 
     //a get action
@@ -135,19 +168,32 @@ function ChatPanel({
         }
     });
 
+    //emote
+    socket.off('emote').on('emote', ({ user, emotion }) => {
+        console.log(`${user} emotes ${emotion}`);
+        let type = 'displayed-stat';
+        setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}`}]))
+    })
+
+    //sleep
     socket.off('sleep').on('sleep', ({ userToSleep }) => {
         if (userToSleep === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
         } else {
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} falls asleep.` }]);
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} falls asleep.` }]);
+            }
         }
     })
 
+    //wake
     socket.off('wake').on('wake', ({ userToWake }) => {
         if (userToWake === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
         } else {
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToWake} wakes up.` }]);
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToWake} wakes up.` }]);
+            }
         }
     })
 
@@ -160,7 +206,9 @@ function ChatPanel({
                 juggling: true
             });
         } else {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
+            }
         }
     })
 
@@ -168,7 +216,9 @@ function ChatPanel({
         if (user === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You juggle ${num} ${target}.` }]);
         } else {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
+            }
         }
     })
 
@@ -180,7 +230,9 @@ function ChatPanel({
                 juggling: false
             });
         } else {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
+            }
         }
         clearJuggleTime();
     })
@@ -195,8 +247,19 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: message }]);
     });
 
+      
+  socket.off('dayNight').on('dayNight', day=>{
+    const time = day ? "day" : "night"
+    setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `It has become ${time}.`}]);
+    
+    setPlayer({
+      ...user,
+      day
+    });
+  })
+
     socket.off('error').on('error', ({ status, message }) => {
-        let type = 'error-message';
+        let type = 'displayed-error';
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
     });
 

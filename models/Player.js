@@ -89,9 +89,11 @@ const playerSchema = new Schema({
   abilities: {
     type: String
   },
-  inventory: {
-    type: Array
-  },
+  inventory: [{
+    item: {type: Schema.Types.ObjectId, ref: "Item"},
+    quantity: Number
+  }]
+  ,
   lastLocation: {
     type: String
   },
