@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const db = require("../../models");
 const mongoose = require("mongoose");
+const { response } = require("express");
 
 router.route("/getData")
     .get(function(req, res) {
@@ -12,6 +13,7 @@ router.route("/getData")
       }
     });
   });
+
 
 
 module.exports = router;

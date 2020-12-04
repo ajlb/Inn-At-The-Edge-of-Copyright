@@ -39,7 +39,8 @@ const itemSchema = new Schema({
         type: Number,
         default: 0
     },
-    equippable: []
+    equippable: [],
+    
 });
 
 const Item = mongoose.model("Item", itemSchema);
