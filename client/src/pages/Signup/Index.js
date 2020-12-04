@@ -1,19 +1,36 @@
 import '../../components/Console/css/styles.css'
-// import { makePlayer } from "./signup";
+import { checkIfAvailable } from "./signup";
 
 var playerValidate = false;
-
+let playerNameField;
+let emailfield;
 
 function Signup() {
 
 
-  function handleSubmit(event){
+  function handleSubmit(event) {
     event.preventDefault();
-        // if (playerValidate === false) {
-        //     window.location.href = "/newPlayer";//reload this page
-        // } else {
-        //     makePlayer();
-        // }
+    if (playerValidate === false) {
+      window.location.href = "/newPlayer";//reload this page
+    } else {
+      // makePlayer();
+    }
+  }
+
+  function handleCharacternameValidation(event) {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    var newPlayer = {
+      player_name: playerNameField.value.trim(),
+    };
+
+    if (!newPlayer.player_name) {
+      return;
+    }
+
+    // if we have a characterName, run the checker function
+    checkIfAvailable(newPlayer.player_name);
   }
 
 
@@ -21,35 +38,42 @@ function Signup() {
   return (
     <div id="whole-form">
       <form
-      class="signup"
-      onClick={handleSubmit}>
+        class="signup"
+        onClick={handleSubmit}>
         <div class="form-group">
           <label class="form-control" for="PlayerName">What is your Character Name:</label>
-          <input type="text" class="form-control" id="PlayerName" /><button type="submit" id="validate"
+          <input
+            type="text"
+            class="form-control"
+            id="PlayerName" 
+            rel={el => playerNameField = el}/>
+          <button
+            type="submit"
+            id="validate"
             class="btn btn-default">Check Availability</button>
-          <div style={{display:"none"}} id="alert" class="alert" role="alert">
+          <div style={{ display: "none" }} id="alert" class="alert" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="msg"></span>
           </div>
-          <div style={{display:"none"}} id="continueSignUp">
-          < label class="form-control" for="Email">What is your email address:</label>
-          <input type="email" class="form-control" id="Email" />
-                    <label class="form-control" for="Password">Set your password:</label>
-          <input type="password" class="form-control" id="Password" />
-          <label class="form-control" for="Verify">Verify your password:</label>
-          <input type="password" class="form-control" id="Verify" />
-          <div style={{display:"none"}} id="passalert" class="alert" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="msg"></span>
-          </div>
-          <span class="input-group-btn">
-            <button type="submit" id="submit-button" class="btn btn-default">Submit</button>
-          </span>
-        </div>
+          <div style={{ display: "none" }} id="continueSignUp">
+            < label class="form-control" for="Email">What is your email address:</label>
+            <input type="email" class="form-control" id="Email" />
+            <label class="form-control" for="Password">Set your password:</label>
+            <input type="password" class="form-control" id="Password" />
+            <label class="form-control" for="Verify">Verify your password:</label>
+            <input type="password" class="form-control" id="Verify" />
+            <div style={{ display: "none" }} id="passalert" class="alert" role="alert">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <span class="msg"></span>
             </div>
-        </form>
+            <span class="input-group-btn">
+              <button type="submit" id="submit-button" class="btn btn-default">Submit</button>
+            </span>
+          </div>
+        </div>
+      </form>
     </div >
-    );
+  );
 }
 
 export default Signup;
