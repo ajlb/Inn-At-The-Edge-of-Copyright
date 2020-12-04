@@ -131,3 +131,8 @@ $(function () {
         
     }
 });
+
+
+export {
+    makePlayer
+  }
