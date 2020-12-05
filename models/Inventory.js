@@ -9,9 +9,10 @@ const inventorySchema = new Schema({
             ref: "Item"
         }
     ],
-    quantitiy: {
+    quantity: {
         type: Number
-    }
+    },
+    
 });
 
 const Inventory = mongoose.model("Inventory", inventorySchema);

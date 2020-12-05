@@ -6,8 +6,13 @@ const playerSchema = new Schema({
     type: String,
     unique: true,
     trim: true,
-    unique: true,
     required: "Character name is Required"
+  },
+  characterNameLowerCase: {
+    type: String,
+    unique: true,
+    trim: true,
+    required: "Character name lower case is Required"
   },
   password: {
     type: String,
@@ -17,10 +22,18 @@ const playerSchema = new Schema({
   },
   email: {
     type: String,
-    unique: true,
+    // unique: true,
     match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
   },
   isLiving: {
+    type: Boolean,
+    default: true
+  },
+  isAwake: {
+    type: Boolean,
+    default: true
+  },
+  isOnline: {
     type: Boolean,
     default: true
   },
@@ -28,49 +41,57 @@ const playerSchema = new Schema({
     type: Boolean,
     default: false
   },
-  stats: 
-    {
-      WIS: {
-        type: Number,
-        default: 0
-      },
-      DEX: {
-        type: Number,
-        default: 0
-      },
-      STR: {
-        type: Number,
-        default: 0
-      },
-      HP: {
-        type: Number,
-        default: 0
-      },
-      maxWIS: {
-        type: Number,
-        default: 0
-      },
-      maxDEX: {
-        type: Number,
-        default: 0
-      },
-      maxSTR: {
-        type: Number,
-        default: 0
-      },
-      maxHP: {
-        type: Number,
-        default: 0
-      },
-      XP: {
-        type: Number,
-        default: 0
-      },
-      level: {
-        type: Number,
-        default: 1
-      }
+  stats:
+  {
+    WIS: {
+      type: Number,
+      default: 0
     },
+    DEX: {
+      type: Number,
+      default: 0
+    },
+    STR: {
+      type: Number,
+      default: 0
+    },
+    HP: {
+      type: Number,
+      default: 0
+    },
+    CHA: {
+      type: Number,
+      default: 0
+    },
+    maxWIS: {
+      type: Number,
+      default: 0
+    },
+    maxDEX: {
+      type: Number,
+      default: 0
+    },
+    maxCHA: {
+      type: Number,
+      default: 0
+    },
+    maxSTR: {
+      type: Number,
+      default: 0
+    },
+    maxHP: {
+      type: Number,
+      default: 0
+    },
+    XP: {
+      type: Number,
+      default: 0
+    },
+    level: {
+      type: Number,
+      default: 1
+    }
+  },
   race: {
     type: String,
     default: "Human"
@@ -82,12 +103,11 @@ const playerSchema = new Schema({
   abilities: {
     type: String
   },
-  inventory: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Inventory"
-    }
-  ],
+  inventory: [{
+    item: {type: Schema.Types.ObjectId, ref: "Item"},
+    quantity: Number
+  }]
+  ,
   lastLocation: {
     type: String
   },
@@ -97,7 +117,7 @@ const playerSchema = new Schema({
   description: {
     type: String
   },
-  wornItems: [
+  wornItems:
     {
       headSlot: {
         type: String
@@ -129,8 +149,7 @@ const playerSchema = new Schema({
       twoHands: {
         type: String
       }
-    }
-  ],
+    },
   day: {
     type: Boolean
   }

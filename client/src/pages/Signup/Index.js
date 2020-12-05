@@ -1,10 +1,10 @@
 import '../../components/Console/css/styles.css'
-
+import SignupForm from '../../components/Signup/Signup';
 function Signup() {
-    return (
-      null
-    );
-  }
-  
-  export default Signup;
-  
+
+  return (
+    <SignupForm />
+  );
+}
+
+export default Signup;

@@ -7,9 +7,9 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
-
-let user = {};
-let location = {};
+import LoginButton from "../auth/LoginButton";
+import { useAuth0 } from "@auth0/auth0-react";
+import LogoutButton from "../auth/LogoutButton";
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -23,52 +23,24 @@ function Console() {
     currentMessage: ""
   }
 
+  const { user, isAuthenticated } = useAuth0();
 
-  // Socket log in message
-  socket.off('log in').on('log in', message => {
-    console.log("got a log in message from socket");
-    let type = 'displayed-stat';
-    user.characterName = message;
-    setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
-    // chat history is mapped down below
-  });
+  const [location, setLocation] = useState({});
 
-  // Socket failed log in message
-  socket.off('logFail').on('logFail', message => {
-    console.log("got a log in failure message from socket");
-    let type = 'displayed-error';
-    setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
-    // chat history is mapped down below
-  });
-
-  // Socket log out message
-  socket.off('logout').on('logout', message => {
-    let type = 'displayed-stat';
-    setChatHistory(prevState => [...prevState, { type, text: message}]);
-    user = {};
-    location = {};
-    // chat history is mapped down below
-  });
-
-  // Socket initial userData
-  socket.off('playerData').on('playerData', message => {
-    console.log("recieved Player Data");
-    console.log(message);
-    if (!(message === null)) {
-      user = message;
-    }
-  });
-
-  // Socket location chunk
-  socket.off('locationChunk').on('locationChunk', message => {
-    console.log("recieved locationChunk");
-    if (!(message === null)) {
-      location = message;
-      console.log(location);
-    }
-  });
+  const [player, setPlayer] = useState({});
 
   const [gameInfo, setGameInfo] = useState(initialGameInfo);
+
+  const [day, setDay] = useState(true);
+
+  const [activities, setActivities] = useState({
+    sleeping: false,
+    juggling: false,
+    fighting: false,
+    singing: false
+  })
+
+  const [inConversation, setConversation] = useState(false);
 
   const [chatHistory, setChatHistory] = useState([]);
 
@@ -76,27 +48,30 @@ function Console() {
 
   const [inputHistory, setInputHistory] = useState([]);
 
+  const [playerPosition, setPlayerPosition] = useState('standing');
+
   const [actionCalls, setActionCalls] = useState({
-    move: ['move', '/m'],
-    inventory: ['inventory', '/i'],
+    move: ['move', '/m', 'walk', 'exit'],
+    inventory: ['inventory', '/i', 'check inventory'],
     speak: ['speak', 'say', '/s'],
     look: ['look', '/l'],
     help: ['help', '/h'],
-    get: ['get', '/g'],
-    drop: ['drop', '/d'],
-    wear: ['wear'],
-    remove: ['remove', '/r'],
-    emote: ['emote', '/e'],
+    get: ['get', '/g', 'pick up'],
+    drop: ['drop', 'discard', '/d'],
+    wear: ['wear', 'put on', 'don'],
+    remove: ['remove', '/r', 'take off', "doff"],
+    emote: ['emote', '/e', "/me"],
     juggle: ['juggle'],
     stats: ['stats'],
-    sleep: ['sleep'],
-    wake: ['wake'],
-    position: ['position'],
+    sleep: ['sleep', 'fall asleep'],
+    wake: ['wake', 'wake up', 'awaken'],
+    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
-    examine: ['examine', '/e'],
+    examine: ['examine', 'study', 'inspect'],
     whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
   });
 
+  let roomOccupants;
   //blur and select functions for input - to set min state
   const onSelect = () => {
     setMinState("min");
@@ -105,6 +80,107 @@ function Console() {
     setMinState("max")
   }
 
+  // Socket log in message
+  socket.off('log in').on('log in', message => {
+    console.log("got a log in message from socket");
+    let type = 'displayed-stat';
+    setPlayer({
+      ...player,
+      characterName: message
+    })
+    setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
+  });
+
+
+  // Socket failed log in message
+  socket.off('logFail').on('logFail', message => {
+    console.log("got a log in failure message from socket");
+    if (message === "new user") {
+      setPlayer({
+        ...player,
+        characterName:"newUser"
+      });
+      setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: 'Please enter a name for your new character!'}]);
+      setChatHistory(prevState => [...prevState, {type: 'displayed-green', text: 'Your name must be no more than three words, and cannot be offensive.'}]);
+      
+    } else {
+      let type = 'displayed-error';
+      setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
+    }
+  });
+
+  // Socket log out message
+  socket.off('logout').on('logout', message => {
+    let type = 'displayed-stat';
+    setChatHistory(prevState => [...prevState, { type, text: message }]);
+    setPlayer({});
+    setLocation({});
+  });
+
+  // Socket initial userData
+  socket.off('playerData').on('playerData', message => {
+    console.log("recieved Player Data");
+
+    console.log(message);
+    if (!(message === null)) {
+      setPlayer(message);
+    }
+  });
+
+  //Socket updated userData
+  socket.off('playerUpdate').on('playerUpdate', updatedPlayerData => {
+    console.log("player update");
+    console.log(updatedPlayerData.inventory);
+    if (!(updatedPlayerData === null)) {
+      setPlayer(updatedPlayerData);
+    }
+  });
+
+  // Socket player inventory update
+  socket.off('invUpP').on('invUpP', message => {
+    console.log('Player Inventory');
+    console.log(message);
+    if (!(message === null)) {
+      setPlayer({
+        ...player,
+        inventory: message
+      });
+    }
+  });
+
+  // Socket location inventory update
+  socket.off('invUpL').on('invUpL', message => {
+    console.log("location Inventory");
+    console.log(message);
+    if (!(message === null)) {
+      setLocation({
+        ...location,
+        current: {
+          ...location.current,
+          inventory: message
+        }
+      });
+    }
+  });
+
+  socket.off('who').on('who', ({ currentUsersOfRoom, userLocation }) => {
+    currentUsersOfRoom = currentUsersOfRoom.map(elem => {
+      return (elem === player.characterName) ? "You" : elem;
+    })
+    //sort to keep "You" in the beginning of the array
+    currentUsersOfRoom = currentUsersOfRoom.sort(function (a, b) {
+      if (a === "You") {
+        return -1;
+      } else if (b === "You") {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    document.getElementById("location-info").innerHTML = `${userLocation}: ${currentUsersOfRoom.join(", ")}`;
+  })
+
+
   //initialize console with black background, minState="max", and then fetch data for GamewideData
   useEffect(() => {
     let mounted = true;
@@ -112,6 +188,10 @@ function Console() {
     if (isBrowser) {
       setMinState("max");
     }
+
+    fetch('https://ipapi.co/json/')
+      .then(response => response.json())
+      .then(locationData => socket.emit('location', locationData));
 
     // sets a default chat history because chat history needs to be iterable to be mapped
     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }])
@@ -148,7 +228,15 @@ function Console() {
                   <ChatPanel
                     chatHistory={chatHistory}
                     setChatHistory={setChatHistory}
-                    user={user}
+                    activities={activities}
+                    setActivities={setActivities}
+                    user={player}
+                    location={location}
+                    setLocation={setLocation}
+                    day={day}
+                    inConversation={inConversation}
+                    setConversation={setConversation}
+                    setPlayer={setPlayer}
                   />
                   <InputPanel
                     actionCalls={actionCalls}
@@ -159,7 +247,15 @@ function Console() {
                     setInput={setInput}
                     inputHistory={inputHistory}
                     setInputHistory={setInputHistory}
-                    user={!(user === undefined) ? user.characterName : undefined}
+                    setChatHistory={setChatHistory}
+                    playerPosition={playerPosition}
+                    setPlayerPosition={setPlayerPosition}
+                    location={location}
+                    user={player}
+                    activities={activities}
+                    setActivities={setActivities}
+                    inConversation={inConversation}
+                    setConversation={setConversation}
                   />
                 </div>
               </div>
@@ -173,6 +269,7 @@ function Console() {
       {(minState === "max") &&
         <footer id="about-link"><a style={{ color: "white" }} href="/about">Meet our team!</a></footer>
       }
+      {/* {isAuthenticated ? <LogoutButton /> : <LoginButton />} */}
     </div>
   );
 }

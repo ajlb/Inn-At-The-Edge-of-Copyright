@@ -15,23 +15,31 @@ let locationSchema = new Schema({
     type: String
   },
   exits: {
-    type: Array
+    type: Object
   },
   region: {
     type: String
   },
   NPCs: {
-    type: String
+    type: Array
   },
-  inventory: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Inventory"
-    }
-  ],
+  inventory: 
+    [{
+    item: {type: Schema.Types.ObjectId, ref: "Item"},
+    quantity: Number
+    } ]
+  ,
+  discoverables: {
+    type: Array,
+    default: undefined
+  },
   indoorOutdoor: {
     type: String
   }
 });
 const Location = mongoose.model("Location", locationSchema);
+
+
+
+
 module.exports = Location;

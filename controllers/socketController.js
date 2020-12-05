@@ -1,219 +1,424 @@
 const db = require("../models");
 const mongoose = require("mongoose");
+const { resolveLocationChunk, findLocationData, move } = require("./userInput/move");
+const { getItem, dropItem, giveItem } = require("./userInput/getDrop");
+const { wearItem, removeItem } = require("./userInput/wearRemove");
+const { incrementDex } = require("./userInput/juggle");
+const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
+const { login, getUsers } = require("./userInput/loginLogout");
+const { whisper } = require("./userInput/whisper");
+// const { response } = require("express");
 
-
-//this pair of functions is for returning async location data within the socket response
-const getLocationChunk = async (data) => {
-    let locationObject = {};
-    locationObject.current = data;
-    for (const exitObject of locationObject.current.exits) {
-        const key = Object.keys(exitObject)[0];
-        locationObject[key] = await db.Location.findOne({ locationName: exitObject[key] });
-    }
-    return locationObject;
-}
-const resolveLocationChunk = (data) => {
-    return new Promise((resolve, reject) => {
-        resolve(getLocationChunk(data));
-    })
-}
+const runNPC = require("./NPCEngine");
+const { validateName, createCharacter } = require("./userInput/userCreation");
 
 // this array is fully temporary and is only here in place of the database until that is set up
-let players = ['the mando', 'shambles', 'cosmo the magnificent'];
+let players = [];
 let users = {};
+let playernicknames = {};
 
 //temp things to simulate display while working on server side only
 location = {};
 
+
+
+//This function is called in logout and disconnect, and remains here due to it editing several of the user variables that live in this file
+function removePlayer(socketID, socket, io, playernicknames) {
+    return new Promise(function (resolve, reject) {
+        for (const user in users) {
+            if (users[user].socketID === socketID) {
+                io.to(socket.id).emit('logout', "You are now logged off.");
+                console.log(users[user].username + " logged off");
+                users[user].chatRooms.forEach(room => {
+                    socket.leave(room);
+                    io.to(room).emit('logout', `${socket.nickname} disappears into the ether.`)
+                    getUsers(io, room, playernicknames);
+                })
+                console.log(players);
+                console.log(socket.lowerName);
+                players = players.filter(player => !(player === socket.lowerName))
+                console.log(players);
+                delete users[user];
+            }
+        }
+    })
+}
+
+
+
+
 module.exports = function (io) {
+
+    /*****************************/
+    /*          CONNECT          */
+    /*****************************/
     // this runs only when the user initially connects
     // if the user refreshes their browser, it will disconnect and reconnect them
     io.on('connection', (socket) => {
         console.log(`${socket.id} connected!`);
         // possibly do a DB call to state that the use is online?
 
+
+        /*****************************/
+        /*         DISCONNECT        */
+        /*****************************/
         socket.on('disconnect', () => {
             console.log(`${socket.id} disconnected...`);
             // possibly do a DB call to state that the use is offline?
             //for now just deleting the user
-            for (const user in users) {
-                if (users[user].socketID === socket.id) {
-                    //next two lines will not be necessary once Auth is in pace
-                    const playerIndex = players.indexOf(user);
-                    players = players.splice(playerIndex, 1);
-                    delete users[user];
-                }
-            }
+            removePlayer(socket.id, socket, io, playernicknames);
         })
 
-        socket.on('log in', message => {
-            if (message === "You must log in first! Type 'log in [username]'") {
-                io.to(socket.id).emit('logFail', message);
+
+        /*****************************/
+        /*           LOG IN          */
+        /*****************************/
+        socket.on('log in', email => {
+            if (email === "You must log in first! Type 'log in [username]'") {
+                io.to(socket.id).emit('logFail', email);
             } else {
-                console.log(`${message} wants to log in.`);
-                const usernameLowerCase = message.toLowerCase();
-                if (players.indexOf(usernameLowerCase) === -1) {
-                    socket.join(usernameLowerCase);
-                    players.push(usernameLowerCase);//delete once Auth is complete
-                    io.to(usernameLowerCase).emit('log in', message);
-                    console.log(`${message} is now fake logged in.`);
-                    //find and retrieve user Data, join location room
-                    db.Player.findOne({ characterName: message }).select("-password").then(userData => {
-                        let userLocation
-                        if (userData === null) {
-                            userLocation = "Inn Lobby";
-                        } else {
-                            userLocation = userData.lastLocation;
-                        }
-                        io.to(usernameLowerCase).emit('playerData', userData)
-                        socket.join(userLocation);
-                        users[usernameLowerCase].chatRooms.push(userLocation);
-                        //find locations, return initial and then chunk
-                        db.Location.findOne({ locationName: userLocation }).then(currentLocationData => {
+                db.Player.findOne({ email }).then(returnData => {
+                    if (returnData === null) {
+                        socket.emit('logFail', `new user`)
+                    } else {
+                        const userCharacter = returnData.characterName;
 
-                            io.to(usernameLowerCase).emit('currentLocation', currentLocationData);
-                            resolveLocationChunk(currentLocationData).then(chunk => {
-                                io.to(usernameLowerCase).emit('locationChunk', chunk);
-                                location = chunk;
-                                console.log(chunk.current.dayDescription);
-                            });
+                        login(socket, io, userCharacter, players).then(userLocation => {
 
-                        })
-                    })
-                    //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
-                    users[usernameLowerCase] = {
-                        socketID: socket.id,
-                        username: usernameLowerCase,
-                        online: true,
-                        chatRooms: []
-                    };
+                            if (!(userLocation === false)) {
+                                //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
+                                socket.nickname = userCharacter;
+                                socket.lowerName = userCharacter.toLowerCase();
+                                users[socket.lowerName] = {
+                                    socketID: socket.id,
+                                    nickname: socket.nickname,
+                                    lowerName: socket.lowerName,
+                                    online: true,
+                                    chatRooms: [userLocation]
+                                };
+                                playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
 
-                } else {
-                    io.to(socket.id).emit('logFail', `${message} is already logged in.`);
-                    console.log(`${message} is already in players list. Cannot log in.`);
-                }
-            }
-        });//end socket.on log in
+                                getUsers(io, userLocation, playernicknames);
 
-        socket.on('logout', message => {
-            for (const user in users){
-                if (users[user].socketID === socket.id){
-                    const playersIndex = players.indexOf(user.username);
-                    players = players.splice(playersIndex, 1);
-                    delete users[user];
-                    console.log("user logged out");
-                    io.to(socket.id).emit('logout', "You are now logged off.");
-                }
-            }
-        })
-        socket.on('move', ({ message, user }) => {
-            console.log("move recieved");
-            const currentExits = [];
-            for (const exitObj of location.current.exits){
-                const key = Object.keys(exitObj)[0];
-                if (key.startsWith("exit")){
-                    currentExits.push(key.slice(4));
-                } else {
-                    currentExits.push(key);
-                }
-            }
-            console.log(currentExits);
-            console.log(`user leaves to the`);
-            // get users current location
-            // get northern route from users location
-            // get the location of the route
-            // send that returned location back to the user
-        });
+                                //find locations, return initial and then chunk
+                                findLocationData(userLocation).then(currentLocationData => {
+                                    io.to(socket.lowerName).emit('currentLocation', currentLocationData);
+                                    resolveLocationChunk(currentLocationData).then(chunk => {
+                                        io.to(socket.lowerName).emit('locationChunk', chunk);
+                                        location = chunk;
+                                    });
 
-        socket.on('whisper', message => {
-            console.log(message);
-            let playerTo
-
-            // How this works:
-            //   This for loop is going to see if the message received from the user starts with a player name
-            //   Because player names are only allowed to be three words max(two spaces),
-            //   this for loop iterates through the first three words of the users message starting at 3 and working its way down
-            // if at any point in the loop it recognizes a player's name, it will set the playerTo variable to that player's name
-            for (let i = 2; i >= 0; i--) {
-                const messageString = message.toLowerCase().split(' ').slice(0, i + 1).join(' ');
-                players.forEach(player => {
-                    if (player === messageString) {
-                        playerTo = messageString;
-                        message = message.split(' ').slice(i + 1).join(' ');
+                                })
+                            }
+                        });
                     }
                 })
             }
-            if (playerTo === undefined) {
-                io.to(socket.id).emit('error', { status: 404, message: "There is nobody by that name" });
-            } else {
-                io.to(socket.id).emit('whisperFrom', { message, userTo: playerTo });
-                io.to(playerTo).emit('whisperTo', { message, userFrom: playerTo });
-            }
+        });//end socket.on log in
+
+
+        /*****************************/
+        /*           LOGOUT          */
+        /*****************************/
+        socket.on('logout', location => {
+            removePlayer(socket.id, socket, io, playernicknames);
+
         })
 
-        socket.on('stop juggle', () => {
+
+        /*****************************/
+        /*    CREATE NEW CHARACTER   */
+        /*****************************/
+        socket.on('newUser', ({ input, email }) => {
+            console.log(input, email);
+            validateName(io, socket, input, email).then(success => {
+                success && createCharacter(input, email);
+            }).then(() => {
+                io.to(socket.id).emit('YouCanLogIn');
+            })
+
+        })
+
+        /*****************************/
+        /*            MOVE           */
+        /*****************************/
+        socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
+            move(socket, io, previousLocation, newLocation, direction, user);
+
+            //leave and enter rooms
+            socket.leave(previousLocation);
+            users[user.toLowerCase()].chatRooms = users[user.toLowerCase()].chatRooms.filter(room => !(room === previousLocation));
+            getUsers(io, previousLocation, playernicknames);
+            users[user.toLowerCase()].chatRooms.push(newLocation);
+            socket.join(newLocation);
+            getUsers(io, newLocation, playernicknames);
 
         });
 
+
+        /*****************************/
+        /*          WHISPER          */
+        /*****************************/
+        socket.on('whisper', ({ message, user }) => {
+            console.log('in socketController');
+            console.log("message", message);
+            console.log("user", user);
+            whisper(socket, io, message, players, user);
+        })
+
+
+        /*****************************/
+        /*            NPC            */
+        /*****************************/
+        socket.on('to NPC', ({ toNPC, message }) => {
+            db.Dialog.findOne({ NPC: toNPC }, (err, result) => {
+                if (err) throw err;
+
+                runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
+
+            })
+        })
+
+        /*****************************/
+        /*   RED - INFO TO USER      */
+        /*****************************/
+        socket.on('failure', message => {
+            io.to(socket.id).emit('failure', message);
+        });
+
+
+        /*****************************/
+        /*   GREEN - INFO TO USER    */
+        /*****************************/
+        socket.on('green', message => {
+            io.to(socket.id).emit('green', message);
+        });
+
+
+        /*****************************/
+        /*         INVENTORY         */
+        /*****************************/
         socket.on('inventory', () => {
 
         });
 
-        socket.on('speak', () => {
 
+        /*****************************/
+        /*           SPEAK           */
+        /*****************************/
+        socket.on('speak', ({ message, user, location }) => {
+            io.to(location).emit('speak', `${user}: ${message}`);
         });
 
-        socket.on('help', () => {
+
+        /*****************************/
+        /*            HELP           */
+        /*****************************/
+        socket.on('help', ({ message}) => {
             // db for all the actions/their descriptions and whatnot
             // emit object back to client and parse there
+            console.log('helped message recieved');
+            console.log(message);
+            let emptyMessage = false;
+            emptyMessage = (message === undefined) && true;
+            emptyMessage = (!emptyMessage && (message.trim() === "")) && true;
+            db.Action.find({})
+                .then(actionData => {
+                    console.log(actionData);
+                    if (emptyMessage) {//just send general help
+                        io.to(socket.id).emit('help', { actionData, type:"whole" });
+                    } else {
+                        const specificHelp = message.trim().toLowerCase();
+                        const helpData = {};
+                        for (const item of actionData){
+                            if (item.actionName.startsWith(specificHelp)){
+                                helpData["actionName"] = item.actionName;
+                                helpData["commandLongDescription"] = item.commandLongDescription;
+                                helpData["waysToCall"] = item.waysToCall;
+                                helpData["exampleCall"] = item.exampleCall;
+                            }
+                        }
+                        if (helpData["actionName"] === undefined){
+                            io.to(socket.id).emit('failure', `I can't find information on a "${message}" command.`)
+                        } else {
+                            io.to(socket.id).emit('help', {actionData: helpData, type:"part"});
+                        }
+                    }
+                })
+          
         });
 
-        socket.on('look', () => {
-            // db the user's location and emit necessary info
-        });
 
-        socket.on('get', () => {
-            // idk what the get function is doing tbh 
-        });
+    /*****************************/
+    /*           LOOK            */
+    /*****************************/
+    socket.on('look', () => {
+        // db the user's location and emit necessary info
+    });
 
-        socket.on('drop', () => {
 
-        });
+    /*****************************/
+    /*             GET           */
+    /*****************************/
+    socket.on('get', ({ target, itemId, user, location }) => {
+        getItem(socket, io, target, itemId, user, location);
+    });
 
-        socket.on('wear', () => {
 
-        });
+    /*****************************/
+    /*           DROP            */
+    /*****************************/
+    socket.on('drop', ({ target, itemId, user, location }) => {
+        dropItem(socket, io, target, itemId, user, location);
+    });
 
-        socket.on('remove', () => {
+    /*****************************/
+    /*           WEAR            */
+    /*****************************/
+    socket.on('wear', ({ user, item, id, targetWords }) => {
+        wearItem(io, socket, user, item, id, targetWords);
+    });
 
-        });
 
-        socket.on('emote', () => {
+    /*****************************/
+    /*          REMOVE           */
+    /*****************************/
+    socket.on('remove', ({ user, item, targetSlot }) => {
+        removeItem(io, socket, user, item, targetSlot);
+    });
 
-        });
+    socket.on('emote', ({ user, emotion, location }) => {
+        console.log(`${user} ${emotion}`);
+        io.to(location).emit('emote', { user, emotion });
+    });
 
-        socket.on('juggle', () => {
 
-        });
+    /*****************************/
+    /*           JUGGLE          */
+    /*****************************/
+    //initial juggle message
+    socket.on('juggle', ({ target, num, user, location }) => {
+        io.to(location).emit('juggle', { user: user.characterName, target, num })
+        io.to(user.characterName.toLowerCase()).emit('continueJuggle', { target, num, user, location });
 
-        socket.on('stats', () => {
-            // db for player stats
-            // emit stats to player
-        });
+    });
 
-        socket.on('sleep', () => {
-
-        });
-
-        socket.on('wake', () => {
-
-        });
-
-        socket.on('position', () => {
-            //  db for player position
-            // emit position to player
-        });
-
+    //juggle every five seconds, with chance of drop
+    socket.on('contJuggle', ({ target, num, user, location }) => {
+        io.to(location).emit('contJuggle', { user: user.characterName, target, num });
     })
+
+    //stop juggle
+    socket.on('stop juggle', ({ user, location, target, intent }) => {
+        //user stopped on purpose
+        if (intent) {
+            io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage: `You neatly catch the ${target}, and stop juggling.` });
+            //user dropped their items, but got a little better at it
+        } else {
+            io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
+            //update player dex
+            incrementDex(user.characterName).then(updatedPlayerData => {
+                io.to(user.characterName.toLowerCase()).emit('playerUpdate', updatedPlayerData);
+            })
+        }
+    });
+
+
+    /*****************************/
+    /*            GIVE           */
+    /*****************************/
+    socket.on('give', ({ target, item, itemId, user, location }) => {
+        giveItem(socket, io, target, item, itemId, user, location);
+    });
+
+
+    /*****************************/
+    /*           STATS           */
+    /*****************************/
+    socket.on('stats', () => {
+        // db for player stats
+        // emit stats to player
+
+        db.Player.find({}).then((statsData) => {
+            io.to(socket.id).emit('stats', { statsData });
+
+        })
+    });
+
+
+    /*****************************/
+    /*            SLEEP          */
+    /*****************************/
+    socket.on('sleep', ({ userToSleep, location }) => {
+        goToSleep(userToSleep).then(userWasAwake => {
+            if (userWasAwake) {
+                io.to(location).emit('sleep', { userToSleep });
+                socket.leave(location);
+                users[userToSleep.toLowerCase()].chatRooms = users[userToSleep.toLowerCase()].chatRooms.filter(room => !(room === location));
+            } else {
+                io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping." });
+            }
+        });
+    });
+
+    /*****************************/
+    /*             WAKE          */
+    /*****************************/
+    socket.on('wake', ({ userToWake, location }) => {
+        wakeUp(userToWake).then(userWasSleeping => {
+            if (userWasSleeping) {
+                socket.join(location);
+                users[userToWake.toLowerCase()].chatRooms.push(location);
+                io.to(location).emit('wake', { userToWake });
+            } else {
+                io.to(socket.id).emit('error', { status: 400, message: "You are already awake." });
+            }
+        });
+    });
+
+
+    /*****************************/
+    /*          POSITION         */
+    /*****************************/
+    socket.on('position', () => {
+        //  db for player position
+        // emit position to player
+    });
+
+
+
+
+    /*****************************/
+    /*        DAY/NIGHT          */
+    /*****************************/
+    socket.on('dayNight', ({ day, user }) => {
+        io.to(user.toLowerCase()).emit('dayNight', day);
+    });
+
+
+    /*****************************/
+    /* DAY/NIGHT - DATA REQUEST  */
+    /*****************************/
+    socket.on('dataRequest', () => {
+        io.emit('dataRequest', users)
+    });
+
+
+    /*****************************/
+    /* DAY/NIGHT - USER LOCATION */
+    /*****************************/
+    socket.on('location', (locationData) => {
+        io.to('backEngine').emit('location', { locationData, id: socket.id });
+    });
+
+
+    /*****************************/
+    /* DAY/NIGHT - USER LOCATION */
+    /*****************************/
+    socket.on('joinRequest', (message) => {
+        console.log('backEngine wants to join backEngine');
+        socket.join(message);
+    });
+})
 
 }
