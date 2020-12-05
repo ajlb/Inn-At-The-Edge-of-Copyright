@@ -13,7 +13,7 @@ import { wear, remove } from "./js/wearRemove";
 import { showStats } from "./js/stats";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
-import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
+import DiscoverableCalls, { callFunctionMap } from "../../clientUtilities/discoverablesCalls";
 import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 
 
@@ -44,7 +44,6 @@ function InputPanel({
     inConversation,
     setConversation
 }) {
-
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
     const authUser = useAuth0().user;
@@ -126,7 +125,7 @@ function InputPanel({
         } else if (findIn(input, actionCalls.help)) {
             let help = takeTheseOffThat(actionCalls.help, input);
             console.log(help);
-            socket.emit('help', input);
+            socket.emit('help', {message:help});
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
