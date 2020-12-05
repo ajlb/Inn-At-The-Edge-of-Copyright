@@ -158,7 +158,7 @@ module.exports = [
                         "route": 2
                     }, {
                         "responses": ["goodbye", "bye", "adios"],
-                        "route": 5
+                        "route": 3
                     }]
                 },
                 { // 2
@@ -172,7 +172,7 @@ module.exports = [
                         "route": 2
                     }, {
                         "responses": ["goodbye", "bye", "adios"],
-                        "route": 5
+                        "route": 3
                     }]
                 },
                 { // 3
