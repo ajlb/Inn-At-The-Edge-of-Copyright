@@ -63,7 +63,7 @@ function InputPanel({
     }
 
 
-    socket.off('YouCanLogIn').on('YouCanLogIn', ()=>{
+    socket.off('YouCanLogIn').on('YouCanLogIn', () => {
         socket.emit("log in", authUser.email);
     })
 
@@ -84,7 +84,7 @@ function InputPanel({
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (user.characterName === "newUser") {
-            socket.emit('newUser', {input, email:authUser.email});
+            socket.emit('newUser', { input, email: authUser.email });
         } else if (findIn(input, actionCalls.whisper)) {
             let message;
             // If it starts with one of these two-word commands, it will remove the first two words from the message, if not, it will just remove the first word
@@ -128,7 +128,7 @@ function InputPanel({
         } else if (findIn(input, actionCalls.help)) {
             let help = takeTheseOffThat(actionCalls.help, input);
             console.log(help);
-            socket.emit('help', {message:help});
+            socket.emit('help', { message: help });
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
@@ -216,7 +216,7 @@ function InputPanel({
                 let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
                 toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
                 console.log("You are attempting to examine", toExamine)
-                console.log(user)
+
                 if (location.current.discoverables && toExamine.trim() !== '') {
                     let discoverables = location.current.discoverables;
                     let description;
@@ -245,8 +245,18 @@ function InputPanel({
                     }
                 } else if (toExamine.trim() === '') {
                     setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
+
                 } else {
-                    setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
+                    let foundItem = user.inventory.find(param => {
+                        return param.item.itemName.includes(toExamine)
+                    })
+                    if (foundItem) {
+                        setChatHistory(prevState => {
+                            return [...prevState, { type: 'displayed-stat', text: `In your inventory you see ${foundItem.item.description}` }]
+                        })
+                    } else {
+                        setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
+                    }
                 }
 
             } else if (findIn(input, ["logout", "log out", "log off"])) {
