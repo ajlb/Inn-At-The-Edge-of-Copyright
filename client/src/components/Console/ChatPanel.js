@@ -263,40 +263,26 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
     });
 
-    socket.off('help').on('help', ({ actionData }) => {
-        let type = 'displayed-indent';
-        // let currentString = ``;
-        let newArray = [];
-        actionData.map((helpItem) => {
-            newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
-            setChatHistory(prevState => [...prevState, { type, text: newArray }]);
-            // console.log(newArray);
-        });
+    socket.off('help').on('help', ({ actionData, type }) => {
+        console.log(actionData);
+        if (type === "whole"){
+            let newArray = [];
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `HELP`}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
+            actionData.map((helpItem) => {
+                newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
+                setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: newArray }]);
+            });
+        } else {
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `----- ${actionData.actionName.toUpperCase()} -----`}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: actionData.commandLongDescription}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}`}]);
 
-        //     let exampleArray = [];
+        }
 
-        //     actionData.map((helpItem) => {
-        //         exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
-        //         setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
-        //     });
-
-
-        //     let commandLongArray = [];
-
-        //     actionData.map((helpItem) => {
-        //         commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
-        //         setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
-        //     });
-        // });
-
-
-        //newArray.forEach((help) => {
-
-        //               actionData.map((helpItem) => {
-        //                  currentString += `
-        // ${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
-        //${helpItem.commandLongDescription}    ${helpItem.waysToCall}
-        // ${helpItem.exampleCall}     ${helpItem.exampleResult}
     });
 
 
