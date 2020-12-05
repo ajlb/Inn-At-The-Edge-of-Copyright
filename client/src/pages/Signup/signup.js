@@ -45,12 +45,12 @@ import { getCharacters } from "../../clientUtilities/API";
     }
 
     function generateBaseStats () {
-        wis = roll([[4,6]]);//roll 4d6  
-        dex = roll([[4,6]]);//roll 4d6  
-        str = roll([[4,6]]);//roll 4d6  
-        hp = roll([[4,6]]);//roll 4d6
+        // wis = roll([[4,6]]);//roll 4d6  
+        // dex = roll([[4,6]]);//roll 4d6  
+        // str = roll([[4,6]]);//roll 4d6  
+        // hp = roll([[4,6]]);//roll 4d6
 
-        return {wis, dex, str, hp}
+        // return {wis, dex, str, hp}
     }
 
     // function makePlayer () {
@@ -72,8 +72,8 @@ import { getCharacters } from "../../clientUtilities/API";
     // }
 
     function handleLoginErr(err) {
-        $("#alert .msg").text(err.responseJSON);
-        $("#alert").fadeIn(500);
+        // $("#alert .msg").text(err.responseJSON);
+        // $("#alert").fadeIn(500);
     }
 
     // function handleResponse(msg){

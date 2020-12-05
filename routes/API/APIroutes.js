@@ -16,7 +16,7 @@ router.route("/getData")
 
 router.route("/checkCharacterName/:name")
   .get(function(req, res){
-    db.Player.find({characterName: req.params.name}).select("characterName").then(data => {
+    db.Player.find({characterNameLowerCase: req.params.name}).select("characterName").then(data => {
       res.send(data);
     })
   })

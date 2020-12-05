@@ -59,14 +59,16 @@ function InputPanel({
         setInput(e.target.value)
     }
 
+
+    socket.off('YouCanLogIn').on('YouCanLogIn', ()=>{
+        socket.emit("log in", authUser.email);
+    })
+
     //action on enter key
     const handleMessage = (event, type = "displayed-stat") => {
         event.preventDefault();
 
         setInputHistory(prevState => [...prevState, input])
-
-
-
 
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
@@ -78,6 +80,8 @@ function InputPanel({
             } else {
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
+        } else if (user.characterName === "newUser") {
+            socket.emit('newUser', {input, email:authUser.email});
         } else if (findIn(input, actionCalls.whisper)) {
             let message;
             // If it starts with one of these two-word commands, it will remove the first two words from the message, if not, it will just remove the first word

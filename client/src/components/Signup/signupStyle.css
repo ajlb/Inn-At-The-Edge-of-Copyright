@@ -1,0 +1,24 @@
+form.signup {
+    margin-top: 40px;
+    background-color: darkgray;
+    padding: 20px;
+    border-radius: 10px;
+    border: white solid 6px;
+}
+
+#validate {
+    margin: 0px 0px 20px 0px;
+    background-color: gray;
+    border: rgb(68, 68, 68) 2px solid;
+}
+
+input.form-control {
+    margin-bottom: 20px;
+}
+
+form.signup #submit-button {
+    width: 80px;
+    height: 100%;
+    background-color: gray;
+    border: rgb(68, 68, 68) 2px solid;
+}

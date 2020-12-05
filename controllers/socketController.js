@@ -10,6 +10,7 @@ const { whisper } = require("./userInput/whisper");
 // const { response } = require("express");
 
 const runNPC = require("./NPCEngine");
+const { validateName, createCharacter } = require("./userInput/userCreation");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -78,7 +79,7 @@ module.exports = function (io) {
             } else {
                 db.Player.findOne({ email }).then(returnData => {
                     if (returnData === null) {
-                        socket.emit('logFail', `I'm sorry, we have no record of a character with email matching ${email}.`)
+                        socket.emit('logFail', `new user`)
                     } else {
                         const userCharacter = returnData.characterName;
 
@@ -124,6 +125,19 @@ module.exports = function (io) {
 
         })
 
+
+        /*****************************/
+        /*    CREATE NEW CHARACTER   */
+        /*****************************/
+        socket.on('newUser', ({input, email}) => {
+            console.log(input, email);
+            validateName(io, socket, input, email).then(success=>{
+                success && createCharacter(input, email);
+            }).then(()=>{
+                io.to(socket.id).emit('YouCanLogIn');
+            })
+
+        })
 
         /*****************************/
         /*            MOVE           */

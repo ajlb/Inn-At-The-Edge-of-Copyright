@@ -23,7 +23,7 @@ function Console() {
     currentMessage: ""
   }
 
-  const { user, isAuthenticated }= useAuth0();
+  const { user, isAuthenticated } = useAuth0();
 
   const [location, setLocation] = useState({});
 
@@ -41,7 +41,7 @@ function Console() {
   })
 
   const [inConversation, setConversation] = useState(false);
-  
+
   const [chatHistory, setChatHistory] = useState([]);
 
   const [input, setInput] = useState('');
@@ -95,8 +95,18 @@ function Console() {
   // Socket failed log in message
   socket.off('logFail').on('logFail', message => {
     console.log("got a log in failure message from socket");
-    let type = 'displayed-error';
-    setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
+    if (message === "new user") {
+      setPlayer({
+        ...player,
+        characterName:"newUser"
+      });
+      setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: 'Please enter a name for your new character!'}]);
+      setChatHistory(prevState => [...prevState, {type: 'displayed-green', text: 'Your name must be no more than three words, and cannot be offensive.'}]);
+      
+    } else {
+      let type = 'displayed-error';
+      setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
+    }
   });
 
   // Socket log out message
@@ -110,7 +120,7 @@ function Console() {
   // Socket initial userData
   socket.off('playerData').on('playerData', message => {
     console.log("recieved Player Data");
-    
+
     console.log(message);
     if (!(message === null)) {
       setPlayer(message);
@@ -153,15 +163,15 @@ function Console() {
     }
   });
 
-  socket.off('who').on('who', ({currentUsersOfRoom, userLocation}) => {
-    currentUsersOfRoom = currentUsersOfRoom.map(elem=>{
+  socket.off('who').on('who', ({ currentUsersOfRoom, userLocation }) => {
+    currentUsersOfRoom = currentUsersOfRoom.map(elem => {
       return (elem === player.characterName) ? "You" : elem;
     })
     //sort to keep "You" in the beginning of the array
-    currentUsersOfRoom = currentUsersOfRoom.sort(function(a, b){
-      if (a === "You"){
+    currentUsersOfRoom = currentUsersOfRoom.sort(function (a, b) {
+      if (a === "You") {
         return -1;
-      } else if (b === "You"){
+      } else if (b === "You") {
         return 1;
       } else {
         return 0;
@@ -180,8 +190,8 @@ function Console() {
     }
 
     fetch('https://ipapi.co/json/')
-  .then(response => response.json())
-  .then(locationData => socket.emit('location', locationData));
+      .then(response => response.json())
+      .then(locationData => socket.emit('location', locationData));
 
     // sets a default chat history because chat history needs to be iterable to be mapped
     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }])
