@@ -11,10 +11,12 @@ import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
 import { wear, remove } from "./js/wearRemove";
 import { showStats } from "./js/stats";
+import { showInventory } from "./js/inventory";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
-import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
+import DiscoverableCalls, { callFunctionMap } from "../../clientUtilities/discoverablesCalls";
 import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
+import { lookAbout } from './js/look';
 
 
 //set up index for current position in userCommandsHistory
@@ -44,7 +46,6 @@ function InputPanel({
     inConversation,
     setConversation
 }) {
-
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
     const authUser = useAuth0().user;
@@ -116,7 +117,8 @@ function InputPanel({
                     socket.emit('whisper', { message, user: user.characterName })
                 })
         } else if (findIn(input, actionCalls.inventory)) {
-            socket.emit('inventory', input)
+            // let inventory = takeTheseOffThat(actionCalls.inventory, input)
+            showInventory(user, setChatHistory);
         } else if (findIn(input, actionCalls.juggle)) {
             juggle(input, user, location.current.locationName);
         } else if (input.toLowerCase() === "stop juggling") {
@@ -126,7 +128,7 @@ function InputPanel({
         } else if (findIn(input, actionCalls.help)) {
             let help = takeTheseOffThat(actionCalls.help, input);
             console.log(help);
-            socket.emit('help', input);
+            socket.emit('help', {message:help});
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
@@ -171,7 +173,7 @@ function InputPanel({
                 const message = takeTheseOffThat(actionCalls.speak, input);
                 socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
             } else if (findIn(input, actionCalls.look)) {
-                socket.emit('look', input)
+                lookAbout(location, setChatHistory);
             } else if (findIn(input, actionCalls.get)) {
                 const target = takeTheseOffThat(actionCalls.get, input);
                 getItem(socket, user, target, location);
