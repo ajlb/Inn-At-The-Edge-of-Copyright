@@ -117,6 +117,10 @@ function InputPanel({
             stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.stats)) {
             showStats(user, setChatHistory, actionCalls.stats, input);
+        } else if (findIn(input, actionCalls.help)) {
+            let help = takeTheseOffThat(actionCalls.help, input);
+            console.log(help);
+            socket.emit('help', input);
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
@@ -128,10 +132,6 @@ function InputPanel({
             } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
                 setPlayerPosition('standing');
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
-            } else if (findIn(input, actionCalls.help)) {
-                let help = takeTheseOffThat(actionCalls.help, input);
-                console.log(help);
-                socket.emit('help', input);
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
             }
