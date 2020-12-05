@@ -3,6 +3,7 @@ const db = require("../../models");
 const mongoose = require("mongoose");
 const newPlayerObject = require("./newPlayerObject.json");
 const { generateBaseStats, roll } = require("./characterLeveling");
+const ObjectId = require('mongoose').Types.ObjectId;
 
 profanityArray = googleProfanityWords.list();
 
@@ -40,6 +41,12 @@ function characterFactory(name, email, password="Auth0isHandlingIt") {
         password,
         description: `a Human Sandwich-maker`,
     }
+    thisPlayer.inventory = [
+        {
+            item: ObjectId("5fc32531b2009d226ef5b862"),
+            quantity: 1
+    }
+    ];
     thisPlayer.stats = {
         ...thisPlayer.stats,
         ...stats,
@@ -67,6 +74,9 @@ function validateName(io, socket, userInput) {
         userInput = userInput.trim();
         if (checkNameWords(userInput) > 2) {
             io.to(socket.id).emit('failure', "Please make sure your name is no more than three words long.")
+            resolve(false);
+        } else if (userInput.length > 30) {
+            io.to(socket.id).emit('failure', "Please make sure your name is less than 30 characters long.")
             resolve(false);
         } else if (!checkVersusProfanity(userInput)) {
             io.to(socket.id).emit('failure', "I'm sorry, that name won't work.")
