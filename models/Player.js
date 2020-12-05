@@ -59,11 +59,19 @@ const playerSchema = new Schema({
       type: Number,
       default: 0
     },
+    CHA: {
+      type: Number,
+      default: 0
+    },
     maxWIS: {
       type: Number,
       default: 0
     },
     maxDEX: {
+      type: Number,
+      default: 0
+    },
+    maxCHA: {
       type: Number,
       default: 0
     },
