@@ -1,16 +1,16 @@
 const db = require("../models");
 const mongoose = require("mongoose");
 const { resolveLocationChunk, findLocationData, move } = require("./userInput/move");
-const { findPlayerData, getItem, dropItem, giveItem } = require("./userInput/getDrop");
-const { findItem } = require("./userInput/wearRemove");
+const { getItem, dropItem, giveItem } = require("./userInput/getDrop");
+const { wearItem, removeItem } = require("./userInput/wearRemove");
 const { incrementDex } = require("./userInput/juggle");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
 // const { response } = require("express");
-const ObjectId = require('mongoose').Types.ObjectId;
 
 const runNPC = require("./NPCEngine");
+const { validateName, createCharacter } = require("./userInput/userCreation");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -79,7 +79,7 @@ module.exports = function (io) {
             } else {
                 db.Player.findOne({ email }).then(returnData => {
                     if (returnData === null) {
-                        socket.emit('logFail', `I'm sorry, we have no record of a character with email matching ${email}.`)
+                        socket.emit('logFail', `new user`)
                     } else {
                         const userCharacter = returnData.characterName;
 
@@ -125,6 +125,19 @@ module.exports = function (io) {
 
         })
 
+
+        /*****************************/
+        /*    CREATE NEW CHARACTER   */
+        /*****************************/
+        socket.on('newUser', ({input, email}) => {
+            console.log(input, email);
+            validateName(io, socket, input, email).then(success=>{
+                success && createCharacter(input, email);
+            }).then(()=>{
+                io.to(socket.id).emit('YouCanLogIn');
+            })
+
+        })
 
         /*****************************/
         /*            MOVE           */
@@ -241,89 +254,7 @@ module.exports = function (io) {
         /*           WEAR            */
         /*****************************/
         socket.on('wear', ({ user, item, id, targetWords }) => {
-            const targetSlot = targetWords ? targetWords.replace(/\s/g, "").toLowerCase() : false;
-            console.log(`${user} wants to wear ${item} with item ID of ${id} in this equipment slot: ${targetWords}`)
-            db.Item.findOne({ itemName: item }).then(returnData => {
-                if (returnData.equippable.length === 1) {
-                    let slot = returnData.equippable[0]
-                    //return info about what the user is already wearing
-                    findPlayerData(user).then(returnData => {
-                        if (returnData.wornItems[slot] === null) {
-                            //let user wear item if they are not already wearing something there
-                            db.Player.findOneAndUpdate({ characterName: user }, { $set: { [`wornItems.${slot}`]: item } }, { new: true }).populate('inventory.item').then(returnData => {
-                                db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(returnData => {
-                                    db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).populate('inventory.item').then(finalData => {
-                                        io.to(socket.id).emit('playerUpdate', finalData);
-                                    });
-                                });
-                                io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${slot.slice(0, -4)}.`);
-                            })
-                        } else {
-                            //failure message on no empty space to wear item
-                            io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[slot]} from your ${slot.slice(0, -4)} before you can wear the ${item}.`);
-                        }
-                    })
-                } else if (returnData.equippable.length > 1) {
-                    //there are multiple slot options
-                    const options = returnData.equippable.map(slot => {
-                        slot = slot.slice(0, -4);
-                        switch (slot) {
-                            case "rightHand":
-                                slot = "right hand";
-                                break;
-                            case "leftHand":
-                                slot = "left hand";
-                                break;
-                            case "twoHands":
-                                slot = "two hands";
-                                break;
-                            default:
-                                break;
-                        }
-                        return slot;
-                    })
-                    const uneditedSlots = returnData.equippable;
-                    //only wear on matching slot
-                    if (targetWords) {
-                        let worn = false;
-                        for (const editedSlot of options) {
-                            if (editedSlot === targetWords.toLowerCase()) {
-                                let slotIndex = options.indexOf(editedSlot);
-                                worn = true;
-                                db.Player.findOne({ characterName: user }).then(returnData => {
-                                    //If player's matching equipment slot is empty
-                                    if (returnData.wornItems[uneditedSlots[slotIndex]] === null) {
-                                        db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${uneditedSlots[slotIndex]}`]: item } }).then(returnData => {
-                                            db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(id) }] }).then(incrementData => {
-                                                db.Player.findOneAndUpdate({ characterName: user }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true }).populate('inventory.item').then(finalData => {
-                                                    console.log(editedSlot, ["right hand", "left hand", "two hands"].indexOf(editedSlot) > -1);
-                                                    if (["right hand", "left hand", "two hands"].indexOf(editedSlot) < 0) {
-                                                        io.to(user.toLowerCase()).emit('wear', `You wear your ${item} on your ${editedSlot}.`);
-                                                    } else {
-                                                        io.to(user.toLowerCase()).emit('wear', `You wear your ${item} in your ${editedSlot}.`);
-                                                    }
-                                                    io.to(user.toLowerCase()).emit('playerUpdate', finalData);
-                                                })
-                                            })
-                                        })
-                                        //if player's matching equipment slot is full
-                                    } else {
-                                        io.to(user.toLowerCase()).emit('failure', `You'll need to remove the ${returnData.wornItems[uneditedSlots[slotIndex]]} from your ${editedSlot} before you can wear the ${item}.`);
-                                    }
-                                })
-                            }
-                        }
-                        if (!worn) {//if user didn't put in a matching slot
-                            io.to(user.toLowerCase()).emit('green', `You can't wear that item there.`);
-                        }
-                    } else {//if multiple slots but user didn't specify
-                        io.to(user.toLowerCase()).emit('green', `Where do you want to wear it? (${options.join(", ")})`);
-                    }
-                } else {//non wearable item
-                    io.to(user.toLowerCase()).emit('green', `You can't wear that.`);
-                }
-            })
-
+            wearItem(io, socket, user, item, id, targetWords);
         });
 
 
@@ -331,61 +262,7 @@ module.exports = function (io) {
         /*          REMOVE           */
         /*****************************/
         socket.on('remove', ({ user, item, targetSlot }) => {
-            let itemId;
-            findItem(item).then(data => itemId = data._id);
-            switch (targetSlot) {
-                case "lefthand":
-                    targetSlot = "leftHand";
-                    break;
-                case "righthand":
-                    targetSlot = "rightHand";
-                    break;
-                case "twohands":
-                    targetSlot = "twoHands";
-                    break;
-                default:
-                    break;
-            }
-            //empty player's equipment slot
-            db.Player.updateOne({ characterName: user }, { $set: { [`wornItems.${targetSlot}`]: null } }).then(returnData => {
-                //only add item to inventory if the empty goes through
-                if (returnData.nModified === 1) {
-                    console.log('itemId: ' + itemId);
-                    db.Player.updateOne({ characterName: user }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.item": itemId }] }).then(returnData => {
-                        targetSlot = targetSlot.slice(0, -4).toLowerCase();
-                        switch (targetSlot) {
-                            case "lefthand":
-                                targetSlot = "left hand";
-                                break;
-                            case "righthand":
-                                targetSlot = "right hand";
-                                break;
-                            case "twohands":
-                                targetSlot = "two hands";
-                                break;
-                            default:
-                                break;
-                        }
-                        //if increment succeeded, there was already one there
-                        if (returnData.nModified === 1) {
-                            //send success
-                            db.Player.findOne({ characterName: user }).populate('inventory.item').then(returnData => {
-                                io.to(socket.id).emit('playerUpdate', returnData);
-                            })
-                            io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
-                            //if increment failed, add a new entry to inventory
-                        } else {
-                            db.Player.findOneAndUpdate({ characterName: user }, { $push: { inventory: { item: itemId, quantity: 1 } } }, { new: true })
-                                .populate('inventory.item').then(returnData => {
-                                    //send success
-                                    io.to(socket.id).emit('remove', `You remove your ${item} from your ${targetSlot}.`);
-                                    io.to(socket.id).emit('playerUpdate', returnData);
-                                })
-                        }
-                    })
-                }
-            })
-
+           removeItem(io, socket, user, item, targetSlot);
         });
 
         socket.on('emote', ({ user, emotion, location }) => {

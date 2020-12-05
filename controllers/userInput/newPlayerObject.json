@@ -1,0 +1,43 @@
+{"characterName":"",
+"characterNameLowerCase":"",
+"password":"",
+  "email":"",
+  "isLiving":true,
+  "isAwake":true,
+  "isOnline":true,
+  "isNPC":false,
+  "stats":
+  {
+    "WIS": 0,
+    "DEX": 0,
+    "STR": 0,
+    "HP": 0,
+    "maxWIS": 80,
+    "maxDEX": 80,
+    "maxSTR": 80,
+    "maxHP": 50,
+    "XP": 0,
+    "level": 1
+  },
+  "race": "Human",
+  "profession": "Sandwich-maker",
+  "abilities": "panic",
+  "inventory": [],
+  "lastLocation":"Start Room",
+  "backstory":"",
+  "description":"",
+  "wornItems":
+    {
+      "headSlot":null,
+      "neckSlot":null,
+      "torsoSlot":null,
+      "rightHandSlot":null,
+      "leftHandSlot":null,
+      "legsSlot":null,
+      "feetSlot":null,
+      "ringSlot":null,
+      "handsSlot":null,
+      "twoHands":null
+    },
+  "day":true
+}

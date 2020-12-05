@@ -13,6 +13,8 @@ import { wear, remove } from "./js/wearRemove";
 import { showStats } from "./js/stats";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
+import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
+import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 
 
 //set up index for current position in userCommandsHistory
@@ -59,14 +61,16 @@ function InputPanel({
         setInput(e.target.value)
     }
 
+
+    socket.off('YouCanLogIn').on('YouCanLogIn', ()=>{
+        socket.emit("log in", authUser.email);
+    })
+
     //action on enter key
     const handleMessage = (event, type = "displayed-stat") => {
         event.preventDefault();
 
         setInputHistory(prevState => [...prevState, input])
-
-
-
 
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
@@ -78,6 +82,8 @@ function InputPanel({
             } else {
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
+        } else if (user.characterName === "newUser") {
+            socket.emit('newUser', {input, email:authUser.email});
         } else if (findIn(input, actionCalls.whisper)) {
             let message;
             // If it starts with one of these two-word commands, it will remove the first two words from the message, if not, it will just remove the first word
@@ -133,11 +139,13 @@ function InputPanel({
                 setPlayerPosition('standing');
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
             } else {
-                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-green", text: `You are already ${playerPosition}` }]);
             }
         } else if (!inConversation) {
             // Everything in here cannot be run while in a conversation with an NPC
-            if (findIn(input, actionCalls.move)) {
+            if (findIn(input, DiscoverableCalls.get(location.current.locationName))) {
+                console.log('something discoverable is happening');
+            } else if (findIn(input, actionCalls.move)) {
                 if (playerPosition === "standing") {
                     let direction = takeTheseOffThat(actionCalls.move, input);
                     for (const param in DIRECTIONS) {
