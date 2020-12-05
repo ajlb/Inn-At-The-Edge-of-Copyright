@@ -13,6 +13,8 @@ import { wear, remove } from "./js/wearRemove";
 import { showStats } from "./js/stats";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
+import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
+import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 
 
 //set up index for current position in userCommandsHistory
@@ -137,11 +139,13 @@ function InputPanel({
                 console.log(help);
                 socket.emit('help', input);
             } else {
-                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-green", text: `You are already ${playerPosition}` }]);
             }
         } else if (!inConversation) {
             // Everything in here cannot be run while in a conversation with an NPC
-            if (findIn(input, actionCalls.move)) {
+            if (findIn(input, DiscoverableCalls.get(location.current.locationName))) {
+                console.log('something discoverable is happening');
+            } else if (findIn(input, actionCalls.move)) {
                 if (playerPosition === "standing") {
                     let direction = takeTheseOffThat(actionCalls.move, input);
                     for (const param in DIRECTIONS) {
