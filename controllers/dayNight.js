@@ -37,7 +37,7 @@ module.exports = function dayNight(socket) {
             if (typeof userName === 'string') {
                 console.log("We're gonna get data!!!!!");
                 console.log(userName);
-                axios.get("http://localhost:3001/backAPI/playerTime/" + userName).then(data => {
+                axios.get("/backAPI/playerTime/" + userName).then(data => {
                     let currentDay = data.data.day;
                     currentDay ? console.log("... day") : console.log("... night");
 
@@ -59,7 +59,7 @@ module.exports = function dayNight(socket) {
                             finalDay = true;
                         }
                         if (!(currentDay === finalDay)) {
-                            axios.put("http://localhost:3001/backAPI/playerTime", { day: finalDay, playerName: userName }).then(data => {
+                            axios.put("/backAPI/playerTime", { day: finalDay, playerName: userName }).then(data => {
                                 finalDay ? console.log("It has become day") : console.log("It has become night");
                                 //SEND OUT SOCKET.IO MESSAGE TO TRIGGER SESSION DATA CHANGE
                                 console.log(userName);
