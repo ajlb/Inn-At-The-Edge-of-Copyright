@@ -1,3 +1,4 @@
+import pluralize from "pluralize";
 
 function lookAbout(location, setChatHistory) {
     console.log(location)
@@ -6,7 +7,7 @@ function lookAbout(location, setChatHistory) {
     const availableNPCs = [];
 
     location.current.inventory.forEach(param => {
-        inventoryArray.push(`${param.quantity} ${param.item.itemName}`);
+        inventoryArray.push(`${param.quantity} ${pluralize(param.item.itemName, param.quantity)}.`);
     })
 
     location.current.NPCs.forEach(npc => {
@@ -16,14 +17,14 @@ function lookAbout(location, setChatHistory) {
     const exitDescriptors = [];
 
     for (const exitPath in location.current.exits) {
-        exitDescriptors.push(`moving to the ${exitPath} would take you to the ${location.current.exits[exitPath]}`);
+        exitDescriptors.push(`moving to the ${exitPath} would take you to the ${location.current.exits[exitPath]}.`);
     }
 
     lookArray.push(`${location.current.dayDescription}`);
 
-    setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${lookArray} ${exitDescriptors}` }]);
+    setChatHistory(prevState => [...prevState, { type: 'displayed-indent displayed-intro', text: `${lookArray} ${exitDescriptors}` }]);
     if(availableNPCs.length >0) {
-        setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `You may want to speak to ${availableNPCs}`}]);
+        setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `You may want to speak to ${availableNPCs}.`}]);
     }
     if(inventoryArray.length > 0){
         inventoryArray.forEach((item) => {
