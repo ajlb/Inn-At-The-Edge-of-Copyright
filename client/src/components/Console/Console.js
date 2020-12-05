@@ -52,22 +52,22 @@ function Console() {
 
   const [actionCalls, setActionCalls] = useState({
     move: ['move', '/m', 'walk', 'exit'],
-    inventory: ['inventory', '/i'],
+    inventory: ['inventory', '/i', 'check inventory'],
     speak: ['speak', 'say', '/s'],
     look: ['look', '/l'],
     help: ['help', '/h'],
     get: ['get', '/g', 'pick up'],
     drop: ['drop', 'discard', '/d'],
-    wear: ['wear', 'put on'],
-    remove: ['remove', '/r', 'take off'],
-    emote: ['emote', '/e'],
+    wear: ['wear', 'put on', 'don'],
+    remove: ['remove', '/r', 'take off', "doff"],
+    emote: ['emote', '/e', "/me"],
     juggle: ['juggle'],
     stats: ['stats'],
     sleep: ['sleep', 'fall asleep'],
     wake: ['wake', 'wake up', 'awaken'],
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
-    examine: ['examine', 'study'],
+    examine: ['examine', 'study', 'inspect'],
     whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
   });
 
