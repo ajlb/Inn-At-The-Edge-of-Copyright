@@ -6,9 +6,9 @@ function login(socket, io, userCharacter, players){
     return new Promise(function(resolve, reject){
             console.log(`${userCharacter} wants to log in.`);
             const usernameLowerCase = userCharacter.toLowerCase();
-            if (players.indexOf(usernameLowerCase) === -1) {
+            if (players.indexOf(userCharacter) === -1) {
                 socket.join(usernameLowerCase);
-                players.push(usernameLowerCase);//delete once Auth is complete
+                players.push(userCharacter);//delete once Auth is complete
                 io.to(usernameLowerCase).emit('log in', userCharacter);
                 console.log(`${userCharacter} is now fake logged in.`);
                 //find and retrieve user Data, join location room
@@ -45,16 +45,16 @@ const getUsers = (io, userLocation, playernicknames) => {
     currentUsersOfRoom = [];
     if (!(roomUsers === undefined)){
         for (const socketID of roomUsers.keys()) {
-            currentUsersOfRoom.push(playernicknames[socketID].nickname)
+            if (!(playernicknames[socketID] === undefined)){
+                currentUsersOfRoom.push(playernicknames[socketID].nickname)
+            }
         }
     }
     io.to(userLocation).emit('who', {currentUsersOfRoom, userLocation});
 }
 
 
-
-
 module.exports = {
     login,
-    getUsers
+    getUsers,
 }
