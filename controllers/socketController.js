@@ -42,9 +42,11 @@ module.exports = function (io) {
             players = players.filter(player => !(player === socket.nickname));
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
                 console.log(returnData);
-                if (!(returnData.lastLocation === null)){
-                    io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
-                    getUsers(io, returnData.lastLocation, playernicknames);
+                if (!(returnData === null)){
+                    if (!(returnData.lastLocation === null)){
+                        io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
+                        getUsers(io, returnData.lastLocation, playernicknames);
+                    }
                 }
             });
         })
