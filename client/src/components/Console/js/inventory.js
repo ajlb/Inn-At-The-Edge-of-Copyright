@@ -36,36 +36,38 @@ function showInventory(user, setChatHistory) {
     })
     inventoryArray.push(`\xa0\xa0`);
 
-    wearingArray.push(`You are wearing: `);
-
-    for (const bodyLocation in user.wornItems ) {
-        const slot = bodyLocation;
-        const wearableItem = user.WornItems[bodyLocation];
-
-        if (wearableItem){
-          wearingArray.push(`${wearableItem} on your ${slot.slice(0, -5)}`);
-        }
-
-    }
-    
-      wearingArray.push(`\xa0\xa0\xa0\xa0`);
-
-
     if(inventoryArray.length === 0){
-        setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `Your inventory is empty!`}]);
-        
-    }
-    if(wearingArray.length === 0){
-      setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `You appear to only be wearing underwear!`}]);
-      
+      setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `Your inventory is empty!`}]);
+    } else {
+      inventoryArray.forEach((item) => {
+        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
+      });
     }
 
-    inventoryArray.forEach((item) => {
-        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
-    });
-    wearingArray.forEach((item) => {
-        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
-    });
+/*
+WEARABLES
+*/
+
+    wearingArray.push(`You are wearing: `);
+    for (const bodyLocation in user.wornItems ) {
+        let slot = bodyLocation.slice(0, -4);
+        let wearableItem = user.wornItems[bodyLocation];
+          console.log(bodyLocation, wearableItem);
+        if (wearableItem !== null) {
+          wearingArray.push(`${wearableItem} on your ${slot}`);
+        }
+    }
+    wearingArray.push(`\xa0\xa0\xa0\xa0`);
+
+
+    if(wearingArray.length === 2){
+      setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `You appear to only be wearing underwear!`}]);
+    } else {
+      wearingArray.forEach((item) => {
+          setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
+      });
+    }
+
 }
 
 export {
