@@ -6,7 +6,6 @@ import findIn, { takeTheseOffThat, getOneOfTheseOffThat } from "../../clientUtil
 import { useEffect } from 'react';
 import socket from "../../clientUtilities/socket";
 import { getItem, dropItem } from "./js/getDrop";
-import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
 import { wear, remove } from "./js/wearRemove";
@@ -14,15 +13,15 @@ import { showStats } from "./js/stats";
 import { showInventory } from "./js/inventory";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
-import DiscoverableCalls, { callFunctionMap } from "../../clientUtilities/discoverablesCalls";
-import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
+// import DiscoverableCalls, { callFunctionMap } from "../../clientUtilities/discoverablesCalls";
+// import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 import { lookAbout } from './js/look';
+import processMove from './js/move';
 import runExamine from './js/examine';
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
 //constant variables for parsing
-const DIRECTIONS = { n: "north", e: "east", s: "south", w: "west" };
 
 
 function InputPanel({
@@ -74,7 +73,10 @@ function InputPanel({
         setInputHistory(prevState => [...prevState, input])
 
 
-        //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
+        ////////////////////////////////
+        //        USER ACTIONS        //
+        ////////////////////////////////
+
         if (user.characterName === undefined) {
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
                 console.log("log on: " + input);
@@ -86,25 +88,7 @@ function InputPanel({
         } else if (user.characterName === "newUser") {
             socket.emit('newUser', { input, email: authUser.email });
         } else if (findIn(input, actionCalls.whisper)) {
-            let message;
-            // If it starts with one of these two-word commands, it will remove the first two words from the message, if not, it will just remove the first word
-            // ie: 
-            //   whisper to Nick Hello there! 
-            // becomes
-            //   Nick Hello there!
-            // and
-            //   /w Shambles General Kenobi...
-            // becomes
-            //   Shambles General Kenobi...
-            if (findIn(input, ['whisper to', 'speak to', 'tell to', 'say to', 'talk to'])) {
-                message = input.split(' ').slice(2).join(' ');
-                console.log('option 1');
-                console.log(message);
-            } else {
-                message = input.split(' ').slice(1).join(' ');
-                console.log('option 2');
-                console.log(message);
-            }
+            let message = takeTheseOffThat(actionCalls.whisper, input);
 
             NPCCheck(location.current.NPCs, message)
                 .then(({ NPCName, message }) => {
@@ -145,30 +129,11 @@ function InputPanel({
             }
         } else if (!inConversation) {
             // Everything in here cannot be run while in a conversation with an NPC
-            if (findIn(input, DiscoverableCalls.get(location.current.locationName))) {
-                console.log('something discoverable is happening');
-            } else if (findIn(input, actionCalls.move)) {
-                if (playerPosition === "standing") {
-                    let direction = takeTheseOffThat(actionCalls.move, input);
-                    for (const param in DIRECTIONS) {
-                        if (direction.toLowerCase() === param) {
-                            direction = DIRECTIONS[param];
-                        }
-                    }
-                    let moved = false;
-                    for (const param in location) {
-                        if (param === direction) {
-                            socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user: user.characterName });
-                            moved = true;
-                        }
-                    }
-                    if (moved === false) {
-                        socket.emit('failure', `There is no exit ${direction}`);
-                    }
-                } else {
-                    setChatHistory(prevState => [...prevState, { type: "displayed-error", text: 'You have to stand up to do that!' }]);
-
-                }
+            // if (findIn(input, DiscoverableCalls.get(location.current.locationName))) {
+            //     console.log('something discoverable is happening');
+            // } else 
+            if (findIn(input, actionCalls.move)) {
+               processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls);
             } else if (findIn(input, actionCalls.speak)) {
                 const message = takeTheseOffThat(actionCalls.speak, input);
                 socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
