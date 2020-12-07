@@ -14,8 +14,8 @@ import { showStats } from "./js/stats";
 import { showInventory } from "./js/inventory";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
-import DiscoverableCalls, { callFunctionMap } from "../../clientUtilities/discoverablesCalls";
-import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
+import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
+// import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 import { lookAbout } from './js/look';
 import runExamine from './js/examine';
 
@@ -24,9 +24,7 @@ let inputHistoryIndex;
 //constant variables for parsing
 const DIRECTIONS = { n: "north", e: "east", s: "south", w: "west" };
 
-
 function InputPanel({
-
     // Props being handed to the input by the console component
     onBlur,
     onSelect,
@@ -62,17 +60,15 @@ function InputPanel({
         setInput(e.target.value)
     }
 
-
     socket.off('YouCanLogIn').on('YouCanLogIn', () => {
         socket.emit("log in", authUser.email);
     })
 
     //action on enter key
-    const handleMessage = (event, type = "displayed-stat") => {
+    const handleMessage = (event) => {
         event.preventDefault();
 
         setInputHistory(prevState => [...prevState, input])
-
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
         if (user.characterName === undefined) {
@@ -87,15 +83,6 @@ function InputPanel({
             socket.emit('newUser', { input, email: authUser.email });
         } else if (findIn(input, actionCalls.whisper)) {
             let message;
-            // If it starts with one of these two-word commands, it will remove the first two words from the message, if not, it will just remove the first word
-            // ie: 
-            //   whisper to Nick Hello there! 
-            // becomes
-            //   Nick Hello there!
-            // and
-            //   /w Shambles General Kenobi...
-            // becomes
-            //   Shambles General Kenobi...
             if (findIn(input, ['whisper to', 'speak to', 'tell to', 'say to', 'talk to'])) {
                 message = input.split(' ').slice(2).join(' ');
                 console.log('option 1');
@@ -243,8 +230,6 @@ function InputPanel({
     }
 
 
-
-    // }
     //display previous commands on key up, key down
     const keyDownResults = (event) => {
 
