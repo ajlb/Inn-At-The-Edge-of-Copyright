@@ -7,9 +7,7 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
-import LoginButton from "../auth/LoginButton";
 import { useAuth0 } from "@auth0/auth0-react";
-import LogoutButton from "../auth/LogoutButton";
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -98,11 +96,11 @@ function Console() {
     if (message === "new user") {
       setPlayer({
         ...player,
-        characterName:"newUser"
+        characterName: "newUser"
       });
-      setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: 'Please enter a name for your new character!'}]);
-      setChatHistory(prevState => [...prevState, {type: 'displayed-green', text: 'Your name must be no more than three words, and cannot be offensive.'}]);
-      
+      setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: 'Please enter a name for your new character!' }]);
+      setChatHistory(prevState => [...prevState, { type: 'displayed-green', text: 'Your name must be no more than three words, and cannot be offensive.' }]);
+
     } else {
       let type = 'displayed-error';
       setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
