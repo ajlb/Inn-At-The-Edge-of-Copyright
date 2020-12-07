@@ -37,7 +37,6 @@ const findLocationData = (locationName) => {
 
 
 const move = (socket, io, previousLocation, newLocation, direction, user) => {
-    console.log(user);
     if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
         io.to(previousLocation).emit('move', { actor: user, direction, cardinal: true, action: "leave" });
     } else {

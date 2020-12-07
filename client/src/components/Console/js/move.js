@@ -19,7 +19,7 @@ function makeMove(socket, location, characterName, direction){
     let moved = false;
     for (const param in location) {
         if (param === direction) {
-            socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user:characterName, queueLength:moveQueue.length() });
+            socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user:characterName });
             moved = true;
         }
     }
