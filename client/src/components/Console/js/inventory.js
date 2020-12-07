@@ -34,15 +34,18 @@ function showInventory(user, setChatHistory) {
     userInventory.forEach(param => {
         inventoryArray.push(`${param.quantity} ${pluralizeAppropriateWords(param.item.itemName, param.quantity)}`);
     })
-    inventoryArray.push(`\xa0\xa0\xa0\xa0`);
+    inventoryArray.push(`\xa0\xa0`);
 
     wearingArray.push(`You are wearing: `);
 
     for (const bodyLocation in user.wornItems ) {
         const slot = bodyLocation;
+        const wearableItem = user.WornItems[bodyLocation];
 
-        wearingArray.push(`${user.wornItems[bodyLocation]} on your ${slot.slice(0, -5)}`);
-    
+        if (wearableItem){
+          wearingArray.push(`${wearableItem} on your ${slot.slice(0, -5)}`);
+        }
+
     }
     
       wearingArray.push(`\xa0\xa0\xa0\xa0`);
