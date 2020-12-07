@@ -1,5 +1,4 @@
 function runExamine({ input, location, command, toExamine, user, setChatHistory }) {
-    console.log("You are attempting to examine", toExamine)
 
     function isInInventory(toExamine) {
         let foundItem = user.inventory.find(param => {

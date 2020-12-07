@@ -150,5 +150,13 @@ module.exports = [
     "waysToCall": "give",
     "exampleCall": "give a mushroom to Grizabella",
     "exampleResult": "You give a mushroom to Grizabella"
-  }
+  },
+  {
+    "actionName" : "whisper",
+    "commandBriefDescription" : "whisper privately to another character, or an NPC",
+    "commandLongDescription" : "When you type a whisper command, you will speak to another character privately. If you whisper to an NPC, it will initiate a converstation with them.",
+    "waysToCall" : "whisper, /w, whisper to, speak to, say to, tell, talk to",
+    "exampleCall" : "tell Chordori hello!",
+    "exampleResult" : "Whisper to Chordori: hello!"
+}
 ]
