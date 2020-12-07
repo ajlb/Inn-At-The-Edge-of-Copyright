@@ -1,9 +1,25 @@
 module.exports = [
   {
+    "actionName": "login",
+    "commandBriefDescription": "log into the game",
+    "commandLongDescription": "When you type a login command, you will open a log in pop up, which will allow you to enter your email and password, or use social login.",
+    "waysToCall": "login, log in",
+    "exampleCall": "log in",
+    "exampleResult": "Welcome, [characterName]! You have logged in!"
+  },
+  {
+    "actionName": "logout",
+    "commandBriefDescription": "log out of the game",
+    "commandLongDescription": "When you type a log out command, you will be logged out of your current session.",
+    "waysToCall": "logout, log out",
+    "exampleCall": "logout",
+    "exampleResult": "You have logged out."
+  },
+  {
     "actionName": "get",
     "commandBriefDescription": "Pick up an item",
     "commandLongDescription": "When you type a get command word followed by an item in your location that is free to pick up, you will add it to your inventory. If the item isn't free to pick up, you will get a result of 'You can't pick that up!'",
-    "waysToCall": "get, g, pick up, grab",
+    "waysToCall": "get, /g, pick up, grab",
     "exampleCall": "get the branch",
     "exampleResult": "You pick up a branch"
   },
@@ -11,7 +27,7 @@ module.exports = [
     "actionName": "look",
     "commandBriefDescription": "You look around you.",
     "commandLongDescription": "When you type a look command word with nothing after it, you will look around your location, seeing the description, possible exits, and items nearby.",
-    "waysToCall": "look, l, look around",
+    "waysToCall": "look, /l, look around",
     "exampleCall": "look",
     "exampleResult": "You look around. --DESCRIPTION OF LOCATION, EXITS, ITEMS, IF ANY--"
   },
@@ -19,7 +35,7 @@ module.exports = [
     "actionName": "drop",
     "commandBriefDescription": "You drop an item",
     "commandLongDescription": "When you type a drop command word followed by an item in your inventory, you will drop it into your location.",
-    "waysToCall": "drop, d, discard",
+    "waysToCall": "drop, /d, discard",
     "exampleCall": "drop branch",
     "exampleResult": "You drop a branch"
   },
@@ -27,7 +43,7 @@ module.exports = [
     "actionName": "inventory",
     "commandBriefDescription": "You check your inventory",
     "commandLongDescription": "When you type an inventory command, you will recieve a list of all items in your inventory",
-    "waysToCall": "inventory, i, check inventory",
+    "waysToCall": "inventory, /i, check inventory",
     "exampleCall": "inventory",
     "exampleResult": "You have 3 mushrooms, 1 branch, and a frog."
   },
@@ -35,7 +51,7 @@ module.exports = [
     "actionName": "move",
     "commandBriefDescription": "You move through an exit",
     "commandLongDescription": "When you type a move command word followed by an available exit from your location, you will move in that direction.",
-    "waysToCall": "move, m, go, walk",
+    "waysToCall": "move, /m, go, walk",
     "exampleCall": "move north",
     "exampleResult": "You exit."
   },
@@ -43,7 +59,7 @@ module.exports = [
     "actionName": "speak",
     "commandBriefDescription": "You speak.",
     "commandLongDescription": "When you type a speak command word followed by other text, your other text will be spoken aloud to your location. For yelling, see yell.",
-    "waysToCall": "speak, say, talk, chat, s, t, c",
+    "waysToCall": "speak, say, /s",
     "exampleCall": "say Hello!",
     "exampleResult": "character: Hello!"
   },
@@ -59,7 +75,7 @@ module.exports = [
     "actionName": "remove",
     "commandBriefDescription": "You take off an item you are wearing.",
     "commandLongDescription": "When you type a remove command followed by an item you are wearing, you will take it off and add it to your inventory.",
-    "waysToCall": "take off, remove, doff",
+    "waysToCall": "take off, remove, /r, doff",
     "exampleCall": "remove green socks",
     "exampleResult": "You take off green socks."
   },
@@ -83,7 +99,7 @@ module.exports = [
     "actionName": "emote",
     "commandBriefDescription": "you describe an action",
     "commandLongDescription": "When you type an emote command word followed by text, the result will be displayed to the room as an action of your character.",
-    "waysToCall": "/me, emote",
+    "waysToCall": "/e, /me, emote",
     "exampleCall": "/me leans against a tree",
     "exampleResult": "You lean against a tree"
   },
@@ -92,7 +108,7 @@ module.exports = [
     "commandBriefDescription": "You go to sleep",
     "commandLongDescription": "When you type a sleep command while lying down, you will go to sleep and recover HP, but you will not be able to see or hear around you. If you are attacked, you will automatically wake up.",
     "waysToCall": "go to sleep, sleep",
-    "exampleCall": "sleep",
+    "exampleCall": "sleep, fall asleep",
     "exampleResult": "You fall into a deep slumber."
   },
   {
@@ -100,7 +116,7 @@ module.exports = [
     "commandBriefDescription": "You wake up",
     "commandLongDescription": "When you type a wake command while sleeping, you will wake up.",
     "waysToCall": "wake up, wake, awake, awaken",
-    "exampleCall": "wake up",
+    "exampleCall": "wake, wake up, awaken",
     "exampleResult": "You wake up."
   },
   {
@@ -115,7 +131,7 @@ module.exports = [
     "actionName": "help",
     "commandBriefDescription": "check command usage",
     "commandLongDescription": "When you type help, you will get a list of all game commands. When you type help followed by a game command, you will get that command's details.",
-    "waysToCall": "help",
+    "waysToCall": "/h, help, help [command]",
     "exampleCall": "help",
     "exampleResult": "--LIST OF GAME COMMANDS--"
   },
@@ -123,7 +139,7 @@ module.exports = [
     "actionName": "examine",
     "commandBriefDescription": "Look closely at an item",
     "commandLongDescription": "When you type an examine command word followed by an appropriate item, you will get a detailed description.",
-    "waysToCall": "examine, inspect",
+    "waysToCall": "examine, inspect, study",
     "exampleCall": "examine stick",
     "exampleResult": "You look closely at a stick. You see a dry, brown branch."
   },

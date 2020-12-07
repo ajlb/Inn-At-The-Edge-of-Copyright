@@ -10,6 +10,11 @@ import "./css/styles.css";
 import LoginButton from "../auth/LoginButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "../auth/LogoutButton";
+console.log('==========================================')
+console.log('==========================================')
+console.log(process.env.REACT_APP_SOCKET_STRING)
+console.log('==========================================')
+console.log('==========================================')
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -52,22 +57,22 @@ function Console() {
 
   const [actionCalls, setActionCalls] = useState({
     move: ['move', '/m', 'walk', 'exit'],
-    inventory: ['inventory', '/i'],
+    inventory: ['inventory', '/i', 'check inventory'],
     speak: ['speak', 'say', '/s'],
     look: ['look', '/l'],
     help: ['help', '/h'],
     get: ['get', '/g', 'pick up'],
     drop: ['drop', 'discard', '/d'],
-    wear: ['wear', 'put on'],
-    remove: ['remove', '/r', 'take off'],
-    emote: ['emote', '/e'],
+    wear: ['wear', 'put on', 'don'],
+    remove: ['remove', '/r', 'take off', "doff"],
+    emote: ['emote', '/e', "/me"],
     juggle: ['juggle'],
     stats: ['stats'],
     sleep: ['sleep', 'fall asleep'],
     wake: ['wake', 'wake up', 'awaken'],
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
-    examine: ['examine', 'study'],
+    examine: ['examine', 'study', 'inspect'],
     whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
   });
 
@@ -98,11 +103,11 @@ function Console() {
     if (message === "new user") {
       setPlayer({
         ...player,
-        characterName:"newUser"
+        characterName: "newUser"
       });
-      setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: 'Please enter a name for your new character!'}]);
-      setChatHistory(prevState => [...prevState, {type: 'displayed-green', text: 'Your name must be no more than three words, and cannot be offensive.'}]);
-      
+      setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: 'Please enter a name for your new character!' }]);
+      setChatHistory(prevState => [...prevState, { type: 'displayed-green', text: 'Your name must be no more than three words, and cannot be offensive.' }]);
+
     } else {
       let type = 'displayed-error';
       setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
