@@ -7,14 +7,7 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
-import LoginButton from "../auth/LoginButton";
 import { useAuth0 } from "@auth0/auth0-react";
-import LogoutButton from "../auth/LogoutButton";
-console.log('==========================================')
-console.log('==========================================')
-console.log(process.env.REACT_APP_SOCKET_STRING)
-console.log('==========================================')
-console.log('==========================================')
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
