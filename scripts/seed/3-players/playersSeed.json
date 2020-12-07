@@ -326,5 +326,44 @@
       "twoHands": null
     },
     "day": true
+  },
+  {
+    "characterName": "Mando The Mandalorian",
+    "email": "estrada.mando7@gmail.com",
+    "isLiving": true,
+    "isAwake": true,
+    "isOnline": false,
+    "isNPC": false,
+    "stats": {
+      "WIS": 14,
+      "DEX": 13,
+      "STR": 10,
+      "HP": 9,
+      "maxWIS": 50,
+      "maxDEX": 50,
+      "maxSTR": 50,
+      "maxHP": 50,
+      "XP": 0,
+      "level": 1
+    },
+    "race": "human",
+    "abilities": "NULL",
+    "inventory": [],
+    "lastLocation": "Inn Lobby",
+    "backstory": "NULL",
+    "description": "Mando The Mandalorian is a human sandwich-maker",
+    "wornItems": {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "ringSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
+    "day": true
   }
 ]

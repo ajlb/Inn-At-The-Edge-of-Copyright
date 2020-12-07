@@ -274,7 +274,6 @@ function ChatPanel({
         });
     });
 
-<<<<<<< HEAD
 //         let exampleArray = [];
 
 //         actionData.map((helpItem) => {
@@ -290,23 +289,6 @@ function ChatPanel({
 //             setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
 //         });
 //     });
-=======
-        //     let exampleArray = [];
-
-        //     actionData.map((helpItem) => {
-        //         exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
-        //         setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
-        //     });
-
-
-        //     let commandLongArray = [];
-
-        //     actionData.map((helpItem) => {
-        //         commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
-        //         setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
-        //     });
-        // });
->>>>>>> plover
 
 
         //newArray.forEach((help) => {
@@ -316,7 +298,7 @@ function ChatPanel({
         // ${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
         //${helpItem.commandLongDescription}    ${helpItem.waysToCall}
         // ${helpItem.exampleCall}     ${helpItem.exampleResult}
-    });
+
 
 
 
