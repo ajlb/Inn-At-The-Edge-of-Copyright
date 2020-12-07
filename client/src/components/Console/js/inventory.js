@@ -26,7 +26,7 @@ function showInventory(user, setChatHistory) {
     const inventoryArray = [];
     const wearingArray = [];
     const userInventory = user.inventory;
-    const wornItems = user.wornItems;
+    //const wornItems = user.wornItems;
 
     inventoryArray.push(`\xa0\xa0\xa0\xa0`);
     inventoryArray.push(`You are carrying: `);
@@ -36,13 +36,16 @@ function showInventory(user, setChatHistory) {
     })
     inventoryArray.push(`\xa0\xa0\xa0\xa0`);
 
-    wearingArray.push(`\xa0\xa0\xa0\xa0`);
     wearingArray.push(`You are wearing: `);
 
-    for (const bodyLocation in wornItems ) {
-        wearingArray.push(`${wornItems[bodyLocation]} on your ${bodyLocation}`);
+    for (const bodyLocation in user.wornItems ) {
+        const slot = bodyLocation;
+
+        wearingArray.push(`${user.wornItems[bodyLocation]} on your ${slot.slice(0, -5)}`);
+    
     }
-    wearingArray.push(`\xa0\xa0\xa0\xa0`);
+    
+      wearingArray.push(`\xa0\xa0\xa0\xa0`);
 
 
     if(inventoryArray.length === 0){
@@ -52,11 +55,7 @@ function showInventory(user, setChatHistory) {
     if(wearingArray.length === 0){
       setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `You appear to only be wearing underwear!`}]);
       
-  }
-    // const deletedItems = inventoryArray.slice(0, 4);
-    // const newDeletedItems = inventoryArray.slice(8, 10);
-
-    // const newArray = deletedItems.concat(newDeletedItems)
+    }
 
     inventoryArray.forEach((item) => {
         setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
