@@ -18,15 +18,12 @@ import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
 import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 import { lookAbout } from './js/look';
 
-
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
 //constant variables for parsing
 const DIRECTIONS = { n: "north", e: "east", s: "south", w: "west" };
 
-
 function InputPanel({
-
     // Props being handed to the input by the console component
     onBlur,
     onSelect,
@@ -47,7 +44,6 @@ function InputPanel({
     setConversation
 }) {
 
-
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
     const authUser = useAuth0().user;
 
@@ -63,8 +59,7 @@ function InputPanel({
         setInput(e.target.value)
     }
 
-
-    socket.off('YouCanLogIn').on('YouCanLogIn', ()=>{
+    socket.off('YouCanLogIn').on('YouCanLogIn', () => {
         socket.emit("log in", authUser.email);
     })
 
@@ -73,7 +68,6 @@ function InputPanel({
         event.preventDefault();
 
         setInputHistory(prevState => [...prevState, input])
-
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
         if (user.characterName === undefined) {
@@ -85,18 +79,9 @@ function InputPanel({
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (user.characterName === "newUser") {
-            socket.emit('newUser', {input, email:authUser.email});
+            socket.emit('newUser', { input, email: authUser.email });
         } else if (findIn(input, actionCalls.whisper)) {
             let message;
-            // If it starts with one of these two-word commands, it will remove the first two words from the message, if not, it will just remove the first word
-            // ie: 
-            //   whisper to Nick Hello there! 
-            // becomes
-            //   Nick Hello there!
-            // and
-            //   /w Shambles General Kenobi...
-            // becomes
-            //   Shambles General Kenobi...
             if (findIn(input, ['whisper to', 'speak to', 'tell to', 'say to', 'talk to'])) {
                 message = input.split(' ').slice(2).join(' ');
                 console.log('option 1');
