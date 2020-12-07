@@ -41,7 +41,6 @@ module.exports = function (io) {
             console.log(`${socket.id} disconnected...`);
             players = players.filter(player => !(player === socket.nickname));
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
-                console.log(returnData);
                 if (!(returnData === null)){
                     if (!(returnData.lastLocation === null)){
                         io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
@@ -98,7 +97,6 @@ module.exports = function (io) {
         socket.on('logout', location => {
             players = players.filter(player => !(player === socket.nickname));
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
-                console.log(returnData);
                 if (!(location === null)){
                     io.to(location).emit('logout', `${socket.nickname} disappears into the ether.`);
                     getUsers(io, location, playernicknames);
@@ -111,7 +109,6 @@ module.exports = function (io) {
         /*    CREATE NEW CHARACTER   */
         /*****************************/
         socket.on('newUser', ({ input, email }) => {
-            console.log(input, email);
             validateName(io, socket, input, email).then(success => {
                 success && createCharacter(input, email);
             }).then(() => {
@@ -137,9 +134,6 @@ module.exports = function (io) {
         /*          WHISPER          */
         /*****************************/
         socket.on('whisper', ({ message, user }) => {
-            console.log('in socketController');
-            console.log("message", message);
-            console.log("user", user);
             whisper(socket, io, message, players, user);
         })
 
@@ -194,14 +188,11 @@ module.exports = function (io) {
         socket.on('help', ({ message }) => {
             // db for all the actions/their descriptions and whatnot
             // emit object back to client and parse there
-            console.log('helped message recieved');
-            console.log(message);
             let emptyMessage = false;
             emptyMessage = (message === undefined) && true;
             emptyMessage = (!emptyMessage && (message.trim() === "")) && true;
             db.Action.find({})
                 .then(actionData => {
-                    console.log(actionData);
                     if (emptyMessage) {//just send general help
                         io.to(socket.id).emit('help', { actionData, type: "whole" });
                     } else {
@@ -265,7 +256,6 @@ module.exports = function (io) {
         });
 
         socket.on('emote', ({ user, emotion, location }) => {
-            console.log(`${user} ${emotion}`);
             io.to(location).emit('emote', { user, emotion });
         });
 
@@ -391,7 +381,6 @@ module.exports = function (io) {
         /* DAY/NIGHT - USER LOCATION */
         /*****************************/
         socket.on('joinRequest', (message) => {
-            console.log('backEngine wants to join backEngine');
             socket.join(message);
         });
     })

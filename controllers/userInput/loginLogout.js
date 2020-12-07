@@ -4,13 +4,12 @@ const mongoose = require("mongoose");
 
 function login(socket, io, userCharacter, players){
     return new Promise(function(resolve, reject){
-            console.log(`${userCharacter} wants to log in.`);
             const usernameLowerCase = userCharacter.toLowerCase();
             if (players.indexOf(userCharacter) === -1) {
                 socket.join(usernameLowerCase);
                 players.push(userCharacter);//delete once Auth is complete
                 io.to(usernameLowerCase).emit('log in', userCharacter);
-                console.log(`${userCharacter} is now fake logged in.`);
+                console.log(`${userCharacter} is now logged in.`);
                 //find and retrieve user Data, join location room
                 db.Player.findOneAndUpdate({ characterName: userCharacter }, { $set: { isAwake: true, isOnline: true } }, { new: true })
                 .select("-password")

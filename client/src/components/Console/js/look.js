@@ -1,4 +1,7 @@
-import pluralize from "pluralize";
+import { pluralizeAppropriateWords } from "./inventory";
+
+
+
 
 function lookAbout(location, setChatHistory) {
     console.log(location)
@@ -7,7 +10,7 @@ function lookAbout(location, setChatHistory) {
     const availableNPCs = [];
 
     location.current.inventory.forEach(param => {
-        inventoryArray.push(`${param.quantity} ${pluralize(param.item.itemName, param.quantity)}.`);
+        inventoryArray.push(`${param.quantity} ${pluralizeAppropriateWords(param.item.itemName, param.quantity)}.`);
     })
 
     location.current.NPCs.forEach(npc => {
