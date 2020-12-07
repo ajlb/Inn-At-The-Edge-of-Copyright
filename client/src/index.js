@@ -4,8 +4,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Auth0Provider } from '@auth0/auth0-react';
-import dotenv from "dotenv";
-dotenv.config();
 
 ReactDOM.render(
   <React.StrictMode>
