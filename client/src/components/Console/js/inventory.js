@@ -9,7 +9,7 @@ function pluralizeAppropriateWords(itemName, itemQuantity) {
     if (doesThisStartWithOneOfThese(itemName, MULTIPLES)) {
       if (itemQuantity > 1){
         for (const startWord of MULTIPLES){
-          if (startWord.endsWith("ch"), startWord.endsWith("x")){
+          if (startWord.endsWith("ch") || startWord.endsWith("x")){
             itemName = itemName.replace(startWord, startWord+"es");
           } else {
             itemName = itemName.replace(startWord, startWord+"s");
