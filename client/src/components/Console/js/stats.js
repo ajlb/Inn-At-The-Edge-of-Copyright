@@ -7,7 +7,7 @@ function showStats(user, setChatHistory) {
 
     for (const param in user.stats) {
 
-        statsArray.push(`${param}:  ${user.stats[param]}`);
+        statsArray.push(`${param}:  ${Math.floor(user.stats[param])}`);
     }
 
     const deletedItems = statsArray.slice(0, 4);
