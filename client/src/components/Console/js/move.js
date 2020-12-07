@@ -10,6 +10,7 @@ socket.off('moveQueueForeward').on('moveQueueForeward', ({chunk, characterName})
     !(moveQueue.isEmpty()) && moveQueue.dequeue();
     if (!(moveQueue.isEmpty())){
         let thisMove = moveQueue.peek();
+        console.log(thisMove);
         makeMove(socket, chunk, characterName, thisMove.direction);
     }
 })
@@ -24,6 +25,7 @@ function makeMove(socket, location, characterName, direction){
     }
     if (moved === false) {
         socket.emit('failure', `There is no exit ${direction}`);
+        moveQueue.dequeue();
     }
 }
 
