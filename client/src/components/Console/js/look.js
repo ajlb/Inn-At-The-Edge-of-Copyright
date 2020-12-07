@@ -16,7 +16,7 @@ function lookAbout(location, setChatHistory) {
         availableNPCs.push(`${npc.primaryName}`)
     })
 
-    // const exitDescriptors = [];
+    const exitDescriptors = [];
 
     for (const exitPath in location.current.exits) {
         exitDescriptors.push(`${exitPath}`);
