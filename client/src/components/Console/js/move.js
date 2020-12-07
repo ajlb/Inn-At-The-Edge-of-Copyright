@@ -1,7 +1,31 @@
+import socket from "../../../clientUtilities/socket";
 import { takeTheseOffThat } from "../../../clientUtilities/finders";
+import Queue from "../../../clientUtilities/Queue";
 
 const DIRECTIONS = { n: "north", e: "east", s: "south", w: "west" };
 
+let moveQueue = new Queue();
+
+socket.off('moveQueueForeward').on('moveQueueForeward', ({chunk, characterName})=>{
+    !(moveQueue.isEmpty()) && moveQueue.dequeue();
+    if (!(moveQueue.isEmpty())){
+        let thisMove = moveQueue.peek();
+        makeMove(socket, chunk, characterName, thisMove.direction);
+    }
+})
+
+function makeMove(socket, location, characterName, direction){
+    let moved = false;
+    for (const param in location) {
+        if (param === direction) {
+            socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user:characterName, queueLength:moveQueue.length() });
+            moved = true;
+        }
+    }
+    if (moved === false) {
+        socket.emit('failure', `There is no exit ${direction}`);
+    }
+}
 
 function processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls){
     if (playerPosition === "standing") {
@@ -11,16 +35,11 @@ function processMove(socket, location, user, input, playerPosition, setChatHisto
                 direction = DIRECTIONS[param];
             }
         }
-        let moved = false;
-        for (const param in location) {
-            if (param === direction) {
-                socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user: user.characterName });
-                moved = true;
-            }
+        moveQueue.enqueue({location:location.current.locationName, direction});
+        if (moveQueue.length() === 1){
+            makeMove(socket, location, user.characterName, direction);
         }
-        if (moved === false) {
-            socket.emit('failure', `There is no exit ${direction}`);
-        }
+
     } else {
         setChatHistory(prevState => [...prevState, { type: "displayed-error", text: 'You have to stand up to do that!' }]);
     

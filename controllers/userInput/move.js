@@ -37,6 +37,7 @@ const findLocationData = (locationName) => {
 
 
 const move = (socket, io, previousLocation, newLocation, direction, user) => {
+    console.log(user);
     if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
         io.to(previousLocation).emit('move', { actor: user, direction, cardinal: true, action: "leave" });
     } else {
@@ -59,6 +60,7 @@ const move = (socket, io, previousLocation, newLocation, direction, user) => {
         resolveLocationChunk(currentLocationData).then(chunk => {
             io.to(socket.id).emit('locationChunk', chunk);
             location = chunk;
+            io.to(socket.id).emit('moveQueueForeward', {locationChunk:chunk, characterName: socket.nickname});
         });
 
     })
