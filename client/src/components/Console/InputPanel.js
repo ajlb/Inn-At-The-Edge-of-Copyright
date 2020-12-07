@@ -49,7 +49,6 @@ function InputPanel({
 
     useEffect(() => {
         isAuthenticated && socket.emit("log in", authUser.email);
-        console.log(authUser);
         if (!(authUser === undefined)) {
             (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
         }
@@ -76,7 +75,6 @@ function InputPanel({
 
         if (user.characterName === undefined) {
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
-                console.log("log on: " + input);
                 loginWithRedirect();
                 // let message = takeTheseOffThat(["log in", "logon", "login", "log on"], input);
             } else {
@@ -89,7 +87,6 @@ function InputPanel({
 
             NPCCheck(location.current.NPCs, message)
                 .then(({ NPCName, message }) => {
-                    console.log(`To NPC named ${NPCName}: ${message}`)
                     socket.emit('to NPC', { toNPC: NPCName, message })
                 })
                 .catch(err => {
@@ -108,7 +105,6 @@ function InputPanel({
             showStats(user, setChatHistory, actionCalls.stats, input);
         } else if (findIn(input, actionCalls.help)) {
             let help = takeTheseOffThat(actionCalls.help, input);
-            console.log(help);
             socket.emit('help', { message: help });
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
@@ -148,7 +144,6 @@ function InputPanel({
                 remove(input, user, actionCalls.remove);
             } else if (findIn(input, actionCalls.emote)) {
                 const emoteThis = takeTheseOffThat(actionCalls.emote, input);
-                console.log(emoteThis);
                 socket.emit('emote', { user: user.characterName, emotion: emoteThis, location: location.current.locationName });
             } else if (findIn(input, actionCalls.sleep)) {
                 if (activities.sleeping) {
@@ -189,7 +184,6 @@ function InputPanel({
         } else if (inConversation) {
             NPCCheck(location.current.NPCs, inConversation.with)
                 .then(({ NPCName, message }) => {
-                    console.log(`To NPC named ${inConversation.with}: ${input}`)
                     socket.emit('to NPC', { toNPC: inConversation.with, message: input })
                 })
                 .catch(err => {

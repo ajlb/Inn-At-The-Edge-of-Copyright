@@ -7,7 +7,6 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
-import { useAuth0 } from "@auth0/auth0-react";
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -20,8 +19,6 @@ function Console() {
     theme: "",
     currentMessage: ""
   }
-
-  const { user, isAuthenticated } = useAuth0();
 
   const [location, setLocation] = useState({});
 
@@ -79,7 +76,6 @@ function Console() {
 
   // Socket log in message
   socket.off('log in').on('log in', message => {
-    console.log("got a log in message from socket");
     let type = 'displayed-stat';
     setPlayer({
       ...player,
@@ -91,7 +87,6 @@ function Console() {
 
   // Socket failed log in message
   socket.off('logFail').on('logFail', message => {
-    console.log("got a log in failure message from socket");
     if (message === "new user") {
       setPlayer({
         ...player,
@@ -116,9 +111,6 @@ function Console() {
 
   // Socket initial userData
   socket.off('playerData').on('playerData', message => {
-    console.log("recieved Player Data");
-
-    console.log(message);
     if (!(message === null)) {
       setPlayer(message);
     }
@@ -126,8 +118,6 @@ function Console() {
 
   //Socket updated userData
   socket.off('playerUpdate').on('playerUpdate', updatedPlayerData => {
-    console.log("player update");
-    console.log(updatedPlayerData.inventory);
     if (!(updatedPlayerData === null)) {
       setPlayer(updatedPlayerData);
     }
@@ -135,8 +125,6 @@ function Console() {
 
   // Socket player inventory update
   socket.off('invUpP').on('invUpP', message => {
-    console.log('Player Inventory');
-    console.log(message);
     if (!(message === null)) {
       setPlayer({
         ...player,
@@ -147,8 +135,6 @@ function Console() {
 
   // Socket location inventory update
   socket.off('invUpL').on('invUpL', message => {
-    console.log("location Inventory");
-    console.log(message);
     if (!(message === null)) {
       setLocation({
         ...location,
@@ -187,7 +173,9 @@ function Console() {
 
     fetch('https://ipapi.co/json/')
       .then(response => response.json())
-      .then(locationData => socket.emit('location', locationData));
+      .then(locationData => {
+        mounted && socket.emit('location', locationData)
+      });
 
     // sets a default chat history because chat history needs to be iterable to be mapped
     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }])
