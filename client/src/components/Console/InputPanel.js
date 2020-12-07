@@ -14,8 +14,8 @@ import { showStats } from "./js/stats";
 import { showInventory } from "./js/inventory";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
-import DiscoverableCalls, { callFunctionMap } from "../../clientUtilities/discoverablesCalls";
-import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
+import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
+// import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 import { lookAbout } from './js/look';
 import runExamine from './js/examine';
 
@@ -65,7 +65,7 @@ function InputPanel({
     })
 
     //action on enter key
-    const handleMessage = (event, type = "displayed-stat") => {
+    const handleMessage = (event) => {
         event.preventDefault();
 
         setInputHistory(prevState => [...prevState, input])
@@ -230,8 +230,6 @@ function InputPanel({
     }
 
 
-
-    // }
     //display previous commands on key up, key down
     const keyDownResults = (event) => {
 
