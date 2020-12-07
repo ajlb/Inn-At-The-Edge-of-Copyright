@@ -25,7 +25,16 @@ app.use(cors());
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
+if(process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https')
+      res.redirect(`https://${req.header('host')}${req.url}`)
+    else
+      next()
+  })
+}
+
+// app.use(enforce.HTTPS({ trustProtoHeader: true }));
 /* API ROUTES */
 app.use("/backAPI", APIBackroutes);
 app.use("/frontAPI", APIroutes);
