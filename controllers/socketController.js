@@ -134,6 +134,7 @@ module.exports = function (io) {
         /*          WHISPER          */
         /*****************************/
         socket.on('whisper', ({ message, user }) => {
+            console.log(message, user);
             whisper(socket, io, message, players, user);
         })
 
