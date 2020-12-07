@@ -1,6 +1,30 @@
 function runExamine({ input, location, command, toExamine, user, setChatHistory }) {
     console.log("You are attempting to examine", toExamine)
 
+    function isInInventory(toExamine) {
+        let foundItem = user.inventory.find(param => {
+            return param.item.itemName.includes(toExamine.trim())
+        })
+        if (foundItem) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function getAndDisplayInventoryItem(toExamine) {
+        let foundItem = user.inventory.find(param => {
+            return param.item.itemName.includes(toExamine.trim())
+        })
+        if (foundItem) {
+            setChatHistory(prevState => {
+                return [...prevState, { type: 'displayed-stat', text: `In your inventory you see ${foundItem.item.description}` }]
+            })
+        } else {
+            setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
+        }
+    }
+
     if (location.current.discoverables && toExamine.trim() !== '') {
         let discoverables = location.current.discoverables;
         let description;
@@ -24,23 +48,15 @@ function runExamine({ input, location, command, toExamine, user, setChatHistory 
                     return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
                 }
             })
+        } else if (isInInventory(toExamine)) {
+            getAndDisplayInventoryItem(toExamine)
         } else {
             setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
         }
     } else if (toExamine.trim() === '') {
         setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
-
-    } else {
-        let foundItem = user.inventory.find(param => {
-            return param.item.itemName.includes(toExamine.trim())
-        })
-        if (foundItem) {
-            setChatHistory(prevState => {
-                return [...prevState, { type: 'displayed-stat', text: `In your inventory you see ${foundItem.item.description}` }]
-            })
-        } else {
-            setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
-        }
+    } else if (isInInventory(toExamine)) {
+        getAndDisplayInventoryItem(toExamine)
     }
 }
 
