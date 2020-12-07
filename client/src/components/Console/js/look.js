@@ -18,9 +18,9 @@ function lookAbout(location, setChatHistory) {
 
     // const exitDescriptors = [];
 
-    // for (const exitPath in location.current.exits) {
-    //     exitDescriptors.push(`moving to the ${exitPath} would take you to the ${location.current.exits[exitPath]}.`);
-    // }
+    for (const exitPath in location.current.exits) {
+        exitDescriptors.push(`${exitPath}`);
+    }
 
     lookArray.push(`${location.current.dayDescription}`);
 
@@ -31,6 +31,8 @@ function lookAbout(location, setChatHistory) {
     if (availableNPCs.length > 0) {
         setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `You may want to speak to ${availableNPCs}.` }]);
     }
+
+    setChatHistory(prevState => [...prevState, { type: 'displayed-indent displayed-intro font-italic', text: `Exits: ${exitDescriptors.join(", ")}.` }]);
 
     setChatHistory(prevState => [...prevState, { type: 'displayed-indent displayed-intro font-italic', text: `In the room someone has left: ${inventoryArray.join(", ")}.` }]);
 
