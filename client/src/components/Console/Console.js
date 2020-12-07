@@ -66,7 +66,7 @@ function Console() {
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
     give: ['give'],
     examine: ['examine', 'study', 'inspect'],
-    whisper: ['whisper', '/w', 'whisper to', 'speak to', 'say to', 'tell', 'talk to'],
+    whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
   });
 
   //blur and select functions for input - to set min state

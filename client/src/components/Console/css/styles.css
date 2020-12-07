@@ -245,6 +245,10 @@ figure {
     margin-top: 8px;
 }
 
+.displayed-dimBlue {
+    color: rgb(100, 149, 204);
+}
+
 .displayed-indent {
     margin-left: 20px;
 }
