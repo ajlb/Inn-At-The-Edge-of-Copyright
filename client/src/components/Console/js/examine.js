@@ -1,5 +1,4 @@
 function runExamine({ input, location, command, toExamine, user, setChatHistory }) {
-    console.log("You are attempting to examine", toExamine)
 
     if (location.current.discoverables && toExamine.trim() !== '') {
         let discoverables = location.current.discoverables;

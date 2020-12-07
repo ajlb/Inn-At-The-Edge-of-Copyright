@@ -12,6 +12,7 @@ const backEngine = require("./controllers/backEngine");
 const APIBackroutes = require("./routes/API/backEngineAPI");
 const APIroutes = require("./routes/API/APIroutes");
 const APIadminRoutes = require("./routes/API/adminAPI");
+const enforce = require('express-sslify');
 
 
 // creating the io variable via the config folder
@@ -27,6 +28,7 @@ app.use(cors());
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 /* API ROUTES */
 
@@ -53,6 +55,7 @@ connection.once("open", function () {
 
 // Send every other request to the React app
 // Define any API routes before this runs
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });

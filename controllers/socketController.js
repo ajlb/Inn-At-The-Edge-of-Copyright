@@ -14,35 +14,10 @@ const { validateName, createCharacter } = require("./userInput/userCreation");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
-let users = {};
 let playernicknames = {};
 
 //temp things to simulate display while working on server side only
 location = {};
-
-
-
-//This function is called in logout and disconnect, and remains here due to it editing several of the user variables that live in this file
-function removePlayer(socketID, socket, io, playernicknames) {
-    return new Promise(function (resolve, reject) {
-        for (const user in users) {
-            if (users[user].socketID === socketID) {
-                io.to(socket.id).emit('logout', "You are now logged off.");
-                console.log(users[user].username + " logged off");
-                users[user].chatRooms.forEach(room => {
-                    socket.leave(room);
-                    io.to(room).emit('logout', `${socket.nickname} disappears into the ether.`)
-                    getUsers(io, room, playernicknames);
-                })
-                console.log(players);
-                console.log(socket.lowerName);
-                players = players.filter(player => !(player === socket.lowerName))
-                console.log(players);
-                delete users[user];
-            }
-        }
-    })
-}
 
 
 
@@ -64,9 +39,15 @@ module.exports = function (io) {
         /*****************************/
         socket.on('disconnect', () => {
             console.log(`${socket.id} disconnected...`);
-            // possibly do a DB call to state that the use is offline?
-            //for now just deleting the user
-            removePlayer(socket.id, socket, io, playernicknames);
+            players = players.filter(player => !(player === socket.nickname));
+            db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
+                if (!(returnData === null)){
+                    if (!(returnData.lastLocation === null)){
+                        io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
+                        getUsers(io, returnData.lastLocation, playernicknames);
+                    }
+                }
+            });
         })
 
 
@@ -89,13 +70,6 @@ module.exports = function (io) {
                                 //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
                                 socket.nickname = userCharacter;
                                 socket.lowerName = userCharacter.toLowerCase();
-                                users[socket.lowerName] = {
-                                    socketID: socket.id,
-                                    nickname: socket.nickname,
-                                    lowerName: socket.lowerName,
-                                    online: true,
-                                    chatRooms: [userLocation]
-                                };
                                 playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
 
                                 getUsers(io, userLocation, playernicknames);
@@ -121,8 +95,13 @@ module.exports = function (io) {
         /*           LOGOUT          */
         /*****************************/
         socket.on('logout', location => {
-            removePlayer(socket.id, socket, io, playernicknames);
-
+            players = players.filter(player => !(player === socket.nickname));
+            db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
+                if (!(location === null)){
+                    io.to(location).emit('logout', `${socket.nickname} disappears into the ether.`);
+                    getUsers(io, location, playernicknames);
+                }
+            });
         })
 
 
@@ -130,7 +109,6 @@ module.exports = function (io) {
         /*    CREATE NEW CHARACTER   */
         /*****************************/
         socket.on('newUser', ({ input, email }) => {
-            console.log(input, email);
             validateName(io, socket, input, email).then(success => {
                 success && createCharacter(input, email);
             }).then(() => {
@@ -144,15 +122,11 @@ module.exports = function (io) {
         /*****************************/
         socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
             move(socket, io, previousLocation, newLocation, direction, user);
-
             //leave and enter rooms
             socket.leave(previousLocation);
-            users[user.toLowerCase()].chatRooms = users[user.toLowerCase()].chatRooms.filter(room => !(room === previousLocation));
             getUsers(io, previousLocation, playernicknames);
-            users[user.toLowerCase()].chatRooms.push(newLocation);
             socket.join(newLocation);
             getUsers(io, newLocation, playernicknames);
-
         });
 
 
@@ -160,9 +134,7 @@ module.exports = function (io) {
         /*          WHISPER          */
         /*****************************/
         socket.on('whisper', ({ message, user }) => {
-            console.log('in socketController');
-            console.log("message", message);
-            console.log("user", user);
+            console.log(message, user);
             whisper(socket, io, message, players, user);
         })
 
@@ -214,211 +186,204 @@ module.exports = function (io) {
         /*****************************/
         /*            HELP           */
         /*****************************/
-        socket.on('help', ({ message}) => {
+        socket.on('help', ({ message }) => {
             // db for all the actions/their descriptions and whatnot
             // emit object back to client and parse there
-            console.log('helped message recieved');
-            console.log(message);
             let emptyMessage = false;
             emptyMessage = (message === undefined) && true;
             emptyMessage = (!emptyMessage && (message.trim() === "")) && true;
             db.Action.find({})
                 .then(actionData => {
-                    console.log(actionData);
                     if (emptyMessage) {//just send general help
-                        io.to(socket.id).emit('help', { actionData, type:"whole" });
+                        io.to(socket.id).emit('help', { actionData, type: "whole" });
                     } else {
                         const specificHelp = message.trim().toLowerCase();
                         const helpData = {};
-                        for (const item of actionData){
-                            if (item.actionName.startsWith(specificHelp)){
+                        for (const item of actionData) {
+                            if (item.actionName.startsWith(specificHelp)) {
                                 helpData["actionName"] = item.actionName;
                                 helpData["commandLongDescription"] = item.commandLongDescription;
                                 helpData["waysToCall"] = item.waysToCall;
                                 helpData["exampleCall"] = item.exampleCall;
                             }
                         }
-                        if (helpData["actionName"] === undefined){
+                        if (helpData["actionName"] === undefined) {
                             io.to(socket.id).emit('failure', `I can't find information on a "${message}" command.`)
                         } else {
-                            io.to(socket.id).emit('help', {actionData: helpData, type:"part"});
+                            io.to(socket.id).emit('help', { actionData: helpData, type: "part" });
                         }
                     }
                 })
-          
+
         });
 
 
-    /*****************************/
-    /*           LOOK            */
-    /*****************************/
-    socket.on('look', () => {
-        // db the user's location and emit necessary info
-    });
+        /*****************************/
+        /*           LOOK            */
+        /*****************************/
+        socket.on('look', () => {
+            // db the user's location and emit necessary info
+        });
 
 
-    /*****************************/
-    /*             GET           */
-    /*****************************/
-    socket.on('get', ({ target, itemId, user, location }) => {
-        getItem(socket, io, target, itemId, user, location);
-    });
+        /*****************************/
+        /*             GET           */
+        /*****************************/
+        socket.on('get', ({ target, itemId, user, location }) => {
+            getItem(socket, io, target, itemId, user, location);
+        });
 
 
-    /*****************************/
-    /*           DROP            */
-    /*****************************/
-    socket.on('drop', ({ target, itemId, user, location }) => {
-        dropItem(socket, io, target, itemId, user, location);
-    });
+        /*****************************/
+        /*           DROP            */
+        /*****************************/
+        socket.on('drop', ({ target, itemId, user, location }) => {
+            dropItem(socket, io, target, itemId, user, location);
+        });
 
-    /*****************************/
-    /*           WEAR            */
-    /*****************************/
-    socket.on('wear', ({ user, item, id, targetWords }) => {
-        wearItem(io, socket, user, item, id, targetWords);
-    });
-
-
-    /*****************************/
-    /*          REMOVE           */
-    /*****************************/
-    socket.on('remove', ({ user, item, targetSlot }) => {
-        removeItem(io, socket, user, item, targetSlot);
-    });
-
-    socket.on('emote', ({ user, emotion, location }) => {
-        console.log(`${user} ${emotion}`);
-        io.to(location).emit('emote', { user, emotion });
-    });
+        /*****************************/
+        /*           WEAR            */
+        /*****************************/
+        socket.on('wear', ({ user, item, id, targetWords }) => {
+            wearItem(io, socket, user, item, id, targetWords);
+        });
 
 
-    /*****************************/
-    /*           JUGGLE          */
-    /*****************************/
-    //initial juggle message
-    socket.on('juggle', ({ target, num, user, location }) => {
-        io.to(location).emit('juggle', { user: user.characterName, target, num })
-        io.to(user.characterName.toLowerCase()).emit('continueJuggle', { target, num, user, location });
+        /*****************************/
+        /*          REMOVE           */
+        /*****************************/
+        socket.on('remove', ({ user, item, targetSlot }) => {
+            removeItem(io, socket, user, item, targetSlot);
+        });
 
-    });
-
-    //juggle every five seconds, with chance of drop
-    socket.on('contJuggle', ({ target, num, user, location }) => {
-        io.to(location).emit('contJuggle', { user: user.characterName, target, num });
-    })
-
-    //stop juggle
-    socket.on('stop juggle', ({ user, location, target, intent }) => {
-        //user stopped on purpose
-        if (intent) {
-            io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage: `You neatly catch the ${target}, and stop juggling.` });
-            //user dropped their items, but got a little better at it
-        } else {
-            io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
-            //update player dex
-            incrementDex(user.characterName).then(updatedPlayerData => {
-                io.to(user.characterName.toLowerCase()).emit('playerUpdate', updatedPlayerData);
-            })
-        }
-    });
+        socket.on('emote', ({ user, emotion, location }) => {
+            io.to(location).emit('emote', { user, emotion });
+        });
 
 
-    /*****************************/
-    /*            GIVE           */
-    /*****************************/
-    socket.on('give', ({ target, item, itemId, user, location }) => {
-        giveItem(socket, io, target, item, itemId, user, location);
-    });
+        /*****************************/
+        /*           JUGGLE          */
+        /*****************************/
+        //initial juggle message
+        socket.on('juggle', ({ target, num, user, location }) => {
+            io.to(location).emit('juggle', { user: user.characterName, target, num })
+            io.to(user.characterName.toLowerCase()).emit('continueJuggle', { target, num, user, location });
 
+        });
 
-    /*****************************/
-    /*           STATS           */
-    /*****************************/
-    socket.on('stats', () => {
-        // db for player stats
-        // emit stats to player
-
-        db.Player.find({}).then((statsData) => {
-            io.to(socket.id).emit('stats', { statsData });
-
+        //juggle every five seconds, with chance of drop
+        socket.on('contJuggle', ({ target, num, user, location }) => {
+            io.to(location).emit('contJuggle', { user: user.characterName, target, num });
         })
-    });
 
-
-    /*****************************/
-    /*            SLEEP          */
-    /*****************************/
-    socket.on('sleep', ({ userToSleep, location }) => {
-        goToSleep(userToSleep).then(userWasAwake => {
-            if (userWasAwake) {
-                io.to(location).emit('sleep', { userToSleep });
-                socket.leave(location);
-                users[userToSleep.toLowerCase()].chatRooms = users[userToSleep.toLowerCase()].chatRooms.filter(room => !(room === location));
+        //stop juggle
+        socket.on('stop juggle', ({ user, location, target, intent }) => {
+            //user stopped on purpose
+            if (intent) {
+                io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage: `You neatly catch the ${target}, and stop juggling.` });
+                //user dropped their items, but got a little better at it
             } else {
-                io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping." });
+                io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
+                //update player dex
+                incrementDex(user.characterName).then(updatedPlayerData => {
+                    io.to(user.characterName.toLowerCase()).emit('playerUpdate', updatedPlayerData);
+                })
             }
         });
-    });
 
-    /*****************************/
-    /*             WAKE          */
-    /*****************************/
-    socket.on('wake', ({ userToWake, location }) => {
-        wakeUp(userToWake).then(userWasSleeping => {
-            if (userWasSleeping) {
-                socket.join(location);
-                users[userToWake.toLowerCase()].chatRooms.push(location);
-                io.to(location).emit('wake', { userToWake });
-            } else {
-                io.to(socket.id).emit('error', { status: 400, message: "You are already awake." });
-            }
+
+        /*****************************/
+        /*            GIVE           */
+        /*****************************/
+        socket.on('give', ({ target, item, itemId, user, location }) => {
+            giveItem(socket, io, target, item, itemId, user, location);
         });
-    });
 
 
-    /*****************************/
-    /*          POSITION         */
-    /*****************************/
-    socket.on('position', () => {
-        //  db for player position
-        // emit position to player
-    });
+        /*****************************/
+        /*           STATS           */
+        /*****************************/
+        socket.on('stats', () => {
+            // db for player stats
+            // emit stats to player
+
+            db.Player.find({}).then((statsData) => {
+                io.to(socket.id).emit('stats', { statsData });
+
+            })
+        });
+
+
+        /*****************************/
+        /*            SLEEP          */
+        /*****************************/
+        socket.on('sleep', ({ userToSleep, location }) => {
+            goToSleep(userToSleep).then(userWasAwake => {
+                if (userWasAwake) {
+                    io.to(location).emit('sleep', { userToSleep });
+                    socket.leave(location);
+                } else {
+                    io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping." });
+                }
+            });
+        });
+
+        /*****************************/
+        /*             WAKE          */
+        /*****************************/
+        socket.on('wake', ({ userToWake, location }) => {
+            wakeUp(userToWake).then(userWasSleeping => {
+                if (userWasSleeping) {
+                    socket.join(location);
+                    io.to(location).emit('wake', { userToWake });
+                } else {
+                    io.to(socket.id).emit('error', { status: 400, message: "You are already awake." });
+                }
+            });
+        });
+
+
+        /*****************************/
+        /*          POSITION         */
+        /*****************************/
+        socket.on('position', () => {
+            //  db for player position
+            // emit position to player
+        });
 
 
 
 
-    /*****************************/
-    /*        DAY/NIGHT          */
-    /*****************************/
-    socket.on('dayNight', ({ day, user }) => {
-        io.to(user.toLowerCase()).emit('dayNight', day);
-    });
+        /*****************************/
+        /*        DAY/NIGHT          */
+        /*****************************/
+        socket.on('dayNight', ({ day, user }) => {
+            io.to(user.toLowerCase()).emit('dayNight', day);
+        });
 
 
-    /*****************************/
-    /* DAY/NIGHT - DATA REQUEST  */
-    /*****************************/
-    socket.on('dataRequest', () => {
-        io.emit('dataRequest', users)
-    });
+        /*****************************/
+        /* DAY/NIGHT - DATA REQUEST  */
+        /*****************************/
+        socket.on('dataRequest', () => {
+            io.emit('dataRequest', playernicknames) //changed this from users, have not yet changed day/night to reflect this, since day/night is not currently working.
+        });
 
 
-    /*****************************/
-    /* DAY/NIGHT - USER LOCATION */
-    /*****************************/
-    socket.on('location', (locationData) => {
-        io.to('backEngine').emit('location', { locationData, id: socket.id });
-    });
+        /*****************************/
+        /* DAY/NIGHT - USER LOCATION */
+        /*****************************/
+        socket.on('location', (locationData) => {
+            io.to('backEngine').emit('location', { locationData, id: socket.id });
+        });
 
 
-    /*****************************/
-    /* DAY/NIGHT - USER LOCATION */
-    /*****************************/
-    socket.on('joinRequest', (message) => {
-        console.log('backEngine wants to join backEngine');
-        socket.join(message);
-    });
-})
+        /*****************************/
+        /* DAY/NIGHT - USER LOCATION */
+        /*****************************/
+        socket.on('joinRequest', (message) => {
+            socket.join(message);
+        });
+    })
 
 }

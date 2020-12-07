@@ -64,23 +64,27 @@ function remove(input, playerData, removeCalls) {
     let itemMatches = [];
 
     for (const slot in playerData.wornItems) {
-        if (playerData.wornItems[slot] === inputItem) {
+        const slotItem = playerData.wornItems[slot];
+        if (slotItem === inputItem) {
             potentialArray.push(slot);
             if ((slot.toLowerCase() === (targetSlot + 'slot')) || (targetSlot === false)) {
+                console.log('exact match: ' + slot, inputItem);
                 socket.emit('remove', { user: playerData.characterName, item: inputItem, targetSlot:slot });
                 return true;
             }
-        } else if (!(playerData.wornItems[slot] === null)) {
-            if (((playerData.wornItems[slot].startsWith(inputItem)) || (playerData.wornItems[slot].endsWith(inputItem))) && (slot.toLowerCase() === (targetSlot + 'slot'))) {
-                socket.emit('remove', { user: playerData.characterName, item: playerData.wornItems[slot], targetSlot:slot });
+        } else if (!(slotItem === null)) {
+            if (((slotItem.startsWith(inputItem)) || (slotItem.endsWith(inputItem))) && (slot.toLowerCase() === (targetSlot + 'slot'))) {
+                socket.emit('remove', { user: playerData.characterName, item: slotItem, targetSlot:slot });
                 return true;
-            } else if (((playerData.wornItems[slot].startsWith(inputItem)) || (playerData.wornItems[slot].endsWith(inputItem))) && (targetSlot === false)) {
-                itemMatches.push(playerData.wornItems[slot]);
+            } else if (((slotItem.startsWith(inputItem)) || (slotItem.endsWith(inputItem))) && (targetSlot === false)) {
+                itemMatches.push(slotItem);
+                potentialArray.push(slot);
             }
 
         }
     }
     if (itemMatches.length === 1) {
+        console.log('One Match: ' + itemMatches[0]);
         socket.emit('remove', { user: playerData.characterName, item: itemMatches[0], targetSlot: potentialArray[0] });
         return true;
     } else if (itemMatches.length > 1) {
