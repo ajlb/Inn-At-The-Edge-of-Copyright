@@ -21,10 +21,6 @@ require('./controllers/socketController')(io);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
-// Serve up static assets (usually on heroku)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
 if(process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
     if (req.header('x-forwarded-proto') !== 'https')
@@ -32,8 +28,12 @@ if(process.env.NODE_ENV === 'production') {
     else
       next()
   })
+  app.use(express.static("client/build"));
 }
-
+// Serve up static assets (usually on heroku)
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static("client/build"));
+// }
 // app.use(enforce.HTTPS({ trustProtoHeader: true }));
 /* API ROUTES */
 app.use("/backAPI", APIBackroutes);
