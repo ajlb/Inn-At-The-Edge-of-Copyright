@@ -40,7 +40,7 @@ function showInventory(user, setChatHistory) {
     wearingArray.push(`You are wearing: `);
 
     for (const bodyLocation in wornItems ) {
-        wearingArray.push(`${pluralizeAppropriateWords(wornItems[bodyLocation])} on your ${bodyLocation}`);
+        wearingArray.push(`${wornItems[bodyLocation]} on your ${bodyLocation}`);
     }
     wearingArray.push(`\xa0\xa0\xa0\xa0`);
 
