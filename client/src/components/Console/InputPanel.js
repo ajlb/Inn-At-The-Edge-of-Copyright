@@ -13,7 +13,7 @@ import { showStats } from "./js/stats";
 import { showInventory } from "./js/inventory";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
-// import DiscoverableCalls, { callFunctionMap } from "../../clientUtilities/discoverablesCalls";
+// import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
 // import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 import { lookAbout } from './js/look';
 import processMove from './js/move';
@@ -23,9 +23,7 @@ import runExamine from './js/examine';
 let inputHistoryIndex;
 //constant variables for parsing
 
-
 function InputPanel({
-
     // Props being handed to the input by the console component
     onBlur,
     onSelect,
@@ -61,13 +59,12 @@ function InputPanel({
         setInput(e.target.value)
     }
 
-
     socket.off('YouCanLogIn').on('YouCanLogIn', () => {
         socket.emit("log in", authUser.email);
     })
 
     //action on enter key
-    const handleMessage = (event, type = "displayed-stat") => {
+    const handleMessage = (event) => {
         event.preventDefault();
 
         setInputHistory(prevState => [...prevState, input])
@@ -208,8 +205,6 @@ function InputPanel({
     }
 
 
-
-    // }
     //display previous commands on key up, key down
     const keyDownResults = (event) => {
 

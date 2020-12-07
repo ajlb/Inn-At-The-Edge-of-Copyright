@@ -24,7 +24,9 @@ function pluralizeAppropriateWords(itemName, itemQuantity) {
 
 function showInventory(user, setChatHistory) {
     const inventoryArray = [];
+    const wearingArray = [];
     const userInventory = user.inventory;
+    //const wornItems = user.wornItems;
 
     inventoryArray.push(`\xa0\xa0\xa0\xa0`);
     inventoryArray.push(`You are carrying: `);
@@ -32,25 +34,40 @@ function showInventory(user, setChatHistory) {
     userInventory.forEach(param => {
         inventoryArray.push(`${param.quantity} ${pluralizeAppropriateWords(param.item.itemName, param.quantity)}`);
     })
-    inventoryArray.push(`\xa0\xa0\xa0\xa0`);
-
+    inventoryArray.push(`\xa0\xa0`);
 
     if(inventoryArray.length === 0){
-        setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `Your inventory is empty!`}]);
-        
+      setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `Your inventory is empty!`}]);
+    } else {
+      inventoryArray.forEach((item) => {
+        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
+      });
     }
 
-    // const deletedItems = inventoryArray.slice(0, 4);
-    // const newDeletedItems = inventoryArray.slice(8, 10);
+/*
+WEARABLES
+*/
 
-    // const newArray = deletedItems.concat(newDeletedItems)
+    wearingArray.push(`You are wearing: `);
+    for (const bodyLocation in user.wornItems ) {
+        let slot = bodyLocation.slice(0, -4);
+        let wearableItem = user.wornItems[bodyLocation];
+          console.log(bodyLocation, wearableItem);
+        if (wearableItem !== null) {
+          wearingArray.push(`${wearableItem} on your ${slot}`);
+        }
+    }
+    wearingArray.push(`\xa0\xa0\xa0\xa0`);
 
-    inventoryArray.forEach((item) => {
 
-        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
+    if(wearingArray.length === 2){
+      setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: `You appear to only be wearing underwear!`}]);
+    } else {
+      wearingArray.forEach((item) => {
+          setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
+      });
+    }
 
-
-    });
 }
 
 export {
