@@ -24,7 +24,7 @@ function whisper(socket, io, message, players, user){
     }
     if (playerTo === undefined) {
         console.log('there was no matching player');
-        io.to(socket.id).emit('failure', { message: "There is nobody by that name" });
+        io.to(socket.id).emit('failure', "There is nobody here by that name.");
     } else {
         console.log("I'm sending a whisper");
         db.Player.findOne({characterNameLowerCase: playerTo}).then(data=>{

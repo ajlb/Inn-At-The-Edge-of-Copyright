@@ -11,10 +11,12 @@
     "WIS": 0,
     "DEX": 0,
     "STR": 0,
+    "CHA": 0,
     "HP": 0,
     "maxWIS": 80,
     "maxDEX": 80,
     "maxSTR": 80,
+    "maxCHA": 80,
     "maxHP": 50,
     "XP": 0,
     "level": 1

@@ -125,7 +125,7 @@ module.exports = function (io) {
         /*****************************/
         /*            MOVE           */
         /*****************************/
-        socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
+        socket.on('move', ({ previousLocation, newLocation, direction, user}) => {
             move(socket, io, previousLocation, newLocation, direction, user);
             //leave and enter rooms
             socket.leave(previousLocation);
