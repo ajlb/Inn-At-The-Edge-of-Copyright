@@ -59,6 +59,7 @@ const move = (socket, io, previousLocation, newLocation, direction, user) => {
         resolveLocationChunk(currentLocationData).then(chunk => {
             io.to(socket.id).emit('locationChunk', chunk);
             location = chunk;
+            io.to(socket.id).emit('moveQueueForeward', {locationChunk:chunk, characterName: socket.nickname});
         });
 
     })
