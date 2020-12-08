@@ -91,11 +91,6 @@ function Console() {
     setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
   });
 
-<<<<<<< HEAD
-  // console.log("AUTH USER: ");
-  // console.log(user);
-=======
->>>>>>> plover
 
   // Socket failed log in message
   socket.off('logFail').on('logFail', message => {
