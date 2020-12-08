@@ -86,7 +86,7 @@ function juggle(value, playerData, location) {
 
 //send stopJuggling to socket
 function stopJuggling(user, intent) {
-    console.log('sending a stop juggle');
+    // console.log('sending a stop juggle');
     socket.emit('stop juggle', {user, location:place, target, intent})
 }
 
@@ -103,7 +103,7 @@ function chancesOfSuccessJuggling(dex, num) {
 
 
 socket.off('continueJuggle').on('continueJuggle', ({target, num, user, location})=>{
-    console.log('recieved a continue juggle');
+    // console.log('recieved a continue juggle');
     juggleTime = setInterval(function(){
         socket.emit('contJuggle', {target, num, user, location});
         chancesOfSuccessJuggling(user.stats.DEX, num);
@@ -111,7 +111,7 @@ socket.off('continueJuggle').on('continueJuggle', ({target, num, user, location}
 })
 
 function clearJuggleTime(){
-    console.log('INSIDE CLEAR INTERVAL');
+    // console.log('INSIDE CLEAR INTERVAL');
     clearInterval(juggleTime);
     juggleTime = undefined;
     
