@@ -55,9 +55,7 @@ const getUsers = (io, userLocation, playernicknames) => {
             io.to(userLocation).emit('who', { currentUsersOfRoom, userLocation });
             res();
         } else {
-            console.log('Requesting', userLocation)
-            console.log(roster)
-            console.log('roomUsers is undefined')
+            console.log(`Nobody in ${userLocation}`)
             // rej();
         }
     })

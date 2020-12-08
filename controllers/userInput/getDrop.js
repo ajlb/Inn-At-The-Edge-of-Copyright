@@ -7,13 +7,22 @@ function decrementItemUpdateOne(itemId, targetName, type) {
     type = type ? type.toLowerCase() : undefined;
     return new Promise(function (resolve, reject) {
         if (type === "location") {
-            db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
-                resolve(data);
-            });
+            db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] })
+                .then(data => {
+                    resolve(data);
+                })
+                .catch(e => {
+                    console.log('ERROR IN DB CALL');
+                    reject(e);
+                });
         } else if (type === "player") {
             db.Player.updateOne({ characterName: targetName }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
                 resolve(data);
-            });
+            })
+                .catch(e => {
+                    console.log('ERROR IN DB CALL');
+                    reject(e);
+                });
         } else {
             reject("You must put in location or player for type.");
         }
@@ -27,10 +36,18 @@ function incrementItemUpdateOne(itemId, targetName, type) {
             db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
                 data.nModified === 1 ? resolve(true) : resolve(false);
             })
+                .catch(e => {
+                    console.log('ERROR IN DB CALL');
+                    reject(e);
+                })
         } else if (type === "player") {
             db.Player.updateOne({ characterName: targetName }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
                 data.nModified === 1 ? resolve(true) : resolve(false);
             })
+                .catch(e => {
+                    console.log('ERROR IN DB CALL');
+                    reject(e);
+                });
         } else {
             reject("You must put in location or player for type.");
         }
@@ -41,15 +58,23 @@ function pushItemToInventoryReturnData(itemId, targetName, type) {
     type = type ? type.toLowerCase() : undefined;
     return new Promise(function (resolve, reject) {
         if (type === "location") {
-            db.Location.findOneAndUpdate({ locationName: targetName }, { $push: { inventory: { item: itemId, quantity: 1} } }, { new: true })
-            .populate('inventory.item').then(data => {
-                resolve(data);
-            });
+            db.Location.findOneAndUpdate({ locationName: targetName }, { $push: { inventory: { item: itemId, quantity: 1 } } }, { new: true })
+                .populate('inventory.item').then(data => {
+                    resolve(data);
+                })
+                .catch(e => {
+                    console.log('ERROR IN DB CALL');
+                    reject(e);
+                });
         } else if (type === "player") {
-            db.Player.findOneAndUpdate({ characterName: targetName }, { $push: { inventory: { item: itemId, quantity: 1} } }, { new: true })
-            .populate('inventory.item').then(data => {
-                resolve(data);
-            });
+            db.Player.findOneAndUpdate({ characterName: targetName }, { $push: { inventory: { item: itemId, quantity: 1 } } }, { new: true })
+                .populate('inventory.item').then(data => {
+                    resolve(data);
+                })
+                .catch(e => {
+                    console.log('ERROR IN DB CALL');
+                    reject(e);
+                });
         } else {
             reject("You must put in location or player for type.");
         }
@@ -62,9 +87,13 @@ function findPlayerData(username) {
             reject("You must put in a username");
         } else {
             db.Player.findOne({ characterName: username })
-            .populate('inventory.item').then(data => {
-                resolve(data);
-            });
+                .populate('inventory.item').then(data => {
+                    resolve(data);
+                })
+                .catch(e => {
+                    console.log('ERROR IN DB CALL');
+                    reject(e);
+                });
         }
     });
 }
@@ -73,14 +102,22 @@ function scrubInventoryReturnData(target, type) {
     return new Promise(function (resolve, reject) {
         if (type === "location") {
             db.Location.findOneAndUpdate({ locationName: target }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true })
-            .populate('inventory.item').then(data => {
-                resolve(data);
-            });
+                .populate('inventory.item').then(data => {
+                    resolve(data);
+                })
+                .catch(e => {
+                    console.log('ERROR IN DB CALL');
+                    reject(e);
+                });
         } else if (type === "player") {
             db.Player.findOneAndUpdate({ characterName: target }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true })
-            .populate('inventory.item').then(data => {
-                resolve(data);
-            })
+                .populate('inventory.item').then(data => {
+                    resolve(data);
+                })
+                .catch(e => {
+                    console.log('ERROR IN DB CALL');
+                    reject(e);
+                });
         } else {
             reject("You must put in location or player for type.");
         }
@@ -92,7 +129,12 @@ function getItem(socket, io, target, itemId, user, location) {
     //remove item from location
     decrementItemUpdateOne(itemId, location, "location").then(returnData => {
         scrubInventoryReturnData(location, "location").then(returnData => {
-            io.to(location).emit('invUpL', returnData.inventory);
+            if (returnData === null) {
+                io.to(socket.id).emit('failure', "I'm sorry, something went wrong.");
+                return false;
+            } else {
+                io.to(location).emit('invUpL', returnData.inventory);
+            }
 
         });
     });
@@ -115,7 +157,12 @@ function dropItem(socket, io, target, itemId, user, location) {
     //remove item from giver's inventory
     decrementItemUpdateOne(itemId, user, "player").then(returnData => {
         scrubInventoryReturnData(user, "player").then(returnData => {
-            io.to(socket.id).emit('invUpP', returnData.inventory);
+            if (returnData === null) {
+                io.to(socket.id).emit('failure', "I'm sorry, something went wrong.");
+                return false;
+            } else {
+                io.to(socket.id).emit('invUpP', returnData.inventory);
+            }
         });
     });
     //add item to recipient's inventory
@@ -127,7 +174,12 @@ function dropItem(socket, io, target, itemId, user, location) {
             });
         } else {//increment item success
             findLocationData(location).then(returnData => {
-                io.to(location).emit('invUpL', returnData.inventory);
+                if (returnData === null) {
+                    io.to(socket.id).emit('failure', "I'm sorry, something went wrong.");
+                    return false;
+                } else {
+                    io.to(location).emit('invUpL', returnData.inventory);
+                }
             })
         }
         io.to(location).emit('drop', { target, actor: user });
@@ -138,7 +190,12 @@ function giveItem(socket, io, target, item, itemId, user, location) {
     //remove item from giver's inventory
     decrementItemUpdateOne(itemId, user, "player").then(returnData => {
         scrubInventoryReturnData(user, "player").then(returnData => {
-            io.to(socket.id).emit('invUpP', returnData.inventory);
+            if (returnData === null) {
+                io.to(socket.id).emit('failure', "I'm sorry, something went wrong.");
+                return false;
+            } else {
+                io.to(socket.id).emit('invUpP', returnData.inventory);
+            }
         });
     });
     //add item to target's inventory
@@ -146,13 +203,23 @@ function giveItem(socket, io, target, item, itemId, user, location) {
         //if increment succeeded, there was already one there
         if (!returnData) {
             pushItemToInventoryReturnData(itemId, target, "player").then(returnData => {
-                io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
+                if (returnData === null) {
+                    io.to(socket.id).emit('failure', "I'm sorry, something went wrong.");
+                    return false;
+                } else {
+                    io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
+                }
 
             });
             //if increment failed, add a new entry to inventory
         } else {
             findPlayerData(target).then(returnData => {
-                io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
+                if (returnData === null) {
+                    io.to(socket.id).emit('failure', "I'm sorry, something went wrong.");
+                    return false;
+                } else {
+                    io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
+                }
             })
         }
         io.to(location).emit('give', { target, item, actor: user });

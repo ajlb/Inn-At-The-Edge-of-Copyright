@@ -34,7 +34,9 @@ function lookAbout(location, setChatHistory) {
 
     setChatHistory(prevState => [...prevState, { type: 'displayed-indent displayed-intro font-italic', text: `Exits: ${exitDescriptors.join(", ")}.` }]);
 
-    setChatHistory(prevState => [...prevState, { type: 'displayed-indent displayed-intro font-italic', text: `In the room someone has left: ${inventoryArray.join(", ")}.` }]);
+    if (inventoryArray.length > 0){
+        setChatHistory(prevState => [...prevState, { type: 'displayed-indent displayed-intro font-italic', text: `In the room someone has left: ${inventoryArray.join(", ")}.` }]);
+    }
 
 
 }

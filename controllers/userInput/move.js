@@ -7,7 +7,12 @@ const getLocationChunk = async (data) => {
     locationObject.current = data;
     for (const exit in data.exits) {
         const thisLocation = data.exits[exit];
-        locationObject[exit] = await db.Location.findOne({ locationName: thisLocation }).populate('inventory.item');
+        try {
+            locationObject[exit] = await db.Location.findOne({ locationName: thisLocation }).populate('inventory.item');
+        } catch (e) {
+            console.log('ERROR IN DB CALL');
+            console.log(e);
+        }
     }
     return locationObject;
 }
@@ -21,7 +26,11 @@ const rememberLocation = (username, newLocation) => {
     return new Promise((resolve, reject) => {
         db.Player.findOneAndUpdate({ characterName: username }, { $set: { lastLocation: newLocation } }, { new: true }).then(returnData => {
             resolve(returnData);
-        });
+        })
+            .catch(e => {
+                console.log('ERROR IN DB CALL');
+                reject(e);
+            });
     });
 }
 
@@ -31,6 +40,10 @@ const findLocationData = (locationName) => {
             .populate('inventory.item')
             .then(returnData => {
                 resolve(returnData);
+            })
+            .catch(e => {
+                console.log('ERROR IN DB CALL');
+                reject(e);
             });
     });
 }
