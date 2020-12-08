@@ -29,7 +29,7 @@ function ChatPanel({
     // This is where most socket client listeners are going to be!
     socket.off('whisperTo').on('whisperTo', ({ message, userFrom }) => {
         let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text:  `<span className='displayed-dimBlue'>Whisper from ${userFrom}:</span> ${message}` }]);
+        setChatHistory(prevState => [...prevState, { type, text: `<span className='displayed-dimBlue'>Whisper from ${userFrom}:</span> ${message}` }]);
         // chat history is mapped down below
     });
 
@@ -259,21 +259,21 @@ function ChatPanel({
     });
 
     socket.off('help').on('help', ({ actionData, type }) => {
-        if (type === "whole"){
+        if (type === "whole") {
             let newArray = [];
-            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
-            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `HELP`}]);
-            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `HELP` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
             actionData.map((helpItem) => {
                 newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
-                setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: newArray }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: newArray }]);
             });
         } else {
-            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
-            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `----- ${actionData.actionName.toUpperCase()} -----`}]);
-            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: actionData.commandLongDescription}]);
-            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
-            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}`}]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `----- ${actionData.actionName.toUpperCase()} -----` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: actionData.commandLongDescription }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}` }]);
 
         }
 
@@ -315,14 +315,14 @@ function ChatPanel({
                 chatHistory.map(message => {
                     i++;
                     let text = message.text;
-                    if (text.includes("span")){
+                    if (text.includes("<span className=")) {
                         let spanClass = text.split(`'>`)[0];
                         spanClass = spanClass.replace(`<span className='`, "");
-                        let spanText = text.slice(text.indexOf(">")+1);
+                        let spanText = text.slice(text.indexOf(">") + 1);
                         spanText = spanText.slice(0, spanText.indexOf("<"));
                         let textAfterSpan = text.split("</span>")[1];
                         let textBeforeSpan = text.split("<span")[0];
-                    return <p key={i} className={message.type}>{textBeforeSpan}<span className={spanClass}>{spanText}</span>{textAfterSpan}</p>
+                        return <p key={i} className={message.type}>{textBeforeSpan}<span className={spanClass}>{spanText}</span>{textAfterSpan}</p>
                     } else {
                         return <p key={i} className={message.type}>{text}</p>
                     }
