@@ -44,12 +44,17 @@ const getUsers = (io, userLocation, playernicknames) => {
     currentUsersOfRoom = [];
     if (!(roomUsers === undefined)){
         for (const socketID of roomUsers.keys()) {
+            console.log('FOUND ONE!', socketID);
             if (!(playernicknames[socketID] === undefined)){
                 currentUsersOfRoom.push(playernicknames[socketID].nickname)
             }
         }
+        io.to(userLocation).emit('who', {currentUsersOfRoom, userLocation});
+    } else {
+        // console.log("Requesting:", userLocation);
+        // console.log(roster);
+        console.log('Nobody in room: ', userLocation);
     }
-    io.to(userLocation).emit('who', {currentUsersOfRoom, userLocation});
 }
 
 

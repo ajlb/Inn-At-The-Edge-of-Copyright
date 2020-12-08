@@ -27,9 +27,16 @@ function whisper(socket, io, message, players, user){
         io.to(socket.id).emit('failure', "There is nobody here by that name.");
     } else {
         console.log("I'm sending a whisper");
-        db.Player.findOne({characterNameLowerCase: playerTo}).then(data=>{
-            io.to(socket.id).emit('whisperFrom', { message, userTo: data.characterName });
-            io.to(playerTo).emit('whisperTo', { message, userFrom: user });
+        db.Player.findOne({characterNameLowerCase: playerTo})
+        .then(data=>{
+            if (!(data === null)){
+                io.to(socket.id).emit('whisperFrom', { message, userTo: data.characterName });
+                io.to(playerTo).emit('whisperTo', { message, userFrom: user });
+            }
+        })
+        .catch(e=>{
+            console.log('ERROR IN DB CALL');
+            console.log(e);
         })
     }
 }

@@ -20,7 +20,7 @@
   },
   {
     "locationName": "Hallway",
-    "dayDescription": "You see a narrow room materialize in front of you. You hear a door latch behind you and a odd hand-painted sign gently sways from a string on the locked knob: `INN AT THE EDGE - REMEMBER YOUR TOWEL - TRY help FOR HELP`. A small window looks out over a beautiful but overgrown garden. The only way out must be the stairway at the end of the hall to the east. The smell of tea and faint sounds of someone moving about down the stairs becons you forward....",
+    "dayDescription": "You see a narrow room materialize in front of you. You hear a door latch behind you and a odd hand-painted sign gently sways from a string on the locked knob: `INN AT THE EDGE - REMEMBER YOUR TOWEL - TRY help FOR HELP`. A small window looks out over a beautiful but overgrown garden. The only way out must be the stairway at the end of the hall to the east. The smell of tea and faint sounds of someone moving about down the stairs beckons you forward....",
     "nightDescription": "NULL",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
@@ -309,7 +309,7 @@
     "inventory": [],
     "exits": {
       "north": "Pumpkin Patch West",
-      "east": "Pumpkin Path South"
+      "east": "Pumpkin Patch South"
     }
   },
   {
@@ -1106,55 +1106,5 @@
     "exits": {
       "west": "Sky Fishing Hole"
     }
-  },
-  {
-    "inventory": [],
-    "locationName": "New New New",
-    "dayDescription": "sadf",
-    "nightDescription": "dfsdf",
-    "region": "newland",
-    "NPCs": "",
-    "indoorOutdoor": "indoor",
-    "exits": {}
-  },
-  {
-    "inventory": [],
-    "locationName": "Still More New",
-    "dayDescription": "sadfg",
-    "nightDescription": "gdfgdsfd",
-    "region": "newland",
-    "NPCs": "",
-    "indoorOutdoor": "indoor",
-    "exits": {}
-  },
-  {
-    "inventory": [],
-    "locationName": "Stuff",
-    "dayDescription": "asdfsa",
-    "nightDescription": "asdfsdaf",
-    "region": "newland",
-    "NPCs": "",
-    "indoorOutdoor": "indoor",
-    "exits": {}
-  },
-  {
-    "inventory": [],
-    "locationName": "Again",
-    "dayDescription": "asdfdsaf",
-    "nightDescription": "asdfdsaf",
-    "region": "newland",
-    "NPCs": "",
-    "indoorOutdoor": "indoor",
-    "exits": {}
-  },
-  {
-    "inventory": [],
-    "locationName": "Mostly New",
-    "dayDescription": "lakisdfj",
-    "nightDescription": "aoikusdfksadjfh",
-    "region": "newland",
-    "NPCs": "",
-    "indoorOutdoor": "indoor",
-    "exits": {}
   }
 ]

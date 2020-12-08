@@ -83,16 +83,22 @@ function validateName(io, socket, userInput) {
             resolve(false);
         } else {
             console.log(userInput);
-            db.Player.find({ characterNameLowerCase: userInput.toLowerCase() }).then(data => {
-                if (data.length === 0) {
-                    console.log('send create character');
-                    resolve(true);
-                } else {
-                    console.log(data);
-                    io.to(socket.id).emit('failure', "I'm sorry, that character name is taken.")
-                    resolve(false);
-                }
-            })
+            db.Player.find({ characterNameLowerCase: userInput.toLowerCase() })
+                .then(data => {
+                    if (data.length === 0) {
+                        console.log('send create character');
+                        resolve(true);
+                    } else {
+                        console.log(data);
+                        io.to(socket.id).emit('failure', "I'm sorry, that character name is taken.")
+                        resolve(false);
+                    }
+                })
+                .catch(e => {
+                    console.log('ERROR IN DB CALL');
+                    console.log(e);
+                    io.to(socket.id).emit('failure', "I'm sorry, something went wrong.");
+                });
         }
     });
 }
@@ -101,7 +107,12 @@ function createCharacter(characterName, email) {
     return new Promise(async (res, rej) => {
         console.log('Creating Character! db.Player.create(character)')
         const character = characterFactory(characterName, email);
-        await db.Player.create(character);
+        await db.Player.create(character)
+            .catch(e => {
+                console.log('ERROR IN DB CALL');
+                console.log(e);
+                io.to(socket.id).emit('failure', "I'm sorry, something went wrong.");
+            });
         res();
     })
 }
