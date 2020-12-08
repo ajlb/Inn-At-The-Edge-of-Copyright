@@ -13,6 +13,7 @@ const paramNames = {
 function showStats(user, setChatHistory) {
     console.log(user)
     const statsArray = [];
+    let HPString = "";
 
     statsArray.push(`\xa0\xa0\xa0`);
     statsArray.push(`You are a level ${user.stats.level} ${user.race} ${user.profession}.`);
@@ -32,7 +33,7 @@ function showStats(user, setChatHistory) {
                 } else {
                     color = "text-warning";
                 }
-                statsArray.push(`${paramNames[param]}:  <span className='${color}'>${Math.floor(user.stats[param])}</span>/${Math.floor(user.stats.maxHP)}`);
+                HPString = `${paramNames[param]}:  <span className='${color}'>${Math.floor(user.stats[param])}</span>/${Math.floor(user.stats.maxHP)}`;
             } else {
                 if (user.stats[param] === user.stats["max"+param]){
                     statsArray.push(`${paramNames[param]}:  <span className='displayed-cyan'>${Math.floor(user.stats[param])}</span> - You have reached the maximum level of ${paramNames[param]}`);
@@ -55,6 +56,8 @@ function showStats(user, setChatHistory) {
 
 
     });
+    setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: HPString}]);
+    
 }
 
 
