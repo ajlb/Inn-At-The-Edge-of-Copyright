@@ -229,6 +229,7 @@ function ChatPanel({
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
             }
         }
+        console.log('calling clear juggle time');
         clearJuggleTime();
     })
 
