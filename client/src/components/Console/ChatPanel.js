@@ -29,7 +29,7 @@ function ChatPanel({
     // This is where most socket client listeners are going to be!
     socket.off('whisperTo').on('whisperTo', ({ message, userFrom }) => {
         let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: `Whisper from ${userFrom}: ${message}` }]);
+        setChatHistory(prevState => [...prevState, { type, text: `<span className='displayed-dimBlue'>Whisper from ${userFrom}:</span> ${message}` }]);
         // chat history is mapped down below
     });
 
@@ -99,8 +99,6 @@ function ChatPanel({
 
     // Socket location chunk
     socket.off('locationChunk').on('locationChunk', message => {
-        console.log("recieved locationChunk");
-        console.log(message);
         if (location.current === undefined) {
             let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
             setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
@@ -122,14 +120,13 @@ function ChatPanel({
     // This is where most socket client listeners are going to be!
     socket.off('whisperFrom').on('whisperFrom', ({ message, userTo }) => {
         let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: `Whisper to ${userTo}: ${message}` }]);
+        setChatHistory(prevState => [...prevState, { type, text: `<span className='displayed-dimBlue'>Whisper to ${userTo}:</span> ${message}` }]);
         // chat history is mapped down below
     });
 
     //room speech
     socket.off('speak').on('speak', (message) => {
         let type = 'displayed-stat';
-        console.log(inConversation)
         if (!inConversation) {
             setChatHistory(prevState => [...prevState, { type, text: message }]);
         }
@@ -157,7 +154,6 @@ function ChatPanel({
 
     //a give action
     socket.off('give').on('give', ({ target, item, actor }) => {
-        console.log("give received");
         let type = 'displayed-stat';
         if (actor === user.characterName) {
             setChatHistory(prevState => [...prevState, { type, text: `You give ${insertArticleSingleValue(item)} to ${target}.` }]);
@@ -170,7 +166,6 @@ function ChatPanel({
 
     //emote
     socket.off('emote').on('emote', ({ user, emotion }) => {
-        console.log(`${user} emotes ${emotion}`);
         let type = 'displayed-stat';
         setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}` }]))
     })
@@ -263,6 +258,7 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
     });
 
+<<<<<<< HEAD
     socket.off('help').on('help', ({ actionData }) => {
         let type = 'displayed-indent';
         // let currentString = ``;
@@ -273,6 +269,24 @@ function ChatPanel({
             // console.log(newArray);
         });
     });
+=======
+    socket.off('help').on('help', ({ actionData, type }) => {
+        if (type === "whole") {
+            let newArray = [];
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `HELP` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            actionData.map((helpItem) => {
+                newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: newArray }]);
+            });
+        } else {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `----- ${actionData.actionName.toUpperCase()} -----` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: actionData.commandLongDescription }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}` }]);
+>>>>>>> inputPlover
 
 //         let exampleArray = [];
 
@@ -326,7 +340,18 @@ function ChatPanel({
             {
                 chatHistory.map(message => {
                     i++;
-                    return <p key={i} className={message.type}>{message.text}</p>
+                    let text = message.text;
+                    if (text.includes("<span className=")) {
+                        let spanClass = text.split(`'>`)[0];
+                        spanClass = spanClass.replace(`<span className='`, "");
+                        let spanText = text.slice(text.indexOf(">") + 1);
+                        spanText = spanText.slice(0, spanText.indexOf("<"));
+                        let textAfterSpan = text.split("</span>")[1];
+                        let textBeforeSpan = text.split("<span")[0];
+                        return <p key={i} className={message.type}>{textBeforeSpan}<span className={spanClass}>{spanText}</span>{textAfterSpan}</p>
+                    } else {
+                        return <p key={i} className={message.type}>{text}</p>
+                    }
                 })
             }
             <div

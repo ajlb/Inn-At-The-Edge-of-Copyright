@@ -15,17 +15,22 @@ function whisper(socket, io, message, players, user){
         console.log(message);
         const messageString = message.toLowerCase().split(' ').slice(0, i + 1).join(' ');
         players.forEach(player => {
-            if (player === messageString) {
+            if (player.toLowerCase() === messageString.toLowerCase()) {
+                console.log('found them!');
                 playerTo = messageString;
                 message = message.split(' ').slice(i + 1).join(' ');
             }
         })
     }
     if (playerTo === undefined) {
-        io.to(socket.id).emit('error', { status: 404, message: "There is nobody by that name" });
+        console.log('there was no matching player');
+        io.to(socket.id).emit('failure', "There is nobody here by that name.");
     } else {
-        io.to(socket.id).emit('whisperFrom', { message, userTo: playerTo });
-        io.to(playerTo).emit('whisperTo', { message, userFrom: user });
+        console.log("I'm sending a whisper");
+        db.Player.findOne({characterNameLowerCase: playerTo}).then(data=>{
+            io.to(socket.id).emit('whisperFrom', { message, userTo: data.characterName });
+            io.to(playerTo).emit('whisperTo', { message, userFrom: user });
+        })
     }
 }
 
