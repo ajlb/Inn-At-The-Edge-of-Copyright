@@ -32,7 +32,7 @@ module.exports = function (io) {
     io.on('connection', (socket) => {
         console.log(`${socket.id} connected!`);
         // possibly do a DB call to state that the use is online?
-
+        io.to(socket.id).emit('data request');
 
         /*****************************/
         /*         DISCONNECT        */
@@ -137,6 +137,50 @@ module.exports = function (io) {
 
         })
 
+
+        /*****************************/
+        /*    ADD PLAYER TO ROSTER   */
+        /*****************************/
+        socket.on('add player', ({ player }) => {
+            console.log(`${player.characterName} reconnected`)
+            players.push(player.characterName);
+            socket.join(player.characterNameLowerCase)
+            let userLocation = player.lastLocation;
+            let userCharacter = player.characterName;
+            if (!(userLocation === false)) {
+                //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
+                socket.join(userLocation)
+                socket.nickname = userCharacter;
+                socket.lowerName = userCharacter.toLowerCase();
+                playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
+                console.log("userLocation:", userLocation)
+                getUsers(io, userLocation, playernicknames);
+
+                //find locations, return initial and then chunk
+                findLocationData(userLocation)
+                    .then(currentLocationData => {
+                        io.to(socket.lowerName).emit('currentLocation', currentLocationData);
+                        resolveLocationChunk(currentLocationData)
+                            .then(chunk => {
+                                if (chunk !== null) {
+                                    io.to(socket.lowerName).emit('locationChunk', chunk);
+                                    location = chunk;
+                                } else {
+                                    io.to(socket.lowerName).emit('error', { status: '500', message: "Something went wrong" })
+                                }
+                            })
+                            .catch(e => {
+                                console.log(e)
+                            });
+
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
+            }
+        })
+
+
         /*****************************/
         /*            MOVE           */
         /*****************************/
@@ -163,12 +207,15 @@ module.exports = function (io) {
         /*            NPC            */
         /*****************************/
         socket.on('to NPC', ({ toNPC, message }) => {
-            db.Dialog.findOne({ NPC: toNPC }, (err, result) => {
-                if (err) throw err;
-
-                runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
-
-            })
+            db.Dialog.findOne({ NPC: toNPC })
+                .then(result => {
+                    console.log(result)
+                    runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
+                })
+                .catch(e => {
+                    socket.emit('errror', { status: 500, message: `Something went wrong` });
+                    console.log(`Error in 'to NPC' listener: `, e)
+                })
         })
 
         /*****************************/
@@ -190,9 +237,6 @@ module.exports = function (io) {
         /*****************************/
         /*         INVENTORY         */
         /*****************************/
-        socket.on('inventory', () => {
-
-        });
 
 
         /*****************************/
@@ -234,6 +278,9 @@ module.exports = function (io) {
                         }
                     }
                 })
+                .catch(e => {
+                    console.log(e)
+                })
 
         });
 
@@ -241,9 +288,7 @@ module.exports = function (io) {
         /*****************************/
         /*           LOOK            */
         /*****************************/
-        socket.on('look', () => {
-            // db the user's location and emit necessary info
-        });
+        // 404 Look not found
 
 
         /*****************************/
@@ -327,10 +372,17 @@ module.exports = function (io) {
             // db for player stats
             // emit stats to player
 
-            db.Player.find({}).then((statsData) => {
-                io.to(socket.id).emit('stats', { statsData });
-
-            })
+            db.Player.find({})
+                .then((statsData) => {
+                    if (statsData !== null) {
+                        io.to(socket.id).emit('stats', { statsData });
+                    } else {
+                        io.emit('error', { status: 500, message: "Something went wrong" })
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                })
         });
 
 
@@ -338,7 +390,7 @@ module.exports = function (io) {
         /*            SLEEP          */
         /*****************************/
         socket.on('sleep', ({ userToSleep, location }) => {
-            goToSleep(userToSleep).then(userWasAwake => {
+            goToSleep(io, socket, userToSleep).then(userWasAwake => {
                 if (userWasAwake) {
                     io.to(location).emit('sleep', { userToSleep });
                     socket.leave(location);
@@ -352,7 +404,7 @@ module.exports = function (io) {
         /*             WAKE          */
         /*****************************/
         socket.on('wake', ({ userToWake, location }) => {
-            wakeUp(userToWake).then(userWasSleeping => {
+            wakeUp(io, socket, userToWake).then(userWasSleeping => {
                 if (userWasSleeping) {
                     socket.join(location);
                     io.to(location).emit('wake', { userToWake });
@@ -366,12 +418,6 @@ module.exports = function (io) {
         /*****************************/
         /*          POSITION         */
         /*****************************/
-        socket.on('position', () => {
-            //  db for player position
-            // emit position to player
-        });
-
-
 
 
         /*****************************/

@@ -28,6 +28,9 @@ function login(socket, io, userCharacter, players) {
                     io.to(userLocation).emit('move', { actor: userCharacter, direction: "ether", cardinal: true, action: "arrive" });
 
                     resolve(userLocation);
+                })
+                .catch(e => {
+                    console.log(e)
                 });
         } else {
             io.to(socket.id).emit('logFail', `${userCharacter} is already logged in.`);
@@ -52,7 +55,10 @@ const getUsers = (io, userLocation, playernicknames) => {
             io.to(userLocation).emit('who', { currentUsersOfRoom, userLocation });
             res();
         } else {
-            rej()
+            console.log('Requesting', userLocation)
+            console.log(roster)
+            console.log('roomUsers is undefined')
+            // rej();
         }
     })
 }
