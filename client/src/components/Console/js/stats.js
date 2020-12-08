@@ -1,5 +1,3 @@
-import { startSession } from "mongoose";
-
 //import setChatHistory from '../ChatPanel'
 const paramNames = {
     DEX: 'Dexterity',
