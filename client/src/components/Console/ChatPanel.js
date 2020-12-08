@@ -263,6 +263,7 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
     });
 
+<<<<<<< HEAD
     socket.off('help').on('help', ({ actionData }) => {
         let type = 'displayed-indent';
         // let currentString = ``;
@@ -290,15 +291,38 @@ function ChatPanel({
 //         });
 //     });
 
+=======
+    socket.off('help').on('help', ({ actionData, type }) => {
+        console.log(actionData);
+        if (type === "whole"){
+            let newArray = [];
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `HELP`}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
+            actionData.map((helpItem) => {
+                newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
+                setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: newArray }]);
+            });
+        } else {
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `----- ${actionData.actionName.toUpperCase()} -----`}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: actionData.commandLongDescription}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `\xa0\xa0\xa0\xa0`}]);
+            setChatHistory(prevState => [...prevState, { type:'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}`}]);
+>>>>>>> plover
 
-        //newArray.forEach((help) => {
+        }
 
+<<<<<<< HEAD
         //               actionData.map((helpItem) => {
         //                  currentString += `
         // ${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
         //${helpItem.commandLongDescription}    ${helpItem.waysToCall}
         // ${helpItem.exampleCall}     ${helpItem.exampleResult}
 
+=======
+    });
+>>>>>>> plover
 
 
 

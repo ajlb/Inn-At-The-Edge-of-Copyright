@@ -8,6 +8,12 @@ const playerSchema = new Schema({
     trim: true,
     required: "Character name is Required"
   },
+  characterNameLowerCase: {
+    type: String,
+    unique: true,
+    trim: true,
+    required: "Character name lower case is Required"
+  },
   password: {
     type: String,
     trim: true,
@@ -53,11 +59,19 @@ const playerSchema = new Schema({
       type: Number,
       default: 0
     },
+    CHA: {
+      type: Number,
+      default: 0
+    },
     maxWIS: {
       type: Number,
       default: 0
     },
     maxDEX: {
+      type: Number,
+      default: 0
+    },
+    maxCHA: {
       type: Number,
       default: 0
     },

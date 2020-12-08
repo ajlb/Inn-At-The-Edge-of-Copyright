@@ -3,6 +3,9 @@
 
 //determine if a string begins with any of an array of other strings
 function doesThisStartWithOneOfThese(givenString, givenArray) {
+  if (givenArray === undefined){
+    return false;
+  }
   // console.log("givenString: ", givenString)
   // console.log("givenArray: ", givenArray)
   for (let value of givenArray) {

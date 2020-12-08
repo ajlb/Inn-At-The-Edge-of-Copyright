@@ -11,9 +11,13 @@ import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
 import { wear, remove } from "./js/wearRemove";
 import { showStats } from "./js/stats";
+import { showInventory } from "./js/inventory";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import DiscoverableCalls, { callFunctionMap } from "../../clientUtilities/discoverablesCalls";
+import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
+import { lookAbout } from './js/look';
+import runExamine from './js/examine';
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -43,7 +47,6 @@ function InputPanel({
     setConversation
 }) {
 
-
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
     const authUser = useAuth0().user;
 
@@ -59,14 +62,16 @@ function InputPanel({
         setInput(e.target.value)
     }
 
+
+    socket.off('YouCanLogIn').on('YouCanLogIn', () => {
+        socket.emit("log in", authUser.email);
+    })
+
     //action on enter key
     const handleMessage = (event, type = "displayed-stat") => {
         event.preventDefault();
 
         setInputHistory(prevState => [...prevState, input])
-
-
-
 
 
         //This code is mostly copied over from previous userInteraction.js, and will serve the same purpose here
@@ -78,6 +83,8 @@ function InputPanel({
             } else {
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
+        } else if (user.characterName === "newUser") {
+            socket.emit('newUser', { input, email: authUser.email });
         } else if (findIn(input, actionCalls.whisper)) {
             let message;
             // If it starts with one of these two-word commands, it will remove the first two words from the message, if not, it will just remove the first word
@@ -110,13 +117,18 @@ function InputPanel({
                     socket.emit('whisper', { message, user: user.characterName })
                 })
         } else if (findIn(input, actionCalls.inventory)) {
-            socket.emit('inventory', input)
+            // let inventory = takeTheseOffThat(actionCalls.inventory, input)
+            showInventory(user, setChatHistory);
         } else if (findIn(input, actionCalls.juggle)) {
             juggle(input, user, location.current.locationName);
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
         } else if (findIn(input, actionCalls.stats)) {
             showStats(user, setChatHistory, actionCalls.stats, input);
+        } else if (findIn(input, actionCalls.help)) {
+            let help = takeTheseOffThat(actionCalls.help, input);
+            console.log(help);
+            socket.emit('help', { message: help });
         } else if (findIn(input, actionCalls.position)) {
             let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
@@ -128,16 +140,14 @@ function InputPanel({
             } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
                 setPlayerPosition('standing');
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
-            } else if (findIn(input, actionCalls.help)) {
-                let help = takeTheseOffThat(actionCalls.help, input);
-                console.log(help);
-                socket.emit('help', input);
             } else {
-                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You are already ${playerPosition}` }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-green", text: `You are already ${playerPosition}` }]);
             }
         } else if (!inConversation) {
             // Everything in here cannot be run while in a conversation with an NPC
-            if (findIn(input, actionCalls.move)) {
+            if (findIn(input, DiscoverableCalls.get(location.current.locationName))) {
+                console.log('something discoverable is happening');
+            } else if (findIn(input, actionCalls.move)) {
                 if (playerPosition === "standing") {
                     let direction = takeTheseOffThat(actionCalls.move, input);
                     for (const param in DIRECTIONS) {
@@ -163,7 +173,7 @@ function InputPanel({
                 const message = takeTheseOffThat(actionCalls.speak, input);
                 socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
             } else if (findIn(input, actionCalls.look)) {
-                socket.emit('look', input)
+                lookAbout(location, setChatHistory);
             } else if (findIn(input, actionCalls.get)) {
                 const target = takeTheseOffThat(actionCalls.get, input);
                 getItem(socket, user, target, location);
@@ -202,42 +212,10 @@ function InputPanel({
                 giveItem(socket, item, target, user, location);
 
             } else if (findIn(input, actionCalls.examine)) {
-                const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
                 let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
+                const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
                 toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
-                console.log("You are attempting to examine", toExamine)
-                console.log(user)
-                if (location.current.discoverables && toExamine.trim() !== '') {
-                    let discoverables = location.current.discoverables;
-                    let description;
-                    let exampleCommand;
-                    discoverables.forEach(discoverable => {
-                        discoverable.names.forEach(name => {
-                            if (name.startsWith(toExamine.toLowerCase()) && toExamine.trim() !== '') {
-                                console.log("You found the", name);
-                                description = discoverable.description;
-                                exampleCommand = discoverable.exampleCommand;
-                            }
-                        })
-                    })
-                    if (description) {
-                        setChatHistory(prevState => {
-                            if (exampleCommand) {
-                                return [...prevState,
-                                { type: 'displayed-stat', text: `You see ${description}` },
-                                { type: 'displayed-commands', text: `Try entering: ${exampleCommand}` }]
-                            } else {
-                                return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
-                            }
-                        })
-                    } else {
-                        setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
-                    }
-                } else if (toExamine.trim() === '') {
-                    setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
-                } else {
-                    setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
-                }
+                runExamine({ input, location, command, toExamine, user, setChatHistory });
 
             } else if (findIn(input, ["logout", "log out", "log off"])) {
                 takeTheseOffThat(["logout, log out", "log off"], input);
