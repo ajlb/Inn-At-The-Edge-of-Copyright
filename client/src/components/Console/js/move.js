@@ -21,6 +21,7 @@ function makeMove(socket, location, characterName, direction){
         if (param === direction) {
             if (location[param] === null){
                 socket.emit('failure', `Something seems to prevent you from moving ${direction}.`);
+                moveQueue.dequeue();
                 moved = true;
             } else {
                 socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user:characterName });
