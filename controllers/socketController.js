@@ -69,7 +69,7 @@ module.exports = function (io) {
                         } else {
                             const userCharacter = returnData.characterName;
 
-                            login(socket, io, userCharacter, players).then(userLocation => {
+                            login(socket, io, userCharacter, players).then(async (userLocation) => {
 
                                 if (!(userLocation === false)) {
                                     //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
@@ -77,7 +77,7 @@ module.exports = function (io) {
                                     socket.lowerName = userCharacter.toLowerCase();
                                     playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
 
-                                    getUsers(io, userLocation, playernicknames);
+                                    await getUsers(io, userLocation, playernicknames);
 
                                     //find locations, return initial and then chunk
                                     findLocationData(userLocation)
