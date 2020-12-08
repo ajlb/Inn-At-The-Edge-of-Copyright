@@ -40,14 +40,26 @@ module.exports = function (io) {
         socket.on('disconnect', () => {
             console.log(`${socket.id} disconnected...`);
             players = players.filter(player => !(player === socket.nickname));
+<<<<<<< Updated upstream
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
                 if (!(returnData === null)) {
                     if (!(returnData.lastLocation === null)) {
                         io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
                         getUsers(io, returnData.lastLocation, playernicknames);
+=======
+            db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } })
+                .then(returnData => {
+                    if (!(returnData === null)) {
+                        if (!(returnData.lastLocation === null)) {
+                            io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
+                            getUsers(io, returnData.lastLocation, playernicknames);
+                        }
+>>>>>>> Stashed changes
                     }
-                }
-            });
+                })
+                .catch(e => {
+                    console.log(e)
+                });
         })
 
 
@@ -60,6 +72,7 @@ module.exports = function (io) {
             if (email === "You must log in first! Type 'log in [username]'") {
                 io.to(socket.id).emit('logFail', email);
             } else {
+<<<<<<< Updated upstream
                 db.Player.findOne({ email }).then(returnData => {
                     console.log("returnData:", returnData)
                     if (returnData === null) {
@@ -90,6 +103,53 @@ module.exports = function (io) {
                         });
                     }
                 })
+=======
+                db.Player.findOne({ email })
+                    .then(returnData => {
+                        if (returnData === null) {
+                            socket.emit('logFail', `new user`)
+                        } else {
+                            const userCharacter = returnData.characterName;
+
+                            login(socket, io, userCharacter, players).then(userLocation => {
+
+                                if (!(userLocation === false)) {
+                                    //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
+                                    socket.nickname = userCharacter;
+                                    socket.lowerName = userCharacter.toLowerCase();
+                                    playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
+
+                                    getUsers(io, userLocation, playernicknames);
+
+                                    //find locations, return initial and then chunk
+                                    findLocationData(userLocation)
+                                        .then(currentLocationData => {
+                                            io.to(socket.lowerName).emit('currentLocation', currentLocationData);
+                                            resolveLocationChunk(currentLocationData)
+                                                .then(chunk => {
+                                                    if (chunk !== null) {
+                                                        io.to(socket.lowerName).emit('locationChunk', chunk);
+                                                        location = chunk;
+                                                    } else {
+                                                        // LOG ERROR HERE
+                                                    }
+                                                })
+                                                .catch(e => {
+                                                    console.log(e)
+                                                });
+
+                                        })
+                                        .catch(e => {
+                                            console.log(e)
+                                        })
+                                }
+                            });
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
+>>>>>>> Stashed changes
             }
         });//end socket.on log in
 
@@ -125,7 +185,7 @@ module.exports = function (io) {
         /*****************************/
         /*            MOVE           */
         /*****************************/
-        socket.on('move', ({ previousLocation, newLocation, direction, user}) => {
+        socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
             move(socket, io, previousLocation, newLocation, direction, user);
             //leave and enter rooms
             socket.leave(previousLocation);
