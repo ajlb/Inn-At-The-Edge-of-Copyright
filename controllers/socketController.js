@@ -41,8 +41,8 @@ module.exports = function (io) {
             console.log(`${socket.id} disconnected...`);
             players = players.filter(player => !(player === socket.nickname));
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
-                if (!(returnData === null)){
-                    if (!(returnData.lastLocation === null)){
+                if (!(returnData === null)) {
+                    if (!(returnData.lastLocation === null)) {
                         io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
                         getUsers(io, returnData.lastLocation, playernicknames);
                     }
@@ -55,10 +55,13 @@ module.exports = function (io) {
         /*           LOG IN          */
         /*****************************/
         socket.on('log in', email => {
+            console.log('Log In Attempt!!')
+            console.log("Email:", email)
             if (email === "You must log in first! Type 'log in [username]'") {
                 io.to(socket.id).emit('logFail', email);
             } else {
                 db.Player.findOne({ email }).then(returnData => {
+                    console.log("returnData:", returnData)
                     if (returnData === null) {
                         socket.emit('logFail', `new user`)
                     } else {
@@ -97,7 +100,7 @@ module.exports = function (io) {
         socket.on('logout', location => {
             players = players.filter(player => !(player === socket.nickname));
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
-                if (!(location === null)){
+                if (!(location === null)) {
                     io.to(location).emit('logout', `${socket.nickname} disappears into the ether.`);
                     getUsers(io, location, playernicknames);
                 }
@@ -109,9 +112,11 @@ module.exports = function (io) {
         /*    CREATE NEW CHARACTER   */
         /*****************************/
         socket.on('newUser', ({ input, email }) => {
-            validateName(io, socket, input, email).then(success => {
-                success && createCharacter(input, email);
+            validateName(io, socket, input, email).then(async function (success) {
+                console.log('Character Validated')
+                success && await createCharacter(input, email);
             }).then(() => {
+                console.log('Server emit YouCanLogIn')
                 io.to(socket.id).emit('YouCanLogIn');
             })
 

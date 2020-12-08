@@ -30,7 +30,7 @@ function checkNameWords(userInputTrimmed) {
 }
 
 
-function characterFactory(name, email, password="Auth0isHandlingIt") {
+function characterFactory(name, email, password = "Auth0isHandlingIt") {
     let thisPlayer = newPlayerObject;
     const stats = generateBaseStats();
     thisPlayer = {
@@ -45,7 +45,7 @@ function characterFactory(name, email, password="Auth0isHandlingIt") {
         {
             item: ObjectId("5fc32531b2009d226ef5b862"),
             quantity: 1
-    }
+        }
     ];
     thisPlayer.stats = {
         ...thisPlayer.stats,
@@ -97,9 +97,13 @@ function validateName(io, socket, userInput) {
     });
 }
 
-function createCharacter(characterName, email){
-    const character = characterFactory(characterName, email);
-    db.Player.create(character);
+function createCharacter(characterName, email) {
+    return new Promise(async (res, rej) => {
+        console.log('Creating Character! db.Player.create(character)')
+        const character = characterFactory(characterName, email);
+        await db.Player.create(character);
+        res();
+    })
 }
 
 

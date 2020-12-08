@@ -80,6 +80,7 @@ function InputPanel({
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
         } else if (user.characterName === "newUser") {
+            console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
         } else if (findIn(input, actionCalls.whisper)) {
             let message;
