@@ -82,6 +82,8 @@ function juggle(value, playerData, location) {
         return false    
     } catch (e) {
         socket.emit('failure', "Hmm... something seems to have gone wrong.")
+        console.log("error from juggle");
+        console.log(e);
     }
 
 }
@@ -99,19 +101,29 @@ function stopJuggling(user, intent) {
 
 //set difficulty of juggling based on dex and number of objects
 function chancesOfSuccessJuggling(dex, num) {
-    if (Math.floor(Math.random() * 10) > ((dex * 2) / (num ** 2))) {
-        stopJuggling(player, false);
+    try {
+        if (Math.floor(Math.random() * 10) > ((dex * 2) / (num ** 2))) {
+            stopJuggling(player, false);
+        }
+    } catch (e) {
+        console.log("error from chancesOfSuccessJuggling");
+        console.log(e);
     }
 }
 
 
 
 socket.off('continueJuggle').on('continueJuggle', ({target, num, user, location})=>{
-    // console.log('recieved a continue juggle');
-    juggleTime = setInterval(function(){
-        socket.emit('contJuggle', {target, num, user, location});
-        chancesOfSuccessJuggling(user.stats.DEX, num);
-    }, 5000);
+    try {
+        // console.log('recieved a continue juggle');
+        juggleTime = setInterval(function(){
+            socket.emit('contJuggle', {target, num, user, location});
+            chancesOfSuccessJuggling(user.stats.DEX, num);
+        }, 5000);
+    } catch (e) {
+        console.log("error from continueJuggle");
+        console.log(e);
+    }
 })
 
 function clearJuggleTime(){
