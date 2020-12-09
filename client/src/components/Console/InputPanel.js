@@ -58,6 +58,8 @@ function InputPanel({
         setInput(e.target.value)
     }
 
+    console.log(user);
+    
     socket.off('YouCanLogIn').on('YouCanLogIn', () => {
         socket.emit("log in", authUser.email);
     })

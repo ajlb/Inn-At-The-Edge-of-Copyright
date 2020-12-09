@@ -45,7 +45,7 @@ module.exports = function (io) {
                     console.log("isAwake on disconnect:", returnData.isAwake)
                     if (!(returnData === null)) {
                         if (!(returnData.lastLocation === null)) {
-                            io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
+                            io.to(returnData.lastLocation).emit('logout', {user:socket.nickname, message:`${socket.nickname} disappears into the ether.`});
                             getUsers(io, returnData.lastLocation, playernicknames);
                         }
                     }
