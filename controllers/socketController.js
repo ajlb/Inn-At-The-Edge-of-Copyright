@@ -216,9 +216,12 @@ module.exports = function (io) {
         /*****************************/
         socket.on('to NPC', ({ toNPC, message }) => {
             db.Dialog.findOne({ NPC: toNPC })
-                .then(result => {
-                    console.log(result)
-                    runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
+                .then((result) => {
+                    if (result) {
+                        runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
+                    } else {
+                        socket.emit('failure', `Looks like ${toNPC} has nothing to say to you`)
+                    }
                 })
                 .catch(e => {
                     socket.emit('errror', { status: 500, message: `Something went wrong` });
