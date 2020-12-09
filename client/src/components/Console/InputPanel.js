@@ -108,18 +108,25 @@ function InputPanel({
             let help = takeTheseOffThat(actionCalls.help, input);
             socket.emit('help', { message: help });
         } else if (findIn(input, actionCalls.position)) {
-            let command = getOneOfTheseOffThat(actionCalls.position, input);
-            if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
-                setPlayerPosition('lying down');
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now lying down.` }]);
-            } else if (findIn(command, ['sit']) && playerPosition !== 'sitting') {
-                setPlayerPosition('sitting');
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting.` }]);
-            } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
-                setPlayerPosition('standing');
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
+            console.log("Position invoked")
+            console.log("activities.sleeping:", activities.sleeping)
+            console.log("position", playerPosition)
+            if (!activities.sleeping) {
+                let command = getOneOfTheseOffThat(actionCalls.position, input);
+                if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
+                    setPlayerPosition('lying down');
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now lying down.` }]);
+                } else if (findIn(command, ['sit']) && playerPosition !== 'sitting') {
+                    setPlayerPosition('sitting');
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting.` }]);
+                } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
+                    setPlayerPosition('standing');
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
+                } else {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-green", text: `You are already ${playerPosition}` }]);
+                }
             } else {
-                setChatHistory(prevState => [...prevState, { type: "displayed-green", text: `You are already ${playerPosition}` }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You need to be awake to do that` }]);
             }
         } else if (!inConversation) {
             // Everything in here cannot be run while in a conversation with an NPC
@@ -127,7 +134,7 @@ function InputPanel({
             //     console.log('something discoverable is happening');
             // } else 
             if (findIn(input, actionCalls.move)) {
-               processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls);
+                processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls);
             } else if (findIn(input, actionCalls.speak)) {
                 const message = takeTheseOffThat(actionCalls.speak, input);
                 socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
@@ -150,7 +157,6 @@ function InputPanel({
                 if (activities.sleeping) {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);
                 } else if (playerPosition === "lying down") {
-                    setActivities(prevState => { return { ...prevState, sleeping: true } });
                     socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
                 } else {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You need to lie down to do that!` }]);
@@ -160,7 +166,6 @@ function InputPanel({
                 if (!activities.sleeping) {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already awake!` }]);
                 } else {
-                    setActivities(prevState => { return { ...prevState, sleeping: false } });
                     socket.emit('wake', { userToWake: user.characterName, location: location.current.locationName })
                 }
             } else if (findIn(input, actionCalls.give)) {

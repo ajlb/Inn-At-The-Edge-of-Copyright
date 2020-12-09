@@ -7,7 +7,6 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
-import Cookies from "js-cookie";
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -82,7 +81,6 @@ function Console() {
       ...player,
       characterName: message
     })
-    await Cookies.set('username', message, { expires: 14 })
     setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
   });
 
@@ -167,14 +165,8 @@ function Console() {
 
   socket.off('data request').on('data request', () => {
     if (Object.keys(player).length !== 0) {
-      console.log(player)
       socket.emit('add player', { player })
     }
-  })
-
-  socket.off('refresh').on('refresh', () => {
-    console.log('server refreshed')
-    window.location = '/'
   })
 
   //initialize console with black background, minState="max", and then fetch data for GamewideData
