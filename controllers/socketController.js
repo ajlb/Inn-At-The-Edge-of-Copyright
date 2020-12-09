@@ -40,8 +40,9 @@ module.exports = function (io) {
         socket.on('disconnect', () => {
             console.log(`${socket.id} disconnected...`);
             players = players.filter(player => !(player === socket.nickname));
-            db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } })
+            db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false, isAwake: true } }, { new: true })
                 .then(returnData => {
+                    console.log("isAwake on disconnect:", returnData.isAwake)
                     if (!(returnData === null)) {
                         if (!(returnData.lastLocation === null)) {
                             io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
@@ -153,8 +154,15 @@ module.exports = function (io) {
                 socket.nickname = userCharacter;
                 socket.lowerName = userCharacter.toLowerCase();
                 playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
-                console.log("userLocation:", userLocation)
                 getUsers(io, userLocation, playernicknames);
+
+                db.Player.findOneAndUpdate({ characterName: userCharacter }, { $set: { isAwake: player.isAwake, isOnline: true } }, { new: true })
+                    .then(playerData => {
+                        console.log("isAwake on reconnect:", playerData.isAwake)
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
 
                 //find locations, return initial and then chunk
                 findLocationData(userLocation)
@@ -393,10 +401,11 @@ module.exports = function (io) {
             goToSleep(io, socket, userToSleep).then(userWasAwake => {
                 if (userWasAwake) {
                     io.to(location).emit('sleep', { userToSleep });
-                    socket.leave(location);
                 } else {
-                    io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping." });
+                    const action = "setActivities(prevState => {console.log('action running'); return { ...prevState, sleeping: true } })"
+                    io.to(socket.id).emit('error', { message: "You are already sleeping", action });
                 }
+                socket.leave(location);
             });
         });
 
@@ -404,12 +413,18 @@ module.exports = function (io) {
         /*             WAKE          */
         /*****************************/
         socket.on('wake', ({ userToWake, location }) => {
-            wakeUp(io, socket, userToWake).then(userWasSleeping => {
-                if (userWasSleeping) {
-                    socket.join(location);
+            wakeUp(io, socket, userToWake).then(userWasAsleep => {
+                socket.join(location);
+                if (userWasAsleep) {
                     io.to(location).emit('wake', { userToWake });
                 } else {
-                    io.to(socket.id).emit('error', { status: 400, message: "You are already awake." });
+                    const action = `
+                    setActivities(prevState => {
+                        console.log('action running')
+                        return { ...prevState, sleeping: false }
+                    })
+                    `
+                    io.to(socket.id).emit('error', { message: "You are already awake!", action });
                 }
             });
         });
