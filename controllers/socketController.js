@@ -119,7 +119,7 @@ module.exports = function (io) {
             players = players.filter(player => !(player === socket.nickname));
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
                 if (!(location === null)) {
-                    io.to(location).emit('logout', `${socket.nickname} disappears into the ether.`);
+                    io.to(location).emit('logout', {user:socket.nickname, message:`${socket.nickname} disappears into the ether.`});
                     getUsers(io, location, playernicknames);
                 }
             });
