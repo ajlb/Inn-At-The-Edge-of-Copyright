@@ -2,9 +2,9 @@ const db = require("../../models");
 const mongoose = require("mongoose");
 
 
-function whisper(socket, io, message, players, user){
+function whisper(socket, io, message, players, user) {
     let playerTo
-    console.log(message);
+    console.log(`${socket.nickname} is whispering`);
 
     // How this works:
     //   This for loop is going to see if the message received from the user starts with a player name
@@ -12,11 +12,10 @@ function whisper(socket, io, message, players, user){
     //   this for loop iterates through the first three words of the users message starting at 3 and working its way down
     // if at any point in the loop it recognizes a player's name, it will set the playerTo variable to that player's name
     for (let i = 2; i >= 0; i--) {
-        console.log(message);
         const messageString = message.toLowerCase().split(' ').slice(0, i + 1).join(' ');
         players.forEach(player => {
             if (player.toLowerCase() === messageString.toLowerCase()) {
-                console.log('found them!');
+                console.log(`${socket.nickname}'s whisper found ${messageString}`);
                 playerTo = messageString;
                 message = message.split(' ').slice(i + 1).join(' ');
             }
@@ -27,10 +26,17 @@ function whisper(socket, io, message, players, user){
         io.to(socket.id).emit('failure', "There is nobody here by that name.");
     } else {
         console.log("I'm sending a whisper");
-        db.Player.findOne({characterNameLowerCase: playerTo}).then(data=>{
-            io.to(socket.id).emit('whisperFrom', { message, userTo: data.characterName });
-            io.to(playerTo).emit('whisperTo', { message, userFrom: user });
-        })
+        db.Player.findOne({ characterNameLowerCase: playerTo })
+            .then(data => {
+                if (!(data === null)) {
+                    io.to(socket.id).emit('whisperFrom', { message, userTo: data.characterName });
+                    io.to(playerTo).emit('whisperTo', { message, userFrom: user });
+                }
+            })
+            .catch(e => {
+                console.log('ERROR IN DB CALL');
+                console.log(e);
+            })
     }
 }
 

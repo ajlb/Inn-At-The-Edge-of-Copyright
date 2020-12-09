@@ -172,7 +172,9 @@ function ChatPanel({
 
     //sleep
     socket.off('sleep').on('sleep', ({ userToSleep }) => {
+        console.log('sleep received')
         if (userToSleep === user.characterName) {
+            setActivities(prevState => { return { ...prevState, sleeping: true } });
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
         } else {
             if (!inConversation) {
@@ -184,6 +186,7 @@ function ChatPanel({
     //wake
     socket.off('wake').on('wake', ({ userToWake }) => {
         if (userToWake === user.characterName) {
+            setActivities(prevState => { return { ...prevState, sleeping: false } });
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
         } else {
             if (!inConversation) {
@@ -229,6 +232,7 @@ function ChatPanel({
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
             }
         }
+        console.log('calling clear juggle time');
         clearJuggleTime();
     })
 
@@ -253,9 +257,11 @@ function ChatPanel({
         });
     })
 
-    socket.off('error').on('error', ({ status, message }) => {
+    socket.off('error').on('error', ({ message, action }) => {
         let type = 'displayed-error';
-        setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
+        setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
+        console.log('action:', action)
+        if (action) eval(action);
     });
 
     socket.off('help').on('help', ({ actionData, type }) => {
@@ -264,7 +270,7 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `HELP` }]);
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
-            actionData.map((helpItem) => {
+            actionData.forEach((helpItem) => {
                 newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
                 setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: newArray }]);
             });

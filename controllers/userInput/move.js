@@ -7,7 +7,12 @@ const getLocationChunk = async (data) => {
     locationObject.current = data;
     for (const exit in data.exits) {
         const thisLocation = data.exits[exit];
-        locationObject[exit] = await db.Location.findOne({ locationName: thisLocation }).populate('inventory.item');
+        try {
+            locationObject[exit] = await db.Location.findOne({ locationName: thisLocation }).populate('inventory.item');
+        } catch (e) {
+            console.log('ERROR IN DB CALL');
+            console.log(e);
+        }
     }
     return locationObject;
 }
@@ -19,19 +24,27 @@ const resolveLocationChunk = (data) => {
 
 const rememberLocation = (username, newLocation) => {
     return new Promise((resolve, reject) => {
-        db.Player.updateOne({ characterName: username }, { $set: { lastLocation: newLocation } }).then(returnData=>{
+        db.Player.findOneAndUpdate({ characterName: username }, { $set: { lastLocation: newLocation } }, { new: true }).then(returnData => {
             resolve(returnData);
-        });
+        })
+            .catch(e => {
+                console.log('ERROR IN DB CALL');
+                reject(e);
+            });
     });
 }
 
 const findLocationData = (locationName) => {
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
         db.Location.findOne({ locationName: locationName })
-        .populate('inventory.item')
-        .then(returnData=>{
-            resolve(returnData);
-        });
+            .populate('inventory.item')
+            .then(returnData => {
+                resolve(returnData);
+            })
+            .catch(e => {
+                console.log('ERROR IN DB CALL');
+                reject(e);
+            });
     });
 }
 
@@ -52,14 +65,16 @@ const move = (socket, io, previousLocation, newLocation, direction, user) => {
     } else {
         io.to(newLocation).emit('move', { actor: user, direction, cardinal: false, action: "arrive" });
     }
-    rememberLocation(user, newLocation);
+    rememberLocation(user, newLocation).then((user) => {
+        io.to(socket.id).emit("playerUpdate", user)
+    });
     //find locations, return chunk
     findLocationData(newLocation).then(currentLocationData => {
 
         resolveLocationChunk(currentLocationData).then(chunk => {
             io.to(socket.id).emit('locationChunk', chunk);
             location = chunk;
-            io.to(socket.id).emit('moveQueueForeward', {locationChunk:chunk, characterName: socket.nickname});
+            io.to(socket.id).emit('moveQueueForeward', { locationChunk: chunk, characterName: socket.nickname });
         });
 
     })

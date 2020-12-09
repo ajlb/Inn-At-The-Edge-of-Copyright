@@ -32,7 +32,7 @@ module.exports = function (io) {
     io.on('connection', (socket) => {
         console.log(`${socket.id} connected!`);
         // possibly do a DB call to state that the use is online?
-
+        io.to(socket.id).emit('data request');
 
         /*****************************/
         /*         DISCONNECT        */
@@ -40,14 +40,19 @@ module.exports = function (io) {
         socket.on('disconnect', () => {
             console.log(`${socket.id} disconnected...`);
             players = players.filter(player => !(player === socket.nickname));
-            db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
-                if (!(returnData === null)) {
-                    if (!(returnData.lastLocation === null)) {
-                        io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
-                        getUsers(io, returnData.lastLocation, playernicknames);
+            db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false, isAwake: true } }, { new: true })
+                .then(returnData => {
+                    console.log("isAwake on disconnect:", returnData.isAwake)
+                    if (!(returnData === null)) {
+                        if (!(returnData.lastLocation === null)) {
+                            io.to(returnData.lastLocation).emit('logout', `${socket.nickname} disappears into the ether.`);
+                            getUsers(io, returnData.lastLocation, playernicknames);
+                        }
                     }
-                }
-            });
+                })
+                .catch(e => {
+                    console.log(e)
+                });
         })
 
 
@@ -55,41 +60,54 @@ module.exports = function (io) {
         /*           LOG IN          */
         /*****************************/
         socket.on('log in', email => {
-            console.log('Log In Attempt!!')
-            console.log("Email:", email)
             if (email === "You must log in first! Type 'log in [username]'") {
                 io.to(socket.id).emit('logFail', email);
             } else {
-                db.Player.findOne({ email }).then(returnData => {
-                    console.log("returnData:", returnData)
-                    if (returnData === null) {
-                        socket.emit('logFail', `new user`)
-                    } else {
-                        const userCharacter = returnData.characterName;
+                db.Player.findOne({ email })
+                    .then(returnData => {
+                        if (returnData === null) {
+                            socket.emit('logFail', `new user`)
+                        } else {
+                            const userCharacter = returnData.characterName;
 
-                        login(socket, io, userCharacter, players).then(userLocation => {
+                            login(socket, io, userCharacter, players).then(async (userLocation) => {
 
-                            if (!(userLocation === false)) {
-                                //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
-                                socket.nickname = userCharacter;
-                                socket.lowerName = userCharacter.toLowerCase();
-                                playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
+                                if (!(userLocation === false)) {
+                                    //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
+                                    socket.nickname = userCharacter;
+                                    socket.lowerName = userCharacter.toLowerCase();
+                                    playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
 
-                                getUsers(io, userLocation, playernicknames);
+                                    await getUsers(io, userLocation, playernicknames);
 
-                                //find locations, return initial and then chunk
-                                findLocationData(userLocation).then(currentLocationData => {
-                                    io.to(socket.lowerName).emit('currentLocation', currentLocationData);
-                                    resolveLocationChunk(currentLocationData).then(chunk => {
-                                        io.to(socket.lowerName).emit('locationChunk', chunk);
-                                        location = chunk;
-                                    });
+                                    //find locations, return initial and then chunk
+                                    findLocationData(userLocation)
+                                        .then(currentLocationData => {
+                                            io.to(socket.lowerName).emit('currentLocation', currentLocationData);
+                                            resolveLocationChunk(currentLocationData)
+                                                .then(chunk => {
+                                                    if (chunk !== null) {
+                                                        io.to(socket.lowerName).emit('locationChunk', chunk);
+                                                        location = chunk;
+                                                    } else {
+                                                        io.to(socket.lowerName).emit('error', { status: '500', message: "Something went wrong" })
+                                                    }
+                                                })
+                                                .catch(e => {
+                                                    console.log(e)
+                                                });
 
-                                })
-                            }
-                        });
-                    }
-                })
+                                        })
+                                        .catch(e => {
+                                            console.log(e)
+                                        })
+                                }
+                            });
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
             }
         });//end socket.on log in
 
@@ -112,20 +130,69 @@ module.exports = function (io) {
         /*    CREATE NEW CHARACTER   */
         /*****************************/
         socket.on('newUser', ({ input, email }) => {
-            validateName(io, socket, input, email).then(async function (success) {
-                console.log('Character Validated')
-                success && await createCharacter(input, email);
+            validateName(io, socket, input, email).then(success => {
+                success && createCharacter(input, email);
             }).then(() => {
-                console.log('Server emit YouCanLogIn')
                 io.to(socket.id).emit('YouCanLogIn');
             })
 
         })
 
+
+        /*****************************/
+        /*    ADD PLAYER TO ROSTER   */
+        /*****************************/
+        socket.on('add player', ({ player }) => {
+            console.log(`${player.characterName} reconnected`)
+            players.push(player.characterName);
+            socket.join(player.characterNameLowerCase)
+            let userLocation = player.lastLocation;
+            let userCharacter = player.characterName;
+            if (!(userLocation === false)) {
+                //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
+                socket.join(userLocation)
+                socket.nickname = userCharacter;
+                socket.lowerName = userCharacter.toLowerCase();
+                playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
+                getUsers(io, userLocation, playernicknames);
+
+                db.Player.findOneAndUpdate({ characterName: userCharacter }, { $set: { isAwake: player.isAwake, isOnline: true } }, { new: true })
+                    .then(playerData => {
+                        console.log("isAwake on reconnect:", playerData.isAwake)
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
+
+                //find locations, return initial and then chunk
+                findLocationData(userLocation)
+                    .then(currentLocationData => {
+                        io.to(socket.lowerName).emit('currentLocation', currentLocationData);
+                        resolveLocationChunk(currentLocationData)
+                            .then(chunk => {
+                                if (chunk !== null) {
+                                    io.to(socket.lowerName).emit('locationChunk', chunk);
+                                    location = chunk;
+                                } else {
+                                    io.to(socket.lowerName).emit('error', { status: '500', message: "Something went wrong" })
+                                }
+                            })
+                            .catch(e => {
+                                console.log(e)
+                            });
+
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
+            }
+        })
+
+
         /*****************************/
         /*            MOVE           */
         /*****************************/
-        socket.on('move', ({ previousLocation, newLocation, direction, user}) => {
+        socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
             move(socket, io, previousLocation, newLocation, direction, user);
             //leave and enter rooms
             socket.leave(previousLocation);
@@ -148,12 +215,18 @@ module.exports = function (io) {
         /*            NPC            */
         /*****************************/
         socket.on('to NPC', ({ toNPC, message }) => {
-            db.Dialog.findOne({ NPC: toNPC }, (err, result) => {
-                if (err) throw err;
-
-                runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
-
-            })
+            db.Dialog.findOne({ NPC: toNPC })
+                .then((result) => {
+                    if (result) {
+                        runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
+                    } else {
+                        socket.emit('failure', `Looks like ${toNPC} has nothing to say to you`)
+                    }
+                })
+                .catch(e => {
+                    socket.emit('errror', { status: 500, message: `Something went wrong` });
+                    console.log(`Error in 'to NPC' listener: `, e)
+                })
         })
 
         /*****************************/
@@ -175,9 +248,6 @@ module.exports = function (io) {
         /*****************************/
         /*         INVENTORY         */
         /*****************************/
-        socket.on('inventory', () => {
-
-        });
 
 
         /*****************************/
@@ -219,6 +289,9 @@ module.exports = function (io) {
                         }
                     }
                 })
+                .catch(e => {
+                    console.log(e)
+                })
 
         });
 
@@ -226,9 +299,7 @@ module.exports = function (io) {
         /*****************************/
         /*           LOOK            */
         /*****************************/
-        socket.on('look', () => {
-            // db the user's location and emit necessary info
-        });
+        // 404 Look not found
 
 
         /*****************************/
@@ -312,10 +383,17 @@ module.exports = function (io) {
             // db for player stats
             // emit stats to player
 
-            db.Player.find({}).then((statsData) => {
-                io.to(socket.id).emit('stats', { statsData });
-
-            })
+            db.Player.find({})
+                .then((statsData) => {
+                    if (statsData !== null) {
+                        io.to(socket.id).emit('stats', { statsData });
+                    } else {
+                        io.emit('error', { status: 500, message: "Something went wrong" })
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                })
         });
 
 
@@ -323,13 +401,14 @@ module.exports = function (io) {
         /*            SLEEP          */
         /*****************************/
         socket.on('sleep', ({ userToSleep, location }) => {
-            goToSleep(userToSleep).then(userWasAwake => {
+            goToSleep(io, socket, userToSleep).then(userWasAwake => {
                 if (userWasAwake) {
                     io.to(location).emit('sleep', { userToSleep });
-                    socket.leave(location);
                 } else {
-                    io.to(socket.id).emit('error', { status: 400, message: "You are already sleeping." });
+                    const action = "setActivities(prevState => {console.log('action running'); return { ...prevState, sleeping: true } })"
+                    io.to(socket.id).emit('error', { message: "You are already sleeping", action });
                 }
+                socket.leave(location);
             });
         });
 
@@ -337,12 +416,18 @@ module.exports = function (io) {
         /*             WAKE          */
         /*****************************/
         socket.on('wake', ({ userToWake, location }) => {
-            wakeUp(userToWake).then(userWasSleeping => {
-                if (userWasSleeping) {
-                    socket.join(location);
+            wakeUp(io, socket, userToWake).then(userWasAsleep => {
+                socket.join(location);
+                if (userWasAsleep) {
                     io.to(location).emit('wake', { userToWake });
                 } else {
-                    io.to(socket.id).emit('error', { status: 400, message: "You are already awake." });
+                    const action = `
+                    setActivities(prevState => {
+                        console.log('action running')
+                        return { ...prevState, sleeping: false }
+                    })
+                    `
+                    io.to(socket.id).emit('error', { message: "You are already awake!", action });
                 }
             });
         });
@@ -351,12 +436,6 @@ module.exports = function (io) {
         /*****************************/
         /*          POSITION         */
         /*****************************/
-        socket.on('position', () => {
-            //  db for player position
-            // emit position to player
-        });
-
-
 
 
         /*****************************/
