@@ -26,7 +26,7 @@ function generateBaseStats() {
     STR = roll([[4,6]]);//roll 4d6  
     CHA = roll([[4,6]]);//roll 4d6
     HP = roll([[6,6]]);//roll 4d6
-    return {WIS, DEX, STR, HP}
+    return {WIS, DEX, STR, CHA, HP}
 }
 
 module.exports = {
