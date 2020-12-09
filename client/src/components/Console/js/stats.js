@@ -42,7 +42,6 @@ function showStats(user, setChatHistory) {
             }
         }
     }
-
     // const deletedItems = statsArray.slice(0, 4);
     // const newDeletedItems = statsArray.slice(8, 10);
 
@@ -50,15 +49,8 @@ function showStats(user, setChatHistory) {
 
     statsArray.forEach((user) => {
 
-   
-      //  let currentColor = 'display-stat';
-       // if (newArray[3] < 5)
-
-
-     //       const userDisplay = { type: currentColor, text: `${user}` }
-
         setChatHistory(prevState => [...prevState, { type: 'display-stat', text: `${user}`}]);
-      //  console.log(redSpan);
+    
 
     });
 

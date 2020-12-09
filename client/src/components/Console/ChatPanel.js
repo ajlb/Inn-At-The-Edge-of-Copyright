@@ -258,18 +258,6 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
     });
 
-<<<<<<< HEAD
-    socket.off('help').on('help', ({ actionData }) => {
-        let type = 'displayed-indent';
-        // let currentString = ``;
-        let newArray = [];
-        actionData.map((helpItem) => {
-            newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
-            setChatHistory(prevState => [...prevState, { type, text: newArray }]);
-            // console.log(newArray);
-        });
-    });
-=======
     socket.off('help').on('help', ({ actionData, type }) => {
         if (type === "whole") {
             let newArray = [];
@@ -286,8 +274,8 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: actionData.commandLongDescription }]);
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}` }]);
->>>>>>> inputPlover
-
+        }
+    });
 //         let exampleArray = [];
 
 //         actionData.map((helpItem) => {
