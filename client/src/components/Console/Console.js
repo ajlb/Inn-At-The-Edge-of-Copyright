@@ -7,6 +7,7 @@ import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -74,6 +75,8 @@ function Console() {
     setMinState("max")
   }
 
+  const { isAuthenticated, isLoading } = useAuth0();
+
   // Socket log in message
   socket.off('log in').on('log in', async message => {
     let type = 'displayed-stat';
@@ -82,6 +85,7 @@ function Console() {
       characterName: message
     })
     setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
+
   });
 
 
@@ -160,6 +164,7 @@ function Console() {
         return 0;
       }
     });
+    document.getElementById("location-info").innerHTML = "";
     document.getElementById("location-info").innerHTML = `${userLocation}: ${currentUsersOfRoom.join(", ")}`;
   })
 
@@ -183,8 +188,9 @@ function Console() {
         mounted && socket.emit('location', locationData)
       });
 
+
     // sets a default chat history because chat history needs to be iterable to be mapped
-    setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }])
+      (isAuthenticated === false) && setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }]);
 
     //avoid trying to set state after component is unmounted
     return function cleanup() {
@@ -192,6 +198,7 @@ function Console() {
     }
   }, [])
 
+  console.log(isLoading);
   return (
     <div>
       <div className="wrapper">
@@ -214,7 +221,13 @@ function Console() {
               }}>
                 <div id="panel-interior">
                   <div className="panel-heading"></div>
-                  <div id="location-info"></div>
+                  <div id="location-info">
+            <p
+            style={{fontSize:"smaller"}}
+            className="mb-1">
+              {isLoading ? "Getting your room key..." : "Please type login to start!"}
+              </p>
+                  </div>
                   <ChatPanel
                     chatHistory={chatHistory}
                     setChatHistory={setChatHistory}

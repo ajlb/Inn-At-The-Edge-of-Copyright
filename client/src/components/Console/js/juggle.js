@@ -37,6 +37,7 @@ function juggle(value, playerData, location) {
                     let potentialArray = [];
                     for (const item of playerData.inventory) {
                         itemName = item.item.itemName;
+                        console.log(itemName);
                         if (itemName === pluralize(target.toLowerCase(), 1)) {
                             if (((playerData.stats.DEX * 1.7) / (num ** 2)) < 2) {
                                 socket.emit('green', 'That may be too many objects for you to juggle.')
