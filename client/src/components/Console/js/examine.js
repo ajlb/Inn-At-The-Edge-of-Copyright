@@ -12,6 +12,7 @@ function runExamine({ input, location, command, toExamine, user, setChatHistory 
     }
 
     function getAndDisplayInventoryItem(toExamine) {
+        console.log('getAndDisplayInventoryItem')
         let foundItem = user.inventory.find(param => {
             return param.item.itemName.includes(toExamine.trim())
         })
@@ -56,6 +57,8 @@ function runExamine({ input, location, command, toExamine, user, setChatHistory 
         setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
     } else if (isInInventory(toExamine)) {
         getAndDisplayInventoryItem(toExamine)
+    } else {
+        setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
     }
 }
 
