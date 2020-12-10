@@ -81,16 +81,35 @@ function ChatPanel({
 
     //receive your own move
     socket.off('yourMove').on('yourMove', (direction) => {
-        let newDescription = day ? location[direction].dayDescription : location[direction].nightDescription;
-        setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You enter: ${location[direction].locationName}` }]);
-        setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
-        let exits = [];
-        for (const param in location[direction].exits) {
-            if (param !== "current") {
-                exits.push(param);
+        try {
+            let newDescription = day ? location[direction].dayDescription : location[direction].nightDescription;
+            setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You enter: ${location[direction].locationName}` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
+            let exits = [];
+            for (const param in location[direction].exits) {
+                if (param !== "current") {
+                    exits.push(param);
+                }
             }
+            const fightables = location[direction].fightables[0];
+            if (fightables){
+                console.log(fightables);
+                if (Object.keys(fightables).length > 1){
+                    const fightList = [];
+                    for (const param in fightables){
+                        fightList.push(fightables[param]);
+                    }
+                    console.log(fightList);
+                    setChatHistory(prevState => [...prevState, {type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.join(", ")}</span>.`}]);
+                    
+                }
+            }
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);        
+        } catch (e) {
+            socket.emit('failure', "Hmmm... it seems like something went wrong.");
+            console.log("error from receive yourMove");
+            console.log(e);
         }
-        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
 
 
     });

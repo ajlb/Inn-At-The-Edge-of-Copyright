@@ -16,6 +16,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 // import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
 // import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 import { lookAbout } from './js/look';
+import { attackCreature } from "./js/monsters";
 import processMove from './js/move';
 import runExamine from './js/examine';
 
@@ -180,6 +181,10 @@ function InputPanel({
                 toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
                 runExamine({ input, location, command, toExamine, user, setChatHistory });
 
+            } else if (findIn(input, actionCalls.attack)) {
+                let target = takeTheseOffThat(actionCalls.attack, input).toLowerCase();
+                target = takeTheseOffThat(["the, a, an, that"], target);
+                attackCreature(socket, user, location, target);
             } else if (findIn(input, ["logout", "log out", "log off"])) {
                 takeTheseOffThat(["logout, log out", "log off"], input);
                 logout({ returnTo: window.location.origin });

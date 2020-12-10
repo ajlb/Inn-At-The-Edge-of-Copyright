@@ -65,6 +65,7 @@ function Console() {
     give: ['give'],
     examine: ['examine', 'study', 'inspect'],
     whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
+    attack: ['attack', 'fight', 'battle', 'kill']
   });
 
   //blur and select functions for input - to set min state
