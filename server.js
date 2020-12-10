@@ -21,6 +21,7 @@ require('./controllers/socketController')(io);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+// console.log('heroku needed a change');
 if(process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
     if (req.header('x-forwarded-proto') !== 'https')
