@@ -1,12 +1,13 @@
 const db = require("../models");
 const mongoose = require("mongoose");
-const { resolveLocationChunk, findLocationData, move } = require("./userInput/move");
+const { resolveLocationChunk, findLocationData, move, wakeMonstersOnMove } = require("./userInput/move");
 const { getItem, dropItem, giveItem } = require("./userInput/getDrop");
 const { wearItem, removeItem } = require("./userInput/wearRemove");
 const { incrementDex } = require("./userInput/juggle");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
+const { receiveAttack } = require("./fighting");
 // const { response } = require("express");
 
 const runNPC = require("./NPCEngine");
@@ -198,6 +199,7 @@ module.exports = function (io) {
             socket.leave(previousLocation);
             getUsers(io, previousLocation, playernicknames);
             socket.join(newLocation);
+            wakeMonstersOnMove(newLocation);
             getUsers(io, newLocation, playernicknames);
         });
 
@@ -469,6 +471,14 @@ module.exports = function (io) {
         /*          POSITION         */
         /*****************************/
 
+        
+        /*****************************/
+        /*           ATTACK          */
+        /*****************************/
+        socket.on('attackCreature', ({target, user, location})=>{
+            console.log(`${target.name} is being attacked by ${user.characterName} in the ${location.locationName}.`);
+            receiveAttack(io, socket, target, user, location);
+        })
 
         /*****************************/
         /*        DAY/NIGHT          */

@@ -69,6 +69,7 @@ function Console() {
     give: ['give'],
     examine: ['examine', 'study', 'inspect'],
     whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
+    attack: ['attack', 'fight', 'battle', 'kill'],
     shout: ['shout', 'yell'],
     reply: ['reply', '/r']
   });
@@ -154,6 +155,33 @@ function Console() {
           inventory: message
         }
       });
+    }
+  });
+
+  // Socket location fightables update
+  socket.off('fightablesUpdate').on('fightablesUpdate', ({ fightables, location }) => {
+    if (!(fightables === null)) {
+      if (location === location.current.locationName){
+        setLocation({
+          ...location,
+          current: {
+            ...location.current,
+            fightables
+          }
+        });
+      } else {
+        for (const param in location){
+          if (location[param].locationName === location){
+            setLocation({
+              ...location,
+              param: {
+                ...location[param],
+                fightables
+              }
+            });
+          }
+        }
+      }
     }
   });
 

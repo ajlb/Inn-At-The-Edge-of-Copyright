@@ -1,5 +1,6 @@
 const db = require("../../models");
 const mongoose = require("mongoose");
+const { sleepMonstersOnMove } = require("./move");
 
 
 function login(socket, io, userCharacter, players) {
@@ -55,7 +56,8 @@ const getUsers = (io, userLocation, playernicknames) => {
             io.to(userLocation).emit('who', { currentUsersOfRoom, userLocation });
             res();
         } else {
-            //     console.log(`Nobody in ${userLocation}`)
+            console.log(`Nobody in ${userLocation}`)
+            sleepMonstersOnMove(userLocation);
             // rej();
         }
     })

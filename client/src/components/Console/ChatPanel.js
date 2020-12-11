@@ -83,16 +83,41 @@ function ChatPanel({
 
     //receive your own move
     socket.off('yourMove').on('yourMove', (direction) => {
-        let newDescription = day ? location[direction].dayDescription : location[direction].nightDescription;
-        setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You enter: ${location[direction].locationName}` }]);
-        setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
-        let exits = [];
-        for (const param in location[direction].exits) {
-            if (param !== "current") {
-                exits.push(param);
+        try {
+            let newDescription = day ? location[direction].dayDescription : location[direction].nightDescription;
+            setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You enter: ${location[direction].locationName}` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
+            let exits = [];
+            for (const param in location[direction].exits) {
+                if (param !== "current") {
+                    exits.push(param);
+                }
             }
+            const fightables = location[direction].fightables;
+            if (fightables) {
+                console.log(fightables);
+                if (fightables.length > 1) {
+                    const fightList = [];
+                    for (const monsterObject of fightables) {
+                        fightList.push(monsterObject);
+                    }
+                    console.log(fightList);
+                    setChatHistory(prevState => [...prevState, {
+                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.filter(en => {
+                            return (en.isAlive);
+                        }).map(en => {
+                            return en.name;
+                        }).join(", ")}</span>.`
+                    }]);
+
+                }
+            }
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
+        } catch (e) {
+            socket.emit('failure', "Hmmm... it seems like something went wrong.");
+            console.log("error from receive yourMove");
+            console.log(e);
         }
-        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
 
 
     });
@@ -109,6 +134,23 @@ function ChatPanel({
             for (const param in message) {
                 if (param !== "current") {
                     exits.push(param);
+                }
+            }
+            const fightables = message.current.fightables;
+            if (fightables) {
+                console.log(fightables);
+                if (fightables.length > 1) {
+                    const fightList = [];
+                    for (const monsterObject of fightables) {
+                        fightList.push(monsterObject);
+                    }
+                    console.log(fightList);
+                    setChatHistory(prevState => [...prevState, {
+                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.map(en => {
+                            return en.name;
+                        }).join(", ")}</span>.`
+                    }]);
+
                 }
             }
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
@@ -134,11 +176,43 @@ function ChatPanel({
         }
     });
 
+    //battle
+    socket.off('battle').on('battle', ({ attacker, defender, action, damage }) => {
+        if (damage) {
+            if (user.characterName === attacker) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You ${action.slice(0, -1)} ${defender} for ${damage} damage!` }]);
+            } else if (user.characterName === defender) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} you for ${damage} damage!` }]);
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} ${defender}!` }]);
+            }
+        } else {
+            if (user.characterName === attacker) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You try to ${action.slice(0, -1)} ${defender}, but miss.` }]);
+            } else if (user.characterName === defender) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action} you, but misses.` }]);
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action} ${defender}, but misses.` }]);
+            }
+        }
+    });
+
+    //battleVictory
+    socket.off('battleVictory').on('battleVictory', ({ victor, defeated }) => {
+        if (user.characterName === victor) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You have defeated ${defeated}!` }]);
+        } else if (user.characterName === defeated) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated you! You have died.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated ${defeated}!` }]);
+        }
+    });
+
     socket.off('shout').on('shout', ({ userMessage, fromUser }) => {
         if (!inConversation) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: userMessage }]);
         }
-    })
+    });
 
     //a get action
     socket.off('get').on('get', ({ target, actor }) => {
