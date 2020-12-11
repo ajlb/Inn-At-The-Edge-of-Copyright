@@ -95,7 +95,7 @@
   {
     "locationName": "Front Yard",
     "dayDescription": "This must be the Front Yard of the Inn. The grass seems like it hasn't been cut in ages and yellow wildflowers peek through the tall grass. An old shed sits in the south end of the yard. A path to the north leads back into the Inn and continues east. Another door leads into a different part of the Inn to the west.",
-    "nightDescription": "NULL",
+    "nightDescription": "This must be the Front Yard of the Inn. The grass feels like it hasn't been cut in ages and purple wildflowers peek through the tall grass. An old shed sits in the south end of the yard. A path to the north leads back into the Inn and continues east. Another door leads into a different part of the Inn to the west.",
     "region": "The Inn",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
