@@ -101,7 +101,9 @@ function ChatPanel({
                     }
                     console.log(fightList);
                     setChatHistory(prevState => [...prevState, {
-                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.map(en => {
+                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.filter(en=>{
+                            return (en.isAlive);
+                        }).map(en => {
                             return en.name;
                         }).join(", ")}</span>.`
                     }]);
@@ -192,6 +194,17 @@ function ChatPanel({
             }
         }
     });
+
+    //battleVictory
+    socket.off('battleVictory').on('battleVictory', ({victor, defeated}) => {
+        if (user.characterName === victor) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You have defeated ${defeated}!` }]);
+        } else if (user.characterName === defeated) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated you! You have died.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated ${defeated}!` }]);
+        }
+    })
 
     //a get action
     socket.off('get').on('get', ({ target, actor }) => {

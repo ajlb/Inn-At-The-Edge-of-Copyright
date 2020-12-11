@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 function christmasJelloFactory(id) {
     return new Promise(function(resolve, reject){
         const jello = {};
+        jello.name = "Christmas Jello";
         jello.id = id;
         jello.stats = {
             "WIS": 5,

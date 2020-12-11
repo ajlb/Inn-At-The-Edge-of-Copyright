@@ -106,10 +106,10 @@ function Console() {
   });
 
   // Socket log out message
-  socket.off('logout').on('logout', ({user, message}) => {
+  socket.off('logout').on('logout', ({ user, message }) => {
     let type = 'displayed-stat';
     setChatHistory(prevState => [...prevState, { type, text: message }]);
-    if (user === player.characterName){
+    if (user === player.characterName) {
       setPlayer({});
       setLocation({});
     }
@@ -149,6 +149,33 @@ function Console() {
           inventory: message
         }
       });
+    }
+  });
+
+  // Socket location fightables update
+  socket.off('fightablesUpdate').on('fightablesUpdate', ({ fightables, location }) => {
+    if (!(fightables === null)) {
+      if (location === location.current.locationName){
+        setLocation({
+          ...location,
+          current: {
+            ...location.current,
+            fightables
+          }
+        });
+      } else {
+        for (const param in location){
+          if (location[param].locationName === location){
+            setLocation({
+              ...location,
+              param: {
+                ...location[param],
+                fightables
+              }
+            });
+          }
+        }
+      }
     }
   });
 

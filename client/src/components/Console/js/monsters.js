@@ -1,6 +1,15 @@
 import pluralize from "pluralize";
 import { allTheSame } from "../../../clientUtilities/finders";
 
+
+//give player XP on win, maybe an item
+//let players die
+//let players revive
+//let players fight each other
+
+
+
+
 function chooseEnemyAndReturnFightables(socket, user, location, input) {
     try {
         console.log(location);
@@ -8,11 +17,13 @@ function chooseEnemyAndReturnFightables(socket, user, location, input) {
         console.log(locationEnemies);
         const potentialArray = [];
         for (const enemyNum in locationEnemies) {
-            if (locationEnemies[enemyNum].name.toLowerCase() === input) {
-                socket.emit('attackCreature', { target: locationEnemies[enemyNum], user, location: location.current });
-                return true;
-            } else if (locationEnemies[enemyNum].name.toLowerCase().includes(input.toLowerCase())) {
-                potentialArray.push(locationEnemies[enemyNum]);
+            if (locationEnemies[enemyNum].isAlive){
+                if (locationEnemies[enemyNum].name.toLowerCase() === input) {
+                    socket.emit('attackCreature', { target: locationEnemies[enemyNum], user, location: location.current });
+                    return true;
+                } else if (locationEnemies[enemyNum].name.toLowerCase().includes(input.toLowerCase())) {
+                    potentialArray.push(locationEnemies[enemyNum]);
+                }
             }
         }
         if (potentialArray.length === 1) {
