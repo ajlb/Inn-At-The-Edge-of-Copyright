@@ -163,7 +163,7 @@
   {
     "locationName": "Library",
     "dayDescription": "You've entered the Inn Library. Rows upon rows of old wooden bookshelves house an innumerable amount of dusty books. A door labeled 'Lobby' sits on the east wall, though it seems that the right book on the shelf might take you elsewhere...",
-    "nightDescription": "NULL",
+    "nightDescription": "You've entered the Inn Library. Rows upon rows of old wooden bookshelves house an innumerable amount of dusty books. A door labeled 'Lobby' sits on the east wall, though it seems that the right book on the shelf might take you elsewhere...",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
