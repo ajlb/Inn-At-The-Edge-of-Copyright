@@ -190,7 +190,7 @@
   {
     "locationName": "Path to Pumpkin Patch",
     "dayDescription": "The dirt path you find yourself on continues to a pumpkin patch in the north. To the east the path comes from the Inn Garden.",
-    "nightDescription": "NULL",
+    "nightDescription": "The dirt path you find yourself on continues to a pumpkin patch in the north. To the east the path comes from the Inn Garden.",
     "region": "The Inn",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
