@@ -3,6 +3,21 @@ const db = require("../models");
 const mongoose = require("mongoose");
 
 
+function randomJelloFlavor(num){
+    try {
+        const possibleFlavors = ["strawberry", "lime", "coconut"];
+        let jelloCups = [];
+        for (i=0; i < num; i++){
+            let index = Math.floor(Math.random() * possibleFlavors.length);
+            jelloCups.push(`a cup of ${possibleFlavors[index]} jello`);
+        }
+        return jelloCups;
+    } catch (e) {
+        console.log("ERROR FROM randomJelloFlavor");
+        console.log(e);
+    }
+}
+
 function christmasJelloFactory(id) {
     return new Promise(function(resolve, reject){
         const jello = {};
@@ -26,6 +41,7 @@ function christmasJelloFactory(id) {
         jello.isLiving = true;
         jello.race = "Holiday Dessert";
         jello.aggressiveness = false;
+        jello.drop = randomJelloFlavor(1);
         jello.enemies = new Set();
     
         jello.attack = (target) => {
