@@ -38,6 +38,8 @@ function Console() {
 
   const [muted, setMuted] = useState(false);
 
+  const [canReply, setReplyTo] = useState(false)
+
   const [inConversation, setConversation] = useState(false);
 
   const [chatHistory, setChatHistory] = useState([]);
@@ -57,7 +59,7 @@ function Console() {
     get: ['get', '/g', 'pick up'],
     drop: ['drop', 'discard', '/d'],
     wear: ['wear', 'put on', 'don'],
-    remove: ['remove', '/r', 'take off', "doff"],
+    remove: ['remove', 'take off', "doff"],
     emote: ['emote', '/e', "/me"],
     juggle: ['juggle'],
     stats: ['stats'],
@@ -67,7 +69,8 @@ function Console() {
     give: ['give'],
     examine: ['examine', 'study', 'inspect'],
     whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
-    shout: ['shout', 'yell']
+    shout: ['shout', 'yell'],
+    reply: ['reply', '/r']
   });
 
   //blur and select functions for input - to set min state
@@ -243,6 +246,7 @@ function Console() {
                     inConversation={inConversation}
                     setConversation={setConversation}
                     setPlayer={setPlayer}
+                    setReplyTo={setReplyTo}
                   />
                   <InputPanel
                     actionCalls={actionCalls}
@@ -264,6 +268,8 @@ function Console() {
                     setConversation={setConversation}
                     muted={muted}
                     setMuted={setMuted}
+                    canReply={canReply}
+                    setReplyTo={setReplyTo}
                   />
                 </div>
               </div>

@@ -75,7 +75,7 @@
     "actionName": "remove",
     "commandBriefDescription": "You take off an item you are wearing.",
     "commandLongDescription": "When you type a remove command followed by an item you are wearing, you will take it off and add it to your inventory.",
-    "waysToCall": "take off, remove, /r, doff",
+    "waysToCall": "take off, remove, doff",
     "exampleCall": "remove green socks",
     "exampleResult": "You take off green socks."
   },
@@ -166,5 +166,13 @@
     "waysToCall": "shout, yell",
     "exampleCall": "shout Hey everybody!",
     "exampleResult": "Shambles shouts: Hey everybody!"
+  },
+  {
+    "actionName": "reply",
+    "commandBriefDescription": "reply to the person that last whispered to you",
+    "commandLongDescription": "When you type a reply command, the message you enter immediately following the command will be whispered to the most recent person who whispered to you",
+    "waysToCall": "reply, /r",
+    "exampleCall": "reply Stop bothering me!",
+    "exampleResult": "Whisper to Shambles: Stop bothering me!"
   }
 ]
