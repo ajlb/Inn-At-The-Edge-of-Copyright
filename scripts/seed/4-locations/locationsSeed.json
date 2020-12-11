@@ -136,7 +136,7 @@
   {
     "locationName": "Backyard",
     "dayDescription": "The quaint backyard of the Inn seems a bit unkempt. A path leads to the Inn Garden in the west and the door to the kitchen sits to the south.",
-    "nightDescription": "NULL",
+    "nightDescription": "The quaint backyard of the Inn seems a bit unkempt. A path leads to the Inn Garden in the west and the door to the kitchen sits to the south.",
     "region": "The Inn",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
