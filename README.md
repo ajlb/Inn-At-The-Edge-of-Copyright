@@ -7,8 +7,8 @@
 [![Version 2.0](https://img.shields.io/badge/Version-V2.0-blue)](#version-updates)
 
 ![Made With Black Magic](https://img.shields.io/badge/Made%20With-Black%20Magic-8b008b)
-![Made With Coffee](https://img.shields.io/badge/Made%20With-Coffee-a27250)
-![Made With Crayons](https://img.shields.io/badge/Made%20With-Crayons-ff69b4)
+![Made With Coffee](https://img.shields.io/badge/Infused%20With-Coffee-a27250)
+![Made With Crayons](https://img.shields.io/badge/Coded%20With-Crayons-ff69b4)
 ![No Unicorns Were Harmed](https://img.shields.io/badge/No%20Unicorns-Were%20Harmed-ffd9ff)
 
 ## Table of Contents
