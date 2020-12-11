@@ -1023,7 +1023,7 @@
   {
     "locationName": "Ships Hold",
     "dayDescription": "At the moment you entered the atmosphere you instantly regretted your desicion. Your life flashed before your eyes and ... there was a beep and a flash. Something happened but before you have time to remember a wave of nausea washes over you... worse than any hangover you have ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about you a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… you’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock… this does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
-    "nightDescription": "NULL",
+    "nightDescription": "At the moment you entered the atmosphere you instantly regretted your desicion. Your life flashed before your eyes and ... there was a beep and a flash. Something happened but before you have time to remember a wave of nausea washes over you... worse than any hangover you have ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about you a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… you’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock… this does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
     "region": "Vogon Space Ship",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -1035,7 +1035,7 @@
   {
     "locationName": "Captain's Quarters",
     "dayDescription": "You may regret everything about this journey to the Sky. Ford did try to warn you afterall. A large yellow skinned creature with a nose on it's forehad stares at you and shouts loudly. You did talk to the fish first, right? To the east you hear the sounds of voices cheering.",
-    "nightDescription": "NULL",
+    "nightDescription": "You may regret everything about this journey to the Sky. Ford did try to warn you afterall. A large yellow skinned creature with a nose on it's forehad stares at you and shouts loudly. You did talk to the fish first, right? To the east you hear the sounds of voices cheering.",
     "region": "Vogon Spaceship",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -1048,7 +1048,7 @@
   {
     "locationName": "Cafe",
     "dayDescription": "A utilitarian ship's mess lies before you. Metal tables and chairs encircle a single microphone hung from the ceiling. The room is packed with Vogons. At the mic is a Vogon reciting poetry. You want to quickly exit but something in the awful words being hurled at you becons you toward the Vogon Poet",
-    "nightDescription": "NULL",
+    "nightDescription": "A utilitarian ship's mess lies before you. Metal tables and chairs encircle a single microphone hung from the ceiling. The room is packed with Vogons. At the mic is a Vogon reciting poetry. You want to quickly exit but something in the awful words being hurled at you becons you toward the Vogon Poet",
     "region": "Vogon Spaceship",
     "indoorOutdoor": "indoor",
     "NPCs": [],
