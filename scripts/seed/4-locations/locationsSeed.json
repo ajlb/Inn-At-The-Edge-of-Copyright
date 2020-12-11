@@ -879,7 +879,7 @@
   {
     "locationName": "Steep Hike West",
     "dayDescription": "The dirt path from the west gives way to a steep stone path to the east on which, if one is not careful, it can be quite easy to slip and fall back down the mountain.",
-    "nightDescription": "NULL",
+    "nightDescription": "The dirt path from the west gives way to a steep stone path to the east on which, if one is not careful, it can be quite easy to slip and fall back down the mountain. Expecially in the dark.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -892,7 +892,7 @@
   {
     "locationName": "Gentle Slope West",
     "dayDescription": "The dirt path from the west gives way to a gently inclining stone path to the east that leads up into the mountains. The rocky surface of the mountain is littered with what looks like pumice.",
-    "nightDescription": "NULL",
+    "nightDescription": "The dirt path from the west gives way to a gently inclining stone path to the east that leads up into the mountains. The rocky surface of the mountain is littered with what looks like pumice.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -905,7 +905,7 @@
   {
     "locationName": "Steep Hike East",
     "dayDescription": "The steep sloping path to the west seems mildly dangerous, though the view of the meadow below takes your breath away. A fork in the hike leads south from which you can hear the sound of a roaring waterfall. The main hike continues east and west.",
-    "nightDescription": "NULL",
+    "nightDescription": "The steep sloping path to the west seems mildly dangerous, and the view of the meadow is ruined by a cloudy night. A fork in the hike leads south from which you can hear the sound of a roaring waterfall. The main hike continues east and west.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -919,7 +919,7 @@
   {
     "locationName": "Mountain Trail North",
     "dayDescription": "A sharp turn in the hiking trail goes east and south. On the northern end of the trail there appears to be a rather small and oddly placed castle-style building with a sign on the door that says 'Girl's Bathroom'.",
-    "nightDescription": "NULL",
+    "nightDescription": "A sharp turn in the hiking trail goes east and south. On the northern end of the trail there appears to be a rather small and oddly placed castle-style building with a sign on the door that says 'Girl's Bathroom'.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -933,7 +933,7 @@
   {
     "locationName": "Girl's Bathroom",
     "dayDescription": "Stepping into the girl's bathroom is almost like stepping into a medieval castle, though it seems to be in quite a state of disrepair. The wall is lined with shattered porcelain sinks and snapped pipes that are flooding the tile with water. Half of the wooden stalls are completely demolished though, in the further stall, you can see the head of a large cave troll sticking up above the stall divider.",
-    "nightDescription": "NULL",
+    "nightDescription": "Stepping into the girl's bathroom is almost like stepping into a medieval castle, though it seems to be in quite a state of disrepair. The wall is lined with shattered porcelain sinks and snapped pipes that are flooding the tile with water. Half of the wooden stalls are completely demolished though, in the further stall, you can see the head of a large cave troll sticking up above the stall divider.",
     "region": "Mountain",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -945,7 +945,7 @@
   {
     "locationName": "Waterfall",
     "dayDescription": "An incredibly tall waterfall pours from atop the cliffs above into a pool at the end of the path. The air is filled with a thick mist that instantly soaks you to the bone. No one seems to be able to determine where the water is draining... the stone path leads to the north.",
-    "nightDescription": "NULL",
+    "nightDescription": "An incredibly tall waterfall pours from atop the cliffs above into a pool at the end of the path. The air is filled with a thick mist that instantly soaks you to the bone. No one seems to be able to determine where the water is draining... the stone path leads to the north.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -957,7 +957,7 @@
   {
     "locationName": "Mountain Trail Center",
     "dayDescription": "The stone beneath you seems to be getting quite warm at this stretch of the hike. The source of the heat seems to come from the east. The path splits to the north, east, and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "The stone beneath you seems to be getting quite warm at this stretch of the hike. The source of the heat seems to come from the east. The path splits to the north, east, and south.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -971,7 +971,7 @@
   {
     "locationName": "Crater's Rim",
     "dayDescription": "You find yourself at the edge of a deep volcano crater which seems to be boiling the air around. You can feel your hair being singed as you gaze upon the lake of lava below. The stone path leads away from the crater to the west.",
-    "nightDescription": "NULL",
+    "nightDescription": "You find yourself at the edge of a deep volcano crater which seems to be boiling the air around. You can feel your hair being singed as you gaze upon the lake of lava below. The stone path leads away from the crater to the west.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -983,7 +983,7 @@
   {
     "locationName": "Mountain Trail South",
     "dayDescription": "The stone path you're walking on gently curves to the north and east, though a smaller path splits off from the main trail, leading toward a cliff.",
-    "nightDescription": "NULL",
+    "nightDescription": "The stone path you're walking on gently curves to the north and east, though a smaller path splits off from the main trail, leading toward a cliff.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -997,7 +997,7 @@
   {
     "locationName": "Cliff's Edge",
     "dayDescription": "You find yourself at the end of the Mountain Trail standing on the edge of a sheer south-facing cliff. The unnerving distance from here to the valley floor below seems terrifying, but one can't help but be beckoned to leap off the cliff into the clouds below. The moutain trail leads away to the north.",
-    "nightDescription": "NULL",
+    "nightDescription": "You find yourself at the end of the Mountain Trail standing on the edge of a sheer south-facing cliff. The unnerving distance from here to the valley floor below seems terrifying, but one can't help but be beckoned to leap off the cliff into the clouds below. The moutain trail leads away to the north.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -1010,7 +1010,7 @@
   {
     "locationName": "Gentle Slope East",
     "dayDescription": "The gently sloping hike through the mountains is very forgiving to those who are prone to tripping. The path continues to the east and west.",
-    "nightDescription": "NULL",
+    "nightDescription": "The gently sloping hike through the mountains is very forgiving to those who are prone to tripping. The path continues to the east and west.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
