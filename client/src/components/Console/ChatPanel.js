@@ -132,6 +132,12 @@ function ChatPanel({
         }
     });
 
+    socket.off('shout').on('shout', ({ userMessage, fromUser }) => {
+        if (!inConversation) {
+            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: userMessage }]);
+        }
+    })
+
     //a get action
     socket.off('get').on('get', ({ target, actor }) => {
         let type = 'displayed-stat';

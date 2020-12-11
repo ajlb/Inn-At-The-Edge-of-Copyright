@@ -36,6 +36,8 @@ function Console() {
     singing: false
   })
 
+  const [muted, setMuted] = useState(false);
+
   const [inConversation, setConversation] = useState(false);
 
   const [chatHistory, setChatHistory] = useState([]);
@@ -65,6 +67,7 @@ function Console() {
     give: ['give'],
     examine: ['examine', 'study', 'inspect'],
     whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
+    shout: ['shout', 'yell']
   });
 
   //blur and select functions for input - to set min state
@@ -105,10 +108,10 @@ function Console() {
   });
 
   // Socket log out message
-  socket.off('logout').on('logout', ({user, message}) => {
+  socket.off('logout').on('logout', ({ user, message }) => {
     let type = 'displayed-stat';
     setChatHistory(prevState => [...prevState, { type, text: message }]);
-    if (user === player.characterName){
+    if (user === player.characterName) {
       setPlayer({});
       setLocation({});
     }
@@ -259,6 +262,8 @@ function Console() {
                     setActivities={setActivities}
                     inConversation={inConversation}
                     setConversation={setConversation}
+                    muted={muted}
+                    setMuted={setMuted}
                   />
                 </div>
               </div>

@@ -258,6 +258,39 @@ module.exports = function (io) {
 
 
         /*****************************/
+        /*           SHOUT           */
+        /*****************************/
+        socket.on('shout', ({ message, fromUser, location }) => {
+            console.log(`${fromUser} shouts to ${location}: ${message}`)
+            db.Location.findOne({ locationName: location })
+                .then(locationData => {
+                    if (locationData && locationData !== {}) {
+                        db.Location.find({ region: locationData.region })
+                            .then(locationsArray => {
+                                if (locationsArray && locationsArray.length > 0) {
+                                    locationsArray.forEach(locationObj => {
+                                        let userMessage = `<span className='text-red'>${fromUser} shouts:</span> ${message}`
+                                        io.to(locationObj.locationName).emit('shout', { userMessage, fromUser })
+                                    })
+                                } else {
+                                    io.to(socket.id).emit("failure", "Something went wrong");
+                                }
+                            })
+                            .catch(e => {
+                                console.log(e)
+                            })
+                    } else {
+                        io.to(socket.id).emit('failure', "Something went wrong")
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            // io.to(location).emit('speak', `${user}: ${message}`);
+        });
+
+
+        /*****************************/
         /*            HELP           */
         /*****************************/
         socket.on('help', ({ message }) => {
