@@ -148,7 +148,7 @@
   },
   {
     "locationName": "Inn Garden",
-    "dayDescription": "The Inn Garden seems slightly overgrown but seems to be thriving nonetheless. The are is scattered with bushes, flowers, and small trees. The shallow pond in the corner seems home to a few wild frogs and a variety of plantlife. The garden gate leads to the west. A gap in the fence to the east take you into the backyard. The door to the Inn Kitchen sits on the south end of the garden.",
+    "dayDescription": "The Inn Garden seems slightly overgrown but seems to be thriving nonetheless. The area is scattered with bushes, flowers, and small trees. The shallow pond in the corner seems home to a few wild frogs and a variety of plantlife. The garden gate leads to the west. A gap in the fence to the east takes you into the backyard. The door to the Inn Kitchen sits on the south end of the garden.",
     "nightDescription": "NULL",
     "region": "The Inn",
     "indoorOutdoor": "outdoor",
@@ -202,7 +202,7 @@
   },
   {
     "locationName": "Pumpkin Patch Center",
-    "dayDescription": "You are at the heart of a pumpkin patch. Though on the vine, and uncarved, the pumpkins you see out of the corners of your vision seem to be leering evilly at you, like jack-o-lanterns.",
+    "dayDescription": "You are at the heart of a pumpkin patch. Though on the vine, uncarved, the pumpkins you see out of the corner of your vision seem to be leering evily at you... Like jack-o-lanterns.",
     "nightDescription": "NULL",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
@@ -217,7 +217,7 @@
   },
   {
     "locationName": "Pumpkin Patch North",
-    "dayDescription": "The pumpkin patch stretches to the east, west and south of you. A large, dark hole sits carved into the ground to the north. The pumpkins surrounding you are craggy and crooked, and the longer you look at them, the creepier they seem.",
+    "dayDescription": "The pumpkin patch stretches to the east, west and north of you. A large dark hole sits carved into the ground to the north. The pumpkins surrounding you are craggy and crooked. The longer you look at them, the creepier they become.",
     "nightDescription": "NULL",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
@@ -232,7 +232,7 @@
   },
   {
     "locationName": "Pumpkin Patch East",
-    "dayDescription": "The pumpkin patch stretches to the north, west, and south of you. The pumpkins around you a unnervingly creepy. Uncarverd pumpkins shouldn't be creepy, should they?",
+    "dayDescription": "The pumpkin patch stretches to the north, west, and south of you. The pumpkins around you are unnervingly creepy. Uncarverd pumpkins shouldn't be creepy... Should they?",
     "nightDescription": "NULL",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
@@ -246,7 +246,7 @@
   },
   {
     "locationName": "Pumpkin Patch South",
-    "dayDescription": "The pumpkin patch stretches to the east, west, and north of you. The patch seems dark somehow even in the day. Shadows seem to take the shape of creatures watching you.",
+    "dayDescription": "The pumpkin patch stretches to the east, west, and south of you. The patch seems dark somehow even in the day. Shadows seem to take the shape of creatures watching you.",
     "nightDescription": "NULL",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
@@ -260,7 +260,7 @@
   },
   {
     "locationName": "Pumpkin Patch West",
-    "dayDescription": "The pumpkin patch stretches to the north, east, and south of you. The pumpkins clustered around you seem to be pressing closer, making what should be an open field feel alarmingly claustrophobic.",
+    "dayDescription": "The pumpkin patch stretches to the north, east, and south of you. The pumpkins clustered around you seem to be pressing closer... Making what should be an open field seem alarmingly claustrophobic.",
     "nightDescription": "NULL",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
@@ -274,7 +274,7 @@
   },
   {
     "locationName": "Pumpkin Patch Northeast",
-    "dayDescription": "The pumpkin patch surrounds you to the west and south. The pumpkins here give of an ineffible feeling of sadness, and you feel tears prick the corners of your eyes.",
+    "dayDescription": "The pumpkin patch surrounds you to the north and east. The pumpkins here give off an ineffible feeling of sadness. You feel tears prick down the corners of your eyes.",
     "nightDescription": "NULL",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
@@ -287,7 +287,7 @@
   },
   {
     "locationName": "Pumpkin Patch Northwest",
-    "dayDescription": "The pumpkin patch surrounds you to the east and south, and the path to the Haunted Forest beckons toward the north. The pumpkin patch radiates a sinister feeling, and the path north feels equally foreboding. You feel trapped.",
+    "dayDescription": "The pumpkin patch surrounds you to the west and north. The path to the Haunted Forest beckons towards the north. The pumpkin patch radiates a sinister feeling, and the path to the north feels equally foreboding. You feel trapped.",
     "nightDescription": "NULL",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
@@ -301,7 +301,7 @@
   },
   {
     "locationName": "Pumpkin Patch Southwest",
-    "dayDescription": "The pumpkin patch surrounds you to the north and east, leaving you corned against a tall fence backed by dark and impenetrable forest. The patch seems darker than you think the day should be, and what should be ordinary pumpkins are radiating ominous threat. Your pulse starts to quicken as your instincts pick up on predatory intent.",
+    "dayDescription": "The pumpkin patch surrounds you to the west and south leaving you corned against a tall fence backed by a dark and impenetrable forest. The patch seems darker than you think the day should be. What should be ordinary pumpkins are radiating an ominous threat. Your pulse starts to quicken as your instincts pick up on a predatory intent.",
     "nightDescription": "NULL",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
@@ -314,7 +314,7 @@
   },
   {
     "locationName": "Pumpkin Patch Entrance",
-    "dayDescription": "The pumpkin patch surrounds you to the north and west. and you can see the inn to the south. The pumpkins closest to the inn look plump and cheery, but as the patch grows more dense to the northwest, it seems to emanate menace and warning.",
+    "dayDescription": "The pumpkin patch surrounds you to the north and west. You can see the inn to the south. The pumpkins closest to the inn look plump and cheery. As the patch grows more dense to the northeast, it seems to emanate menace and warning.",
     "nightDescription": "NULL",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
@@ -406,8 +406,8 @@
   },
   {
     "locationName": "Raging River",
-    "dayDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though the slippery rock surrounding the river could lead elsewhere.",
-    "nightDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though the slippery rock surrounding the river could lead elsewhere.",
+    "dayDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south. The slippery rock surrounding the river could lead elsewhere.",
+    "nightDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south. The slippery rock surrounding the river could lead elsewhere.",
     "region": "Halloween",
     "indoorOutdoor": "cave",
     "NPCs": [],
@@ -420,7 +420,7 @@
           "raging river",
           "river's edge"
         ],
-        "description": "the river flowing directly into a tunnel in the cave wall. Is it really safe to get in?",
+        "description": "the river is flowing directly into a tunnel in the cave wall. Is it really safe to get in?",
         "exampleCommand": "move west"
       }
     ],
@@ -432,8 +432,8 @@
   },
   {
     "locationName": "Cavern Lake",
-    "dayDescription": "A large, still pool of water glows an eerie shade of blue, the light reflecting off the cavern walls making the ceiling sparkle like the night sky. The tunnel continues to the east and to the west, while along the south wall you see rough entrance to something.",
-    "nightDescription": "A large, still pool of water glows an eerie shade of blue, the light reflecting off the cavern walls making the ceiling sparkle like the night sky. The tunnel continues to the east and to the west, while along the south wall you see rough entrance to something.",
+    "dayDescription": "A large still pool of water glows an eerie shade of blue. The light reflecting off the cavern walls making the ceiling sparkle like the night sky. The tunnel continues to the east and to the west. While along the south wall, you see a rough entrance to something.",
+    "nightDescription": "A large still pool of water glows an eerie shade of blue. The light reflecting off the cavern walls making the ceiling sparkle like the night sky. The tunnel continues to the east and to the west. While along the south wall, you see a rough entrance to something.",
     "region": "Halloween",
     "indoorOutdoor": "cave",
     "NPCs": [],
@@ -445,8 +445,8 @@
   },
   {
     "locationName": "Surface Elevator",
-    "dayDescription": "A rickety wooden elevator sits along the north wall seemlingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.",
-    "nightDescription": "A rickety wooden elevator sits along the north wall seemlingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.",
+    "dayDescription": "A rickety wooden elevator sits along the north wall seemlingly abandoned and begging someone to start it back up. The tunnel continues to the west and the south.",
+    "nightDescription": "A rickety wooden elevator sits along the north wall seemlingly abandoned and begging someone to start it back up. The tunnel continues to the west and the south.",
     "region": "Halloween",
     "indoorOutdoor": "cave",
     "NPCs": [],
@@ -459,8 +459,8 @@
   },
   {
     "locationName": "Murky Pond",
-    "dayDescription": "You've found yourself on the shore of a murky green pond of which no source of water can be seen. Dark trees line the far side of the pond. A path of dirt expands to the south.",
-    "nightDescription": "You've found yourself on the shore of a murky green pond of which no source of water can be seen. Dark trees line the far side of the pond. A path of dirt expands to the south.",
+    "dayDescription": "You finnd yourself on the shore of a murky green pond of which no source of water can be seen. Dark trees line the far side of the pond. A path of dirt expands to the south.",
+    "nightDescription": "You find yourself on the shore of a murky green pond of which no source of water can be seen. Dark trees line the far side of the pond. A path of dirt expands to the south.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -471,8 +471,8 @@
   },
   {
     "locationName": "The Seven Stones",
-    "dayDescription": "The small clearing you've entered is littered with small pebbles. Seven large stones surround you in a neat circle covered in stranger marks and symbols. To path you are on continues to the north and to the west.",
-    "nightDescription": "The small clearing you've entered is littered with small pebbles. Seven large stones surround you in a neat circle covered in stranger marks and symbols. To path you are on continues to the north and to the west.",
+    "dayDescription": "The small clearing you've entered is littered with small pebbles. Seven large stones surround you in a neat circle covered in stranger marks and symbols. The path you are on continues to the north and to the west.",
+    "nightDescription": "The small clearing you've entered is littered with small pebbles. Seven large stones surround you in a neat circle covered in stranger marks and symbols. The path you are on continues to the north and to the west.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -484,8 +484,8 @@
   },
   {
     "locationName": "Large Clearing",
-    "dayDescription": "The large clearing you've entered is interrupted by the dark treeline at its perimeter. The path splits four ways, leading north, south, east, and west.",
-    "nightDescription": "The large clearing you've entered is interrupted by the dark treeline at its perimeter. The path splits four ways, leading north, south, east, and west.",
+    "dayDescription": "The large clearing you've entered is interrupted by the dark treeline at its perimeter. The path splits four ways leading north, south, east, and west.",
+    "nightDescription": "The large clearing you've entered is interrupted by the dark treeline at its perimeter. The path splits four ways leading north, south, east, and west.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -499,8 +499,8 @@
   },
   {
     "locationName": "Tree Tunnel North",
-    "dayDescription": "The tunnel of trees you find yourself in is lined with dark trees. There seems to be a clearing in the trees up ahead to the north. The tunnel of trees continues to the south.",
-    "nightDescription": "The tunnel of trees you find yourself in is lined with dark trees. There seems to be a clearing in the trees up ahead to the north. The tunnel of trees continues to the south.",
+    "dayDescription": "In The tunnel of trees, you find yourself in lined with dark trees. There seems to be a clearing in the trees up ahead to the north. The tunnel of trees continues to the south.",
+    "nightDescription": "In The tunnel of trees, you find yourself in lined with dark trees. There seems to be a clearing in the trees up ahead to the north. The tunnel of trees continues to the south.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -512,8 +512,8 @@
   },
   {
     "locationName": "Tree Tunnel South",
-    "dayDescription": "A tunnel of looming, dark trees surrounds you. Rustlings bushes and snapping twigs can be heard out of sight just beyond the treeline. The path continues to the west",
-    "nightDescription": "A tunnel of looming, dark trees surrounds you. Rustlings bushes and snapping twigs can be heard out of sight just beyond the treeline. The path continues to the west",
+    "dayDescription": "A tunnel of looming dark trees surrounds you. Rustling bushes and snapping twigs can be heard out of sight just beyond the treeline. The path continues to the north and south",
+    "nightDescription": "A tunnel of looming dark trees surrounds you. Rustling bushes and snapping twigs can be heard out of sight just beyond the treeline. The path continues to the north and south",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -525,8 +525,8 @@
   },
   {
     "locationName": "The Elder Trees",
-    "dayDescription": "The grove of trees surrounding you is full of large, ancient trees that loom over you. They seem to be keeping you under a watchful eye. The path continues to the west and to the south.",
-    "nightDescription": "The grove of trees surrounding you is full of large, ancient trees that loom over you. They seem to be keeping you under a watchful eye. The path continues to the west and to the south.",
+    "dayDescription": "The grove of trees surrounding you is full of large ancient trees that loom over you. They seem to be keeping you under a watchful eye. The path continues to the east and to the south.",
+    "nightDescription": "The grove of trees surrounding you is full of large ancient trees that loom over you. They seem to be keeping you under a watchful eye. The path continues to the east and to the south.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -538,8 +538,8 @@
   },
   {
     "locationName": "The Great Tree",
-    "dayDescription": "The thick dark fog shrouding your environment slowly parts to reveal an impossibly large tree leering above you. The mist in the air seems to whisper about the impossible age of the great tree for the tree will outlive us all. Upon its wide trunk, you can makeup an ancient face that seems eerily familiar...",
-    "nightDescription": "The thick dark fog shrouding your environment slowly parts to reveal an impossibly large tree leering above you. The mist in the air seems to whisper about the impossible age of the great tree for the tree will outlive us all. Upon its wide trunk, you can makeup an ancient face that seems eerily familiar...",
+    "dayDescription": "The thick dark fog shrouding your environment slowly parts to reveal an impossibly large tree leering above you. The mist in the air seems to whisper about the impossible age of the great tree for the tree will outlive us all. Upon its wide trunk, you can make view of an ancient face that seems eerily familiar...",
+    "nightDescription": "The thick dark fog shrouding your environment slowly parts to reveal an impossibly large tree leering above you. The mist in the air seems to whisper about the impossible age of the great tree for the tree will outlive us all. Upon its wide trunk, you can make view of an ancient face that seems eerily familiar...",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [
@@ -558,8 +558,8 @@
   },
   {
     "locationName": "Crazy Cat Lady's Shack",
-    "dayDescription": "Although worn on the outside, the inside of the shack you've entered is finely decorated and well-kept, though quite flashy and a bit out-dated. In the corner next to the crackling fireplace you notice a slightly-grizzled looking cat-like person rocking their chair back and forth.",
-    "nightDescription": "Although worn on the outside, the inside of the shack you've entered is finely decorated and well-kept, though quite flashy and a bit out-dated. In the corner next to the crackling fireplace you notice a slightly-grizzled looking cat-like person rocking their chair back and forth.",
+    "dayDescription": "Although worn on the outside, the inside of the shack you've entered is finely decorated and well-kept. You notice it's quite flashy and a bit out-dated. In the corner next to the crackling fireplace, you notice a slightly-grizzled looking cat-like person rocking their chair back and forth.",
+    "nightDescription": "Although worn on the outside, the inside of the shack you've entered is finely decorated and well-kept. You notice it's quite flashy and a bit out-dated. In the corner next to the crackling fireplace, you notice a slightly-grizzled looking cat-like person rocking their chair back and forth.",
     "region": "Halloween",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -570,8 +570,8 @@
   },
   {
     "locationName": "East Tunnel",
-    "dayDescription": "The tunnel splits, stretching to the north, south, and west.",
-    "nightDescription": "The tunnel splits, stretching to the north, south, and west.",
+    "dayDescription": "The tunnel splits stretching to the north, south, and west.",
+    "nightDescription": "The tunnel splits stretching to the north, south, and west.",
     "region": "Halloween",
     "indoorOutdoor": "cave",
     "NPCs": [],
@@ -705,7 +705,7 @@
   },
   {
     "locationName": "Town Southwest",
-    "dayDescription": "A small town of brick and mortar buildings surrounds you. The town road continues north and east and leads away from the town to the south.",
+    "dayDescription": "A small town of brick mortar buildings surrounds you. The town road continues north and east and leads away from the town to the south.",
     "nightDescription": "NULL",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
@@ -719,7 +719,7 @@
   },
   {
     "locationName": "Town Southeast",
-    "dayDescription": "The town road curves past the bumbling creek and around the back of a small fenced garden, though a stacked stone wall keeps you from accessing the water. The town road continues to the north and west.",
+    "dayDescription": "The town road curves past the bumbling creek and around the back of a small fenced garden. A stacked stone wall keeps you from accessing the water. The town road continues to the north and west.",
     "nightDescription": "NULL",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
@@ -732,7 +732,7 @@
   },
   {
     "locationName": "Item Store",
-    "dayDescription": "You've entered a brightly lit Item Store with a multitude of tools, trinkets, and clothing for sale filling the shelves around the room. A smiling clerk stands proudly behind a counter seemingly waiting for you to approach.",
+    "dayDescription": "You've entered a brightly lit Item Store with a multitude of tools, trinkets, and clothing for sale filling the shelves around the room. A smiling clerk stands proudly behind a counter, seemingly waiting for you to approach.",
     "nightDescription": "NULL",
     "region": "Country and Town",
     "indoorOutdoor": "indoor",
@@ -745,7 +745,7 @@
   },
   {
     "locationName": "Town East",
-    "dayDescription": "Small, tough weeds peek through the small cracks in the road surface. A gap in the fence on the west side leads you into a neat garden. The town road continues to the north and south.",
+    "dayDescription": "Small tough weeds peek through the small cracks in the road surface. A gap in the fence on the west side leads you into a neat garden. The town road continues to the north and south.",
     "nightDescription": "NULL",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
@@ -759,7 +759,7 @@
   },
   {
     "locationName": "Garden",
-    "dayDescription": "It could be said that no better-maintained garden than the one you find yourself could be found. Beautiful flowers and perfectly trimmed hedges fill the garden with a gentle atmosphere. A door on the west side of the garden leads into the brick and mortar building standing next to the garden. You should be able to fit through the gap in the fence on the east side of the garden.",
+    "dayDescription": "It could be said that no better-maintained garden than the one you find yourself could be found. Beautiful flowers and perfectly trimmed hedges fill the garden with a gentle atmosphere. A door on the west side of the garden leads into the brick mortar building standing next to the garden. You should be able to fit through the gap in the fence on the east side of the garden.",
     "nightDescription": "NULL",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
@@ -772,7 +772,7 @@
   },
   {
     "locationName": "Town Northwest",
-    "dayDescription": "You find yourself completely surrounded by the brick and mortar buildings that make up the town. The brick road makes a sharp turn to the east and south. The building on the west side of the road has an iron front door, though it seems to be locked.",
+    "dayDescription": "You find yourself completely surrounded by the brick mortar buildings that make up the town. The brick road makes a sharp turn to the east and south. The building on the west side of the road has an iron front door... Though it seems to be locked.",
     "nightDescription": "NULL",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
@@ -786,7 +786,7 @@
   },
   {
     "locationName": "Town Northeast",
-    "dayDescription": "The brick road you're standing on seems to be the only barrier between the town and the nature beyond. The road splits three ways, leading you north, south, and west. A small wooden boardwalk to the east takes you to the river's edge",
+    "dayDescription": "The brick road you're standing on seems to be the only barrier between the town and the nature beyond. The road splits three ways leading you north, south, and west. A small wooden boardwalk to the east takes you to the river's edge",
     "nightDescription": "NULL",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
@@ -813,7 +813,7 @@
   },
   {
     "locationName": "Special Item Store",
-    "dayDescription": "The iron door you've unlocked leads into an item store filled with rare and powerful items. There is no store clerk in sight but a small sign posted near the door reads 'Honor Code: Take what you need and leave payment'",
+    "dayDescription": "The iron door you've unlocked leads into an item store filled with rare and powerful items. There is no store clerk in sight, but a small sign posted near the door reads 'Honor Code: Take what you need and leave payment'",
     "nightDescription": "NULL",
     "region": "Country and Town",
     "indoorOutdoor": "indoor",
@@ -838,7 +838,7 @@
   },
   {
     "locationName": "Haunted Shack",
-    "dayDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Enter the door to the west if you dare... or move back to the wishing well to the east.",
+    "dayDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Enter the door to the west if you dare... Or move back to the wishing well to the east.",
     "nightDescription": "NULL",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
@@ -851,7 +851,7 @@
   },
   {
     "locationName": "Wishing Well",
-    "dayDescription": "The brick road wraps around a stone wishing well. It sits dauntingly before you, daring anyone to toss in their valubles. A dirt path behind the well takes you west into the woods and the brick road continues east.",
+    "dayDescription": "The brick road wraps around a stone wishing well. It sits dauntingly before you daring anyone to toss in their valubles. A dirt path behind the well takes you west into the woods and the brick road continues east.",
     "nightDescription": "NULL",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
@@ -878,7 +878,7 @@
   },
   {
     "locationName": "Steep Hike West",
-    "dayDescription": "The dirt path from the west gives way to a steep stone path to the east on which, if one is not careful, it can be quite easy to slip and fall back down the mountain.",
+    "dayDescription": "The dirt path from the west gives way to a steep stone path to the east. If one is not careful, it can be quite easy to slip and fall back down the mountain.",
     "nightDescription": "NULL",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
@@ -918,7 +918,7 @@
   },
   {
     "locationName": "Mountain Trail North",
-    "dayDescription": "A sharp turn in the hiking trail goes east and south. On the northern end of the trail there appears to be a rather small and oddly placed castle-style building with a sign on the door that says 'Girl's Bathroom'.",
+    "dayDescription": "A sharp turn in the hiking trail goes west and south. On the northern end of the trail, there appears to be a rather small and oddly placed castle-style building with a sign on the door that says 'Girl's Bathroom'.",
     "nightDescription": "NULL",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
@@ -932,7 +932,7 @@
   },
   {
     "locationName": "Girl's Bathroom",
-    "dayDescription": "Stepping into the girl's bathroom is almost like stepping into a medieval castle, though it seems to be in quite a state of disrepair. The wall is lined with shattered porcelain sinks and snapped pipes that are flooding the tile with water. Half of the wooden stalls are completely demolished though, in the further stall, you can see the head of a large cave troll sticking up above the stall divider.",
+    "dayDescription": "Stepping into the girl's bathroom is almost like stepping into a medieval castle. It seems to be in quite a state of disrepair. The wall is lined with shattered porcelain sinks and snapped pipes that are flooding the tile with water. Half of the wooden stalls are completely demolished. In the further stall, you can see the head of a large cave troll sticking up above the stall divider.",
     "nightDescription": "NULL",
     "region": "Mountain",
     "indoorOutdoor": "indoor",
@@ -944,7 +944,7 @@
   },
   {
     "locationName": "Waterfall",
-    "dayDescription": "An incredibly tall waterfall pours from atop the cliffs above into a pool at the end of the path. The air is filled with a thick mist that instantly soaks you to the bone. No one seems to be able to determine where the water is draining... the stone path leads to the north.",
+    "dayDescription": "An incredibly tall waterfall pours from atop the cliffs above into a pool at the end of the path. The air is filled with a thick mist that instantly soaks you to the bone. No one seems to be able to determine where the water is draining... The stone path leads to the north.",
     "nightDescription": "NULL",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
@@ -982,7 +982,7 @@
   },
   {
     "locationName": "Mountain Trail South",
-    "dayDescription": "The stone path you're walking on gently curves to the north and east, though a smaller path splits off from the main trail, leading toward a cliff.",
+    "dayDescription": "The stone path you're walking on gently curves to the north and west. A smaller path splits off from the main trail leading toward a cliff.",
     "nightDescription": "NULL",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
@@ -1022,7 +1022,7 @@
   },
   {
     "locationName": "Ships Hold",
-    "dayDescription": "At the moment you entered the atmosphere you instantly regretted your desicion. Your life flashed before your eyes and ... there was a beep and a flash. Something happened but before you have time to remember a wave of nausea washes over you... worse than any hangover you have ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about you a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… you’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock… this does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
+    "dayDescription": "At the moment you entered the atmosphere, you instantly regret your desicion. Your life flashes before your eyes. There was a beep and a flash. Something happened, but before you have time to remember, a wave of nausea washes over you... Worse than any hangover you've ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about yourself, a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… You’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock. This does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
     "nightDescription": "NULL",
     "region": "Vogon Space Ship",
     "indoorOutdoor": "indoor",
@@ -1047,7 +1047,7 @@
   },
   {
     "locationName": "Cafe",
-    "dayDescription": "A utilitarian ship's mess lies before you. Metal tables and chairs encircle a single microphone hung from the ceiling. The room is packed with Vogons. At the mic is a Vogon reciting poetry. You want to quickly exit but something in the awful words being hurled at you becons you toward the Vogon Poet",
+    "dayDescription": "A utilitarian ship's mess lies before you. Metal tables and chairs encircle a single microphone hung from the ceiling. The room is packed with Vogons. At the mic is a Vogon reciting poetry. You want to quickly exit, but something in the awful words being hurled at you becons you toward the Vogon Poet",
     "nightDescription": "NULL",
     "region": "Vogon Spaceship",
     "indoorOutdoor": "indoor",
@@ -1084,7 +1084,7 @@
   },
   {
     "locationName": "Sky Fishing Hole",
-    "dayDescription": "The sky is blue. The fishing hole is blue. Are there fish in the sky? Perhaps you should find out.",
+    "dayDescription": "The sky and fishing hole is blue. Are there fish in the sky? Perhaps you should find out.",
     "nightDescription": "NULL",
     "region": "Cloud City",
     "indoorOutdoor": "outdoor",
