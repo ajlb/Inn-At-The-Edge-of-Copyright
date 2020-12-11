@@ -100,6 +100,9 @@ function InputPanel({
         } else if (user.characterName === "newUser") {
             console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
+        /////////////////////
+        //      REPLY      //
+        /////////////////////
         } else if (findIn(input, actionCalls.reply)) {
             if (canReply) {
                 let message = canReply.to + ' ' + takeTheseOffThat(actionCalls.reply, input)
