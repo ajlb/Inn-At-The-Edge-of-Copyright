@@ -183,8 +183,13 @@ function InputPanel({
             } else if (findIn(input, actionCalls.remove)) {
                 remove(input, user, actionCalls.remove);
             } else if (findIn(input, actionCalls.emote)) {
+                let command = getOneOfTheseOffThat(actionCalls.emote, input)
                 const emoteThis = takeTheseOffThat(actionCalls.emote, input);
-                socket.emit('emote', { user: user.characterName, emotion: emoteThis, location: location.current.locationName });
+                if (emoteThis.trim() !== '') {
+                    socket.emit('emote', { user: user.characterName, emotion: emoteThis, location: location.current.locationName });
+                } else {
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Looks like you didn't emote anything! Try ${command} runs around wildly` }]);
+                }
             } else if (findIn(input, actionCalls.sleep)) {
                 if (activities.sleeping) {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);
