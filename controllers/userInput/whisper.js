@@ -2,7 +2,7 @@ const db = require("../../models");
 const mongoose = require("mongoose");
 
 
-function whisper(socket, io, message, players, user) {
+function whisper(socket, io, message, players, userData) {
     let playerTo
     console.log(`${socket.nickname} is whispering`);
 
@@ -26,11 +26,26 @@ function whisper(socket, io, message, players, user) {
         io.to(socket.id).emit('failure', "There is nobody here by that name.");
     } else {
         console.log("I'm sending a whisper");
-        db.Player.findOne({ characterNameLowerCase: playerTo })
+        db.Player.find({ characterNameLowerCase: { $in: [playerTo, userData.characterNameLowerCase] } })
             .then(data => {
                 if (!(data === null)) {
-                    io.to(socket.id).emit('whisperFrom', { message, userTo: data.characterName });
-                    io.to(playerTo).emit('whisperTo', { message, userFrom: user });
+                    // console.log(data);
+                    data.forEach(playerObj => {
+                        // console.log(playerObj)
+                        if (playerObj.characterNameLowerCase === playerTo) {
+                            playerTo = playerObj
+                        }
+                        // return playerObj.characterName === playerTo
+                    });
+                    // console.log(playerTo)
+                    if (playerTo.lastLocation === userData.lastLocation) {
+                        io.to(socket.id).emit('whisperFrom', { message, userTo: playerTo.characterName });
+                        io.to(playerTo.characterNameLowerCase).emit('whisperTo', { message, userFrom: userData.characterName });
+                    } else {
+                        io.to(socket.id).emit('failure', `${playerTo.characterName} is not in the same room as you`)
+                    }
+                } else {
+                    io.to(socket.id).emit('failure', "Something went wrong")
                 }
             })
             .catch(e => {

@@ -45,7 +45,7 @@ module.exports = function (io) {
                     console.log("isAwake on disconnect:", returnData.isAwake)
                     if (!(returnData === null)) {
                         if (!(returnData.lastLocation === null)) {
-                            io.to(returnData.lastLocation).emit('logout', {user:socket.nickname, message:`${socket.nickname} disappears into the ether.`});
+                            io.to(returnData.lastLocation).emit('logout', { user: socket.nickname, message: `${socket.nickname} disappears into the ether.` });
                             getUsers(io, returnData.lastLocation, playernicknames);
                         }
                     }
@@ -119,7 +119,7 @@ module.exports = function (io) {
             players = players.filter(player => !(player === socket.nickname));
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false } }).then(returnData => {
                 if (!(location === null)) {
-                    io.to(location).emit('logout', {user:socket.nickname, message:`${socket.nickname} disappears into the ether.`});
+                    io.to(location).emit('logout', { user: socket.nickname, message: `${socket.nickname} disappears into the ether.` });
                     getUsers(io, location, playernicknames);
                 }
             });
@@ -205,9 +205,8 @@ module.exports = function (io) {
         /*****************************/
         /*          WHISPER          */
         /*****************************/
-        socket.on('whisper', ({ message, user }) => {
-            console.log(message, user);
-            whisper(socket, io, message, players, user);
+        socket.on('whisper', ({ message, userData }) => {
+            whisper(socket, io, message, players, userData);
         })
 
 
