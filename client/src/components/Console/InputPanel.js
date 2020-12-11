@@ -59,7 +59,7 @@ function InputPanel({
     }
 
     // console.log(user);
-    
+
     socket.off('YouCanLogIn').on('YouCanLogIn', () => {
         socket.emit("log in", authUser.email);
     })
@@ -92,10 +92,10 @@ function InputPanel({
                 .then(({ NPCName, message }) => {
                     socket.emit('to NPC', { toNPC: NPCName, message })
                 })
-                .catch(err => {
-                    console.log(err.message)
+                .catch(() => {
+                    // This runs if the entered character is not an NPC
                     // fyi, checking if the message begins with someone's name is handled on the server side
-                    socket.emit('whisper', { message, user: user.characterName })
+                    socket.emit('whisper', { message, userData: user })
                 })
         } else if (findIn(input, actionCalls.inventory)) {
             // let inventory = takeTheseOffThat(actionCalls.inventory, input)
