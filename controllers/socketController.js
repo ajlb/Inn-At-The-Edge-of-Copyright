@@ -264,7 +264,7 @@ module.exports = function (io) {
             console.log(`${fromUser} shouts to ${location}: ${message}`)
             db.Location.findOne({ locationName: location })
                 .then(locationData => {
-                    if (locationData) {
+                    if (locationData && locationData !== {}) {
                         db.Location.find({ region: locationData.region })
                             .then(locationsArray => {
                                 if (locationsArray && locationsArray.length > 0) {
