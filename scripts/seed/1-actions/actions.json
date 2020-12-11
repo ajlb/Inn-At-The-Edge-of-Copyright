@@ -166,5 +166,13 @@
     "waysToCall": "shout, yell",
     "exampleCall": "shout Hey everybody!",
     "exampleResult": "Shambles shouts: Hey everybody!"
+  },
+  {
+    "actionName": "reply",
+    "commandBriefDescription": "reply to the person that last whispered to you",
+    "commandLongDescription": "When you type a reply command, the message you enter immediately following the command will be whispered to the most recent person who whispered to you",
+    "waysToCall": "reply, /r",
+    "exampleCall": "reply Stop bothering me!",
+    "exampleResult": "Whisper to Shambles: Stop bothering me!"
   }
 ]
