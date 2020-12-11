@@ -54,8 +54,8 @@ const getUsers = (io, userLocation, playernicknames) => {
             }
             io.to(userLocation).emit('who', { currentUsersOfRoom, userLocation });
             res();
-        } else {
-            console.log(`Nobody in ${userLocation}`)
+            // } else {
+            //     console.log(`Nobody in ${userLocation}`)
             // rej();
         }
     })

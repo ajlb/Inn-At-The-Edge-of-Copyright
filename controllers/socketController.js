@@ -258,6 +258,23 @@ module.exports = function (io) {
 
 
         /*****************************/
+        /*           SHOUT           */
+        /*****************************/
+        socket.on('shout', ({ message, fromUser, location }) => {
+            console.log(`${fromUser} shouts to ${location}: ${message}`)
+            db.Location.findOne({ locationName: location }).then(locationData => {
+                db.Location.find({ region: locationData.region }).then(locationsArray => {
+                    locationsArray.forEach(locationObj => {
+                        let userMessage = `<span className='text-red'>${fromUser} shouts:</span> ${message}`
+                        io.to(locationObj.locationName).emit('shout', { userMessage, fromUser })
+                    })
+                })
+            })
+            // io.to(location).emit('speak', `${user}: ${message}`);
+        });
+
+
+        /*****************************/
         /*            HELP           */
         /*****************************/
         socket.on('help', ({ message }) => {

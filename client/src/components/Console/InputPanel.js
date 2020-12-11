@@ -8,6 +8,7 @@ import socket from "../../clientUtilities/socket";
 import { getItem, dropItem } from "./js/getDrop";
 import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
+import { startShoutTimer } from "./js/timers";
 import { wear, remove } from "./js/wearRemove";
 import { showStats } from "./js/stats";
 import { showInventory } from "./js/inventory";
@@ -41,7 +42,9 @@ function InputPanel({
     activities,
     setActivities,
     inConversation,
-    setConversation
+    setConversation,
+    muted,
+    setMuted
 }) {
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -140,6 +143,24 @@ function InputPanel({
             } else if (findIn(input, actionCalls.speak)) {
                 const message = takeTheseOffThat(actionCalls.speak, input);
                 socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
+            } else if (findIn(input, actionCalls.shout)) {
+                const command = getOneOfTheseOffThat(actionCalls.shout, input.toLowerCase());
+                if (!muted) {
+                    const message = takeTheseOffThat(actionCalls.shout, input)
+                    if (message.trim() !== "") {
+                        startShoutTimer(setMuted)
+                        socket.emit('shout', { location: user.lastLocation, fromUser: user.characterName, message })
+                    } else {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `Looks like you didn't ${command} anything! Try ${command} [your message here]` }]);
+                    }
+                } else {
+                    if (muted.secondsLeft !== undefined) {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You cannot ${command} for ${muted.secondsLeft} more seconds` }]);
+                    } else {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You cannot ${command} for 10 more seconds` }]);
+                    }
+                }
+                // console.log(user)
             } else if (findIn(input, actionCalls.look)) {
                 lookAbout(location, setChatHistory);
             } else if (findIn(input, actionCalls.get)) {
