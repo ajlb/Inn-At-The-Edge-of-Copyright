@@ -88,7 +88,6 @@ function Console() {
 
   });
 
-
   // Socket failed log in message
   socket.off('logFail').on('logFail', message => {
     if (message === "new user") {
@@ -106,11 +105,13 @@ function Console() {
   });
 
   // Socket log out message
-  socket.off('logout').on('logout', message => {
+  socket.off('logout').on('logout', ({user, message}) => {
     let type = 'displayed-stat';
     setChatHistory(prevState => [...prevState, { type, text: message }]);
-    setPlayer({});
-    setLocation({});
+    if (user === player.characterName){
+      setPlayer({});
+      setLocation({});
+    }
   });
 
   // Socket initial userData
@@ -190,7 +191,7 @@ function Console() {
 
 
     // sets a default chat history because chat history needs to be iterable to be mapped
-      (isAuthenticated === false) && setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }]);
+    (isAuthenticated === false) && setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }]);
 
     //avoid trying to set state after component is unmounted
     return function cleanup() {
@@ -198,7 +199,6 @@ function Console() {
     }
   }, [])
 
-  console.log(isLoading);
   return (
     <div>
       <div className="wrapper">
@@ -222,11 +222,11 @@ function Console() {
                 <div id="panel-interior">
                   <div className="panel-heading"></div>
                   <div id="location-info">
-            <p
-            style={{fontSize:"smaller"}}
-            className="mb-1">
-              {isLoading ? "Getting your room key..." : "Please type login to start!"}
-              </p>
+                    <p
+                      style={{ fontSize: "smaller" }}
+                      className="mb-1">
+                      {isLoading ? "Getting your room key..." : "Please type login to start!"}
+                    </p>
                   </div>
                   <ChatPanel
                     chatHistory={chatHistory}

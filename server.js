@@ -6,7 +6,7 @@ const server = require('http').createServer(app);
 const mongoose = require("mongoose");
 const db = require("./models");
 require("dotenv").config();
-// const dotenvExpand = require('dotenv-expand');
+
 const cors = require("cors");
 const backEngine = require("./controllers/backEngine");
 const APIBackroutes = require("./routes/API/backEngineAPI");
@@ -21,6 +21,7 @@ require('./controllers/socketController')(io);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+// console.log('heroku needed a change');
 if(process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
     if (req.header('x-forwarded-proto') !== 'https')

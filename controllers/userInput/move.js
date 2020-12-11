@@ -24,9 +24,11 @@ const resolveLocationChunk = (data) => {
 
 const rememberLocation = (username, newLocation) => {
     return new Promise((resolve, reject) => {
-        db.Player.findOneAndUpdate({ characterName: username }, { $set: { lastLocation: newLocation } }, { new: true }).then(returnData => {
-            resolve(returnData);
-        })
+        db.Player.findOneAndUpdate({ characterName: username }, { $set: { lastLocation: newLocation } }, { new: true })
+            .populate('inventory.item')
+            .then(returnData => {
+                resolve(returnData);
+            })
             .catch(e => {
                 console.log('ERROR IN DB CALL');
                 reject(e);
