@@ -44,7 +44,9 @@ function InputPanel({
     inConversation,
     setConversation,
     muted,
-    setMuted
+    setMuted,
+    canReply,
+    setReplyTo
 }) {
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -88,6 +90,13 @@ function InputPanel({
         } else if (user.characterName === "newUser") {
             console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
+        } else if (findIn(input, actionCalls.reply)) {
+            if (canReply) {
+                let message = canReply.to + ' ' + takeTheseOffThat(actionCalls.reply, input)
+                socket.emit('whisper', { message, userData: user })
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: "You have nobody to reply to!" }]);
+            }
         } else if (findIn(input, actionCalls.whisper)) {
             let message = takeTheseOffThat(actionCalls.whisper, input);
 

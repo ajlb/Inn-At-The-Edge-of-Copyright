@@ -75,7 +75,7 @@
     "actionName": "remove",
     "commandBriefDescription": "You take off an item you are wearing.",
     "commandLongDescription": "When you type a remove command followed by an item you are wearing, you will take it off and add it to your inventory.",
-    "waysToCall": "take off, remove, /r, doff",
+    "waysToCall": "take off, remove, doff",
     "exampleCall": "remove green socks",
     "exampleResult": "You take off green socks."
   },

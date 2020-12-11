@@ -21,7 +21,8 @@ function ChatPanel({
     day,
     inConversation,
     setConversation,
-    setPlayer
+    setPlayer,
+    setReplyTo
 }) {
     //prepare variable to hold div reference for scrolling
     let anchorDiv;
@@ -29,6 +30,7 @@ function ChatPanel({
     // This is where most socket client listeners are going to be!
     socket.off('whisperTo').on('whisperTo', ({ message, userFrom }) => {
         let type = 'displayed-stat';
+        setReplyTo({ to: userFrom });
         setChatHistory(prevState => [...prevState, { type, text: `<span className='displayed-dimBlue'>Whisper from ${userFrom}:</span> ${message}` }]);
         // chat history is mapped down below
     });
