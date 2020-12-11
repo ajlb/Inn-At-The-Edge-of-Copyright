@@ -89,7 +89,6 @@ function Console() {
 
   });
 
-
   // Socket failed log in message
   socket.off('logFail').on('logFail', message => {
     if (message === "new user") {
@@ -107,11 +106,13 @@ function Console() {
   });
 
   // Socket log out message
-  socket.off('logout').on('logout', message => {
+  socket.off('logout').on('logout', ({user, message}) => {
     let type = 'displayed-stat';
     setChatHistory(prevState => [...prevState, { type, text: message }]);
-    setPlayer({});
-    setLocation({});
+    if (user === player.characterName){
+      setPlayer({});
+      setLocation({});
+    }
   });
 
   // Socket initial userData
