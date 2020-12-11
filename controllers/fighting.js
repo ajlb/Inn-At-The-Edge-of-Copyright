@@ -11,6 +11,15 @@ function random9DigitNumber() {
     return parseInt(numberString);
 }
 
+
+//to do:
+//give players XP and DEX/STR after a fight
+//random chance of item drop?
+//give players edible jello cup?
+//set timer to have jello fight back
+//set disengage reminder at half health or below 5
+
+
 let activeMonsters = {};
 
 async function awakenMonsters(monsterObject){
@@ -58,9 +67,10 @@ async function processPlayerAttack(user, monster){
                 const attackRoll = roll([[1, 20]]) + user.stats.DEX;
                 console.log(user.characterName, "attacks for with roll:", attackRoll, "vs monster's DEX", monster.stats.DEX);
                 if (attackRoll > monster.stats.DEX){
-                    const damageRoll = roll([[1,6]]) + user.stats.STR;
+                    let damageRoll = roll([[1,6]]) + user.stats.STR - 10;
                     // console.log(activeMonsters);
                     // console.log(monster.name + " " + monster.id);
+                    damageRoll = (damageRoll > 0) ? damageRoll : 1;
                     activeMonsters[monster.name + " " + monster.id].stats.HP -= damageRoll;
                     console.log(activeMonsters[monster.name + " " + monster.id]);
                     resolve(damageRoll);
@@ -94,11 +104,12 @@ async function receiveAttack(io, socket, monsterObject, user, location) {
                                 io.to(location.locationName).emit('battleVictory', {victor:user.characterName, defeated:thisMonster.name});
                                 console.log(`${thisMonster.name} has been defeated by ${user.characterName}!`);
                                 db.Location.findOneAndUpdate({ locationName: location.locationName }, { $set: { "fightables.$[mob].isFighting": false, "fightables.$[mob].isAlive": false } }, { arrayFilters: [{ "mob.id": monsterObject.id }], new: true }).then(returnData => {
+                                    //send location update to anyone with that location in their locationChunk
                                     if (returnData){
-                                        io.to(location.locationName).emit('updateFightables', {fightables:returnData.fightables, location:returnData.locationName});
+                                        io.to(location.locationName).emit('updateFightables', {fightables:returnData.fightables, targetLocation:returnData.locationName});
                                         console.log(returnData);
                                         for (const param in returnData.exits){
-                                            io.to(returnData[param]).emit('updateFightables', {fightables: returnData.fightables, location:returnData.locationName});
+                                            io.to(returnData[param]).emit('updateFightables', {fightables: returnData.fightables, targetLocation:returnData.locationName});
                                         }
                                     }
                                 }).catch(e=>console.log(e));
@@ -111,6 +122,17 @@ async function receiveAttack(io, socket, monsterObject, user, location) {
                                 io.to(location.locationName).emit('battle', { attacker: monsterObject.name, defender: user.characterName, action: monsterObject.attack, damage });
                                 thisMonster.newEnemy(user.characterName);
                                 console.log(thisMonster.enemies);
+                                //send any updates to fightables
+                                db.Location.findOneAndUpdate({ locationName: location.locationName }, { $set: { "fightables.$[mob].isFighting": true } }, { arrayFilters: [{ "mob.id": monsterObject.id }], new: true }).then(returnData => {
+                                    //send location update to anyone with that location in their locationChunk
+                                    if (returnData){
+                                        io.to(location.locationName).emit('updateFightables', {fightables:returnData.fightables, targetLocation:returnData.locationName});
+                                        console.log(returnData);
+                                        for (const param in returnData.exits){
+                                            io.to(returnData[param]).emit('updateFightables', {fightables: returnData.fightables, targetLocation:returnData.locationName});
+                                        }
+                                    }
+                                }).catch(e=>console.log(e));
                             }
                         }, 3000);
                     })
@@ -119,11 +141,6 @@ async function receiveAttack(io, socket, monsterObject, user, location) {
                     console.log("the monster list did not include this monster");
                     return false;
                 }
-                db.Location.findOneAndUpdate({ locationName: location.locationName }, { $set: { "fightables.$[mob].isFighting": true } }, { arrayFilters: [{ "mob.id": monsterObject.id }], new: true }).then(returnData => {
-                    console.log(returnData);
-                }).catch(e=>console.log(e));
-                break;
-    
             default:
                 break;
         }
