@@ -7,6 +7,7 @@ const { incrementDex } = require("./userInput/juggle");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
+const { receiveAttack } = require("./fighting");
 // const { response } = require("express");
 
 const runNPC = require("./NPCEngine");
@@ -437,6 +438,14 @@ module.exports = function (io) {
         /*          POSITION         */
         /*****************************/
 
+        
+        /*****************************/
+        /*           ATTACK          */
+        /*****************************/
+        socket.on('attackCreature', ({target, user, location})=>{
+            console.log(`${target.name} is being attacked by ${user.characterName} in the ${location.locationName}.`);
+            receiveAttack(io, socket, target, user, location);
+        })
 
         /*****************************/
         /*        DAY/NIGHT          */

@@ -91,16 +91,18 @@ function ChatPanel({
                     exits.push(param);
                 }
             }
-            const fightables = location[direction].fightables[0];
+            const fightables = location[direction].fightables;
             if (fightables){
                 console.log(fightables);
-                if (Object.keys(fightables).length > 1){
+                if (fightables.length > 1){
                     const fightList = [];
-                    for (const param in fightables){
-                        fightList.push(fightables[param]);
+                    for (const monsterObject of fightables){
+                        fightList.push(monsterObject);
                     }
                     console.log(fightList);
-                    setChatHistory(prevState => [...prevState, {type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.join(", ")}</span>.`}]);
+                    setChatHistory(prevState => [...prevState, {type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.map(en=>{
+                        return en.name;
+                    }).join(", ")}</span>.`}]);
                     
                 }
             }
@@ -126,6 +128,21 @@ function ChatPanel({
             for (const param in message) {
                 if (param !== "current") {
                     exits.push(param);
+                }
+            }
+            const fightables = message.current.fightables;
+            if (fightables){
+                console.log(fightables);
+                if (fightables.length > 1){
+                    const fightList = [];
+                    for (const monsterObject of fightables){
+                        fightList.push(monsterObject);
+                    }
+                    console.log(fightList);
+                    setChatHistory(prevState => [...prevState, {type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.map(en=>{
+                        return en.name;
+                    }).join(", ")}</span>.`}]);
+                    
                 }
             }
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);

@@ -58,6 +58,12 @@ function doesThisEqualThat(thisThing, thatStuff) {
   return false;
 }
 
+//see if all the items in an array are the same
+function allTheSame(arrayy){
+  const distinctSet = new Set(arrayy);
+  return (distinctSet.size === 1) ? true : false;
+}
+
 export default doesThisStartWithOneOfThese;
 
 export {
@@ -65,5 +71,6 @@ export {
   startsWithOrIs,
   takeTheseOffThat,
   doesThisEqualThat,
-  getOneOfTheseOffThat
+  getOneOfTheseOffThat,
+  allTheSame
 }

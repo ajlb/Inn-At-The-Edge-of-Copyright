@@ -37,7 +37,7 @@ let locationSchema = new Schema({
     type: String
   },
   fightables: {
-    type: Array
+    type: Object
   }
 });
 const Location = mongoose.model("Location", locationSchema);
