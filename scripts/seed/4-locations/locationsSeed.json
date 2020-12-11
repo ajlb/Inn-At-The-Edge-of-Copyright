@@ -585,7 +585,7 @@
   {
     "locationName": "Crossroads",
     "dayDescription": "You've encountered a fork in the brick road. To the west, a dirt path trails away from the main road through a meadow of flowers and small trees. A wooden sign ahead of you says 'North -> Country Town   South -> Sky Cannon   West -> The Inn'",
-    "nightDescription": "NULL",
+    "nightDescription": "You've encountered a fork in the brick road. To the west, a dirt path trails away from the main road through a meadow of flowers and small trees. A wooden sign ahead of you says 'North -> Country Town   South -> Sky Cannon   West -> The Inn'",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -600,7 +600,7 @@
   {
     "locationName": "South Country Lane",
     "dayDescription": "A wooden fence is the only thing separating the Country Lane from the woods that lie beyond. The brick road continues to the north and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "A wooden fence is the only thing separating the Country Lane from the woods that lie beyond. The brick road continues to the north and south.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -613,7 +613,7 @@
   {
     "locationName": "North Country Lane",
     "dayDescription": "On the side of the road you see a hooded merchant with a plastic folding table on which the hooded figure displays their wares. The brick road continues to the north and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "On the side of the road you see a hooded merchant with a plastic folding table on which the hooded figure displays their wares. The brick road continues to the north and south.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -626,7 +626,7 @@
   {
     "locationName": "Meadow Path",
     "dayDescription": "The sweet scent of wildflowers fills the air as you scan your area. Small trees and wildgrasses cover the meadow in varying shades of green. To the east you can see a bridge crossing a bumbling creek. The dirt path meets a brick road to the west.",
-    "nightDescription": "NULL",
+    "nightDescription": "The sweet scent of wildflowers fills the air as you scan your area. Small trees and wildgrasses cover the meadow in dark shades of green. To the east you can see a bridge crossing a bumbling creek. The dirt path meets a brick road to the west.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -666,7 +666,7 @@
   {
     "locationName": "Creek Bridge",
     "dayDescription": "The wooden bridge creaks underneath your feet as the water below flows past. The rusting metal railings on either side of the bridge are the only thing stopping one from tumbling over the edge. To the south, you can see where the creek comes to a halt. A steep hike into the mountains continues to the east. The meadow path leads away to the west.",
-    "nightDescription": "NULL",
+    "nightDescription": "The wooden bridge creaks underneath your feet as the water below flows past. The rusting metal railings on either side of the bridge are the only thing stopping one from tumbling over the edge. To the south, you can see where the creek comes to a halt. A steep hike into the mountains continues to the east. The meadow path leads away to the west.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -680,7 +680,7 @@
   {
     "locationName": "Pond's Edge",
     "dayDescription": "The creek flows into a deep pond of which is teeming with aquatic plant life and seems deep enough to fish out of. The path you're on curves to the east and continues up gentle slope into the mountains. A quick trip north would take you to the creek bridge.",
-    "nightDescription": "NULL",
+    "nightDescription": "The creek flows into a deep pond of which is teeming with aquatic plant life and seems deep enough to fish out of. The path you're on curves to the east and continues up gentle slope into the mountains. A quick trip north would take you to the creek bridge.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -693,7 +693,7 @@
   {
     "locationName": "Sky Cannon",
     "dayDescription": "You come upon a large metal cannon with a sign that says 'Sky Cannon'... it seems to be aiming east but no one can be sure where it leads. The road you stand on takes you north.",
-    "nightDescription": "NULL",
+    "nightDescription": "You come upon a large metal cannon with a sign that says 'Sky Cannon'... it seems to be aiming east but no one can be sure where it leads. The road you stand on takes you north.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -706,7 +706,7 @@
   {
     "locationName": "Town Southwest",
     "dayDescription": "A small town of brick and mortar buildings surrounds you. The town road continues north and east and leads away from the town to the south.",
-    "nightDescription": "NULL",
+    "nightDescription": "A small town of brick and mortar buildings surrounds you. The town road continues north and east and leads away from the town to the south.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -720,7 +720,7 @@
   {
     "locationName": "Town Southeast",
     "dayDescription": "The town road curves past the bumbling creek and around the back of a small fenced garden, though a stacked stone wall keeps you from accessing the water. The town road continues to the north and west.",
-    "nightDescription": "NULL",
+    "nightDescription": "The town road curves past the bumbling creek and around the back of a small fenced garden, though a stacked stone wall keeps you from accessing the water. The town road continues to the north and west.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -733,7 +733,7 @@
   {
     "locationName": "Item Store",
     "dayDescription": "You've entered a brightly lit Item Store with a multitude of tools, trinkets, and clothing for sale filling the shelves around the room. A smiling clerk stands proudly behind a counter seemingly waiting for you to approach.",
-    "nightDescription": "NULL",
+    "nightDescription": "You've entered a dimmly lit Item Store with a multitude of tools, trinkets, and clothing for sale filling the shelves around the room. A clerk dozes behind the counter but shoots up when you enter.",
     "region": "Country and Town",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -746,7 +746,7 @@
   {
     "locationName": "Town East",
     "dayDescription": "Small, tough weeds peek through the small cracks in the road surface. A gap in the fence on the west side leads you into a neat garden. The town road continues to the north and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "Small, tough weeds peek through the small cracks in the road surface. A gap in the fence on the west side leads you into a neat garden. The town road continues to the north and south.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -760,7 +760,7 @@
   {
     "locationName": "Garden",
     "dayDescription": "It could be said that no better-maintained garden than the one you find yourself could be found. Beautiful flowers and perfectly trimmed hedges fill the garden with a gentle atmosphere. A door on the west side of the garden leads into the brick and mortar building standing next to the garden. You should be able to fit through the gap in the fence on the east side of the garden.",
-    "nightDescription": "NULL",
+    "nightDescription": "It could be said that no better-maintained garden than the one you find yourself could be found. Beautiful flowers and perfectly trimmed hedges fill the garden with a gentle atmosphere. A door on the west side of the garden leads into the brick and mortar building standing next to the garden. You should be able to fit through the gap in the fence on the east side of the garden.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -773,7 +773,7 @@
   {
     "locationName": "Town Northwest",
     "dayDescription": "You find yourself completely surrounded by the brick and mortar buildings that make up the town. The brick road makes a sharp turn to the east and south. The building on the west side of the road has an iron front door, though it seems to be locked.",
-    "nightDescription": "NULL",
+    "nightDescription": "You find yourself completely surrounded by the brick and mortar buildings that make up the town. The brick road makes a sharp turn to the east and south. The building on the west side of the road has an iron front door, though it seems to be locked.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -786,8 +786,8 @@
   },
   {
     "locationName": "Town Northeast",
-    "dayDescription": "The brick road you're standing on seems to be the only barrier between the town and the nature beyond. The road splits three ways, leading you north, south, and west. A small wooden boardwalk to the east takes you to the river's edge",
-    "nightDescription": "NULL",
+    "dayDescription": "The brick road you're standing on seems to be the only barrier between the town and the nature beyond. The road splits three ways, leading you north, south, and west. A small wooden boardwalk to the east takes you to the river's edge.",
+    "nightDescription": "The brick road you're standing on seems to be the only barrier between the town and the nature beyond. The road splits three ways, leading you north, south, and west. A small wooden boardwalk to the east takes you to the river's edge.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -802,7 +802,7 @@
   {
     "locationName": "River's Edge",
     "dayDescription": "You come to the edge of the gently flowing river. The water seems deep and ample for fishing. The boardwalk takes you west back to the main road.",
-    "nightDescription": "NULL",
+    "nightDescription": "You come to the edge of the gently flowing river. The water seems deep and ample for fishing. The boardwalk takes you west back to the main road.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -814,7 +814,7 @@
   {
     "locationName": "Special Item Store",
     "dayDescription": "The iron door you've unlocked leads into an item store filled with rare and powerful items. There is no store clerk in sight but a small sign posted near the door reads 'Honor Code: Take what you need and leave payment'",
-    "nightDescription": "NULL",
+    "nightDescription": "The iron door you've unlocked leads into an item store filled with rare and powerful items. There is no store clerk in sight but a small sign posted near the door reads 'Honor Code: Take what you need and leave payment'",
     "region": "Country and Town",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -826,7 +826,7 @@
   {
     "locationName": "Town North",
     "dayDescription": "You've come to a sharp turn in the road wrapping around a seemingly abandoned building. The road continues west and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "You've come to a sharp turn in the road wrapping around a seemingly abandoned building. The road continues west and south.",
     "region": "Country and Town",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -839,7 +839,7 @@
   {
     "locationName": "Haunted Shack",
     "dayDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Enter the door to the west if you dare... or move back to the wishing well to the east.",
-    "nightDescription": "NULL",
+    "nightDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Shadows feel extra long and like they are looming over you here. Enter the door to the west if you dare... or move back to the wishing well to the east.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -852,7 +852,7 @@
   {
     "locationName": "Wishing Well",
     "dayDescription": "The brick road wraps around a stone wishing well. It sits dauntingly before you, daring anyone to toss in their valubles. A dirt path behind the well takes you west into the woods and the brick road continues east.",
-    "nightDescription": "NULL",
+    "nightDescription": "The brick road wraps around a stone wishing well. It sits dauntingly before you, daring anyone to toss in their valubles. A dirt path behind the well takes you west into the woods and the brick road continues east.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -865,7 +865,7 @@
   {
     "locationName": "Town West",
     "dayDescription": "The brick road beneath your feet seems worn but sturdy and one can almost imagine how busy this town once was. A brick building stands to your east with a sign atop the door that reads 'Generic Item Store'. The brick road continues to the north and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "The brick road beneath your feet seems worn but sturdy and one can almost imagine how busy this town once was. A brick building stands to your east with a sign atop the door that reads 'Generic Item Store'. The brick road continues to the north and south.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
