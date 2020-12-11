@@ -8,6 +8,7 @@ import socket from "../../clientUtilities/socket";
 import { getItem, dropItem } from "./js/getDrop";
 import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
+import { startShoutTimer } from "./js/timers";
 import { wear, remove } from "./js/wearRemove";
 import { showStats } from "./js/stats";
 import { showInventory } from "./js/inventory";
@@ -42,7 +43,11 @@ function InputPanel({
     activities,
     setActivities,
     inConversation,
-    setConversation
+    setConversation,
+    muted,
+    setMuted,
+    canReply,
+    setReplyTo
 }) {
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -86,6 +91,13 @@ function InputPanel({
         } else if (user.characterName === "newUser") {
             console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
+        } else if (findIn(input, actionCalls.reply)) {
+            if (canReply) {
+                let message = canReply.to + ' ' + takeTheseOffThat(actionCalls.reply, input)
+                socket.emit('whisper', { message, userData: user })
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: "You have nobody to reply to!" }]);
+            }
         } else if (findIn(input, actionCalls.whisper)) {
             let message = takeTheseOffThat(actionCalls.whisper, input);
 
@@ -141,6 +153,24 @@ function InputPanel({
             } else if (findIn(input, actionCalls.speak)) {
                 const message = takeTheseOffThat(actionCalls.speak, input);
                 socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
+            } else if (findIn(input, actionCalls.shout)) {
+                const command = getOneOfTheseOffThat(actionCalls.shout, input.toLowerCase());
+                if (!muted) {
+                    const message = takeTheseOffThat(actionCalls.shout, input)
+                    if (message.trim() !== "") {
+                        startShoutTimer(setMuted)
+                        socket.emit('shout', { location: user.lastLocation, fromUser: user.characterName, message })
+                    } else {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `Looks like you didn't ${command} anything! Try ${command} [your message here]` }]);
+                    }
+                } else {
+                    if (muted.secondsLeft !== undefined) {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You cannot ${command} for ${muted.secondsLeft} more seconds` }]);
+                    } else {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You cannot ${command} for 10 more seconds` }]);
+                    }
+                }
+                // console.log(user)
             } else if (findIn(input, actionCalls.look)) {
                 lookAbout(location, setChatHistory);
             } else if (findIn(input, actionCalls.get)) {
@@ -154,8 +184,13 @@ function InputPanel({
             } else if (findIn(input, actionCalls.remove)) {
                 remove(input, user, actionCalls.remove);
             } else if (findIn(input, actionCalls.emote)) {
+                let command = getOneOfTheseOffThat(actionCalls.emote, input)
                 const emoteThis = takeTheseOffThat(actionCalls.emote, input);
-                socket.emit('emote', { user: user.characterName, emotion: emoteThis, location: location.current.locationName });
+                if (emoteThis.trim() !== '') {
+                    socket.emit('emote', { user: user.characterName, emotion: emoteThis, location: location.current.locationName });
+                } else {
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Looks like you didn't emote anything! Try ${command} runs around wildly` }]);
+                }
             } else if (findIn(input, actionCalls.sleep)) {
                 if (activities.sleeping) {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);

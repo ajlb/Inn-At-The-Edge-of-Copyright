@@ -62,11 +62,13 @@ figure {
     padding: 5px;
     margin-bottom: 58px;
 }
+
 /* scroll bar above and fixed */
+
 /* add region classes to html */
 
-
 /* Backgrounds begin */
+
 .cavern-elevator {
     background-image: url("../images/the-cavern-elevator.png");
     background-repeat: no-repeat;
@@ -78,51 +80,61 @@ figure {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .cavern {
     background-image: url("../images/the-cavern.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .clouds {
     background-image: url("../images/the-clouds.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .forest {
     background-image: url("../images/the-forest.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .inn-welcome-page {
     background-image: url("../images/the-inn.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .meadow {
     background-image: url("../images/the-meadow.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .mountains {
     background-image: url("../images/the-mountains.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .pumpkin-patch {
     background-image: url("../images/the-pumpkin-patch.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .spaceship {
     background-image: url("../images/the-spaceship.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .town-crossroads {
     background-image: url("../images/the-town-crossroads.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 /* Background ends */
 
 .new-panel {
@@ -239,6 +251,10 @@ figure {
 .displayed-error {
     margin-left: 20px;
     color: red;
+}
+
+.text-red {
+    color: rgb(255, 71, 71);
 }
 
 .displayed-intro {
