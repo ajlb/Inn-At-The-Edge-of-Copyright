@@ -1,4 +1,6 @@
 const { roll } = require("./userInput/characterLeveling");
+const db = require("../models");
+const mongoose = require("mongoose");
 
 
 function christmasJelloFactory(id) {
@@ -22,11 +24,26 @@ function christmasJelloFactory(id) {
         jello.description = "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...";
         jello.isLiving = true;
         jello.race = "Holiday Dessert";
+        jello.aggressiveness = false;
         jello.enemies = new Set();
     
         jello.attack = (target) => {
-            const attackRoll = roll([[1, 20]]) + jello.stats.DEX;
-            console.log("jello attacks for with roll:", attackRoll, "vs user's DEX", target.stats.DEX);
+        return new Promise(async function(resolve, reject){
+            try {
+                const attackRoll = roll([[1, 20]]) + jello.stats.DEX;
+                console.log("jello attacks for with roll:", attackRoll, "vs user's DEX", target.stats.DEX);
+                if (attackRoll > target.stats.DEX){
+                    const damageRoll = roll([[1,6]]) + jello.stats.STR;
+                    const playerData = await db.Player.findOneAndUpdate({characterName:target.characterName}, {$inc: {"stats.HP": -damageRoll}}, {new:true}).catch(e=>{console.log(e);});
+                    resolve({playerData, damage:damageRoll});
+                } else {
+                    resolve({playerData:null, damage:null});
+                }
+            } catch (error) {
+                console.log("ERROR FROM jello.attack in christmasJelloFactory");
+                console.log(error);
+            }
+            });
         }
     
         jello.newEnemy = (target) => {
