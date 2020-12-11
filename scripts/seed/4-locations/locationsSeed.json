@@ -110,7 +110,7 @@
   {
     "locationName": "Shed",
     "dayDescription": "The old shed is full of junk and broken yard tools. Everything seems slightly out of place. The door you came through sits on the north wall.",
-    "nightDescription": "NULL",
+    "nightDescription": "The old shed is full of junk and broken yard tools. Everything seems slightly out of place. You feel like the shadows are leering at you. The door you came through sits on the north wall.",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
