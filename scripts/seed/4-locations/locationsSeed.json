@@ -40,7 +40,7 @@
   {
     "locationName": "Inn Lobby",
     "dayDescription": "You enter what appears to be the Inn Lobby. Light streams in through the windows lighting the room with a soft glow. A bored clerk sits behind the counter clearly not paying attention to their work. The smell of cooking food wafts into the room through an open door on the north wall. The front door of the Inn exits to the east. Two more doors exit the room to the south and to the west.",
-    "nightDescription": "NULL",
+    "nightDescription": "You enter what appears to be the Inn Lobby. A few vintage lamps are strewn about the room, lighting the room yellow. A bored clerk sits behind the counter clearly not paying attention to their work. The smell of cooking food wafts into the room through an open door on the north wall. The front door of the Inn exits to the east. Two more doors exit the room to the south and to the west.",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [
