@@ -302,8 +302,8 @@ function ChatPanel({
         }
     })
 
-    socket.off('stop juggle').on('stop juggle', ({ user, roomMessage, userMessage }) => {
-        if (user === user.characterName) {
+    socket.off('stop juggle').on('stop juggle', ({ actor, roomMessage, userMessage }) => {
+        if (actor === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
             setActivities({
                 ...activities,

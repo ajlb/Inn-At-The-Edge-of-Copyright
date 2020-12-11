@@ -388,15 +388,16 @@ module.exports = function (io) {
 
         //stop juggle
         socket.on('stop juggle', ({ user, location, target, intent }) => {
+            console.log(user, "stops juggling");
             //user stopped on purpose
             if (intent) {
-                io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage: `You neatly catch the ${target}, and stop juggling.` });
+                io.to(location).emit('stop juggle', { actor: user, roomMessage: `${user} neatly catches the ${target}, and stops juggling.`, userMessage: `You neatly catch the ${target}, and stop juggling.` });
                 //user dropped their items, but got a little better at it
             } else {
-                io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
+                io.to(location).emit('stop juggle', { actor: user, roomMessage: `${user} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
                 //update player dex
-                incrementDex(user.characterName).then(updatedPlayerData => {
-                    io.to(user.characterName.toLowerCase()).emit('playerUpdate', updatedPlayerData);
+                incrementDex(user).then(updatedPlayerData => {
+                    io.to(user.toLowerCase()).emit('playerUpdate', updatedPlayerData);
                 })
             }
         });
