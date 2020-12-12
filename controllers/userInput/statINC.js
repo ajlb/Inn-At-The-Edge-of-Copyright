@@ -15,9 +15,9 @@ function incrementDex(user) {
     });
 }
 
-function incrementDexAndStr({user, dex, str}) {
+function incrementDexAndStrAndXP({user, dex, str, xp}) {
     return new Promise(function (resolve, reject) {
-        db.Player.findOneAndUpdate({ characterName: user }, { $inc: { "stats.DEX": dex, "stats.STR": str } }, { new: true }).populate('inventory.item')
+        db.Player.findOneAndUpdate({ characterName: user }, { $inc: { "stats.DEX": dex, "stats.STR": str, "stats.XP": xp } }, { new: true }).populate('inventory.item')
         .then(data => {
             resolve(data);
         })
@@ -30,5 +30,5 @@ function incrementDexAndStr({user, dex, str}) {
 
 module.exports = {
     incrementDex,
-    incrementDexAndStr
+    incrementDexAndStrAndXP
 }

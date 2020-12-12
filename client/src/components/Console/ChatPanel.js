@@ -93,19 +93,12 @@ function ChatPanel({
                     exits.push(param);
                 }
             }
-            const fightables = location[direction].fightables;
+            const fightables = location[direction].fightables.filter(en=>en.isAlive);
             if (fightables) {
                 console.log(fightables);
                 if (fightables.length > 1) {
-                    const fightList = [];
-                    for (const monsterObject of fightables) {
-                        fightList.push(monsterObject);
-                    }
-                    console.log(fightList);
                     setChatHistory(prevState => [...prevState, {
-                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.filter(en => {
-                            return (en.isAlive);
-                        }).map(en => {
+                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
                             return en.name;
                         }).join(", ")}</span>.`
                     }]);
@@ -136,17 +129,12 @@ function ChatPanel({
                     exits.push(param);
                 }
             }
-            const fightables = message.current.fightables;
+            const fightables = message.current.fightables.filter(en=>en.isAlive);
             if (fightables) {
                 console.log(fightables);
                 if (fightables.length > 1) {
-                    const fightList = [];
-                    for (const monsterObject of fightables) {
-                        fightList.push(monsterObject);
-                    }
-                    console.log(fightList);
                     setChatHistory(prevState => [...prevState, {
-                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.map(en => {
+                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
                             return en.name;
                         }).join(", ")}</span>.`
                     }]);

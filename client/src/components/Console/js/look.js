@@ -7,7 +7,7 @@ function lookAbout(location, setChatHistory) {
     const lookArray = [];
     const inventoryArray = [];
     const availableNPCs = [];
-    const fightables = location.current.fightables;
+    const fightables = location.current.fightables.filter(en=>en.isAlive);
 
     location.current.inventory.forEach(param => {
         inventoryArray.push(`${param.quantity} ${pluralizeAppropriateWords(param.item.itemName, param.quantity)}`);
@@ -36,15 +36,8 @@ function lookAbout(location, setChatHistory) {
     if (fightables) {
         console.log(fightables);
         if (fightables.length > 1) {
-            const fightList = [];
-            for (const monsterObject of fightables) {
-                fightList.push(monsterObject);
-            }
-            console.log(fightList);
             setChatHistory(prevState => [...prevState, {
-                type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightList.filter(en => {
-                    return (en.isAlive);
-                }).map(en => {
+                type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
                     return en.name;
                 }).join(", ")}</span>.`
             }]);

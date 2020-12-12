@@ -2,7 +2,7 @@ const { christmasJelloFactory } = require("./monsters");
 const db = require("../models");
 const mongoose = require("mongoose");
 const { roll } = require("./userInput/characterLeveling");
-const { incrementDexAndStr } = require("./userInput/statINC");
+const { incrementDexAndStrAndXP } = require("./userInput/statINC");
 
 function random9DigitNumber() {
     let numberString = "";
@@ -22,6 +22,10 @@ function random9DigitNumber() {
 
 
 let activeMonsters = {};
+
+function getStatIncreaseFromMonsterKill(monsterObject, player){
+    return (monsterObject.stats.maxHP / ((player.stats.maxHP * 2) + 10));
+}
 
 async function awakenMonsters(monsterObject) {
     console.log("inside awakenMonsters");
@@ -105,10 +109,10 @@ async function processPlayerAttack(user, monster) {
         try {
             console.log("MONSTER FROM PROCESS PLAYER");
             console.log(monster);
-            const attackRoll = roll([[1, 20]]) + user.stats.DEX;
+            const attackRoll = Math.floor(roll([[1, 20]]) + user.stats.DEX);
             console.log(user.characterName, "attacks for with roll:", attackRoll, "vs monster's DEX", monster.stats.DEX);
             if (attackRoll > monster.stats.DEX) {
-                let damageRoll = roll([[1, 6]]) + user.stats.STR - 10;
+                let damageRoll = Math.floor(roll([[1, 6]]) + user.stats.STR - 10);
                 // console.log(activeMonsters);
                 // console.log(monster.name + " " + monster.id);
                 damageRoll = (damageRoll > 0) ? damageRoll : 1;
@@ -142,11 +146,12 @@ async function receiveAttack(io, socket, monsterObject, user, location) {
                             console.log("NOW IN THE .THEN AFTER PLAYER ATTACK");
                             console.log(activeMonsters[`${monsterObject.name} ${monsterObject.id}`]);
                             if (activeMonsters[`${monsterObject.name} ${monsterObject.id}`].stats.HP < 1) {
+                                const statIncrease = getStatIncreaseFromMonsterKill(thisMonster, user);
                                 io.to(location.locationName).emit('battleVictory', { victor: user.characterName, defeated: thisMonster.name });
                                 console.log(`${thisMonster.name} has been defeated by ${user.characterName}!`);
-                                updateAndDisseminateFightables({ io, location, monsterObject, isAlive: false, isFighting: false });
-                                incrementDexAndStr({user:user.characterName, dex:0.05, str:0.05}).then(playerData => {
-                                    io.to(socket.id).emit('playerUpdate', returnData);
+                                updateAndDisseminateFightables({ io, singleLocationChunk:location, monsterObject, isAlive: false, isFighting: false });
+                                incrementDexAndStrAndXP({user:user.characterName, dex:statIncrease, str:statIncrease, xp:thisMonster.stats.XP}).then(playerData => {
+                                    io.to(socket.id).emit('playerUpdate', playerData);
                                 })
                                 return true;
                             } else {
@@ -158,7 +163,7 @@ async function receiveAttack(io, socket, monsterObject, user, location) {
                                 thisMonster.newEnemy(user.characterName);
                                 console.log(thisMonster.enemies);
                                 //send any updates to fightables
-                                updateAndDisseminateFightables({ io, location, monsterObject, isFighting: true });
+                                updateAndDisseminateFightables({ io, singleLocationChunk:location, monsterObject, isFighting: true });
                             }
                         }, 3000);
                     })
