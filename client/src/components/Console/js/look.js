@@ -35,7 +35,7 @@ function lookAbout(location, setChatHistory) {
 
     if (fightables) {
         console.log(fightables);
-        if (fightables.length > 1) {
+        if (fightables.length > 0) {
             setChatHistory(prevState => [...prevState, {
                 type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
                     return en.name;

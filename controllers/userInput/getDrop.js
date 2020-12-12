@@ -200,7 +200,7 @@ function giveItem(socket, io, target, item, itemId, user, location) {
     });
     //add item to target's inventory
     incrementItemUpdateOne(itemId, target, "player").then(returnData => {
-        //if increment succeeded, there was already one there
+        //if increment failed, add a new entry to inventory
         if (!returnData) {
             pushItemToInventoryReturnData(itemId, target, "player").then(returnData => {
                 if (returnData === null) {
@@ -211,7 +211,7 @@ function giveItem(socket, io, target, item, itemId, user, location) {
                 }
 
             });
-            //if increment failed, add a new entry to inventory
+        //if increment succeeded, there was already one there
         } else {
             findPlayerData(target).then(returnData => {
                 if (returnData === null) {

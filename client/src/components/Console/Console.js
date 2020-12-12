@@ -160,8 +160,6 @@ function Console() {
 
   // Socket location fightables update
   socket.off('updateFightables').on('updateFightables', ({ fightables, targetLocation }) => {
-    console.log('received fightables update, at location', location);
-    console.log(fightables);
     if (!(fightables === null)) {
       if (targetLocation === location.current.locationName){
         setLocation({
