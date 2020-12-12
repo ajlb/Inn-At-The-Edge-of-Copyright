@@ -55,6 +55,13 @@ function ChatPanel({
     });
 
 
+    //failed user command messages
+    socket.off('genericMessage').on('genericMessage', (message) => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+
     //system message to user
     socket.off('green').on('green', (message) => {
         let type = 'displayed-green';
@@ -93,7 +100,7 @@ function ChatPanel({
                     exits.push(param);
                 }
             }
-            const fightables = location[direction].fightables.filter(en=>en.isAlive);
+            const fightables = location[direction].fightables.filter(en => en.isAlive);
             if (fightables) {
                 console.log(fightables);
                 if (fightables.length > 0) {
@@ -129,7 +136,7 @@ function ChatPanel({
                     exits.push(param);
                 }
             }
-            const fightables = message.current.fightables.filter(en=>en.isAlive);
+            const fightables = message.current.fightables.filter(en => en.isAlive);
             if (fightables) {
                 console.log(fightables);
                 if (fightables.length > 0) {

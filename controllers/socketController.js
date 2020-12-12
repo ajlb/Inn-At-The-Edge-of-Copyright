@@ -1,13 +1,13 @@
 const db = require("../models");
 const mongoose = require("mongoose");
-const { resolveLocationChunk, findLocationData, move, wakeMonstersOnMove } = require("./userInput/move");
+const { resolveLocationChunk, findLocationData, move } = require("./userInput/move");
 const { getItem, dropItem, giveItem } = require("./userInput/getDrop");
 const { wearItem, removeItem } = require("./userInput/wearRemove");
 const { incrementDex } = require("./userInput/statINC");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
-const { receiveAttack } = require("./fighting");
+const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fighting");
 // const { response } = require("express");
 
 const runNPC = require("./NPCEngine");

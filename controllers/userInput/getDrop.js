@@ -57,6 +57,7 @@ function incrementItemUpdateOne(itemId, targetName, type) {
 function pushItemToInventoryReturnData(itemId, targetName, type) {
     type = type ? type.toLowerCase() : undefined;
     return new Promise(function (resolve, reject) {
+        console.log(`pushing ${itemId} to ${targetName}`);
         if (type === "location") {
             db.Location.findOneAndUpdate({ locationName: targetName }, { $push: { inventory: { item: itemId, quantity: 1 } } }, { new: true })
                 .populate('inventory.item').then(data => {

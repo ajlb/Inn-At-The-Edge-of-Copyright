@@ -1,6 +1,6 @@
 import {doesThisStartWithOneOfThese} from "./finders";
 import pluralize from "pluralize";
-const MULTIPLES = ["set", "pair", "box", "bag"];
+const MULTIPLES = ["set", "pair", "box", "bag", "square"];
 const VOWELS = ["a", "e", "i", "o", "u"];
 
 //only pluralize things that don't start with multiples words

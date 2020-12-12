@@ -159,14 +159,14 @@ function Console() {
   });
 
   // Socket location fightables update
-  socket.off('updateFightables').on('updateFightables', ({ fightables, targetLocation }) => {
-    if (!(fightables === null)) {
+  socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {
+    if (!(data === null)) {
       if (targetLocation === location.current.locationName){
         setLocation({
           ...location,
           current: {
             ...location.current,
-            fightables
+            data
           }
         });
       } else {
@@ -176,7 +176,7 @@ function Console() {
               ...location,
               param: {
                 ...location[param],
-                fightables
+                data
               }
             });
           }
