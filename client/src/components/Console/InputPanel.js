@@ -75,6 +75,14 @@ function InputPanel({
 
         setInputHistory(prevState => [...prevState, input])
 
+        let discoverableCommands = [];
+        if (location.current.discoverables) {
+            location.current.discoverables.forEach(discObj => {
+                if (discObj.commands) {
+                    discObj.commands.forEach(command => discoverableCommands.push(command))
+                }
+            })
+        }
 
         ////////////////////////////////
         //                            //
@@ -102,6 +110,18 @@ function InputPanel({
             /////////////////////
             //      REPLY      //
             /////////////////////
+        } else if (findIn(input, discoverableCommands)) {
+            const command = getOneOfTheseOffThat(discoverableCommands, input)
+            const foundDiscoverable = location.current.discoverables.find(discObj => {
+                return discObj.commands.includes(command)
+            })
+            if (foundDiscoverable.actionDescription) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: foundDiscoverable.actionDescription }]);
+            }
+            if (foundDiscoverable.action) {
+                console.log('Has action');
+                // socket.emit('discoverable', foundDiscoverable.action)
+            }
         } else if (findIn(input, actionCalls.reply)) {
             if (canReply) {
                 let message = canReply.to + ' ' + takeTheseOffThat(actionCalls.reply, input)
