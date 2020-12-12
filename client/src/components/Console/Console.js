@@ -163,7 +163,7 @@ function Console() {
     console.log('received fightables update, at location', location);
     console.log(fightables);
     if (!(fightables === null)) {
-      if (targetLocation === location.current.locationName){
+      if (targetLocation === location.current.locationName) {
         setLocation({
           ...location,
           current: {
@@ -172,8 +172,8 @@ function Console() {
           }
         });
       } else {
-        for (const param in location){
-          if (location[param].locationName === targetLocation){
+        for (const param in location) {
+          if (location[param].locationName === targetLocation) {
             setLocation({
               ...location,
               param: {
@@ -299,7 +299,6 @@ function Console() {
                     muted={muted}
                     setMuted={setMuted}
                     canReply={canReply}
-                    setReplyTo={setReplyTo}
                   />
                 </div>
               </div>
