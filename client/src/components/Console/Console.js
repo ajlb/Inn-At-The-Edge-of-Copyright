@@ -75,6 +75,8 @@ function Console() {
     eat: ['eat', 'devour', 'ingest'],
   });
 
+  let region = "panel-default " + "inn-welcome-page";
+
   //blur and select functions for input - to set min state
   const onSelect = () => {
     setMinState("min");
@@ -250,7 +252,7 @@ function Console() {
               marginTop: minState === "min" && 57 + "vh",
               overflow: minState === "min" && "hidden"
             }}>
-              <div className="panel-default" style={{
+              <div className={region} style={{
                 height: minState === "min" && 100 + "%",
                 width: minState === "min" && 100 + "%"
               }}>
