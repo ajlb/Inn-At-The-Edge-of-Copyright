@@ -78,9 +78,15 @@ function InputPanel({
 
 
         ////////////////////////////////
+        //                            //
         //        USER ACTIONS        //
+        //                            //
+        //    permissable in convo    //
         ////////////////////////////////
 
+        /////////////////////
+        //  PROMPT LOG IN  //
+        /////////////////////
         if (user.characterName === undefined) {
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
                 loginWithRedirect();
@@ -88,9 +94,15 @@ function InputPanel({
             } else {
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
+        /////////////////////
+        //    NEW USER     //
+        /////////////////////
         } else if (user.characterName === "newUser") {
             console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
+        /////////////////////
+        //      REPLY      //
+        /////////////////////
         } else if (findIn(input, actionCalls.reply)) {
             if (canReply) {
                 let message = canReply.to + ' ' + takeTheseOffThat(actionCalls.reply, input)
@@ -98,6 +110,9 @@ function InputPanel({
             } else {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: "You have nobody to reply to!" }]);
             }
+        /////////////////////
+        //    WHISPER      //
+        /////////////////////
         } else if (findIn(input, actionCalls.whisper)) {
             let message = takeTheseOffThat(actionCalls.whisper, input);
 
@@ -110,18 +125,33 @@ function InputPanel({
                     // fyi, checking if the message begins with someone's name is handled on the server side
                     socket.emit('whisper', { message, userData: user })
                 })
+        /////////////////////
+        //    INVENTORY    //
+        /////////////////////
         } else if (findIn(input, actionCalls.inventory)) {
             // let inventory = takeTheseOffThat(actionCalls.inventory, input)
             showInventory(user, setChatHistory);
+        /////////////////////
+        //     JUGGLE      //
+        /////////////////////
         } else if (findIn(input, actionCalls.juggle)) {
             juggle(input, user, location.current.locationName);
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
+        /////////////////////
+        //      STATS      //
+        /////////////////////
         } else if (findIn(input, actionCalls.stats)) {
             showStats(user, setChatHistory, actionCalls.stats, input);
+        /////////////////////
+        //      HELP       //
+        /////////////////////
         } else if (findIn(input, actionCalls.help)) {
             let help = takeTheseOffThat(actionCalls.help, input);
             socket.emit('help', { message: help });
+        /////////////////////
+        //    POSITION     //
+        /////////////////////
         } else if (findIn(input, actionCalls.position)) {
             console.log("Position invoked")
             console.log("activities.sleeping:", activities.sleeping)
@@ -143,6 +173,17 @@ function InputPanel({
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You need to be awake to do that` }]);
             }
+
+
+
+        ////////////////////////////////
+        //                            //
+        //   OUT OF CONVO ACTIONS     //
+        //                            //
+        ////////////////////////////////
+
+
+
         } else if (!inConversation) {
             // Everything in here cannot be run while in a conversation with an NPC
             // if (findIn(input, DiscoverableCalls.get(location.current.locationName))) {

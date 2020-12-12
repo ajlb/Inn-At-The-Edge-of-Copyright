@@ -3,6 +3,21 @@ const db = require("../models");
 const mongoose = require("mongoose");
 
 
+function randomJelloFlavor(num){
+    try {
+        const possibleFlavors = ["strawberry", "lime", "coconut"];
+        let jelloCups = [];
+        for (i=0; i < num; i++){
+            let index = Math.floor(Math.random() * possibleFlavors.length);
+            jelloCups.push(`square of ${possibleFlavors[index]} jello`);
+        }
+        return jelloCups;
+    } catch (e) {
+        console.log("ERROR FROM randomJelloFlavor");
+        console.log(e);
+    }
+}
+
 function christmasJelloFactory(id) {
     return new Promise(function(resolve, reject){
         const jello = {};
@@ -26,15 +41,16 @@ function christmasJelloFactory(id) {
         jello.isLiving = true;
         jello.race = "Holiday Dessert";
         jello.aggressiveness = false;
+        jello.drop = randomJelloFlavor(1);
         jello.enemies = new Set();
     
         jello.attack = (target) => {
         return new Promise(async function(resolve, reject){
             try {
-                const attackRoll = roll([[1, 20]]) + jello.stats.DEX;
+                const attackRoll = Math.floor(roll([[1, 20]]) + jello.stats.DEX);
                 console.log("jello attacks for with roll:", attackRoll, "vs user's DEX", target.stats.DEX);
                 if (attackRoll > target.stats.DEX){
-                    const damageRoll = roll([[1,6]]) + jello.stats.STR;
+                    const damageRoll = Math.floor(roll([[1,6]]) + jello.stats.STR);
                     const playerData = await db.Player.findOneAndUpdate({characterName:target.characterName}, {$inc: {"stats.HP": -damageRoll}}, {new:true}).catch(e=>{console.log(e);});
                     resolve({playerData, damage:damageRoll});
                 } else {
