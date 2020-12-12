@@ -1,17 +1,18 @@
 const db = require("../models");
 const mongoose = require("mongoose");
-const { resolveLocationChunk, findLocationData, move, wakeMonstersOnMove } = require("./userInput/move");
+const { resolveLocationChunk, findLocationData, move } = require("./userInput/move");
 const { getItem, dropItem, giveItem } = require("./userInput/getDrop");
 const { wearItem, removeItem } = require("./userInput/wearRemove");
 const { incrementDex } = require("./userInput/statINC");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
-const { receiveAttack } = require("./fighting");
+const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fighting");
 // const { response } = require("express");
 
 const runNPC = require("./NPCEngine");
 const { validateName, createCharacter } = require("./userInput/userCreation");
+const { eatItem } = require("./userInput/eat");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -341,6 +342,14 @@ module.exports = function (io) {
         /*****************************/
         socket.on('get', ({ target, itemId, user, location }) => {
             getItem(socket, io, target, itemId, user, location);
+        });
+
+
+        /*****************************/
+        /*             GET           */
+        /*****************************/
+        socket.on('eat', ({ target, itemId, player }) => {
+            eatItem(socket, io, target, itemId, player);
         });
 
 

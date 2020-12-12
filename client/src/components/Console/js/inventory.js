@@ -1,11 +1,12 @@
 import pluralize from "pluralize";
 import doesThisStartWithOneOfThese from "../../../clientUtilities/finders";
-const MULTIPLES = ["set", "pair", "box", "bag", "bunch"];
+const MULTIPLES = ["set", "pair", "box", "bag", "bunch", "square"];
 
 
 
 //only pluralize things that don't start with multiples words
 function pluralizeAppropriateWords(itemName, itemQuantity) {
+ console.log(itemName)
     if (doesThisStartWithOneOfThese(itemName, MULTIPLES)) {
       if (itemQuantity > 1){
         for (const startWord of MULTIPLES){
@@ -23,6 +24,7 @@ function pluralizeAppropriateWords(itemName, itemQuantity) {
   }
 
 function showInventory(user, setChatHistory) {
+  try {
     const inventoryArray = [];
     const wearingArray = [];
     const userInventory = user.inventory;
@@ -52,7 +54,7 @@ WEARABLES
     for (const bodyLocation in user.wornItems ) {
         let slot = bodyLocation.slice(0, -4);
         let wearableItem = user.wornItems[bodyLocation];
-          console.log(bodyLocation, wearableItem);
+          // console.log(bodyLocation, wearableItem);
         if (wearableItem !== null) {
           wearingArray.push(`${wearableItem} on your ${slot}`);
         }
@@ -67,6 +69,10 @@ WEARABLES
           setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
       });
     }
+  } catch(e) {
+    console.log("ERROR FROM inventory:")
+    console.log(e)
+  }
 
 }
 

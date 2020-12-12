@@ -1,6 +1,5 @@
 const db = require("../../models");
 const mongoose = require("mongoose");
-const { awakenMonsters, sleepMonsters } = require("../fighting");
 
 //this pair of functions is for returning async location data within the socket response
 const getLocationChunk = async (data) => {
@@ -83,41 +82,13 @@ const move = (socket, io, previousLocation, newLocation, direction, user) => {
     })
 }
 
-const wakeMonstersOnMove = async (location) => {
-    try {
-        locationData = await db.Location.findOne({locationName: location}).catch(e=>console.log(e));
-        fightables = locationData.fightables;
-        if (fightables.length > 0){
-            for (const monsterObject of fightables){
-                awakenMonsters(monsterObject);
-            }
-        }
-    } catch (e) {
-        console.log("ERROR FROM wakeMonstersOnMove");
-        console.log(e);
-    }
-}
+console.log("+++++++++++++++++INSIDE MOVE.JS++++++++++++++++++");
+console.log(findLocationData);
 
-const sleepMonstersOnMove = async (location) => {
-    try {
-        locationData = await db.Location.findOne({locationName: location}).catch(e=>console.log(e));
-        fightables = locationData.fightables;
-        if (fightables.length > 0){
-            for (const monsterObject of fightables){
-                sleepMonsters(monsterObject);
-            }
-        }
-    } catch (e) {
-        console.log("ERROR FROM sleepMonstersOnMove");
-        console.log(e);
-    }
-}
 
 module.exports = {
     resolveLocationChunk,
     rememberLocation,
     findLocationData,
-    move,
-    wakeMonstersOnMove,
-    sleepMonstersOnMove
+    move
 }

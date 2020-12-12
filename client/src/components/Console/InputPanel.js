@@ -20,6 +20,7 @@ import { lookAbout } from './js/look';
 import { attackCreature } from "./js/monsters";
 import processMove from './js/move';
 import runExamine from './js/examine';
+import eatItem from './js/eat';
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -84,36 +85,39 @@ function InputPanel({
         //    permissable in convo    //
         ////////////////////////////////
 
-        /////////////////////
-        //  PROMPT LOG IN  //
-        /////////////////////
         if (user.characterName === undefined) {
+            /////////////////////
+            //  PROMPT LOG IN  //
+            /////////////////////
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
                 loginWithRedirect();
                 // let message = takeTheseOffThat(["log in", "logon", "login", "log on"], input);
             } else {
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
-        /////////////////////
-        //    NEW USER     //
-        /////////////////////
+
         } else if (user.characterName === "newUser") {
+            /////////////////////
+            //    NEW USER     //
+            /////////////////////
             console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
-        /////////////////////
-        //      REPLY      //
-        /////////////////////
+
         } else if (findIn(input, actionCalls.reply)) {
+            /////////////////////
+            //      REPLY      //
+            /////////////////////
             if (canReply) {
                 let message = canReply.to + ' ' + takeTheseOffThat(actionCalls.reply, input)
                 socket.emit('whisper', { message, userData: user })
             } else {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: "You have nobody to reply to!" }]);
             }
-        /////////////////////
-        //    WHISPER      //
-        /////////////////////
+
         } else if (findIn(input, actionCalls.whisper)) {
+            /////////////////////
+            //    WHISPER      //
+            /////////////////////
             let message = takeTheseOffThat(actionCalls.whisper, input);
 
             NPCCheck(location.current.NPCs, message)
@@ -125,34 +129,39 @@ function InputPanel({
                     // fyi, checking if the message begins with someone's name is handled on the server side
                     socket.emit('whisper', { message, userData: user })
                 })
-        /////////////////////
-        //    INVENTORY    //
-        /////////////////////
+
         } else if (findIn(input, actionCalls.inventory)) {
+            /////////////////////
+            //    INVENTORY    //
+            /////////////////////
             // let inventory = takeTheseOffThat(actionCalls.inventory, input)
             showInventory(user, setChatHistory);
-        /////////////////////
-        //     JUGGLE      //
-        /////////////////////
+
         } else if (findIn(input, actionCalls.juggle)) {
+            /////////////////////
+            //     JUGGLE      //
+            /////////////////////
             juggle(input, user, location.current.locationName);
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
-        /////////////////////
-        //      STATS      //
-        /////////////////////
+
         } else if (findIn(input, actionCalls.stats)) {
+            /////////////////////
+            //      STATS      //
+            /////////////////////
             showStats(user, setChatHistory, actionCalls.stats, input);
-        /////////////////////
-        //      HELP       //
-        /////////////////////
+
         } else if (findIn(input, actionCalls.help)) {
+            /////////////////////
+            //      HELP       //
+            /////////////////////
             let help = takeTheseOffThat(actionCalls.help, input);
             socket.emit('help', { message: help });
-        /////////////////////
-        //    POSITION     //
-        /////////////////////
+
         } else if (findIn(input, actionCalls.position)) {
+            /////////////////////
+            //    POSITION     //
+            /////////////////////
             console.log("Position invoked")
             console.log("activities.sleeping:", activities.sleeping)
             console.log("position", playerPosition)
@@ -164,7 +173,7 @@ function InputPanel({
                 } else if (findIn(command, ['sit']) && playerPosition !== 'sitting') {
                     setPlayerPosition('sitting');
                     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting.` }]);
-                } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
+                } else if (findIn(command, ['stand', 'get']) && playerPosition !== 'standing') {
                     setPlayerPosition('standing');
                     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
                 } else {
@@ -176,11 +185,11 @@ function InputPanel({
 
 
 
-        ////////////////////////////////
-        //                            //
-        //   OUT OF CONVO ACTIONS     //
-        //                            //
-        ////////////////////////////////
+            ////////////////////////////////
+            //                            //
+            //   OUT OF CONVO ACTIONS     //
+            //                            //
+            ////////////////////////////////
 
 
 
@@ -189,12 +198,24 @@ function InputPanel({
             // if (findIn(input, DiscoverableCalls.get(location.current.locationName))) {
             //     console.log('something discoverable is happening');
             // } else 
+
             if (findIn(input, actionCalls.move)) {
+                /////////////////////
+                //      MOVE       //
+                /////////////////////
                 processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls);
+
             } else if (findIn(input, actionCalls.speak)) {
+                /////////////////////
+                //     SPEAK       //
+                /////////////////////
                 const message = takeTheseOffThat(actionCalls.speak, input);
                 socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
+
             } else if (findIn(input, actionCalls.shout)) {
+                /////////////////////
+                //     SHOUT       //
+                /////////////////////
                 const command = getOneOfTheseOffThat(actionCalls.shout, input.toLowerCase());
                 if (!muted) {
                     const message = takeTheseOffThat(actionCalls.shout, input)
@@ -213,18 +234,41 @@ function InputPanel({
                 }
                 // console.log(user)
             } else if (findIn(input, actionCalls.look)) {
+                /////////////////////
+                //      LOOK       //
+                /////////////////////
                 lookAbout(location, setChatHistory);
+
             } else if (findIn(input, actionCalls.get)) {
+                /////////////////////
+                //      GET        //
+                /////////////////////
                 const target = takeTheseOffThat(actionCalls.get, input);
                 getItem(socket, user, target, location);
+
             } else if (findIn(input, actionCalls.drop)) {
+                /////////////////////
+                //      DROP       //
+                /////////////////////
                 const target = takeTheseOffThat(actionCalls.drop, input);
                 dropItem(socket, location, target, user);
+
             } else if (findIn(input, actionCalls.wear)) {
+                /////////////////////
+                //      WEAR       //
+                /////////////////////
                 wear(input, user, actionCalls.wear);
+
             } else if (findIn(input, actionCalls.remove)) {
+                /////////////////////
+                //     REMOVE      //
+                /////////////////////
                 remove(input, user, actionCalls.remove);
+
             } else if (findIn(input, actionCalls.emote)) {
+                /////////////////////
+                //      EMOTE      //
+                /////////////////////
                 let command = getOneOfTheseOffThat(actionCalls.emote, input)
                 const emoteThis = takeTheseOffThat(actionCalls.emote, input);
                 if (emoteThis.trim() !== '') {
@@ -232,7 +276,11 @@ function InputPanel({
                 } else {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Looks like you didn't emote anything! Try ${command} runs around wildly` }]);
                 }
+
             } else if (findIn(input, actionCalls.sleep)) {
+                /////////////////////
+                //      SLEEP      //
+                /////////////////////
                 if (activities.sleeping) {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);
                 } else if (playerPosition === "lying down") {
@@ -241,36 +289,73 @@ function InputPanel({
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You need to lie down to do that!` }]);
                 }
                 // socket.emit('sleep', input)
+
             } else if (findIn(input, actionCalls.wake)) {
+                /////////////////////
+                //      WEAR       //
+                /////////////////////
                 if (!activities.sleeping) {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already awake!` }]);
                 } else {
                     socket.emit('wake', { userToWake: user.characterName, location: location.current.locationName })
                 }
+
             } else if (findIn(input, actionCalls.give)) {
+                /////////////////////
+                //      GIVE       //
+                /////////////////////
                 let inputString = takeTheseOffThat(actionCalls.give, input);
                 let item = inputString.split(" to ")[0];
                 let target = takeTheseOffThat([item + " to "], inputString);
                 giveItem(socket, item, target, user, location);
 
             } else if (findIn(input, actionCalls.examine)) {
+                /////////////////////
+                //     EXAMINE     //
+                /////////////////////
                 let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
                 const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
                 toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
                 runExamine({ input, location, command, toExamine, user, setChatHistory });
 
             } else if (findIn(input, actionCalls.attack)) {
-                let target = takeTheseOffThat(actionCalls.attack, input).toLowerCase();
-                target = takeTheseOffThat(["the, a, an, that"], target);
-                attackCreature(socket, user, location, target);
+                /////////////////////
+                //     ATTACK      //
+                /////////////////////
+                if (!(playerPosition === 'standing')){
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You should probably stand up to do that.` }]);
+                } else {
+                    let target = takeTheseOffThat(actionCalls.attack, input).toLowerCase();
+                    target = takeTheseOffThat(["the, a, an, that"], target);
+                    attackCreature(socket, user, location, target);
+                }
+
             } else if (findIn(input, ["logout", "log out", "log off"])) {
+                /////////////////////
+                //      LOGOUT     //
+                /////////////////////
                 takeTheseOffThat(["logout, log out", "log off"], input);
                 logout({ returnTo: window.location.origin });
                 // socket.emit('logout', location.current.locationName);
+
+            } else if (findIn(input, actionCalls.eat)) {
+                /////////////////////
+                //       EAT       //
+                /////////////////////
+                const eatMessage = takeTheseOffThat(actionCalls.eat, input);
+                eatItem(socket, eatMessage, user);
+
             } else {
+                /////////////////////
+                //  UNKNOWN INPUT  //
+                /////////////////////
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Hmmmm... that didn't quite make sense. Try 'help' for a list of commands!` }]);
             }
+
         } else if (inConversation) {
+            //////////////////////
+            // NPC CONVERSATION //
+            //////////////////////
             NPCCheck(location.current.NPCs, inConversation.with)
                 .then(({ NPCName, message }) => {
                     socket.emit('to NPC', { toNPC: inConversation.with, message: input })
@@ -280,7 +365,11 @@ function InputPanel({
                     console.log(err.message);
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `It looks like ${inConversation.with} has left` }]);
                 })
+
         } else {
+            /////////////////////
+            //  UNKNOWN INPUT  //
+            /////////////////////
             setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Hmmmm... that didn't quite make sense. Try 'help' for a list of commands!` }]);
         }
 
