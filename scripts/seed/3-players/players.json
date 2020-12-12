@@ -337,5 +337,62 @@
         "twoHands": null
       },
       "day": true
-    }
+    },
+    {
+      "_id" : {"$oid": "5fd315f451e3e612a08b54a8"},
+      "stats" : {
+          "WIS" : 13,
+          "DEX" : 12.6615384615385,
+          "STR" : 13.5615384615385,
+          "HP" : 18,
+          "CHA" : 16,
+          "maxWIS" : 80,
+          "maxDEX" : 80,
+          "maxCHA" : 80,
+          "maxSTR" : 80,
+          "maxHP" : 21,
+          "XP" : 15,
+          "level" : 1
+      },
+      "isLiving" : true,
+      "isAwake" : true,
+      "isOnline" : true,
+      "isNPC" : false,
+      "race" : "Human",
+      "profession" : "Sandwich-maker",
+      "characterName" : "Thimbleberry",
+      "characterNameLowerCase" : "thimbleberry",
+      "password" : "Auth0isHandlingIt",
+      "email" : "herebird@gmail.com",
+      "abilities" : "panic",
+      "inventory" : [ 
+          {
+              "_id" : {"$oid": "5fd315f451e3e612a08b54a9"},
+              "item" : {"$oid": "5fc32531b2009d226ef5b862"},
+              "quantity" : 1
+          }, 
+          {
+              "_id" : {"$oid": "5fd3bd5a922010239c73bae7"},
+              "item" : {"$oid": "5fc32531b2009d226ef5b858"},
+              "quantity" : 3
+          }
+      ],
+      "lastLocation" : "Backyard",
+      "backstory" : "",
+      "description" : "a Human Sandwich-maker",
+      "wornItems" : {
+          "headSlot" : null,
+          "neckSlot" : null,
+          "torsoSlot" : null,
+          "rightHandSlot" : null,
+          "leftHandSlot" : null,
+          "legsSlot" : null,
+          "feetSlot" : null,
+          "ringSlot" : null,
+          "handsSlot" : null,
+          "twoHands" : null
+      },
+      "day" : true,
+      "__v" : 0
+  }
   ]

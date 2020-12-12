@@ -14,7 +14,6 @@ function random9DigitNumber() {
 
 
 //to do:
-//give players XP and DEX/STR after a fight
 //random chance of item drop?
 //give players edible jello cup?
 //set timer to have jello fight back

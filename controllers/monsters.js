@@ -9,7 +9,7 @@ function randomJelloFlavor(num){
         let jelloCups = [];
         for (i=0; i < num; i++){
             let index = Math.floor(Math.random() * possibleFlavors.length);
-            jelloCups.push(`a cup of ${possibleFlavors[index]} jello`);
+            jelloCups.push(`square of ${possibleFlavors[index]} jello`);
         }
         return jelloCups;
     } catch (e) {
@@ -47,10 +47,10 @@ function christmasJelloFactory(id) {
         jello.attack = (target) => {
         return new Promise(async function(resolve, reject){
             try {
-                const attackRoll = roll([[1, 20]]) + jello.stats.DEX;
+                const attackRoll = Math.floor(roll([[1, 20]]) + jello.stats.DEX);
                 console.log("jello attacks for with roll:", attackRoll, "vs user's DEX", target.stats.DEX);
                 if (attackRoll > target.stats.DEX){
-                    const damageRoll = roll([[1,6]]) + jello.stats.STR;
+                    const damageRoll = Math.floor(roll([[1,6]]) + jello.stats.STR);
                     const playerData = await db.Player.findOneAndUpdate({characterName:target.characterName}, {$inc: {"stats.HP": -damageRoll}}, {new:true}).catch(e=>{console.log(e);});
                     resolve({playerData, damage:damageRoll});
                 } else {

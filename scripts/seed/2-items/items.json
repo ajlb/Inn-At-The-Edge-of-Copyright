@@ -432,8 +432,154 @@
           "leftHandSlot"
       ],
       "dexterityEffect" : 0,
+      "strengthEffect" : 1,
+      "wisdomEffect" : 0,
+      "xpEffect" : 0
+    },
+    {
+      "_id" : {"$oid": "5fd42fa7c7f92ab615f64792"},
+      "itemName" : "square of strawberry jello",
+      "description" : "a bite sized square of red, jiggly jello",
+      "category" : "food",
+      "inventorySize" : 0,
+      "edible" : true,
+      "healthEffect" : 1,
+      "equippable" : [],
+      "dexterityEffect" : 0,
       "strengthEffect" : 0,
       "wisdomEffect" : 0,
       "xpEffect" : 0
-    }
+  },
+  {
+    "_id" : {"$oid": "5fd42fabc7f92ab615f64793"},
+    "itemName" : "square of lime jello",
+    "description" : "a bite sized square of green, jiggly jello",
+    "category" : "food",
+    "inventorySize" : 0,
+    "edible" : true,
+    "healthEffect" : 1,
+    "equippable" : [],
+    "dexterityEffect" : 0,
+    "strengthEffect" : 0,
+    "wisdomEffect" : 0,
+    "xpEffect" : 0
+},
+{
+  "_id" : {"$oid": "5fd42faec7f92ab615f64794"},
+  "itemName" : "square of coconut jello",
+  "description" : "a bite sized square of white, jiggly jello. The locals seem to have a strong prejudice against it.",
+  "category" : "food",
+  "inventorySize" : 0,
+  "edible" : true,
+  "healthEffect" : 1,
+  "equippable" : [],
+  "dexterityEffect" : 0,
+  "strengthEffect" : 0,
+  "wisdomEffect" : 0,
+  "xpEffect" : 0
+},
+{
+  "_id" : {"$oid": "5fcbe6eef2a755c42f073628"},
+  "itemName" : "glasses",
+  "description" : "a pair of plain wireframe glasses",
+  "category" : "tools",
+  "inventorySize" : 0,
+  "edible" : false,
+  "healthEffect" : 0,
+  "equippable" : [ 
+      "headSlot"
+  ],
+  "dexterityEffect" : 0,
+  "strengthEffect" : 0,
+  "wisdomEffect" : 1,
+  "xpEffect" : 0
+},
+{
+  "_id" : {"$oid": "5fcbe6f8f2a755c42f073629"},
+  "itemName" : "gloves",
+  "description" : "leather gloves",
+  "category" : "tools",
+  "inventorySize" : 0,
+  "edible" : false,
+  "healthEffect" : 0,
+  "equippable" : [ 
+      "handsSlot"
+  ],
+  "dexterityEffect" : 0,
+  "strengthEffect" : 0,
+  "wisdomEffect" : 0,
+  "xpEffect" : 0
+},
+{
+  "_id" : {"$oid": "5fcbe709f2a755c42f07362a"},
+  "itemName" : "face mask",
+  "description" : "a plain cloth face mask, designed to cover the mouth and nose",
+  "category" : "tools",
+  "inventorySize" : 0,
+  "edible" : false,
+  "healthEffect" : 1,
+  "equippable" : [ 
+      "headSlot"
+  ],
+  "dexterityEffect" : 0,
+  "strengthEffect" : 0,
+  "wisdomEffect" : 0,
+  "xpEffect" : 0
+},
+{
+  "_id" : {"$oid": "5fcbe712f2a755c42f07362b"},
+  "itemName" : "blue ball",
+  "description" : "a small, blue wooden ball",
+  "category" : "tools",
+  "inventorySize" : 0,
+  "edible" : false,
+  "healthEffect" : 0,
+  "equippable" : [],
+  "dexterityEffect" : 0,
+  "strengthEffect" : 0,
+  "wisdomEffect" : 0,
+  "xpEffect" : 0
+},
+{
+  "_id" : {"$oid": "5fcbe716f2a755c42f07362c"},
+  "itemName" : "red ball",
+  "description" : "a small, red wooden ball",
+  "category" : "tools",
+  "inventorySize" : 0,
+  "edible" : false,
+  "healthEffect" : 0,
+  "equippable" : [],
+  "dexterityEffect" : 0,
+  "strengthEffect" : 0,
+  "wisdomEffect" : 0,
+  "xpEffect" : 0
+},
+{
+  "_id" : {"$oid": "5fcbe719f2a755c42f07362d"},
+  "itemName" : "yellow ball",
+  "description" : "a small, yellow wooden ball",
+  "category" : "tools",
+  "inventorySize" : 0,
+  "edible" : false,
+  "healthEffect" : 0,
+  "equippable" : [],
+  "dexterityEffect" : 0,
+  "strengthEffect" : 0,
+  "wisdomEffect" : 0,
+  "xpEffect" : 0
+},
+{
+  "_id" : {"$oid": "5fcbe72cf2a755c42f07362e"},
+  "itemName" : "jar of jam",
+  "description" : "a jar filled with tasty, homemade preserves. Yum!",
+  "category" : "tools",
+  "inventorySize" : 0,
+  "edible" : true,
+  "healthEffect" : 2,
+  "equippable" : [],
+  "dexterityEffect" : 0,
+  "strengthEffect" : 0,
+  "wisdomEffect" : 0,
+  "xpEffect" : 0
+}
   ]

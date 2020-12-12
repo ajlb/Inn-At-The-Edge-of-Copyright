@@ -78,7 +78,38 @@
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
-    "inventory": [],
+    "inventory": [
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b85e"
+        },
+        "quantity": 10
+      },
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b85d"
+        },
+        "quantity": 3
+      },
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b85c"
+        },
+        "quantity": 10
+      },
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b85f"
+        },
+        "quantity": 3
+      },
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b860"
+        },
+        "quantity": 13
+      }
+    ],
     "discoverables": [
       {
         "names": [
@@ -103,7 +134,26 @@
     "region": "The Inn",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
-    "inventory": [],
+    "inventory": [
+      {
+        "item": {
+          "$oid": "5fcbe712f2a755c42f07362b"
+        },
+        "quantity": 12
+      },
+      {
+        "item": {
+          "$oid": "5fcbe716f2a755c42f07362c"
+        },
+        "quantity": 12
+      },
+      {
+        "item": {
+          "$oid": "5fcbe719f2a755c42f07362d"
+        },
+        "quantity": 12
+      }
+    ],
     "exits": {
       "north": "Inn Lobby",
       "west": "Inn Laundry Room",
@@ -119,7 +169,20 @@
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
-    "inventory": [],
+    "inventory": [
+      {
+        "item": {
+          "$oid": "5fcbe6f8f2a755c42f073629"
+        },
+        "quantity": 6
+      },
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b872"
+        },
+        "quantity": 6
+      }
+    ],
     "exits": {
       "north": "Front Yard"
     },
@@ -132,7 +195,14 @@
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
-    "inventory": [],
+    "inventory": [
+      {
+        "item": {
+          "$oid": "5fcbe72cf2a755c42f07362e"
+        },
+        "quantity": 2
+      }
+    ],
     "exits": {
       "north": "Inn Garden",
       "south": "Inn Lobby",
