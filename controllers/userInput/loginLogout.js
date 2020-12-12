@@ -1,6 +1,6 @@
 const db = require("../../models");
 const mongoose = require("mongoose");
-const { sleepMonstersOnMove } = require("./move");
+const { sleepMonstersOnMove } = require("../fighting");
 
 
 function login(socket, io, userCharacter, players) {
