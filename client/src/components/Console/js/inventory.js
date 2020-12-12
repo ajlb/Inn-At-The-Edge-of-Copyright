@@ -24,6 +24,7 @@ function pluralizeAppropriateWords(itemName, itemQuantity) {
   }
 
 function showInventory(user, setChatHistory) {
+  try {
     const inventoryArray = [];
     const wearingArray = [];
     const userInventory = user.inventory;
@@ -68,6 +69,10 @@ WEARABLES
           setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
       });
     }
+  } catch(e) {
+    console.log("ERROR FROM inventory:")
+    console.log(e)
+  }
 
 }
 

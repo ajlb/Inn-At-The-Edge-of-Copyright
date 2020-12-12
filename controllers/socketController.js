@@ -12,6 +12,7 @@ const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fi
 
 const runNPC = require("./NPCEngine");
 const { validateName, createCharacter } = require("./userInput/userCreation");
+const { eatItem } = require("./userInput/eat");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -341,6 +342,14 @@ module.exports = function (io) {
         /*****************************/
         socket.on('get', ({ target, itemId, user, location }) => {
             getItem(socket, io, target, itemId, user, location);
+        });
+
+
+        /*****************************/
+        /*             GET           */
+        /*****************************/
+        socket.on('eat', ({ target, itemId, player }) => {
+            eatItem(socket, io, target, itemId, player);
         });
 
 

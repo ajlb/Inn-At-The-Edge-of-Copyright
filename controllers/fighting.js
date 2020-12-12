@@ -42,6 +42,7 @@ function getItemIdFromName(itemName) {
         })
     })
 }
+
 async function awakenMonsters(monsterObject) {
     console.log("inside awakenMonsters");
     console.log(monsterObject);

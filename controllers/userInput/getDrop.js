@@ -12,7 +12,7 @@ function decrementItemUpdateOne(itemId, targetName, type) {
                     resolve(data);
                 })
                 .catch(e => {
-                    console.log('ERROR IN DB CALL');
+                    console.log('ERROR IN decrement location DB CALL');
                     reject(e);
                 });
         } else if (type === "player") {
@@ -20,7 +20,7 @@ function decrementItemUpdateOne(itemId, targetName, type) {
                 resolve(data);
             })
                 .catch(e => {
-                    console.log('ERROR IN DB CALL');
+                    console.log('ERROR IN decrement player DB CALL');
                     reject(e);
                 });
         } else {
@@ -37,15 +37,17 @@ function incrementItemUpdateOne(itemId, targetName, type) {
                 data.nModified === 1 ? resolve(true) : resolve(false);
             })
                 .catch(e => {
-                    console.log('ERROR IN DB CALL');
+                    console.log('ERROR increment location IN DB CALL');
                     reject(e);
                 })
         } else if (type === "player") {
-            db.Player.updateOne({ characterName: targetName }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
+            targetName = targetName.toLowerCase()
+            console.log("in increment player, trying to increment", targetName);
+            db.Player.updateOne({ characterNameLowerCase: targetName }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
                 data.nModified === 1 ? resolve(true) : resolve(false);
             })
                 .catch(e => {
-                    console.log('ERROR IN DB CALL');
+                    console.log('ERROR IN increment player DB CALL');
                     reject(e);
                 });
         } else {
@@ -64,16 +66,17 @@ function pushItemToInventoryReturnData(itemId, targetName, type) {
                     resolve(data);
                 })
                 .catch(e => {
-                    console.log('ERROR IN DB CALL');
+                    console.log('ERROR IN pushItemTo location DB CALL');
                     reject(e);
                 });
         } else if (type === "player") {
-            db.Player.findOneAndUpdate({ characterName: targetName }, { $push: { inventory: { item: itemId, quantity: 1 } } }, { new: true })
+            targetName = targetName.toLowerCase();
+            db.Player.findOneAndUpdate({ characterNameLowerCase: targetName }, { $push: { inventory: { item: itemId, quantity: 1 } } }, { new: true })
                 .populate('inventory.item').then(data => {
                     resolve(data);
                 })
                 .catch(e => {
-                    console.log('ERROR IN DB CALL');
+                    console.log('ERROR IN pushItemTo player DB CALL');
                     reject(e);
                 });
         } else {
@@ -84,15 +87,16 @@ function pushItemToInventoryReturnData(itemId, targetName, type) {
 
 function findPlayerData(username) {
     return new Promise(function (resolve, reject) {
+        username = username.toLowerCase();
         if (username === undefined) {
             reject("You must put in a username");
         } else {
-            db.Player.findOne({ characterName: username })
+            db.Player.findOne({ characterNameLowerCase: username })
                 .populate('inventory.item').then(data => {
                     resolve(data);
                 })
                 .catch(e => {
-                    console.log('ERROR IN DB CALL');
+                    console.log('ERROR IN findPlayerData DB CALL');
                     reject(e);
                 });
         }
@@ -107,16 +111,17 @@ function scrubInventoryReturnData(target, type) {
                     resolve(data);
                 })
                 .catch(e => {
-                    console.log('ERROR IN DB CALL');
+                    console.log('ERROR IN scrub location DB CALL');
                     reject(e);
                 });
         } else if (type === "player") {
-            db.Player.findOneAndUpdate({ characterName: target }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true })
+            target = target.toLowerCase();
+            db.Player.findOneAndUpdate({ characterNameLowerCase: target }, { $pull: { "inventory": { "quantity": { $lt: 1 } } } }, { new: true })
                 .populate('inventory.item').then(data => {
                     resolve(data);
                 })
                 .catch(e => {
-                    console.log('ERROR IN DB CALL');
+                    console.log('ERROR IN scrub player DB CALL');
                     reject(e);
                 });
         } else {
@@ -200,31 +205,21 @@ function giveItem(socket, io, target, item, itemId, user, location) {
         });
     });
     //add item to target's inventory
+    console.log(target);
+    //give item to player
     incrementItemUpdateOne(itemId, target, "player").then(returnData => {
-        //if increment failed, add a new entry to inventory
-        if (!returnData) {
+        if (!returnData) { //increment was not successful
             pushItemToInventoryReturnData(itemId, target, "player").then(returnData => {
-                if (returnData === null) {
-                    io.to(socket.id).emit('failure', "I'm sorry, something went wrong.");
-                    return false;
-                } else {
-                    io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
-                }
-
+                console.log(returnData.inventory);
+                io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
             });
-        //if increment succeeded, there was already one there
-        } else {
+        } else { //increment was successful
             findPlayerData(target).then(returnData => {
-                if (returnData === null) {
-                    io.to(socket.id).emit('failure', "I'm sorry, something went wrong.");
-                    return false;
-                } else {
-                    io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
-                }
+                console.log(returnData);
+                io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
             })
         }
         io.to(location).emit('give', { target, item, actor: user });
-
     });
 }
 
