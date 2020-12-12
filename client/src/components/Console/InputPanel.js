@@ -8,6 +8,7 @@ import socket from "../../clientUtilities/socket";
 import { getItem, dropItem } from "./js/getDrop";
 import { giveItem } from './js/give';
 import { juggle, stopJuggling } from "./js/juggle";
+import { startShoutTimer } from "./js/timers";
 import { wear, remove } from "./js/wearRemove";
 import { showStats } from "./js/stats";
 import { showInventory } from "./js/inventory";
@@ -16,6 +17,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 // import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
 // import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 import { lookAbout } from './js/look';
+import { attackCreature } from "./js/monsters";
 import processMove from './js/move';
 import runExamine from './js/examine';
 
@@ -41,7 +43,11 @@ function InputPanel({
     activities,
     setActivities,
     inConversation,
-    setConversation
+    setConversation,
+    muted,
+    setMuted,
+    canReply,
+    setReplyTo
 }) {
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -59,7 +65,7 @@ function InputPanel({
     }
 
     // console.log(user);
-    
+
     socket.off('YouCanLogIn').on('YouCanLogIn', () => {
         socket.emit("log in", authUser.email);
     })
@@ -72,9 +78,15 @@ function InputPanel({
 
 
         ////////////////////////////////
+        //                            //
         //        USER ACTIONS        //
+        //                            //
+        //    permissable in convo    //
         ////////////////////////////////
 
+        /////////////////////
+        //  PROMPT LOG IN  //
+        /////////////////////
         if (user.characterName === undefined) {
             if (findIn(input, ["log in", "logon", "login", "log on"])) {
                 loginWithRedirect();
@@ -82,9 +94,25 @@ function InputPanel({
             } else {
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
+        /////////////////////
+        //    NEW USER     //
+        /////////////////////
         } else if (user.characterName === "newUser") {
             console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
+        /////////////////////
+        //      REPLY      //
+        /////////////////////
+        } else if (findIn(input, actionCalls.reply)) {
+            if (canReply) {
+                let message = canReply.to + ' ' + takeTheseOffThat(actionCalls.reply, input)
+                socket.emit('whisper', { message, userData: user })
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: "You have nobody to reply to!" }]);
+            }
+        /////////////////////
+        //    WHISPER      //
+        /////////////////////
         } else if (findIn(input, actionCalls.whisper)) {
             let message = takeTheseOffThat(actionCalls.whisper, input);
 
@@ -92,23 +120,38 @@ function InputPanel({
                 .then(({ NPCName, message }) => {
                     socket.emit('to NPC', { toNPC: NPCName, message })
                 })
-                .catch(err => {
-                    console.log(err.message)
+                .catch(() => {
+                    // This runs if the entered character is not an NPC
                     // fyi, checking if the message begins with someone's name is handled on the server side
-                    socket.emit('whisper', { message, user: user.characterName })
+                    socket.emit('whisper', { message, userData: user })
                 })
+        /////////////////////
+        //    INVENTORY    //
+        /////////////////////
         } else if (findIn(input, actionCalls.inventory)) {
             // let inventory = takeTheseOffThat(actionCalls.inventory, input)
             showInventory(user, setChatHistory);
+        /////////////////////
+        //     JUGGLE      //
+        /////////////////////
         } else if (findIn(input, actionCalls.juggle)) {
             juggle(input, user, location.current.locationName);
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
+        /////////////////////
+        //      STATS      //
+        /////////////////////
         } else if (findIn(input, actionCalls.stats)) {
             showStats(user, setChatHistory, actionCalls.stats, input);
+        /////////////////////
+        //      HELP       //
+        /////////////////////
         } else if (findIn(input, actionCalls.help)) {
             let help = takeTheseOffThat(actionCalls.help, input);
             socket.emit('help', { message: help });
+        /////////////////////
+        //    POSITION     //
+        /////////////////////
         } else if (findIn(input, actionCalls.position)) {
             console.log("Position invoked")
             console.log("activities.sleeping:", activities.sleeping)
@@ -130,6 +173,17 @@ function InputPanel({
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You need to be awake to do that` }]);
             }
+
+
+
+        ////////////////////////////////
+        //                            //
+        //   OUT OF CONVO ACTIONS     //
+        //                            //
+        ////////////////////////////////
+
+
+
         } else if (!inConversation) {
             // Everything in here cannot be run while in a conversation with an NPC
             // if (findIn(input, DiscoverableCalls.get(location.current.locationName))) {
@@ -140,6 +194,24 @@ function InputPanel({
             } else if (findIn(input, actionCalls.speak)) {
                 const message = takeTheseOffThat(actionCalls.speak, input);
                 socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
+            } else if (findIn(input, actionCalls.shout)) {
+                const command = getOneOfTheseOffThat(actionCalls.shout, input.toLowerCase());
+                if (!muted) {
+                    const message = takeTheseOffThat(actionCalls.shout, input)
+                    if (message.trim() !== "") {
+                        startShoutTimer(setMuted)
+                        socket.emit('shout', { location: user.lastLocation, fromUser: user.characterName, message })
+                    } else {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `Looks like you didn't ${command} anything! Try ${command} [your message here]` }]);
+                    }
+                } else {
+                    if (muted.secondsLeft !== undefined) {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You cannot ${command} for ${muted.secondsLeft} more seconds` }]);
+                    } else {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You cannot ${command} for 10 more seconds` }]);
+                    }
+                }
+                // console.log(user)
             } else if (findIn(input, actionCalls.look)) {
                 lookAbout(location, setChatHistory);
             } else if (findIn(input, actionCalls.get)) {
@@ -153,8 +225,13 @@ function InputPanel({
             } else if (findIn(input, actionCalls.remove)) {
                 remove(input, user, actionCalls.remove);
             } else if (findIn(input, actionCalls.emote)) {
+                let command = getOneOfTheseOffThat(actionCalls.emote, input)
                 const emoteThis = takeTheseOffThat(actionCalls.emote, input);
-                socket.emit('emote', { user: user.characterName, emotion: emoteThis, location: location.current.locationName });
+                if (emoteThis.trim() !== '') {
+                    socket.emit('emote', { user: user.characterName, emotion: emoteThis, location: location.current.locationName });
+                } else {
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Looks like you didn't emote anything! Try ${command} runs around wildly` }]);
+                }
             } else if (findIn(input, actionCalls.sleep)) {
                 if (activities.sleeping) {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);
@@ -182,6 +259,10 @@ function InputPanel({
                 toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
                 runExamine({ input, location, command, toExamine, user, setChatHistory });
 
+            } else if (findIn(input, actionCalls.attack)) {
+                let target = takeTheseOffThat(actionCalls.attack, input).toLowerCase();
+                target = takeTheseOffThat(["the, a, an, that"], target);
+                attackCreature(socket, user, location, target);
             } else if (findIn(input, ["logout", "log out", "log off"])) {
                 takeTheseOffThat(["logout, log out", "log off"], input);
                 logout({ returnTo: window.location.origin });
