@@ -2,6 +2,7 @@ const { christmasJelloFactory } = require("./monsters");
 const db = require("../models");
 const mongoose = require("mongoose");
 const { roll } = require("./userInput/characterLeveling");
+const { incrementDexAndStr } = require("./userInput/statINC");
 
 function random9DigitNumber() {
     let numberString = "";
@@ -22,7 +23,7 @@ function random9DigitNumber() {
 
 let activeMonsters = {};
 
-async function awakenMonsters(monsterObject){
+async function awakenMonsters(monsterObject) {
     console.log("inside awakenMonsters");
     console.log(monsterObject);
     try {
@@ -34,7 +35,7 @@ async function awakenMonsters(monsterObject){
                 console.log('ACTIVE MONSTERS');
                 console.log(activeMonsters);
                 break;
-        
+
             default:
                 break;
         }
@@ -44,11 +45,11 @@ async function awakenMonsters(monsterObject){
     }
 }
 
-async function sleepMonsters(monsterObject){
+async function sleepMonsters(monsterObject) {
     console.log("inside sleepMonsters");
     try {
         let thisMonster = activeMonsters[`${monsterObject.name} ${monsterObject.id}`];
-        if (thisMonster){
+        if (thisMonster) {
             delete activeMonsters[`${monsterObject.name} ${monsterObject.id}`];
         }
         console.log("ACTIVE MONSTERS AFTER SLEEP");
@@ -59,29 +60,69 @@ async function sleepMonsters(monsterObject){
     }
 }
 
-async function processPlayerAttack(user, monster){
-        return new Promise(async function(resolve, reject){
-            try {
-                console.log("MONSTER FROM PROCESS PLAYER");
-                console.log(monster);
-                const attackRoll = roll([[1, 20]]) + user.stats.DEX;
-                console.log(user.characterName, "attacks for with roll:", attackRoll, "vs monster's DEX", monster.stats.DEX);
-                if (attackRoll > monster.stats.DEX){
-                    let damageRoll = roll([[1,6]]) + user.stats.STR - 10;
-                    // console.log(activeMonsters);
-                    // console.log(monster.name + " " + monster.id);
-                    damageRoll = (damageRoll > 0) ? damageRoll : 1;
-                    activeMonsters[monster.name + " " + monster.id].stats.HP -= damageRoll;
-                    console.log(activeMonsters[monster.name + " " + monster.id]);
-                    resolve(damageRoll);
-                } else {
-                    resolve({playerData:null, damage:null});
+function updateAndDisseminateFightables({ io, singleLocationChunk, monsterObject, isAlive=null, isFighting }) {
+    try {
+        if (!(isAlive === null) && !(isFighting === null)) {
+            db.Location.findOneAndUpdate(
+                { locationName: singleLocationChunk.locationName }, 
+                { $set: { "fightables.$[mob].isFighting": isFighting, "fightables.$[mob].isAlive": isAlive } }, 
+                { arrayFilters: [{ "mob.id": monsterObject.id }], new: true })
+                .then(returnData => {
+                //send location update to anyone with that location in their locationChunk
+                if (returnData) {
+                    io.to(singleLocationChunk.locationName).emit('updateFightables', { fightables: returnData.fightables, targetLocation: returnData.locationName });
+                    console.log(returnData);
+                    for (const param in returnData.exits) {
+                        io.to(returnData[param]).emit('updateFightables', { fightables: returnData.fightables, targetLocation: returnData.locationName });
+                    }
                 }
-            } catch (error) {
-                console.log("ERROR FROM processPlayerAttack");
-                console.log(error);
+            }).catch(e => console.log(e));
+        } else if (!(isFighting === null)){
+            db.Location.findOneAndUpdate(
+                { locationName: singleLocationChunk.locationName }, 
+                { $set: { "fightables.$[mob].isFighting": isFighting } }, 
+                { arrayFilters: [{ "mob.id": monsterObject.id }], new: true })
+                .then(returnData => {
+                //send location update to anyone with that location in their locationChunk
+                if (returnData) {
+                    io.to(singleLocationChunk.locationName).emit('updateFightables', { fightables: returnData.fightables, targetLocation: returnData.locationName });
+                    console.log(returnData);
+                    for (const param in returnData.exits) {
+                        io.to(returnData[param]).emit('updateFightables', { fightables: returnData.fightables, targetLocation: returnData.locationName });
+                    }
+                }
+            }).catch(e => console.log(e));
+        }
+    } catch (e) {
+        console.log("ERROR FROM updateAndDisseminateFightables:");
+        console.log(e);
+    }
+}
+
+
+async function processPlayerAttack(user, monster) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            console.log("MONSTER FROM PROCESS PLAYER");
+            console.log(monster);
+            const attackRoll = roll([[1, 20]]) + user.stats.DEX;
+            console.log(user.characterName, "attacks for with roll:", attackRoll, "vs monster's DEX", monster.stats.DEX);
+            if (attackRoll > monster.stats.DEX) {
+                let damageRoll = roll([[1, 6]]) + user.stats.STR - 10;
+                // console.log(activeMonsters);
+                // console.log(monster.name + " " + monster.id);
+                damageRoll = (damageRoll > 0) ? damageRoll : 1;
+                activeMonsters[monster.name + " " + monster.id].stats.HP -= damageRoll;
+                console.log(activeMonsters[monster.name + " " + monster.id]);
+                resolve(damageRoll);
+            } else {
+                resolve({ playerData: null, damage: null });
             }
-            });
+        } catch (error) {
+            console.log("ERROR FROM processPlayerAttack");
+            console.log(error);
+        }
+    });
 }
 
 async function receiveAttack(io, socket, monsterObject, user, location) {
@@ -96,43 +137,28 @@ async function receiveAttack(io, socket, monsterObject, user, location) {
                 // console.log(activeMonsters);
                 if (thisMonster) {
                     processPlayerAttack(user, thisMonster).then(playerDamageToMonster => {
-                        io.to(location.locationName).emit('battle', { attacker: user.characterName, defender: monsterObject.name, action: "attacks", damage:playerDamageToMonster });
-                        setTimeout(async function (){
+                        io.to(location.locationName).emit('battle', { attacker: user.characterName, defender: monsterObject.name, action: "attacks", damage: playerDamageToMonster });
+                        setTimeout(async function () {
                             console.log("NOW IN THE .THEN AFTER PLAYER ATTACK");
                             console.log(activeMonsters[`${monsterObject.name} ${monsterObject.id}`]);
-                            if (activeMonsters[`${monsterObject.name} ${monsterObject.id}`].stats.HP < 1){
-                                io.to(location.locationName).emit('battleVictory', {victor:user.characterName, defeated:thisMonster.name});
+                            if (activeMonsters[`${monsterObject.name} ${monsterObject.id}`].stats.HP < 1) {
+                                io.to(location.locationName).emit('battleVictory', { victor: user.characterName, defeated: thisMonster.name });
                                 console.log(`${thisMonster.name} has been defeated by ${user.characterName}!`);
-                                db.Location.findOneAndUpdate({ locationName: location.locationName }, { $set: { "fightables.$[mob].isFighting": false, "fightables.$[mob].isAlive": false } }, { arrayFilters: [{ "mob.id": monsterObject.id }], new: true }).then(returnData => {
-                                    //send location update to anyone with that location in their locationChunk
-                                    if (returnData){
-                                        io.to(location.locationName).emit('updateFightables', {fightables:returnData.fightables, targetLocation:returnData.locationName});
-                                        console.log(returnData);
-                                        for (const param in returnData.exits){
-                                            io.to(returnData[param]).emit('updateFightables', {fightables: returnData.fightables, targetLocation:returnData.locationName});
-                                        }
-                                    }
-                                }).catch(e=>console.log(e));
+                                updateAndDisseminateFightables({ io, location, monsterObject, isAlive: false, isFighting: false });
+                                incrementDexAndStr({user:user.characterName, dex:0.05, str:0.05}).then(playerData => {
+                                    io.to(socket.id).emit('playerUpdate', returnData);
+                                })
                                 return true;
                             } else {
                                 let { playerData, damage } = await thisMonster.attack(user);
-                                if (playerData){
+                                if (playerData) {
                                     io.to(socket.id).emit('playerUpdate', playerData);
                                 }
                                 io.to(location.locationName).emit('battle', { attacker: monsterObject.name, defender: user.characterName, action: monsterObject.attack, damage });
                                 thisMonster.newEnemy(user.characterName);
                                 console.log(thisMonster.enemies);
                                 //send any updates to fightables
-                                db.Location.findOneAndUpdate({ locationName: location.locationName }, { $set: { "fightables.$[mob].isFighting": true } }, { arrayFilters: [{ "mob.id": monsterObject.id }], new: true }).then(returnData => {
-                                    //send location update to anyone with that location in their locationChunk
-                                    if (returnData){
-                                        io.to(location.locationName).emit('updateFightables', {fightables:returnData.fightables, targetLocation:returnData.locationName});
-                                        console.log(returnData);
-                                        for (const param in returnData.exits){
-                                            io.to(returnData[param]).emit('updateFightables', {fightables: returnData.fightables, targetLocation:returnData.locationName});
-                                        }
-                                    }
-                                }).catch(e=>console.log(e));
+                                updateAndDisseminateFightables({ io, location, monsterObject, isFighting: true });
                             }
                         }, 3000);
                     })
