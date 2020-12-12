@@ -65,13 +65,14 @@ function Console() {
     stats: ['stats'],
     sleep: ['sleep', 'fall asleep'],
     wake: ['wake', 'wake up', 'awaken'],
-    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie'],
+    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie', 'get up'],
     give: ['give'],
     examine: ['examine', 'study', 'inspect'],
     whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
     attack: ['attack', 'fight', 'battle', 'kill'],
     shout: ['shout', 'yell'],
-    reply: ['reply', '/r']
+    reply: ['reply', '/r'],
+    eat: ['eat', 'devour', 'ingest'],
   });
 
   //blur and select functions for input - to set min state
@@ -159,16 +160,14 @@ function Console() {
   });
 
   // Socket location fightables update
-  socket.off('updateFightables').on('updateFightables', ({ fightables, targetLocation }) => {
-    console.log('received fightables update, at location', location);
-    console.log(fightables);
-    if (!(fightables === null)) {
+  socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {
+    if (!(data === null)) {
       if (targetLocation === location.current.locationName) {
         setLocation({
           ...location,
           current: {
             ...location.current,
-            fightables
+            data
           }
         });
       } else {
@@ -178,7 +177,7 @@ function Console() {
               ...location,
               param: {
                 ...location[param],
-                fightables
+                data
               }
             });
           }
