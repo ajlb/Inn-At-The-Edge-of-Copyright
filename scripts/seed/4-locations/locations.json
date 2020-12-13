@@ -2,7 +2,7 @@
   {
     "locationName": "Start Room",
     "dayDescription": "Looking around, you notice a large mirror hung on the wall next to a large open wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with white curtains but a large tree seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
-    "nightDescription": "NULL",
+    "nightDescription": "Looking around, you notice a large mirror hung on the wall next to a large open wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with curtains but a large shadow seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -16,12 +16,13 @@
     ],
     "exits": {
       "east": "Hallway"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Hallway",
     "dayDescription": "You see a narrow room materialize in front of you. You hear a door latch behind you and a odd hand-painted sign gently sways from a string on the locked knob: `INN AT THE EDGE - REMEMBER YOUR TOWEL - TRY help FOR HELP`. A small window looks out over a beautiful but overgrown garden. The only way out must be the stairway at the end of the hall to the east. The smell of tea and faint sounds of someone moving about down the stairs beckons you forward....",
-    "nightDescription": "NULL",
+    "nightDescription": "You see a narrow room materialize in front of you. You hear a door latch behind you and a odd hand-painted sign gently sways from a string on the locked knob: `INN AT THE EDGE - REMEMBER YOUR TOWEL - TRY help FOR HELP`. A small window looks out over a overgrown garden. The only way out must be the stairway at the end of the hall to the east. The smell of tea and faint sounds of someone moving about down the stairs beckons you forward....",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -35,12 +36,13 @@
     ],
     "exits": {
       "east": "Inn Lobby"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Inn Lobby",
     "dayDescription": "You enter what appears to be the Inn Lobby. Light streams in through the windows lighting the room with a soft glow. A bored clerk sits behind the counter clearly not paying attention to their work. The smell of cooking food wafts into the room through an open door on the north wall. The front door of the Inn exits to the east. Two more doors exit the room to the south and to the west.",
-    "nightDescription": "NULL",
+    "nightDescription": "You enter what appears to be the Inn Lobby. A few vintage lamps are strewn about the room, lighting the room yellow. A bored clerk sits behind the counter clearly not paying attention to their work. The smell of cooking food wafts into the room through an open door on the north wall. The front door of the Inn exits to the east. Two more doors exit the room to the south and to the west.",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [
@@ -66,16 +68,48 @@
       "west": "Library",
       "south": "Inn Laundry Room",
       "east": "Front Yard"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Inn Laundry Room",
     "dayDescription": "You've entered the Inn Laundry Room. Washers and dryers line the back wall and folding station sits in the corner in front of the window. A door to the east leads outside. There appears to be an oversized mouse hole hidden behind a stack of boxes. A wooden door labeled 'Lobby' sits on the north wall.",
-    "nightDescription": "NULL",
+    "nightDescription": "You've entered the Inn Laundry Room. Washers and dryers line the back wall and folding station sits in the corner in front of the window. A door to the east leads outside. There appears to be an oversized mouse hole hidden behind a stack of boxes. A wooden door labeled 'Lobby' sits on the north wall.",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
-    "inventory": [],
+    "inventory": [
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b85e"
+        },
+        "quantity": 10
+      },
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b85d"
+        },
+        "quantity": 3
+      },
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b85c"
+        },
+        "quantity": 10
+      },
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b85f"
+        },
+        "quantity": 3
+      },
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b860"
+        },
+        "quantity": 13
+      }
+    ],
     "discoverables": [
       {
         "names": [
@@ -90,53 +124,96 @@
       "north": "Inn Lobby",
       "west": "Library",
       "east": "Front Yard"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Front Yard",
     "dayDescription": "This must be the Front Yard of the Inn. The grass seems like it hasn't been cut in ages and yellow wildflowers peek through the tall grass. An old shed sits in the south end of the yard. A path to the north leads back into the Inn and continues east. Another door leads into a different part of the Inn to the west.",
-    "nightDescription": "NULL",
+    "nightDescription": "This must be the Front Yard of the Inn. The grass feels like it hasn't been cut in ages and purple wildflowers peek through the tall grass. An old shed sits in the south end of the yard. A path to the north leads back into the Inn and continues east. Another door leads into a different part of the Inn to the west.",
     "region": "The Inn",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
-    "inventory": [],
+    "inventory": [
+      {
+        "item": {
+          "$oid": "5fcbe712f2a755c42f07362b"
+        },
+        "quantity": 12
+      },
+      {
+        "item": {
+          "$oid": "5fcbe716f2a755c42f07362c"
+        },
+        "quantity": 12
+      },
+      {
+        "item": {
+          "$oid": "5fcbe719f2a755c42f07362d"
+        },
+        "quantity": 12
+      }
+    ],
     "exits": {
       "north": "Inn Lobby",
       "west": "Inn Laundry Room",
       "south": "Shed",
       "east": "Crossroads"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Shed",
     "dayDescription": "The old shed is full of junk and broken yard tools. Everything seems slightly out of place. The door you came through sits on the north wall.",
-    "nightDescription": "NULL",
+    "nightDescription": "The old shed is full of junk and broken yard tools. Everything seems slightly out of place. You feel like the shadows are leering at you. The door you came through sits on the north wall.",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
-    "inventory": [],
+    "inventory": [
+      {
+        "item": {
+          "$oid": "5fcbe6f8f2a755c42f073629"
+        },
+        "quantity": 6
+      },
+      {
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b872"
+        },
+        "quantity": 6
+      }
+    ],
     "exits": {
       "north": "Front Yard"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Inn Kitchen",
     "dayDescription": "The Inn kitchen smells of freshly baked bread and garlic. A bubbling pot sits on the stove unattended. Two doors lead outside to the north and the east. The swinging door to the Lobby is left slightly cracked open on the south wall.",
-    "nightDescription": "NULL",
+    "nightDescription": "The Inn kitchen smells of roasted meat and squash. A pot sits on the stove unattended, it's contents burned away. Two doors lead outside to the north and the east. The swinging door to the Lobby is left slightly cracked open on the south wall.",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
-    "inventory": [],
+    "inventory": [
+      {
+        "item": {
+          "$oid": "5fcbe72cf2a755c42f07362e"
+        },
+        "quantity": 2
+      }
+    ],
     "exits": {
       "north": "Inn Garden",
       "south": "Inn Lobby",
       "east": "Backyard"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Backyard",
     "dayDescription": "The quaint backyard of the Inn seems a bit unkempt. A path leads to the Inn Garden in the west and the door to the kitchen sits to the south.",
-    "nightDescription": "NULL",
+    "nightDescription": "The quaint backyard of the Inn seems a bit unkempt. A path leads to the Inn Garden in the west and the door to the kitchen sits to the south.",
     "region": "The Inn",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -144,12 +221,50 @@
     "exits": {
       "west": "Inn Garden",
       "south": "Inn Kitchen"
-    }
+    },
+    "fightables": [
+        {
+            "name" : "Christmas Jello",
+            "isFighting" : false,
+            "id" : 964821307,
+            "attack" : "slimes",
+            "isAlive" : true,
+            "description" : "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+            "race" : "Holiday Dessert"
+        }, 
+        {
+            "name" : "Christmas Jello",
+            "isFighting" : false,
+            "id" : 271048739,
+            "attack" : "slimes",
+            "isAlive" : true,
+            "description" : "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+            "race" : "Holiday Dessert"
+        },
+        {
+          "name" : "Christmas Jello",
+          "isFighting" : false,
+          "id" : 964247309,
+          "attack" : "slimes",
+          "isAlive" : true,
+          "description" : "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+          "race" : "Holiday Dessert"
+      }, 
+      {
+          "name" : "Christmas Jello",
+          "isFighting" : false,
+          "id" : 271048721,
+          "attack" : "slimes",
+          "isAlive" : true,
+          "description" : "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+          "race" : "Holiday Dessert"
+      }
+    ]
   },
   {
     "locationName": "Inn Garden",
-    "dayDescription": "The Inn Garden seems slightly overgrown but seems to be thriving nonetheless. The area is scattered with bushes, flowers, and small trees. The shallow pond in the corner seems home to a few wild frogs and a variety of plantlife. The garden gate leads to the west. A gap in the fence to the east takes you into the backyard. The door to the Inn Kitchen sits on the south end of the garden.",
-    "nightDescription": "NULL",
+    "dayDescription": "The Inn Garden seems slightly overgrown but seems to be thriving nonetheless. The are is scattered with bushes, flowers, and small trees. The shallow pond in the corner seems home to a few wild frogs and a variety of plantlife. The garden gate leads to the west. A gap in the fence to the east take you into the backyard. The door to the Inn Kitchen sits on the south end of the garden.",
+    "nightDescription": "The Inn Garden seems slightly overgrown but seems to be thriving nonetheless. The area is scattered with bushes, flowers, and small trees. The shallow pond in the corner seems home to a variety of plantlife. The garden gate leads to the west. A gap in the fence to the east take you into the backyard. The door to the Inn Kitchen sits on the south end of the garden.",
     "region": "The Inn",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -158,12 +273,13 @@
       "west": "Path to Pumpkin Patch",
       "south": "Inn Kitchen",
       "east": "Backyard"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Library",
     "dayDescription": "You've entered the Inn Library. Rows upon rows of old wooden bookshelves house an innumerable amount of dusty books. A door labeled 'Lobby' sits on the east wall, though it seems that the right book on the shelf might take you elsewhere...",
-    "nightDescription": "NULL",
+    "nightDescription": "You've entered the Inn Library. Rows upon rows of old wooden bookshelves house an innumerable amount of dusty books. A door labeled 'Lobby' sits on the east wall, though it seems that the right book on the shelf might take you elsewhere...",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -185,12 +301,13 @@
     "exits": {
       "south": "Inn Laundry Room",
       "east": "Inn Lobby"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Path to Pumpkin Patch",
     "dayDescription": "The dirt path you find yourself on continues to a pumpkin patch in the north. To the east the path comes from the Inn Garden.",
-    "nightDescription": "NULL",
+    "nightDescription": "The dirt path you find yourself on continues to a pumpkin patch in the north. To the east the path comes from the Inn Garden.",
     "region": "The Inn",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -198,12 +315,13 @@
     "exits": {
       "north": "Pumpkin Patch Entrance",
       "east": "Inn Garden"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Pumpkin Patch Center",
-    "dayDescription": "You are at the heart of a pumpkin patch. Though on the vine, uncarved, the pumpkins you see out of the corner of your vision seem to be leering evily at you... Like jack-o-lanterns.",
-    "nightDescription": "NULL",
+    "dayDescription": "You are at the heart of a pumpkin patch. Though on the vine, and uncarved, the pumpkins you see out of the corners of your vision seem to be leering evilly at you, like jack-o-lanterns.",
+    "nightDescription": "You are at the heart of a pumpkin patch. Though on the vine, and uncarved, the pumpkins you see out of the corners of your vision seem to be leering evilly at you, like jack-o-lanterns.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -213,12 +331,13 @@
       "west": "Pumpkin Patch West",
       "south": "Pumpkin Patch South",
       "east": "Pumpkin Patch East"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Pumpkin Patch North",
-    "dayDescription": "The pumpkin patch stretches to the east, west and north of you. A large dark hole sits carved into the ground to the north. The pumpkins surrounding you are craggy and crooked. The longer you look at them, the creepier they become.",
-    "nightDescription": "NULL",
+    "dayDescription": "The pumpkin patch stretches to the east, west and south of you. A large, dark hole sits carved into the ground to the north. The pumpkins surrounding you are craggy and crooked, and the longer you look at them, the creepier they seem.",
+    "nightDescription": "The pumpkin patch stretches to the east, west and south of you. A large, dark hole sits carved into the ground to the north. The pumpkins surrounding you are craggy and crooked, and the longer you look at them, the creepier they seem.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -228,12 +347,13 @@
       "west": "Pumpkin Patch Northwest",
       "south": "Pumpkin Patch Center",
       "east": "Pumpkin Patch Northeast"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Pumpkin Patch East",
-    "dayDescription": "The pumpkin patch stretches to the north, west, and south of you. The pumpkins around you are unnervingly creepy. Uncarverd pumpkins shouldn't be creepy... Should they?",
-    "nightDescription": "NULL",
+    "dayDescription": "The pumpkin patch stretches to the north, west, and south of you. The pumpkins around you a unnervingly creepy. Uncarverd pumpkins shouldn't be creepy, should they?",
+    "nightDescription": "The pumpkin patch stretches to the north, west, and south of you. The pumpkins around you a unnervingly creepy. Uncarverd pumpkins shouldn't be creepy, should they?",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -242,12 +362,13 @@
       "north": "Pumpkin Patch Northeast",
       "west": "Pumpkin Patch Center",
       "south": "Pumpkin Patch Entrance"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Pumpkin Patch South",
-    "dayDescription": "The pumpkin patch stretches to the east, west, and south of you. The patch seems dark somehow even in the day. Shadows seem to take the shape of creatures watching you.",
-    "nightDescription": "NULL",
+    "dayDescription": "The pumpkin patch stretches to the east, west, and north of you. The patch seems dark somehow even in the day. Shadows seem to take the shape of creatures watching you.",
+    "nightDescription": "The pumpkin patch stretches to the east, west, and north of you. The patch seems darker than normal night. Shadows seem to take the shape of creatures watching you.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -256,12 +377,13 @@
       "north": "Pumpkin Patch Center",
       "west": "Pumpkin Patch Southwest",
       "east": "Pumpkin Patch Entrance"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Pumpkin Patch West",
-    "dayDescription": "The pumpkin patch stretches to the north, east, and south of you. The pumpkins clustered around you seem to be pressing closer... Making what should be an open field seem alarmingly claustrophobic.",
-    "nightDescription": "NULL",
+    "dayDescription": "The pumpkin patch stretches to the north, east, and south of you. The pumpkins clustered around you seem to be pressing closer, making what should be an open field feel alarmingly claustrophobic.",
+    "nightDescription": "The pumpkin patch stretches to the north, east, and south of you. The pumpkins clustered around you seem to be pressing closer, making what should be an open field feel alarmingly claustrophobic.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -270,12 +392,13 @@
       "north": "Pumpkin Patch Northwest",
       "south": "Pumpkin Patch Southwest",
       "east": "Pumpkin Patch Center"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Pumpkin Patch Northeast",
-    "dayDescription": "The pumpkin patch surrounds you to the north and east. The pumpkins here give off an ineffible feeling of sadness. You feel tears prick down the corners of your eyes.",
-    "nightDescription": "NULL",
+    "dayDescription": "The pumpkin patch surrounds you to the west and south. The pumpkins here give of an ineffible feeling of sadness, and you feel tears prick the corners of your eyes.",
+    "nightDescription": "The pumpkin patch surrounds you to the west and south. The pumpkins here give of an ineffible feeling of sadness, and you feel tears prick the corners of your eyes.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -283,12 +406,13 @@
     "exits": {
       "west": "Pumpkin Patch North",
       "south": "Pumpkin Patch East"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Pumpkin Patch Northwest",
-    "dayDescription": "The pumpkin patch surrounds you to the west and north. The path to the Haunted Forest beckons towards the north. The pumpkin patch radiates a sinister feeling, and the path to the north feels equally foreboding. You feel trapped.",
-    "nightDescription": "NULL",
+    "dayDescription": "The pumpkin patch surrounds you to the east and south, and the path to the Haunted Forest beckons toward the north. The pumpkin patch radiates a sinister feeling, and the path north feels equally foreboding. You feel trapped.",
+    "nightDescription": "The pumpkin patch surrounds you to the east and south, and the path to the Haunted Forest beckons toward the north. The pumpkin patch radiates a sinister feeling, and the path north feels equally foreboding. You feel trapped.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -297,12 +421,13 @@
       "north": "Path to Haunted Forest",
       "south": "Pumpkin Patch West",
       "east": "Pumpkin Patch North"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Pumpkin Patch Southwest",
-    "dayDescription": "The pumpkin patch surrounds you to the west and south leaving you corned against a tall fence backed by a dark and impenetrable forest. The patch seems darker than you think the day should be. What should be ordinary pumpkins are radiating an ominous threat. Your pulse starts to quicken as your instincts pick up on a predatory intent.",
-    "nightDescription": "NULL",
+    "dayDescription": "The pumpkin patch surrounds you to the north and east, leaving you corned against a tall fence backed by dark and impenetrable forest. The patch seems darker than you think the day should be, and what should be ordinary pumpkins are radiating ominous threat. Your pulse starts to quicken as your instincts pick up on predatory intent.",
+    "nightDescription": "The pumpkin patch surrounds you to the north and east, leaving you corned against a tall fence backed by dark and impenetrable forest. The patch seems darker than you think the day should be, and what should be ordinary pumpkins are radiating ominous threat. Your pulse starts to quicken as your instincts pick up on predatory intent.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -310,12 +435,13 @@
     "exits": {
       "north": "Pumpkin Patch West",
       "east": "Pumpkin Patch South"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Pumpkin Patch Entrance",
-    "dayDescription": "The pumpkin patch surrounds you to the north and west. You can see the inn to the south. The pumpkins closest to the inn look plump and cheery. As the patch grows more dense to the northeast, it seems to emanate menace and warning.",
-    "nightDescription": "NULL",
+    "dayDescription": "The pumpkin patch surrounds you to the north and west. and you can see the inn to the south. The pumpkins closest to the inn look plump and cheery, but as the patch grows more dense to the northwest, it seems to emanate menace and warning.",
+    "nightDescription": "The pumpkin patch surrounds you to the north and west. and you can see the inn to the south. The pumpkins closest to the inn look plump and cheery, but as the patch grows more dense to the northwest, it seems to emanate menace and warning.",
     "region": "Halloween",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -324,12 +450,13 @@
       "north": "Pumpkin Patch East",
       "west": "Pumpkin Patch South",
       "south": "Inn Garden"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Rabbit Hole",
     "dayDescription": "The dark rabbit hole smells like wet earth as the sunlight from above leaves a spotlight on the ground below you. The tunnel continues to the east.",
-    "nightDescription": "NULL",
+    "nightDescription": "The dark rabbit hole smells like wet earth as the shadows from below create a dark spot on the ground around you. The tunnel continues to the east.",
     "region": "Halloween",
     "indoorOutdoor": "cave",
     "NPCs": [],
@@ -337,7 +464,8 @@
     "exits": {
       "south": "Pumpkin Patch North",
       "east": "South Tunnel"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "South Tunnel",
@@ -350,7 +478,8 @@
     "exits": {
       "north": "East Tunnel",
       "west": "Rabbit Hole"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Path to Haunted Forest",
@@ -363,7 +492,8 @@
     "exits": {
       "north": "Tree Tunnel South",
       "south": "Pumpkin Patch Northwest"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "West Tunnel",
@@ -377,7 +507,8 @@
       "west": "Crystal Cavern",
       "south": "Cavetown Ruins",
       "east": "West Tunnel"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Cavetown Ruins",
@@ -389,7 +520,8 @@
     "inventory": [],
     "exits": {
       "north": "West Tunnel"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Crystal Cavern",
@@ -402,7 +534,8 @@
     "exits": {
       "north": "Raging River",
       "east": "West Tunnel"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Raging River",
@@ -428,7 +561,8 @@
       "west": "Murky Pond",
       "south": "Crystal Cavern",
       "east": "Cavern Lake"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Cavern Lake",
@@ -441,7 +575,8 @@
     "exits": {
       "west": "Raging River",
       "east": "Surface Elevator"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Surface Elevator",
@@ -455,7 +590,8 @@
       "north": "Haunted Shack",
       "west": "Cavern Lake",
       "south": "East Tunnel"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Murky Pond",
@@ -467,7 +603,8 @@
     "inventory": [],
     "exits": {
       "south": "The Seven Stones"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "The Seven Stones",
@@ -480,7 +617,8 @@
     "exits": {
       "north": "Murky Pond",
       "west": "Large Clearing"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Large Clearing",
@@ -495,7 +633,8 @@
       "west": "Crazy Cat Lady's Shack",
       "south": "Tree Tunnel North",
       "east": "The Seven Stones"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Tree Tunnel North",
@@ -508,7 +647,8 @@
     "exits": {
       "north": "Large Clearing",
       "south": "Tree Tunnel South"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Tree Tunnel South",
@@ -521,7 +661,8 @@
     "exits": {
       "north": "Tree Tunnel North",
       "south": "Path to Haunted Forest"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "The Elder Trees",
@@ -534,7 +675,8 @@
     "exits": {
       "south": "Large Clearing",
       "east": "The Great Tree"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "The Great Tree",
@@ -554,7 +696,8 @@
     "inventory": [],
     "exits": {
       "west": "The Elder Trees"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Crazy Cat Lady's Shack",
@@ -566,7 +709,8 @@
     "inventory": [],
     "exits": {
       "east": "Large Clearing"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "East Tunnel",
@@ -580,12 +724,13 @@
       "north": "Surface Elevator",
       "west": "West Tunnel",
       "south": "South Tunnel"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Crossroads",
     "dayDescription": "You've encountered a fork in the brick road. To the west, a dirt path trails away from the main road through a meadow of flowers and small trees. A wooden sign ahead of you says 'North -> Country Town   South -> Sky Cannon   West -> The Inn'",
-    "nightDescription": "NULL",
+    "nightDescription": "You've encountered a fork in the brick road. To the west, a dirt path trails away from the main road through a meadow of flowers and small trees. A wooden sign ahead of you says 'North -> Country Town   South -> Sky Cannon   West -> The Inn'",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -595,12 +740,13 @@
       "west": "Front Yard",
       "south": "South Country Lane",
       "east": "Meadow Path"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "South Country Lane",
     "dayDescription": "A wooden fence is the only thing separating the Country Lane from the woods that lie beyond. The brick road continues to the north and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "A wooden fence is the only thing separating the Country Lane from the woods that lie beyond. The brick road continues to the north and south.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -608,12 +754,13 @@
     "exits": {
       "north": "Crossroads",
       "south": "Sky Cannon"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "North Country Lane",
     "dayDescription": "On the side of the road you see a hooded merchant with a plastic folding table on which the hooded figure displays their wares. The brick road continues to the north and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "On the side of the road you see a hooded merchant with a plastic folding table on which the hooded figure displays their wares. The brick road continues to the north and south.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -621,12 +768,13 @@
     "exits": {
       "north": "Town Southwest",
       "south": "Crossroads"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Meadow Path",
     "dayDescription": "The sweet scent of wildflowers fills the air as you scan your area. Small trees and wildgrasses cover the meadow in varying shades of green. To the east you can see a bridge crossing a bumbling creek. The dirt path meets a brick road to the west.",
-    "nightDescription": "NULL",
+    "nightDescription": "The sweet scent of wildflowers fills the air as you scan your area. Small trees and wildgrasses cover the meadow in dark shades of green. To the east you can see a bridge crossing a bumbling creek. The dirt path meets a brick road to the west.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -661,12 +809,13 @@
     "exits": {
       "west": "Crossroads",
       "east": "Creek Bridge"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Creek Bridge",
     "dayDescription": "The wooden bridge creaks underneath your feet as the water below flows past. The rusting metal railings on either side of the bridge are the only thing stopping one from tumbling over the edge. To the south, you can see where the creek comes to a halt. A steep hike into the mountains continues to the east. The meadow path leads away to the west.",
-    "nightDescription": "NULL",
+    "nightDescription": "The wooden bridge creaks underneath your feet as the water below flows past. The rusting metal railings on either side of the bridge are the only thing stopping one from tumbling over the edge. To the south, you can see where the creek comes to a halt. A steep hike into the mountains continues to the east. The meadow path leads away to the west.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -675,12 +824,13 @@
       "west": "Meadow Path",
       "south": "Pond's Edge",
       "east": "Steep Hike West"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Pond's Edge",
     "dayDescription": "The creek flows into a deep pond of which is teeming with aquatic plant life and seems deep enough to fish out of. The path you're on curves to the east and continues up gentle slope into the mountains. A quick trip north would take you to the creek bridge.",
-    "nightDescription": "NULL",
+    "nightDescription": "The creek flows into a deep pond of which is teeming with aquatic plant life and seems deep enough to fish out of. The path you're on curves to the east and continues up gentle slope into the mountains. A quick trip north would take you to the creek bridge.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -688,12 +838,13 @@
     "exits": {
       "north": "Creek Bridge",
       "east": "Gentle Slope West"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Sky Cannon",
     "dayDescription": "You come upon a large metal cannon with a sign that says 'Sky Cannon'... it seems to be aiming east but no one can be sure where it leads. The road you stand on takes you north.",
-    "nightDescription": "NULL",
+    "nightDescription": "You come upon a large metal cannon with a sign that says 'Sky Cannon'... it seems to be aiming east but no one can be sure where it leads. The road you stand on takes you north.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -701,12 +852,13 @@
     "exits": {
       "north": "South Country Lane",
       "east": "Ships Hold"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Town Southwest",
-    "dayDescription": "A small town of brick mortar buildings surrounds you. The town road continues north and east and leads away from the town to the south.",
-    "nightDescription": "NULL",
+    "dayDescription": "A small town of brick and mortar buildings surrounds you. The town road continues north and east and leads away from the town to the south.",
+    "nightDescription": "A small town of brick and mortar buildings surrounds you. The town road continues north and east and leads away from the town to the south.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -715,12 +867,13 @@
       "north": "Town West",
       "south": "North Country Lane",
       "east": "Town Southeast"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Town Southeast",
-    "dayDescription": "The town road curves past the bumbling creek and around the back of a small fenced garden. A stacked stone wall keeps you from accessing the water. The town road continues to the north and west.",
-    "nightDescription": "NULL",
+    "dayDescription": "The town road curves past the bumbling creek and around the back of a small fenced garden, though a stacked stone wall keeps you from accessing the water. The town road continues to the north and west.",
+    "nightDescription": "The town road curves past the bumbling creek and around the back of a small fenced garden, though a stacked stone wall keeps you from accessing the water. The town road continues to the north and west.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -728,12 +881,13 @@
     "exits": {
       "north": "Town East",
       "west": "Town Southwest"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Item Store",
-    "dayDescription": "You've entered a brightly lit Item Store with a multitude of tools, trinkets, and clothing for sale filling the shelves around the room. A smiling clerk stands proudly behind a counter, seemingly waiting for you to approach.",
-    "nightDescription": "NULL",
+    "dayDescription": "You've entered a brightly lit Item Store with a multitude of tools, trinkets, and clothing for sale filling the shelves around the room. A smiling clerk stands proudly behind a counter seemingly waiting for you to approach.",
+    "nightDescription": "You've entered a dimmly lit Item Store with a multitude of tools, trinkets, and clothing for sale filling the shelves around the room. A clerk dozes behind the counter but shoots up when you enter.",
     "region": "Country and Town",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -741,12 +895,13 @@
     "exits": {
       "west": "Town West",
       "east": "Garden"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Town East",
-    "dayDescription": "Small tough weeds peek through the small cracks in the road surface. A gap in the fence on the west side leads you into a neat garden. The town road continues to the north and south.",
-    "nightDescription": "NULL",
+    "dayDescription": "Small, tough weeds peek through the small cracks in the road surface. A gap in the fence on the west side leads you into a neat garden. The town road continues to the north and south.",
+    "nightDescription": "Small, tough weeds peek through the small cracks in the road surface. A gap in the fence on the west side leads you into a neat garden. The town road continues to the north and south.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -755,12 +910,13 @@
       "north": "Town Northeast",
       "west": "Garden",
       "south": "Town Southeast"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Garden",
-    "dayDescription": "It could be said that no better-maintained garden than the one you find yourself could be found. Beautiful flowers and perfectly trimmed hedges fill the garden with a gentle atmosphere. A door on the west side of the garden leads into the brick mortar building standing next to the garden. You should be able to fit through the gap in the fence on the east side of the garden.",
-    "nightDescription": "NULL",
+    "dayDescription": "It could be said that no better-maintained garden than the one you find yourself could be found. Beautiful flowers and perfectly trimmed hedges fill the garden with a gentle atmosphere. A door on the west side of the garden leads into the brick and mortar building standing next to the garden. You should be able to fit through the gap in the fence on the east side of the garden.",
+    "nightDescription": "It could be said that no better-maintained garden than the one you find yourself could be found. Beautiful flowers and perfectly trimmed hedges fill the garden with a gentle atmosphere. A door on the west side of the garden leads into the brick and mortar building standing next to the garden. You should be able to fit through the gap in the fence on the east side of the garden.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -768,12 +924,13 @@
     "exits": {
       "west": "Item Store",
       "east": "Town East"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Town Northwest",
-    "dayDescription": "You find yourself completely surrounded by the brick mortar buildings that make up the town. The brick road makes a sharp turn to the east and south. The building on the west side of the road has an iron front door... Though it seems to be locked.",
-    "nightDescription": "NULL",
+    "dayDescription": "You find yourself completely surrounded by the brick and mortar buildings that make up the town. The brick road makes a sharp turn to the east and south. The building on the west side of the road has an iron front door, though it seems to be locked.",
+    "nightDescription": "You find yourself completely surrounded by the brick and mortar buildings that make up the town. The brick road makes a sharp turn to the east and south. The building on the west side of the road has an iron front door, though it seems to be locked.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -782,12 +939,13 @@
       "west": "Special Item Store",
       "south": "Town West",
       "east": "Town Northeast"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Town Northeast",
-    "dayDescription": "The brick road you're standing on seems to be the only barrier between the town and the nature beyond. The road splits three ways leading you north, south, and west. A small wooden boardwalk to the east takes you to the river's edge",
-    "nightDescription": "NULL",
+    "dayDescription": "The brick road you're standing on seems to be the only barrier between the town and the nature beyond. The road splits three ways, leading you north, south, and west. A small wooden boardwalk to the east takes you to the river's edge",
+    "nightDescription": "The brick road you're standing on seems to be the only barrier between the town and the nature beyond. The road splits three ways, leading you north, south, and west. A small wooden boardwalk to the east takes you to the river's edge.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -797,36 +955,39 @@
       "west": "Town Northwest",
       "south": "Town East",
       "east": "River's Edge"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "River's Edge",
     "dayDescription": "You come to the edge of the gently flowing river. The water seems deep and ample for fishing. The boardwalk takes you west back to the main road.",
-    "nightDescription": "NULL",
+    "nightDescription": "You come to the edge of the gently flowing river. The water seems deep and ample for fishing. The boardwalk takes you west back to the main road.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "west": "Town Northeast"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Special Item Store",
-    "dayDescription": "The iron door you've unlocked leads into an item store filled with rare and powerful items. There is no store clerk in sight, but a small sign posted near the door reads 'Honor Code: Take what you need and leave payment'",
-    "nightDescription": "NULL",
+    "dayDescription": "The iron door you've unlocked leads into an item store filled with rare and powerful items. There is no store clerk in sight but a small sign posted near the door reads 'Honor Code: Take what you need and leave payment'",
+    "nightDescription": "The iron door you've unlocked leads into an item store filled with rare and powerful items. There is no store clerk in sight but a small sign posted near the door reads 'Honor Code: Take what you need and leave payment'",
     "region": "Country and Town",
     "indoorOutdoor": "indoor",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "east": "Town West"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Town North",
     "dayDescription": "You've come to a sharp turn in the road wrapping around a seemingly abandoned building. The road continues west and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "You've come to a sharp turn in the road wrapping around a seemingly abandoned building. The road continues west and south.",
     "region": "Country and Town",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -834,12 +995,13 @@
     "exits": {
       "west": "Wishing Well",
       "south": "Town Northeast"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Haunted Shack",
-    "dayDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Enter the door to the west if you dare... Or move back to the wishing well to the east.",
-    "nightDescription": "NULL",
+    "dayDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Enter the door to the west if you dare... or move back to the wishing well to the east.",
+    "nightDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Shadows feel extra long and like they are looming over you here. Enter the door to the west if you dare... or move back to the wishing well to the east.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -847,12 +1009,13 @@
     "exits": {
       "west": "Surface Elevator",
       "east": "Wishing Well"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Wishing Well",
-    "dayDescription": "The brick road wraps around a stone wishing well. It sits dauntingly before you daring anyone to toss in their valubles. A dirt path behind the well takes you west into the woods and the brick road continues east.",
-    "nightDescription": "NULL",
+    "dayDescription": "The brick road wraps around a stone wishing well. It sits dauntingly before you, daring anyone to toss in their valubles. A dirt path behind the well takes you west into the woods and the brick road continues east.",
+    "nightDescription": "The brick road wraps around a stone wishing well. It sits dauntingly before you, daring anyone to toss in their valubles. A dirt path behind the well takes you west into the woods and the brick road continues east.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -860,12 +1023,13 @@
     "exits": {
       "west": "Haunted Shack",
       "east": "Town North"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Town West",
     "dayDescription": "The brick road beneath your feet seems worn but sturdy and one can almost imagine how busy this town once was. A brick building stands to your east with a sign atop the door that reads 'Generic Item Store'. The brick road continues to the north and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "The brick road beneath your feet seems worn but sturdy and one can almost imagine how busy this town once was. A brick building stands to your east with a sign atop the door that reads 'Generic Item Store'. The brick road continues to the north and south.",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -874,12 +1038,13 @@
       "north": "Town Northwest",
       "south": "Town Southwest",
       "east": "Item Store"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Steep Hike West",
-    "dayDescription": "The dirt path from the west gives way to a steep stone path to the east. If one is not careful, it can be quite easy to slip and fall back down the mountain.",
-    "nightDescription": "NULL",
+    "dayDescription": "The dirt path from the west gives way to a steep stone path to the east on which, if one is not careful, it can be quite easy to slip and fall back down the mountain.",
+    "nightDescription": "The dirt path from the west gives way to a steep stone path to the east on which, if one is not careful, it can be quite easy to slip and fall back down the mountain. Expecially in the dark.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -887,12 +1052,13 @@
     "exits": {
       "west": "Creek Bridge",
       "east": "Steep Hike East"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Gentle Slope West",
     "dayDescription": "The dirt path from the west gives way to a gently inclining stone path to the east that leads up into the mountains. The rocky surface of the mountain is littered with what looks like pumice.",
-    "nightDescription": "NULL",
+    "nightDescription": "The dirt path from the west gives way to a gently inclining stone path to the east that leads up into the mountains. The rocky surface of the mountain is littered with what looks like pumice.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -900,12 +1066,13 @@
     "exits": {
       "west": "Pond's Edge",
       "east": "Gentle Slope East"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Steep Hike East",
     "dayDescription": "The steep sloping path to the west seems mildly dangerous, though the view of the meadow below takes your breath away. A fork in the hike leads south from which you can hear the sound of a roaring waterfall. The main hike continues east and west.",
-    "nightDescription": "NULL",
+    "nightDescription": "The steep sloping path to the west seems mildly dangerous, and the view of the meadow is ruined by a cloudy night. A fork in the hike leads south from which you can hear the sound of a roaring waterfall. The main hike continues east and west.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -914,12 +1081,13 @@
       "west": "Steep Hike West",
       "south": "Waterfall",
       "east": "Mountain Trail North"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Mountain Trail North",
-    "dayDescription": "A sharp turn in the hiking trail goes west and south. On the northern end of the trail, there appears to be a rather small and oddly placed castle-style building with a sign on the door that says 'Girl's Bathroom'.",
-    "nightDescription": "NULL",
+    "dayDescription": "A sharp turn in the hiking trail goes east and south. On the northern end of the trail there appears to be a rather small and oddly placed castle-style building with a sign on the door that says 'Girl's Bathroom'.",
+    "nightDescription": "A sharp turn in the hiking trail goes east and south. On the northern end of the trail there appears to be a rather small and oddly placed castle-style building with a sign on the door that says 'Girl's Bathroom'.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -928,36 +1096,39 @@
       "north": "Girl's Bathroom",
       "west": "Steep Hike East",
       "south": "Mountain Trail Center"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Girl's Bathroom",
-    "dayDescription": "Stepping into the girl's bathroom is almost like stepping into a medieval castle. It seems to be in quite a state of disrepair. The wall is lined with shattered porcelain sinks and snapped pipes that are flooding the tile with water. Half of the wooden stalls are completely demolished. In the further stall, you can see the head of a large cave troll sticking up above the stall divider.",
-    "nightDescription": "NULL",
+    "dayDescription": "Stepping into the girl's bathroom is almost like stepping into a medieval castle, though it seems to be in quite a state of disrepair. The wall is lined with shattered porcelain sinks and snapped pipes that are flooding the tile with water. Half of the wooden stalls are completely demolished though, in the further stall, you can see the head of a large cave troll sticking up above the stall divider.",
+    "nightDescription": "Stepping into the girl's bathroom is almost like stepping into a medieval castle, though it seems to be in quite a state of disrepair. The wall is lined with shattered porcelain sinks and snapped pipes that are flooding the tile with water. Half of the wooden stalls are completely demolished though, in the further stall, you can see the head of a large cave troll sticking up above the stall divider.",
     "region": "Mountain",
     "indoorOutdoor": "indoor",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "south": "Mountain Trail North"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Waterfall",
-    "dayDescription": "An incredibly tall waterfall pours from atop the cliffs above into a pool at the end of the path. The air is filled with a thick mist that instantly soaks you to the bone. No one seems to be able to determine where the water is draining... The stone path leads to the north.",
-    "nightDescription": "NULL",
+    "dayDescription": "An incredibly tall waterfall pours from atop the cliffs above into a pool at the end of the path. The air is filled with a thick mist that instantly soaks you to the bone. No one seems to be able to determine where the water is draining... the stone path leads to the north.",
+    "nightDescription": "An incredibly tall waterfall pours from atop the cliffs above into a pool at the end of the path. The air is filled with a thick mist that instantly soaks you to the bone. No one seems to be able to determine where the water is draining... the stone path leads to the north.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "north": "Steep Hike East"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Mountain Trail Center",
     "dayDescription": "The stone beneath you seems to be getting quite warm at this stretch of the hike. The source of the heat seems to come from the east. The path splits to the north, east, and south.",
-    "nightDescription": "NULL",
+    "nightDescription": "The stone beneath you seems to be getting quite warm at this stretch of the hike. The source of the heat seems to come from the east. The path splits to the north, east, and south.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -966,24 +1137,26 @@
       "north": "Mountain Trail North",
       "south": "Mountain Trail South",
       "east": "Crater's Rim"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Crater's Rim",
     "dayDescription": "You find yourself at the edge of a deep volcano crater which seems to be boiling the air around. You can feel your hair being singed as you gaze upon the lake of lava below. The stone path leads away from the crater to the west.",
-    "nightDescription": "NULL",
+    "nightDescription": "You find yourself at the edge of a deep volcano crater which seems to be boiling the air around. You can feel your hair being singed as you gaze upon the lake of lava below. The stone path leads away from the crater to the west.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "west": "Mountain Trail Center"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Mountain Trail South",
-    "dayDescription": "The stone path you're walking on gently curves to the north and west. A smaller path splits off from the main trail leading toward a cliff.",
-    "nightDescription": "NULL",
+    "dayDescription": "The stone path you're walking on gently curves to the north and east, though a smaller path splits off from the main trail, leading toward a cliff.",
+    "nightDescription": "The stone path you're walking on gently curves to the north and east, though a smaller path splits off from the main trail, leading toward a cliff.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -992,12 +1165,13 @@
       "north": "Mountain Trail Center",
       "west": "Gentle Slope East",
       "south": "Cliff's Edge"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Cliff's Edge",
     "dayDescription": "You find yourself at the end of the Mountain Trail standing on the edge of a sheer south-facing cliff. The unnerving distance from here to the valley floor below seems terrifying, but one can't help but be beckoned to leap off the cliff into the clouds below. The moutain trail leads away to the north.",
-    "nightDescription": "NULL",
+    "nightDescription": "You find yourself at the end of the Mountain Trail standing on the edge of a sheer south-facing cliff. The unnerving distance from here to the valley floor below seems terrifying, but one can't help but be beckoned to leap off the cliff into the clouds below. The moutain trail leads away to the north.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -1005,12 +1179,13 @@
     "exits": {
       "north": "Mountain Trail South",
       "south": "Ships Hold"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Gentle Slope East",
     "dayDescription": "The gently sloping hike through the mountains is very forgiving to those who are prone to tripping. The path continues to the east and west.",
-    "nightDescription": "NULL",
+    "nightDescription": "The gently sloping hike through the mountains is very forgiving to those who are prone to tripping. The path continues to the east and west.",
     "region": "Mountain",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
@@ -1018,24 +1193,26 @@
     "exits": {
       "west": "Gentle Slope West",
       "east": "Mountain Trail South"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Ships Hold",
-    "dayDescription": "At the moment you entered the atmosphere, you instantly regret your desicion. Your life flashes before your eyes. There was a beep and a flash. Something happened, but before you have time to remember, a wave of nausea washes over you... Worse than any hangover you've ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about yourself, a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… You’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock. This does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
-    "nightDescription": "NULL",
+    "dayDescription": "At the moment you entered the atmosphere you instantly regretted your desicion. Your life flashed before your eyes and ... there was a beep and a flash. Something happened but before you have time to remember a wave of nausea washes over you... worse than any hangover you have ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about you a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… you’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock… this does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
+    "nightDescription": "At the moment you entered the atmosphere you instantly regretted your desicion. Your life flashed before your eyes and ... there was a beep and a flash. Something happened but before you have time to remember a wave of nausea washes over you... worse than any hangover you have ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about you a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… you’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock… this does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
     "region": "Vogon Space Ship",
     "indoorOutdoor": "indoor",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "south": "Inn Lobby"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Captain's Quarters",
     "dayDescription": "You may regret everything about this journey to the Sky. Ford did try to warn you afterall. A large yellow skinned creature with a nose on it's forehad stares at you and shouts loudly. You did talk to the fish first, right? To the east you hear the sounds of voices cheering.",
-    "nightDescription": "NULL",
+    "nightDescription": "You may regret everything about this journey to the Sky. Ford did try to warn you afterall. A large yellow skinned creature with a nose on it's forehad stares at you and shouts loudly. You did talk to the fish first, right? To the east you hear the sounds of voices cheering.",
     "region": "Vogon Spaceship",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -1043,19 +1220,21 @@
     "exits": {
       "west": "Cafe",
       "east": "Ships Hold"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Cafe",
-    "dayDescription": "A utilitarian ship's mess lies before you. Metal tables and chairs encircle a single microphone hung from the ceiling. The room is packed with Vogons. At the mic is a Vogon reciting poetry. You want to quickly exit, but something in the awful words being hurled at you becons you toward the Vogon Poet",
-    "nightDescription": "NULL",
+    "dayDescription": "A utilitarian ship's mess lies before you. Metal tables and chairs encircle a single microphone hung from the ceiling. The room is packed with Vogons. At the mic is a Vogon reciting poetry. You want to quickly exit but something in the awful words being hurled at you becons you toward the Vogon Poet",
+    "nightDescription": "A utilitarian ship's mess lies before you. Metal tables and chairs encircle a single microphone hung from the ceiling. The room is packed with Vogons. At the mic is a Vogon reciting poetry. You want to quickly exit but something in the awful words being hurled at you becons you toward the Vogon Poet",
     "region": "Vogon Spaceship",
     "indoorOutdoor": "indoor",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "east": "Captain's Quarters"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Sky Poppy Field",
@@ -1067,7 +1246,8 @@
     "inventory": [],
     "exits": {
       "south": "Mystery Button"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Mystery Button",
@@ -1080,7 +1260,8 @@
     "exits": {
       "north": "Sky Poppy Field",
       "east": "Sky Fishing Hole"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Sky Fishing Hole",
@@ -1093,7 +1274,8 @@
     "exits": {
       "west": "Mystery Button",
       "east": "Fairy Godfather's Sky Hut"
-    }
+    },
+    "fightables": []
   },
   {
     "locationName": "Fairy Godfather's Sky Hut",

@@ -1,4 +1,44 @@
-function runExamine({ input, location, command, toExamine, user, setChatHistory }) {
+function runExamine({ location, command, toExamine, user, setChatHistory }) {
+
+    function isInFightables(toExamine) {
+        let foundItem = location.current.fightables.find(param => {
+            return param.name.toLowerCase().includes(toExamine.trim())
+        })
+
+        if (foundItem) return true
+        else return false
+    }
+
+    function getAndDisplayFightable(toExamine) {
+        let foundItem = location.current.fightables.find(param => {
+            return param.name.toLowerCase().includes(toExamine.trim())
+        })
+        if (foundItem) {
+            setChatHistory(prevState => {
+                return [...prevState, { type: 'displayed-stat', text: foundItem.description }]
+            })
+        }
+    }
+
+    function isInLocationInventory(toExamine) {
+        let foundItem = location.current.inventory.find(param => {
+            return param.item.itemName.toLowerCase().includes(toExamine.trim())
+        })
+        if (foundItem) return true
+        else return false
+        // return true;
+    }
+
+    function getAndDisplayLocationItem(toExamine) {
+        let foundItem = location.current.inventory.find(param => {
+            return param.item.itemName.toLowerCase().includes(toExamine.trim())
+        })
+        if (foundItem) {
+            setChatHistory(prevState => {
+                return [...prevState, { type: 'displayed-stat', text: `In the ${location.current.locationName} you see ${foundItem.item.description}` }]
+            })
+        }
+    }
 
     function isInInventory(toExamine) {
         let foundItem = user.inventory.find(param => {
@@ -25,7 +65,9 @@ function runExamine({ input, location, command, toExamine, user, setChatHistory 
         }
     }
 
-    if (location.current.discoverables && toExamine.trim() !== '') {
+    if (toExamine.trim() === '') {
+        setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
+    } else if (location.current.discoverables) {
         let discoverables = location.current.discoverables;
         let description;
         let exampleCommand;
@@ -53,11 +95,18 @@ function runExamine({ input, location, command, toExamine, user, setChatHistory 
         } else {
             setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
         }
-    } else if (toExamine.trim() === '') {
-        setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
-    } else if (isInInventory(toExamine)) {
+    }
+    else if (isInInventory(toExamine)) {
         getAndDisplayInventoryItem(toExamine)
-    } else {
+    }
+    else if (isInLocationInventory(toExamine)) {
+        console.log("found in location")
+        getAndDisplayLocationItem(toExamine)
+    }
+    else if (isInFightables(toExamine)) {
+        getAndDisplayFightable(toExamine)
+    }
+    else {
         setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
     }
 }

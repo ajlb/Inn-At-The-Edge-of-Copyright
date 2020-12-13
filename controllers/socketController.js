@@ -3,14 +3,16 @@ const mongoose = require("mongoose");
 const { resolveLocationChunk, findLocationData, move } = require("./userInput/move");
 const { getItem, dropItem, giveItem } = require("./userInput/getDrop");
 const { wearItem, removeItem } = require("./userInput/wearRemove");
-const { incrementDex } = require("./userInput/juggle");
+const { incrementDex } = require("./userInput/statINC");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
+const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fighting");
 // const { response } = require("express");
 
 const runNPC = require("./NPCEngine");
 const { validateName, createCharacter } = require("./userInput/userCreation");
+const { eatItem } = require("./userInput/eat");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -198,6 +200,7 @@ module.exports = function (io) {
             socket.leave(previousLocation);
             getUsers(io, previousLocation, playernicknames);
             socket.join(newLocation);
+            wakeMonstersOnMove(newLocation);
             getUsers(io, newLocation, playernicknames);
         });
 
@@ -258,6 +261,39 @@ module.exports = function (io) {
 
 
         /*****************************/
+        /*           SHOUT           */
+        /*****************************/
+        socket.on('shout', ({ message, fromUser, location }) => {
+            console.log(`${fromUser} shouts to ${location}: ${message}`)
+            db.Location.findOne({ locationName: location })
+                .then(locationData => {
+                    if (locationData && locationData !== {}) {
+                        db.Location.find({ region: locationData.region })
+                            .then(locationsArray => {
+                                if (locationsArray && locationsArray.length > 0) {
+                                    locationsArray.forEach(locationObj => {
+                                        let userMessage = `<span className='text-red'>${fromUser} shouts:</span> ${message}`
+                                        io.to(locationObj.locationName).emit('shout', { userMessage, fromUser })
+                                    })
+                                } else {
+                                    io.to(socket.id).emit("failure", "Something went wrong");
+                                }
+                            })
+                            .catch(e => {
+                                console.log(e)
+                            })
+                    } else {
+                        io.to(socket.id).emit('failure', "Something went wrong")
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            // io.to(location).emit('speak', `${user}: ${message}`);
+        });
+
+
+        /*****************************/
         /*            HELP           */
         /*****************************/
         socket.on('help', ({ message }) => {
@@ -310,6 +346,14 @@ module.exports = function (io) {
 
 
         /*****************************/
+        /*             EAT           */
+        /*****************************/
+        socket.on('eat', ({ target, itemId, player, locationName }) => {
+            eatItem(socket, io, target, itemId, player, locationName);
+        });
+
+
+        /*****************************/
         /*           DROP            */
         /*****************************/
         socket.on('drop', ({ target, itemId, user, location }) => {
@@ -353,15 +397,16 @@ module.exports = function (io) {
 
         //stop juggle
         socket.on('stop juggle', ({ user, location, target, intent }) => {
+            console.log(user, "stops juggling");
             //user stopped on purpose
             if (intent) {
-                io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} neatly catches the ${target}, and stops juggling.`, userMessage: `You neatly catch the ${target}, and stop juggling.` });
+                io.to(location).emit('stop juggle', { actor: user, roomMessage: `${user} neatly catches the ${target}, and stops juggling.`, userMessage: `You neatly catch the ${target}, and stop juggling.` });
                 //user dropped their items, but got a little better at it
             } else {
-                io.to(location).emit('stop juggle', { user: user.characterName, roomMessage: `${user.characterName} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
+                io.to(location).emit('stop juggle', { actor: user, roomMessage: `${user} drops all the ${target} and scrambles around, picking them up.`, userMessage: `You drop all the ${target} and scramble around, picking them up.` });
                 //update player dex
-                incrementDex(user.characterName).then(updatedPlayerData => {
-                    io.to(user.characterName.toLowerCase()).emit('playerUpdate', updatedPlayerData);
+                incrementDex(user).then(updatedPlayerData => {
+                    io.to(user.toLowerCase()).emit('playerUpdate', updatedPlayerData);
                 })
             }
         });
@@ -443,6 +488,14 @@ module.exports = function (io) {
         /*          POSITION         */
         /*****************************/
 
+        
+        /*****************************/
+        /*           ATTACK          */
+        /*****************************/
+        socket.on('attackCreature', ({target, user, location})=>{
+            console.log(`${target.name} is being attacked by ${user.characterName} in the ${location.locationName}.`);
+            receiveAttack(io, socket, target, user, location);
+        })
 
         /*****************************/
         /*        DAY/NIGHT          */

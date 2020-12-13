@@ -82,6 +82,10 @@ const move = (socket, io, previousLocation, newLocation, direction, user) => {
     })
 }
 
+console.log("+++++++++++++++++INSIDE MOVE.JS++++++++++++++++++");
+console.log(findLocationData);
+
+
 module.exports = {
     resolveLocationChunk,
     rememberLocation,
