@@ -1,9 +1,9 @@
 [
   {
     "locationName": "Start Room",
-    "dayDescription": "Looking around, you notice a large mirror hung on the wall next to a large open wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with white curtains but a large tree seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
-    "nightDescription": "Looking around, you notice a large mirror hung on the wall next to a large open wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with curtains but a large shadow seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
-    "region": "The Inn",
+    "dayDescription": "Looking around, you notice a large mirror hung on the wall next to a large closed wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with white curtains but a large tree seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
+    "nightDescription": "Looking around, you notice a large mirror hung on the wall next to a large closed wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with curtains but a large shadow seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
+    "region": "Start Room",
     "indoorOutdoor": "indoor",
     "NPCs": [],
     "inventory": [
@@ -17,6 +17,74 @@
     "exits": {
       "east": "Hallway"
     },
+    "discoverables": [
+      {
+        "names": [
+          "wardrobe",
+          "closet"
+        ],
+        "description": "an old wooden wardrobe with intricate carvings adorning its doors depicting tales of the heroes of old",
+        "exampleCommand": "open wardrobe",
+        "commands": [
+          "open wardrobe",
+          "open closet"
+        ],
+        "action": "openWardrobe"
+      },
+      {
+        "names": [
+          "wooden door",
+          "door"
+        ],
+        "description": "a weathered wooden door with an iron doorknob and a silver latch",
+        "exampleCommand": "unlock door",
+        "commands": [
+          "unlock door",
+          "unlock wooden door",
+          "open door",
+          "open wooden door"
+        ],
+        "action": "unlockDoor"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "move",
+          "/m"
+        ],
+        "action": "startRoomMove"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "get",
+          "pick up",
+          "/g"
+        ],
+        "action": "startRoomGet"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "look",
+          "/l"
+        ],
+        "action": "startRoomLook"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "inventory",
+          "/i",
+          "check inventory"
+        ],
+        "action": "startRoomInventory"
+      }
+    ],
     "fightables": []
   },
   {

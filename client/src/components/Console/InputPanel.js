@@ -120,6 +120,7 @@ function InputPanel({
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat faded mt-3", text: foundDisc.actionDescription }]);
             }
             if (foundDisc.action) {
+                input = takeTheseOffThat(discoverableCommands, input)
                 discoverableFunctions[foundDisc.action]({ socket, location, user, input, playerPosition, setChatHistory, actionCalls });
             }
         } else if (findIn(input, actionCalls.reply)) {

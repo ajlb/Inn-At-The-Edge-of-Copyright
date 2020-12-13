@@ -84,7 +84,7 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
             setChatHistory(prevState => {
                 if (exampleCommand) {
                     return [...prevState,
-                    { type: 'displayed-stat', text: `You see ${description}` },
+                    { type: 'displayed-stat mt-3', text: `You see ${description}` },
                     { type: 'displayed-commands', text: `Try entering: ${exampleCommand}` }]
                 } else {
                     return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
