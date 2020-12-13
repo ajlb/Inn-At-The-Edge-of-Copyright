@@ -22,7 +22,6 @@ function random9DigitNumber() {
 //to do:
 //set timer to have jello fight back
 //set disengage reminder at half health or below 5
-//what is going on in dropItemFromMonster that is messing up items in location inventory
 
 
 let activeMonsters = {};

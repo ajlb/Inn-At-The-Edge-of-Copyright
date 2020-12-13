@@ -171,6 +171,18 @@ function ChatPanel({
         }
     });
 
+    //eat message
+    socket.off('eat').on('eat', ({ actor, eatenItem, actorMessage }) => {
+        let type = 'displayed-stat';
+        if (actor.toLowerCase() === user.characterName.toLowerCase()){
+            setChatHistory(prevState => [...prevState, { type, text: `You eat ${insertArticleSingleValue(eatenItem)}. ${actorMessage}`}]);
+        } else {
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type, text: `${actor} eats ${insertArticleSingleValue(eatenItem)}.`}]);
+            }
+        }
+    });
+
     //battle
     socket.off('battle').on('battle', ({ attacker, defender, action, damage }) => {
         if (damage) {
