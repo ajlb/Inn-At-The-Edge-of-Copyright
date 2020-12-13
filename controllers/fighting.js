@@ -139,9 +139,9 @@ function updateAndDisseminateFightables({ io, singleLocationChunk, monsterObject
                     if (returnData) {
                         console.log("------------------- THE DATA - DOES IT EXIST? SECOND IF ----------------------");
                         console.log(returnData);
-                        io.to(singleLocationChunk.locationName).emit('updateFightables', { fightables: returnData.fightables, targetLocation: returnData.locationName });
+                        io.to(singleLocationChunk.locationName).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
                         for (const param in returnData.exits) {
-                            io.to(returnData[param]).emit('updateFightables', { fightables: returnData.fightables, targetLocation: returnData.locationName });
+                            io.to(returnData[param]).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
                         }
                     }
                 }).catch(e => console.log(e));
@@ -153,9 +153,9 @@ function updateAndDisseminateFightables({ io, singleLocationChunk, monsterObject
                 if (returnData) {
                     console.log(returnData);
                     console.log("------------------- THE DATA - DOES IT EXIST? THIRD IF ----------------------");
-                    io.to(singleLocationChunk.locationName).emit('updateFightables', { fightables: returnData.fightables, targetLocation: returnData.locationName });
+                    io.to(singleLocationChunk.locationName).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
                     for (const param in returnData.exits) {
-                        io.to(returnData[param]).emit('updateFightables', { fightables: returnData.fightables, targetLocation: returnData.locationName });
+                        io.to(returnData[param]).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
                     }
                 }
             }).catch(e => console.log(e));
