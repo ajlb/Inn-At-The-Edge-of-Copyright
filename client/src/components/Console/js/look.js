@@ -4,6 +4,8 @@ import { pluralizeAppropriateWords } from "./inventory";
 
 
 function lookAbout(location, setChatHistory) {
+    console.log("INSIDE LOOK:");
+    console.log(location);
     try {
         console.log(location);
         const lookArray = [];

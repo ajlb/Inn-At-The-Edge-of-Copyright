@@ -161,24 +161,20 @@ function Console() {
 
   // Socket location fightables update
   socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {
-    if (!(data === null)) {
+    console.log('GOT FIGHTABLES');
+    console.log(data);
+    if (!(data === undefined) && !(data === null)) {
       if (targetLocation === location.current.locationName){
         setLocation({
           ...location,
-          current: {
-            ...location.current,
-            data
-          }
+          current: data
         });
       } else {
         for (const param in location){
           if (location[param].locationName === targetLocation){
             setLocation({
               ...location,
-              param: {
-                ...location[param],
-                data
-              }
+              param: data
             });
           }
         }
