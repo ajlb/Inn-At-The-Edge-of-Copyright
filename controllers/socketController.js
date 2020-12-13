@@ -346,10 +346,10 @@ module.exports = function (io) {
 
 
         /*****************************/
-        /*             GET           */
+        /*             EAT           */
         /*****************************/
-        socket.on('eat', ({ target, itemId, player }) => {
-            eatItem(socket, io, target, itemId, player);
+        socket.on('eat', ({ target, itemId, player, locationName }) => {
+            eatItem(socket, io, target, itemId, player, locationName);
         });
 
 

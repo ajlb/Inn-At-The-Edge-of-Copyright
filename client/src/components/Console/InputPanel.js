@@ -357,7 +357,7 @@ function InputPanel({
                 //       EAT       //
                 /////////////////////
                 const eatMessage = takeTheseOffThat(actionCalls.eat, input);
-                eatItem(socket, eatMessage, user);
+                eatItem(socket, eatMessage, user, location.current.locationName);
 
             } else {
                 /////////////////////
