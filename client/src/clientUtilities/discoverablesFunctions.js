@@ -57,7 +57,7 @@ const discFunctions = {
             }, 500)
         },
 
-        startRoomLook: function startRoomLook({ setChatHistory, location }) {
+        look: function look({ setChatHistory, location }) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat mt-3", text: location.current.dayDescription }]);
             if (wardrobeIsOpen && wardrobeList.length > 0) {
                 let inWardrobe = wardrobeList;
@@ -73,7 +73,7 @@ const discFunctions = {
             }
         },
 
-        startRoomGet: function startRoomGet({ setChatHistory, input }) {
+        get: function get({ setChatHistory, input }) {
             let isInWardrobeList = false;
             if (wardrobeList.length > 0) {
                 wardrobeList.forEach(item => {
@@ -100,7 +100,7 @@ const discFunctions = {
             }
         },
 
-        startRoomInventory: function startRoomInventory({ setChatHistory }) {
+        inventory: function inventory({ setChatHistory }) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat mt-4 mb-2", text: "You are carrying:" }]);
 
             playerStartRoomInventory.forEach(item => {
@@ -108,20 +108,15 @@ const discFunctions = {
             })
         },
 
-        startRoomMove: function startRoomMove({ socket, input, location, user, playerPosition, setChatHistory, actionCalls }) {
-            let direction = input.split(' ')[0];
-            if (direction !== "east" && direction !== "e") {
-                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: "There is no exit " + direction }]);
-            } else {
-                setTimeout(() => {
-                    if (startDoorisLocked) {
-                        setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "Looks like the door is locked! If only you had a  key..." }]);
-                    } else {
-                        setChatHistory(prevState => [...prevState, { type: "displayed-stat mt-3", text: "You step through the wooden doorframe, the floorboards creaking beneath your feet. The door suddenly slams behind you!" }]);
-                        processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls)
-                    }
-                }, 500)
-            }
+        moveEast: function moveEast({ socket, input, location, user, playerPosition, setChatHistory, actionCalls }) {
+            setTimeout(() => {
+                if (startDoorisLocked) {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "Looks like the door is locked! If only you had a  key..." }]);
+                } else {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat mt-3", text: "You step through the wooden doorframe, the floorboards creaking beneath your feet. The door suddenly slams behind you!" }]);
+                    processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls)
+                }
+            }, 500)
         }
 
 

@@ -50,10 +50,12 @@
         "names": [],
         "description": "",
         "commands": [
-          "move",
-          "/m"
+          "move east",
+          "move e",
+          "/m east",
+          "/m e"
         ],
-        "action": "startRoomMove"
+        "action": "moveEast"
       },
       {
         "names": [],
@@ -63,7 +65,7 @@
           "pick up",
           "/g"
         ],
-        "action": "startRoomGet"
+        "action": "get"
       },
       {
         "names": [],
@@ -72,7 +74,7 @@
           "look",
           "/l"
         ],
-        "action": "startRoomLook"
+        "action": "look"
       },
       {
         "names": [],
@@ -82,7 +84,7 @@
           "/i",
           "check inventory"
         ],
-        "action": "startRoomInventory"
+        "action": "inventory"
       }
     ],
     "fightables": []
