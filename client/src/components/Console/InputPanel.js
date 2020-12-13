@@ -114,7 +114,9 @@ function InputPanel({
             /////////////////////
             let command = getOneOfTheseOffThat(discoverableCommands, input);
             let foundDisc = location.current.discoverables.find(discObj => {
-                return discObj.commands.includes(command)
+                if (discObj.commands) {
+                    return discObj.commands.includes(command)
+                }
             })
             if (foundDisc.actionDescription) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat faded mt-3", text: foundDisc.actionDescription }]);

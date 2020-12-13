@@ -8,7 +8,18 @@ let wardrobeList = [];
 let playerStartRoomInventory = [];
 
 
+
 const discFunctions = {
+    "Library": {
+        /*****************************/
+        /*         Library           */
+        /*****************************/
+        pullBook: function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
+            setTimeout(() => {
+                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls)
+            }, 1000)
+        }
+    },
     "Inn Laundry Room": {
         /*****************************/
         /*      Inn Laundry Room     */
@@ -17,12 +28,6 @@ const discFunctions = {
         mousehole: function mousehole({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
             setTimeout(() => {
                 processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls)
-            }, 1000)
-        },
-
-        pullBook: function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
-            setTimeout(() => {
-                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls)
             }, 1000)
         }
 
@@ -36,7 +41,7 @@ const discFunctions = {
             setTimeout(() => {
                 if (hasStartKey) {
                     startDoorisLocked = false;
-                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "The silver latch unlocks and falls to the floor! Though the door swings open, it seems like you broke your key in the lock..." }]);
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat mt-3", text: "The silver latch unlocks and falls to the floor! Though the door swings open, it seems like you broke your key in the lock..." }]);
                     setChatHistory(prevState => [...prevState, { type: "displayed-commands", text: "Try entering: move east" }]);
                 } else {
                     setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "It seems the door needs a special key to unlock" }]);
@@ -69,7 +74,10 @@ const discFunctions = {
                 } else {
                     inWardrobe = inWardrobe[0]
                 }
+                let firstItemSplit = wardrobeList[0].split(' ');
+                let lastWord = firstItemSplit[firstItemSplit.length - 1];
                 setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: `In the wardrobe you see ${inWardrobe}` }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: `Try entering: pick up ${lastWord}` }]);
             }
         },
 
@@ -91,6 +99,7 @@ const discFunctions = {
                     }
                     if (isInWardrobeList === 'a shiny key') {
                         hasStartKey = true;
+                        setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: inventory" }]);
                     }
                     playerStartRoomInventory.push(isInWardrobeList)
                 }
@@ -120,6 +129,12 @@ const discFunctions = {
         }
 
 
+    },
+
+    "Inn Kitchen": {
+        getLadle: function getLadle({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
+            console.log('getting ladle')
+        }
     }
 }
 

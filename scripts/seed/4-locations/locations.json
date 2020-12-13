@@ -20,6 +20,12 @@
     "discoverables": [
       {
         "names": [
+          "mirror"
+        ],
+        "description": "a black-framed ovular mirror in which your reflection stares back... did it just blink?"
+      },
+      {
+        "names": [
           "wardrobe",
           "closet"
         ],
@@ -184,15 +190,23 @@
       {
         "names": [
           "mouse hole",
-          "hole"
+          "hole",
+          "mousehole"
         ],
         "description": "a mousehole on the western wall that seems like the perfect size for a curious explorer to squeeze through...",
         "exampleCommand": "crawl into mouse hole",
         "commands": [
-          "crawl",
+          "crawl in hole",
+          "crawl in mouse",
+          "crawl in mousehole",
           "crawl into hole",
           "crawl into mousehole",
-          "crawl into mouse hole"
+          "crawl into mouse hole",
+          "go through hole",
+          "go into hole",
+          "go in hole",
+          "go in mouse",
+          "go in mousehole"
         ],
         "actionDescription": "You crawl into the dark, narrow mouse hole...",
         "action": "mousehole"
@@ -286,6 +300,33 @@
       "south": "Inn Lobby",
       "east": "Backyard"
     },
+    "discoverables": [
+      {
+        "names": [
+          "pot",
+          "bubbling pot"
+        ],
+        "description": "a copper pot sitting atop the wood-fired stove while a silver ladle hangs off the edge of the pot",
+        "exampleCommand": "examine ladle"
+      },
+      {
+        "names": [
+          "ladle",
+          "silver ladle"
+        ],
+        "description": "a silver ladle hanging off the edge of the pot. It seems to have a bit of weight to it",
+        "exampleCommand": "pick up ladle",
+        "commands": [
+          "get ladle",
+          "/g ladle",
+          "pick up ladle",
+          "get silver ladle",
+          "/g silver ladle",
+          "pick up silver ladle"
+        ],
+        "action": "getLadle"
+      }
+    ],
     "fightables": []
   },
   {
@@ -366,16 +407,21 @@
       {
         "names": [
           "book shelf",
-          "book case",
           "bookshelf",
           "bookcase",
-          "shelf",
+          "book case"
+        ],
+        "description": "an old, mahogany bookcase filled with old history books from which you can nearly hear the whispers of long lost legends, though one leather-bound book seems awfully...",
+        "exampleCommand": "inspect book"
+      },
+      {
+        "names": [
           "book"
         ],
-        "description": "an odd-looking book sitting on the bookcase against the southern wall that seems to be attached to some kind of lever mechanism",
+        "description": "an odd-looking book sitting on the dusty bookcase that seems to be attached to some kind of lever mechanism",
         "exampleCommand": "pull book",
         "commands": [
-          "pull",
+          "pull book",
           "pull books",
           "pull the book"
         ],
