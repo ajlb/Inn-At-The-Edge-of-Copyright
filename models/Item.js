@@ -19,23 +19,27 @@ const itemSchema = new Schema({
         type: Boolean,
         default: false
     },
-    healthEffect: {
+    HPeffect: {
         type: Number,
         default: 0
     },
-    wisdomEffect: {
+    WISeffect: {
         type: Number,
         default: 0
     },
-    dexterityEffect: {
+    DEXeffect: {
         type: Number,
         default: 0
     },
-    strengthEffect: {
+    STReffect: {
         type: Number,
         default: 0
     },
-    xpEffect: {
+    CHAeffect: {
+        type: Number,
+        default: 0
+    },
+    XPeffect: {
         type: Number,
         default: 0
     },
