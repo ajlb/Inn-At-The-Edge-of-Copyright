@@ -3,6 +3,8 @@ import socket from "../../clientUtilities/socket";
 import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { clearJuggleTime } from "./js/juggle";
 import { getOneOfTheseOffThat, takeTheseOffThat } from '../../clientUtilities/finders';
+import { ConnectionStates } from 'mongoose';
+
 
 
 
@@ -257,6 +259,23 @@ function ChatPanel({
         });
     })
 
+    socket.off('weatherData').on('weatherData', ({ weatherData}) => {
+        console.log("hello data", weatherData);
+
+        const shuffleWeather = weatherData.map((weather) => ({ sort: Math.random(), value: weather.weatherCondition }))
+            .sort((weather, element) => weather.sort - element.sort)
+            .map((weather) => weather.value);
+
+        shuffleWeather.forEach((setLocation) => {
+
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Current forecast is ${setLocation}.` }]);
+            console.log(location);
+            console.log(shuffleWeather);
+        });
+    });
+
+
+
     socket.off('error').on('error', ({ message, action }) => {
         let type = 'displayed-error';
         setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
@@ -282,21 +301,23 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}` }]);
         }
     });
-//         let exampleArray = [];
+    //         let exampleArray = [];
 
-//         actionData.map((helpItem) => {
-//             exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
-//             setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
-//         });
-//    // });
+    //         actionData.map((helpItem) => {
+    //             exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
+    //             setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
+    //         });
+    //    // });
 
-//         let commandLongArray = [];
+    //         let commandLongArray = [];
 
-//         actionData.map((helpItem) => {
-//             commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
-//             setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
-//         });
-//     });
+    //         actionData.map((helpItem) => {
+    //             commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
+    //             setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
+    //         });
+    //     });
+
+
 
 
 

@@ -381,7 +381,6 @@ module.exports = function (io) {
         socket.on('stats', () => {
             // db for player stats
             // emit stats to player
-
             db.Player.find({})
                 .then((statsData) => {
                     if (statsData !== null) {
@@ -420,15 +419,23 @@ module.exports = function (io) {
                 if (userWasAsleep) {
                     io.to(location).emit('wake', { userToWake });
                 } else {
-                    const action = `
+                    const action = 
                     setActivities(prevState => {
                         console.log('action running')
                         return { ...prevState, sleeping: false }
                     })
-                    `
                     io.to(socket.id).emit('error', { message: "You are already awake!", action });
+                    
                 }
-            });
+            }); 
+            db.Weather.find({})
+            .then((weatherData) => {
+               io.emit('weatherData',  {weatherData})
+                console.log(weatherData);
+            })
+            .catch(e => {
+                console.log(e);
+            })
         });
 
 
@@ -448,9 +455,13 @@ module.exports = function (io) {
         /*****************************/
         /* DAY/NIGHT - DATA REQUEST  */
         /*****************************/
-        socket.on('dataRequest', () => {
-            io.emit('dataRequest', playernicknames) //changed this from users, have not yet changed day/night to reflect this, since day/night is not currently working.
-        });
+        socket.on('dataRequest', ({playernicknames}) => {
+            db.Weather.find({})
+            .then((weatherData) => {
+            io.to(socket.id).emit('dataRequest', playernicknames, {weatherData})
+            console.log(weatherData) //changed this from users, have not yet changed day/night to reflect this, since day/night is not currently working.
+        })
+    });
 
 
         /*****************************/
@@ -467,6 +478,16 @@ module.exports = function (io) {
         socket.on('joinRequest', (message) => {
             socket.join(message);
         });
-    })
 
+        socket.on('weatherData', ({day, night, location, user}) => {
+            db.Weather.find({})
+            .then((weatherData) => {
+                socket.emit('weatherData',  {weatherData, day, night, location, user})
+                console.log(weatherData);
+            })
+            .catch(e => {
+                console.log(e);
+            })
+        })
+    })
 }
