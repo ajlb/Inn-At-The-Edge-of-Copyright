@@ -15,7 +15,7 @@ import { showInventory } from "./js/inventory";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
 // import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
-// import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
+import discoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 import { lookAbout } from './js/look';
 import { attackCreature } from "./js/monsters";
 import processMove from './js/move';
@@ -108,6 +108,20 @@ function InputPanel({
             /////////////////////
             console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
+        } else if (findIn(input, discoverableCommands)) {
+            /////////////////////
+            //  DISCOVERABLES  //
+            /////////////////////
+            let command = getOneOfTheseOffThat(discoverableCommands, input);
+            let foundDisc = location.current.discoverables.find(discObj => {
+                return discObj.commands.includes(command)
+            })
+            if (foundDisc.actionDescription) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded mt-3", text: foundDisc.actionDescription }]);
+            }
+            if (foundDisc.action) {
+                discoverableFunctions[foundDisc.action]({ socket, location, user, input, playerPosition, setChatHistory, actionCalls });
+            }
         } else if (findIn(input, actionCalls.reply)) {
             /////////////////////
             //      REPLY      //

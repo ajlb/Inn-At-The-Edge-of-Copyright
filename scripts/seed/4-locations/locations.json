@@ -303,7 +303,14 @@
           "book"
         ],
         "description": "an odd-looking book sitting on the bookcase against the southern wall that seems to be attached to some kind of lever mechanism",
-        "exampleCommand": "move south"
+        "exampleCommand": "pull book",
+        "commands": [
+          "pull",
+          "pull books",
+          "pull the book"
+        ],
+        "actionDescription": "You pull back the worn, leather-bound book which appears to be attached to some kind of lever. You hear a click and the bookcase opens like a door and you enter the dark tunnel beyond...",
+        "action": "pullBook"
       }
     ],
     "exits": {

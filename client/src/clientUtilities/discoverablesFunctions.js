@@ -1,23 +1,22 @@
+import processMove from '../components/Console/js/move';
+
 /*****************************/
-/*        START ROOM         */
+/*      Inn Laundry Room     */
 /*****************************/
 
-function closeWardrobe(socket, input){
-    socket.emit('closeWardrobe', input);
+function mousehole({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
+    setTimeout(() => {
+        processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls)
+    }, 1000)
 }
 
-function adjustDoor(socket, input){
-    socket.emit('adjustDoor', input);
+function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
+    setTimeout(() => {
+        processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls)
+    }, 1000)
 }
 
-function lookInMirror(socket, input){
-    socket.emit('lookInMirror', input);
-}
-
-
-
-export {
-    closeWardrobe,
-    adjustDoor,
-    lookInMirror
+export default {
+    mousehole,
+    pullBook
 }
