@@ -7,7 +7,7 @@ function decrementItemUpdateOne(itemId, targetName, type) {
     type = type ? type.toLowerCase() : undefined;
     return new Promise(function (resolve, reject) {
         if (type === "location") {
-            db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] })
+            db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": -1 }, $pop: {"inventory.$[item].dropTime": -1} }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] })
                 .then(data => {
                     resolve(data);
                 })
@@ -16,7 +16,7 @@ function decrementItemUpdateOne(itemId, targetName, type) {
                     reject(e);
                 });
         } else if (type === "player") {
-            db.Player.updateOne({ characterName: targetName }, { $inc: { "inventory.$[item].quantity": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
+            db.Player.updateOne({ characterName: targetName }, { $inc: { "inventory.$[item].quantity": -1 }, $pop: {"inventory.$[item].dropTime": -1} }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
                 resolve(data);
             })
                 .catch(e => {
@@ -33,7 +33,7 @@ function incrementItemUpdateOne(itemId, targetName, type) {
     type = type ? type.toLowerCase() : undefined;
     return new Promise(function (resolve, reject) {
         if (type === "location") {
-            db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
+            db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": 1 }, $push: {"inventory.$[item].dropTime": new Date()} }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
                 data.nModified === 1 ? resolve(true) : resolve(false);
             })
                 .catch(e => {
@@ -43,7 +43,7 @@ function incrementItemUpdateOne(itemId, targetName, type) {
         } else if (type === "player") {
             targetName = targetName.toLowerCase()
             console.log("in increment player, trying to increment", targetName);
-            db.Player.updateOne({ characterNameLowerCase: targetName }, { $inc: { "inventory.$[item].quantity": 1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
+            db.Player.updateOne({ characterNameLowerCase: targetName }, { $inc: { "inventory.$[item].quantity": 1 }, $push: {"inventory.$[item].dropTime": new Date()} }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
                 data.nModified === 1 ? resolve(true) : resolve(false);
             })
                 .catch(e => {
@@ -61,7 +61,7 @@ function pushItemToInventoryReturnData(itemId, targetName, type) {
     return new Promise(function (resolve, reject) {
         console.log(`pushing ${itemId} to ${targetName}`);
         if (type === "location") {
-            db.Location.findOneAndUpdate({ locationName: targetName }, { $push: { inventory: { item: itemId, quantity: 1 } } }, { new: true })
+            db.Location.findOneAndUpdate({ locationName: targetName }, { $push: { inventory: { item: itemId, quantity: 1, dropTime: [new Date()] } } }, { new: true })
                 .populate('inventory.item').then(data => {
                     resolve(data);
                 })
@@ -71,7 +71,7 @@ function pushItemToInventoryReturnData(itemId, targetName, type) {
                 });
         } else if (type === "player") {
             targetName = targetName.toLowerCase();
-            db.Player.findOneAndUpdate({ characterNameLowerCase: targetName }, { $push: { inventory: { item: itemId, quantity: 1 } } }, { new: true })
+            db.Player.findOneAndUpdate({ characterNameLowerCase: targetName }, { $push: { inventory: { item: itemId, quantity: 1, dropTime: [new Date()] } } }, { new: true })
                 .populate('inventory.item').then(data => {
                     resolve(data);
                 })
