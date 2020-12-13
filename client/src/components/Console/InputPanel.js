@@ -121,7 +121,7 @@ function InputPanel({
             }
             if (foundDisc.action) {
                 input = takeTheseOffThat(discoverableCommands, input).toLowerCase().trim();
-                discoverableFunctions[foundDisc.action]({ socket, location, user, input, playerPosition, setChatHistory, actionCalls });
+                discoverableFunctions[location.current.locationName][foundDisc.action]({ socket, location, user, input, playerPosition, setChatHistory, actionCalls });
             }
         } else if (findIn(input, actionCalls.reply)) {
             /////////////////////
