@@ -248,7 +248,7 @@ function Console() {
               marginTop: minState === "min" && 57 + "vh",
               overflow: minState === "min" && "hidden"
             }}>
-              <div className={region} style={{
+              <div className="panel-default" style={{
                 height: minState === "min" && 100 + "%",
                 width: minState === "min" && 100 + "%"
               }}>
