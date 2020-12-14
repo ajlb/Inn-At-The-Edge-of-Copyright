@@ -112,10 +112,11 @@ function InputPanel({
             /////////////////////
             console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
-        } else if (findIn(input, discoverableCommands)) {
+        } else if (findIn(input, discoverableCommands) || findIn(input.replace(' the', ''), discoverableCommands)) {
             /////////////////////
             //  DISCOVERABLES  //
             /////////////////////
+            input = input.replace(' the', '')
             let command = getOneOfTheseOffThat(discoverableCommands, input);
             let foundDisc = location.current.discoverables.find(discObj => {
                 if (discObj.commands) {
@@ -126,7 +127,7 @@ function InputPanel({
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat faded mt-3", text: foundDisc.actionDescription }]);
             }
             if (foundDisc.action) {
-                input = takeTheseOffThat(discoverableCommands, input).toLowerCase().trim();
+                input = takeTheseOffThat(discoverableCommands.concat(['the', 'a', 'an', "that"]), input).toLowerCase().trim();
                 discoverableFunctions[location.current.locationName][foundDisc.action]({ isSleeping: activities.sleeping, socket, location, user, input, playerPosition, setChatHistory, actionCalls });
             }
         } else if (findIn(input, actionCalls.reply)) {
