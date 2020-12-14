@@ -1,43 +1,22 @@
 function runExamine({ location, command, toExamine, user, setChatHistory }) {
 
-    function isInFightables(toExamine) {
-        let foundItem = location.current.fightables.find(param => {
-            return param.name.toLowerCase().includes(toExamine.trim())
-        })
-
-        if (foundItem) return true
-        else return false
-    }
-
-    function getAndDisplayFightable(toExamine) {
-        let foundItem = location.current.fightables.find(param => {
-            return param.name.toLowerCase().includes(toExamine.trim())
-        })
-        if (foundItem) {
-            setChatHistory(prevState => {
-                return [...prevState, { type: 'displayed-stat', text: foundItem.description }]
+    function isInDiscoverables(toExamine) {
+        let itIs = false;
+        if (location.current.discoverables) {
+            let discoverables = location.current.discoverables;
+            let description;
+            let exampleCommand;
+            discoverables.forEach(discoverable => {
+                discoverable.names.forEach(name => {
+                    if (name.startsWith(toExamine.toLowerCase()) && toExamine.trim() !== '') {
+                        itIs = true;
+                        description = discoverable.description;
+                        exampleCommand = discoverable.exampleCommand;
+                    }
+                })
             })
         }
-    }
-
-    function isInLocationInventory(toExamine) {
-        let foundItem = location.current.inventory.find(param => {
-            return param.item.itemName.toLowerCase().includes(toExamine.trim())
-        })
-        if (foundItem) return true
-        else return false
-        // return true;
-    }
-
-    function getAndDisplayLocationItem(toExamine) {
-        let foundItem = location.current.inventory.find(param => {
-            return param.item.itemName.toLowerCase().includes(toExamine.trim())
-        })
-        if (foundItem) {
-            setChatHistory(prevState => {
-                return [...prevState, { type: 'displayed-stat', text: `In the ${location.current.locationName} you see ${foundItem.item.description}` }]
-            })
-        }
+        return itIs;
     }
 
     function isInInventory(toExamine) {
@@ -65,9 +44,49 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
         }
     }
 
+    function isInLocationInventory(toExamine) {
+        let foundItem = location.current.inventory.find(param => {
+            return param.item.itemName.toLowerCase().includes(toExamine.trim())
+        })
+        if (foundItem) return true
+        else return false
+        // return true;
+    }
+
+    function getAndDisplayLocationItem(toExamine) {
+        let foundItem = location.current.inventory.find(param => {
+            return param.item.itemName.toLowerCase().includes(toExamine.trim())
+        })
+        if (foundItem) {
+            setChatHistory(prevState => {
+                return [...prevState, { type: 'displayed-stat', text: `Nearby you see ${foundItem.item.description}` }]
+            })
+        }
+    }
+
+    function isInFightables(toExamine) {
+        let foundItem = location.current.fightables.find(param => {
+            return param.name.toLowerCase().includes(toExamine.trim())
+        })
+
+        if (foundItem) return true
+        else return false
+    }
+
+    function getAndDisplayFightable(toExamine) {
+        let foundItem = location.current.fightables.find(param => {
+            return param.name.toLowerCase().includes(toExamine.trim())
+        })
+        if (foundItem) {
+            setChatHistory(prevState => {
+                return [...prevState, { type: 'displayed-stat', text: foundItem.description }]
+            })
+        }
+    }
+
     if (toExamine.trim() === '') {
         setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
-    } else if (location.current.discoverables) {
+    } else if (isInDiscoverables(toExamine)) {
         let discoverables = location.current.discoverables;
         let description;
         let exampleCommand;

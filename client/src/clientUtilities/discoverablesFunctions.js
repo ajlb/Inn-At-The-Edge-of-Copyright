@@ -1,4 +1,5 @@
 import processMove from '../components/Console/js/move';
+import runExamine from "../components/Console/js/examine";
 
 /* ---------Global Variables----------*/
 let startDoorisLocked = true;
@@ -106,6 +107,30 @@ const discFunctions = {
                 }
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+            }
+        },
+
+        examine: function examine({ location, command, user, setChatHistory, input }) {
+            let toExamine = input;
+            console.log(toExamine)
+            function isAllowed(toExamine) {
+                let itIs = false;
+                wardrobeList.forEach(item => {
+                    if (item.includes(toExamine)) {
+                        itIs = true;
+                    }
+                })
+                location.current.discoverables.forEach(discObj => {
+                    if (discObj.names.includes(toExamine)) {
+                        itIs = true;
+                    }
+                })
+                return itIs;
+            }
+            if (isAllowed(toExamine)) {
+                runExamine({ location, command, toExamine, user, setChatHistory })
+            } else {
+                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: "There's nothing by that name here" }]);
             }
         },
 

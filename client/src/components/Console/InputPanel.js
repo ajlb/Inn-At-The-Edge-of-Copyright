@@ -116,6 +116,7 @@ function InputPanel({
             /////////////////////
             //  DISCOVERABLES  //
             /////////////////////
+            console.log(location)
             input = input.replace(' the', '')
             let command = getOneOfTheseOffThat(discoverableCommands, input);
             let foundDisc = location.current.discoverables.find(discObj => {

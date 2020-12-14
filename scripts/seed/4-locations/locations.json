@@ -20,6 +20,17 @@
           "$oid": "5fc32531b2009d226ef5b85e"
         },
         "quantity": 1
+      },
+      {
+        "dropTime": [
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          }
+        ],
+        "item": {
+          "$oid": "5fd704e94c88070749b5ba12"
+        },
+        "quantity": 1
       }
     ],
     "exits": {
@@ -72,7 +83,9 @@
           "walk east",
           "walk e",
           "go east",
-          "go e"
+          "go e",
+          "exit east",
+          "exit e"
         ],
         "action": "moveEast"
       },
@@ -85,6 +98,18 @@
           "/g"
         ],
         "action": "get"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "look at",
+          "look in",
+          "examine",
+          "study",
+          "inspect"
+        ],
+        "action": "examine"
       },
       {
         "names": [],

@@ -548,6 +548,23 @@
   },
   {
     "_id": {
+      "$oid": "5fd704e94c88070749b5ba12"
+    },
+    "itemName": "shiny key",
+    "description": "a shiny metal key... maybe it could be used to unlock something...",
+    "category": "tools",
+    "inventorySize": 0.0,
+    "edible": false,
+    "HPeffect": 0.0,
+    "equipable": [],
+    "DEXeffect": 0.0,
+    "STReffect": 0.0,
+    "WISeffect": 0.0,
+    "CHAeffect": 0.0,
+    "XPeffect": 0.0
+  },
+  {
+    "_id": {
       "$oid": "5fd42fa7c7f92ab615f64792"
     },
     "itemName": "square of strawberry jello",
