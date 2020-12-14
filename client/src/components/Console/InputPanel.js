@@ -253,6 +253,15 @@ function InputPanel({
                     }
                 }
                 // console.log(user)
+            } else if (findIn(input, actionCalls.examine)) {
+                /////////////////////
+                //     EXAMINE     //
+                /////////////////////
+                let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
+                const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
+                toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
+                runExamine({ input, location, command, toExamine, user, setChatHistory });
+
             } else if (findIn(input, actionCalls.look)) {
                 /////////////////////
                 //      LOOK       //
@@ -328,15 +337,6 @@ function InputPanel({
                 let item = inputString.split(" to ")[0];
                 let target = takeTheseOffThat([item + " to "], inputString);
                 giveItem(socket, item, target, user, location);
-
-            } else if (findIn(input, actionCalls.examine)) {
-                /////////////////////
-                //     EXAMINE     //
-                /////////////////////
-                let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
-                const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
-                toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
-                runExamine({ input, location, command, toExamine, user, setChatHistory });
 
             } else if (findIn(input, actionCalls.attack)) {
                 /////////////////////
