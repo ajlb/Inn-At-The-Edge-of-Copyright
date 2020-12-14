@@ -125,10 +125,15 @@ const discFunctions = {
                         itIs = true;
                     }
                 })
+                if (toExamine === 'window') {
+                    itIs = true;
+                }
                 return itIs;
             }
             if (isAllowed(toExamine)) {
                 runExamine({ location, command, toExamine, user, setChatHistory })
+            } else if (toExamine === '') {
+                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: "There's nothing by that name here" }]);
             }

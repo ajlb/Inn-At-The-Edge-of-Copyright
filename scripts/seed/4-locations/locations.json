@@ -46,6 +46,13 @@
       },
       {
         "names": [
+          "window"
+        ],
+        "description": "a large tree blocking any semblance of a view. Someone really needs to trim that!",
+        "exampleCommand": "look around"
+      },
+      {
+        "names": [
           "wardrobe",
           "closet"
         ],
@@ -105,6 +112,7 @@
         "commands": [
           "look at",
           "look in",
+          "look out",
           "examine",
           "study",
           "inspect"

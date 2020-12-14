@@ -129,7 +129,7 @@ function InputPanel({
             }
             if (foundDisc.action) {
                 input = takeTheseOffThat(discoverableCommands.concat(['the', 'a', 'an', "that"]), input).toLowerCase().trim();
-                discoverableFunctions[location.current.locationName][foundDisc.action]({ isSleeping: activities.sleeping, socket, location, user, input, playerPosition, setChatHistory, actionCalls });
+                discoverableFunctions[location.current.locationName][foundDisc.action]({ isSleeping: activities.sleeping, socket, location, user, input, playerPosition, setChatHistory, actionCalls, command });
             }
         } else if (findIn(input, actionCalls.reply)) {
             /////////////////////

@@ -67,7 +67,7 @@ function Console() {
     wake: ['wake', 'wake up', 'awaken'],
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie', 'get up'],
     give: ['give'],
-    examine: ['examine', 'study', 'inspect', "look at", "look in"],
+    examine: ['examine', 'study', 'inspect', "look at", "look in", "look out"],
     whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
     attack: ['attack', 'fight', 'battle', 'kill'],
     shout: ['shout', 'yell'],
