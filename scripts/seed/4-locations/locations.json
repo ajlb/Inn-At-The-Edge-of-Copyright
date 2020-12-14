@@ -22,7 +22,8 @@
         "names": [
           "mirror"
         ],
-        "description": "a black-framed ovular mirror in which your reflection stares back... did it just blink?"
+        "description": "a black-framed ovular mirror in which your reflection stares back... did it just blink?",
+        "exampleCommand": "stats"
       },
       {
         "names": [
@@ -91,6 +92,45 @@
           "check inventory"
         ],
         "action": "inventory"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "give"
+        ],
+        "actionDescription": "You can't do that right now"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "drop",
+          "discard",
+          "/d"
+        ],
+        "actionDescription": "You can't do that right now"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "wear",
+          "don",
+          "put on"
+        ],
+        "actionDescription": "You can't do that right now"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "attack",
+          "fight",
+          "battle",
+          "kill"
+        ],
+        "actionDescription": "You can't do that right now"
       }
     ],
     "fightables": []

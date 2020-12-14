@@ -74,7 +74,10 @@ function InputPanel({
     const handleMessage = (event) => {
         event.preventDefault();
 
-        setInputHistory(prevState => [...prevState, input])
+        let enteredInput = input
+        // This is a slow function and occasionally the input variable is already modified by the time
+        // this function runs, so it must be set to a different variable to avoid async issues
+        setInputHistory(prevState => [...prevState, enteredInput])
 
         let discoverableCommands = [];
         if (location.current.discoverables) {
@@ -123,7 +126,7 @@ function InputPanel({
             }
             if (foundDisc.action) {
                 input = takeTheseOffThat(discoverableCommands, input).toLowerCase().trim();
-                discoverableFunctions[location.current.locationName][foundDisc.action]({ socket, location, user, input, playerPosition, setChatHistory, actionCalls });
+                discoverableFunctions[location.current.locationName][foundDisc.action]({ isSleeping: activities.sleeping, socket, location, user, input, playerPosition, setChatHistory, actionCalls });
             }
         } else if (findIn(input, actionCalls.reply)) {
             /////////////////////
