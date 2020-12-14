@@ -113,12 +113,14 @@ function InputPanel({
                 /////////////////////
                 console.log('Emit newUser')
                 socket.emit('newUser', { input, email: authUser.email });
-            } else if (findIn(input, discoverableCommands) || findIn(input.replace(' the', ''), discoverableCommands)) {
+            } else if (
+                findIn(input, discoverableCommands) ||
+                findIn(input.replace(/( the | a | an | that )/, ' '), discoverableCommands)
+            ) {
                 /////////////////////
                 //  DISCOVERABLES  //
                 /////////////////////
-                console.log(location)
-                input = input.replace(' the', '')
+                input = input.replace(/( the | a | an | that )/, ' ')
                 let command = getOneOfTheseOffThat(discoverableCommands, input);
                 let foundDisc = location.current.discoverables.find(discObj => {
                     if (discObj.commands) {
