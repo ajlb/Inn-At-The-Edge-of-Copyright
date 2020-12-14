@@ -190,6 +190,10 @@ function ChatPanel({
         if (damage) {
             if (user.characterName === attacker) {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You ${action.slice(0, -1)} ${defender} for ${damage} damage!` }]);
+                setActivities({
+                    ...activities,
+                    currentlyAttacking: false
+                });
             } else if (user.characterName === defender) {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} you for ${damage} damage!` }]);
             } else {
@@ -198,6 +202,10 @@ function ChatPanel({
         } else {
             if (user.characterName === attacker) {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You try to ${action.slice(0, -1)} ${defender}, but miss.` }]);
+                setActivities({
+                    ...activities,
+                    currentlyAttacking: false
+                });
             } else if (user.characterName === defender) {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action} you, but misses.` }]);
             } else {
@@ -210,8 +218,22 @@ function ChatPanel({
     socket.off('battleVictory').on('battleVictory', ({ victor, defeated }) => {
         if (user.characterName === victor) {
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You have defeated ${defeated}!` }]);
+            setActivities({
+                ...activities,
+                currentlyAttacking: false,
+                fighting: false
+            });
         } else if (user.characterName === defeated) {
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated you! You have died.` }]);
+            setActivities({
+                ...activities,
+                currentlyAttacking: false,
+                fighting: false
+            });
+            setPlayer({
+                ...user,
+                isAlive: false
+            });
         } else {
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated ${defeated}!` }]);
         }

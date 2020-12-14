@@ -33,7 +33,8 @@ function Console() {
     sleeping: false,
     juggling: false,
     fighting: false,
-    singing: false
+    singing: false,
+    currentlyAttacking: false
   })
 
   const [muted, setMuted] = useState(false);
