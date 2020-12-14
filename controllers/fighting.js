@@ -6,8 +6,6 @@ const { incrementDexAndStrAndXP } = require("./userInput/statINC");
 const { pushItemToInventoryReturnData, incrementItemUpdateOne } = require("./userInput/getDrop");
 const { findLocationData} = require("./userInput/move");
 const VOWELS = ["a", "e", "i", "o", "u"];
-console.log("++++++++++++++++++ LOGGING THIS FUNCTION +++++++++++++++++");
-console.log(findLocationData);
 
 
 function random9DigitNumber() {
@@ -22,7 +20,6 @@ function random9DigitNumber() {
 //to do:
 //set timer to have jello fight back
 //set disengage reminder at half health or below 5
-//what is going on in dropItemFromMonster that is messing up items in location inventory
 
 
 let activeMonsters = {};
@@ -45,7 +42,7 @@ function getItemIdFromName(itemName) {
 
 async function awakenMonsters(monsterObject) {
     console.log("inside awakenMonsters");
-    console.log(monsterObject);
+    // console.log(monsterObject);
     try {
         let thisMonster = activeMonsters[`${monsterObject.name} ${monsterObject.id}`];
         switch (monsterObject.name) {
@@ -123,8 +120,9 @@ function updateAndDisseminateFightables({ io, singleLocationChunk, monsterObject
                     //send location update to anyone with that location in their locationChunk
                     if (returnData) {
                         console.log(`sending location update to ${returnData.locationName}`);
-                        io.to(singleLocationChunk.locationName).emit('updateFightables', { data: returnData, targetLocation: returnData.locationName });
+                        console.log("------------------- THE DATA - DOES IT EXIST? FIRST IF ----------------------");
                         console.log(returnData);
+                        io.to(singleLocationChunk.locationName).emit('updateFightables', { data: returnData, targetLocation: returnData.locationName });
                         for (const param in returnData.exits) {
                             io.to(returnData[param]).emit('updateFightables', { data: returnData, targetLocation: returnData.locationName });
                         }
@@ -139,13 +137,28 @@ function updateAndDisseminateFightables({ io, singleLocationChunk, monsterObject
                 .then(returnData => {
                     //send location update to anyone with that location in their locationChunk
                     if (returnData) {
-                        io.to(singleLocationChunk.locationName).emit('updateFightables', { fightables: returnData.fightables, targetLocation: returnData.locationName });
+                        console.log("------------------- THE DATA - DOES IT EXIST? SECOND IF ----------------------");
                         console.log(returnData);
+                        io.to(singleLocationChunk.locationName).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
                         for (const param in returnData.exits) {
-                            io.to(returnData[param]).emit('updateFightables', { fightables: returnData.fightables, targetLocation: returnData.locationName });
+                            io.to(returnData[param]).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
                         }
                     }
                 }).catch(e => console.log(e));
+        } else {
+            db.Location.findOne({locationName: singleLocationChunk.locationName})
+            .populate('inventory.item')
+            .then(returnData =>{
+                //send location update to anyone with that location in their locationChunk
+                if (returnData) {
+                    console.log(returnData);
+                    console.log("------------------- THE DATA - DOES IT EXIST? THIRD IF ----------------------");
+                    io.to(singleLocationChunk.locationName).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
+                    for (const param in returnData.exits) {
+                        io.to(returnData[param]).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
+                    }
+                }
+            }).catch(e => console.log(e));
         }
     } catch (e) {
         console.log("ERROR FROM updateAndDisseminateFightables:");
@@ -181,7 +194,7 @@ function doesThisStartWithOneOfThese(givenString, givenArray) {
 
 async function dropItemFromMonster(io, monsterObject, locationName) {
     try {
-        console.log(monsterObject.drop);
+        // console.log(monsterObject.drop);
         for (const item of monsterObject.drop) {
             getItemIdFromName(item).then(itemId => {
                 console.log(`${monsterObject.name} drops ${item}, id ${itemId}`);
@@ -221,8 +234,8 @@ async function dropItemFromMonster(io, monsterObject, locationName) {
 async function processPlayerAttack(user, monster) {
     return new Promise(async function (resolve, reject) {
         try {
-            console.log("MONSTER FROM PROCESS PLAYER");
-            console.log(monster);
+            console.log("MONSTER FROM PROCESS PLAYER:", monster.name, monster.id);
+            // console.log(monster);
             const attackRoll = Math.floor(roll([[1, 20]]) + user.stats.DEX);
             console.log(user.characterName, "attacks for with roll:", attackRoll, "vs monster's DEX", monster.stats.DEX);
             if (attackRoll > monster.stats.DEX) {
@@ -231,7 +244,7 @@ async function processPlayerAttack(user, monster) {
                 // console.log(monster.name + " " + monster.id);
                 damageRoll = (damageRoll > 0) ? damageRoll : 1;
                 activeMonsters[monster.name + " " + monster.id].stats.HP -= damageRoll;
-                console.log(activeMonsters[monster.name + " " + monster.id]);
+                // console.log(activeMonsters[monster.name + " " + monster.id]);
                 resolve(damageRoll);
             } else {
                 resolve({ playerData: null, damage: null });
@@ -244,21 +257,26 @@ async function processPlayerAttack(user, monster) {
 }
 
 async function receiveAttack(io, socket, monsterObject, user, location) {
+    console.log("----------------------------------");
+    console.log(`MONSTER COMING IN FROM SOCKETCONTROLLER:`);
+    console.log(monsterObject);
+    console.log("----------------------------------");
+
+
+
     try {
         let thisMonster = activeMonsters[`${monsterObject.name} ${monsterObject.id}`];
-        console.log(thisMonster);
+        // console.log(thisMonster);
         switch (monsterObject.name) {
             case "Christmas Jello":
                 activeMonsters[`${monsterObject.name} ${monsterObject.id}`] = thisMonster ? thisMonster : await christmasJelloFactory(monsterObject.id);
                 thisMonster = activeMonsters[`${monsterObject.name} ${monsterObject.id}`];
-                // console.log('ACTIVE MONSTERS');
-                // console.log(activeMonsters);
                 if (thisMonster) {
                     processPlayerAttack(user, thisMonster).then(playerDamageToMonster => {
                         io.to(location.locationName).emit('battle', { attacker: user.characterName, defender: monsterObject.name, action: "attacks", damage: playerDamageToMonster });
                         setTimeout(async function () {
                             console.log("NOW IN THE .THEN AFTER PLAYER ATTACK");
-                            console.log(activeMonsters[`${monsterObject.name} ${monsterObject.id}`]);
+                            // console.log(activeMonsters[`${monsterObject.name} ${monsterObject.id}`]);
                             if (activeMonsters[`${monsterObject.name} ${monsterObject.id}`].stats.HP < 1) {
                                 const statIncrease = getStatIncreaseFromMonsterKill(thisMonster, user);
                                 io.to(location.locationName).emit('battleVictory', { victor: user.characterName, defeated: thisMonster.name });
@@ -276,7 +294,7 @@ async function receiveAttack(io, socket, monsterObject, user, location) {
                                 }
                                 io.to(location.locationName).emit('battle', { attacker: monsterObject.name, defender: user.characterName, action: monsterObject.attack, damage });
                                 thisMonster.newEnemy(user.characterName);
-                                console.log(thisMonster.enemies);
+                                // console.log(thisMonster.enemies);
                                 //send any updates to fightables
                                 updateAndDisseminateFightables({ io, singleLocationChunk: location, monsterObject, isFighting: true });
                             }

@@ -212,6 +212,10 @@ figure {
 
 /* message display */
 
+.faded {
+    opacity: 80%;
+}
+
 .error-message {
     margin-left: 20px;
     margin-top: -8px;

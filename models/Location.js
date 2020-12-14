@@ -26,7 +26,8 @@ let locationSchema = new Schema({
   inventory: 
     [{
     item: {type: Schema.Types.ObjectId, ref: "Item"},
-    quantity: Number
+    quantity: Number,
+    dropTime: Array
     } ]
   ,
   discoverables: {

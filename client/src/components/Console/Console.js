@@ -51,23 +51,23 @@ function Console() {
   const [playerPosition, setPlayerPosition] = useState('standing');
 
   const [actionCalls] = useState({
-    move: ['move', '/m', 'walk', 'exit'],
+    move: ['move', '/m', 'walk', 'exit', "go"],
     inventory: ['inventory', '/i', 'check inventory'],
     speak: ['speak', 'say', '/s'],
     look: ['look', '/l'],
     help: ['help', '/h'],
     get: ['get', '/g', 'pick up'],
     drop: ['drop', 'discard', '/d'],
-    wear: ['wear', 'put on', 'don'],
+    wear: ['wear', 'put on', 'don', 'equip'],
     remove: ['remove', 'take off', "doff"],
     emote: ['emote', '/e', "/me"],
     juggle: ['juggle'],
     stats: ['stats'],
     sleep: ['sleep', 'fall asleep'],
     wake: ['wake', 'wake up', 'awaken'],
-    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie', 'get up'],
+    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie', 'get up', 'position', 'get position'],
     give: ['give'],
-    examine: ['examine', 'study', 'inspect'],
+    examine: ['examine', 'study', 'inspect', "look at", "look in", "look out"],
     whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
     attack: ['attack', 'fight', 'battle', 'kill'],
     shout: ['shout', 'yell'],
@@ -75,7 +75,7 @@ function Console() {
     eat: ['eat', 'devour', 'ingest'],
   });
 // new, n helped t set region 
-  let region = "panel-default " + "inn-welcome-page";
+  let region;
 
   //blur and select functions for input - to set min state
   const onSelect = () => {
@@ -148,6 +148,8 @@ function Console() {
     }
   });
 
+
+
   // Socket location inventory update
   socket.off('invUpL').on('invUpL', message => {
     if (!(message === null)) {
@@ -163,24 +165,20 @@ function Console() {
 
   // Socket location fightables update
   socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {
-    if (!(data === null)) {
-      if (targetLocation === location.current.locationName){
+    console.log('GOT FIGHTABLES');
+    console.log(data);
+    if (!(data === undefined) && !(data === null)) {
+      if (targetLocation === location.current.locationName) {
         setLocation({
           ...location,
-          current: {
-            ...location.current,
-            data
-          }
+          current: data
         });
       } else {
-        for (const param in location){
-          if (location[param].locationName === targetLocation){
+        for (const param in location) {
+          if (location[param].locationName === targetLocation) {
             setLocation({
               ...location,
-              param: {
-                ...location[param],
-                data
-              }
+              param: data
             });
           }
         }
@@ -262,7 +260,9 @@ useEffect(() => {
               marginTop: minState === "min" && 57 + "vh",
               overflow: minState === "min" && "hidden"
             }}>
-              <div className={region} style={{
+
+            {/* region variable replacement */}
+              <div className="panel-default" style={{
                 height: minState === "min" && 100 + "%",
                 width: minState === "min" && 100 + "%"
               }}>
@@ -310,7 +310,6 @@ useEffect(() => {
                     muted={muted}
                     setMuted={setMuted}
                     canReply={canReply}
-                    setReplyTo={setReplyTo}
                   />
                 </div>
               </div>

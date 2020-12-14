@@ -126,6 +126,8 @@ function ChatPanel({
 
     // Socket location chunk
     socket.off('locationChunk').on('locationChunk', message => {
+        console.log('received locationChunk');
+        console.log(message);
         if (location.current === undefined) {
             let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
             setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
@@ -138,7 +140,7 @@ function ChatPanel({
             }
             const fightables = message.current.fightables.filter(en => en.isAlive);
             if (fightables) {
-                console.log(fightables);
+                // console.log(fightables);
                 if (fightables.length > 0) {
                     setChatHistory(prevState => [...prevState, {
                         type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
@@ -168,6 +170,18 @@ function ChatPanel({
         let type = 'displayed-stat';
         if (!inConversation) {
             setChatHistory(prevState => [...prevState, { type, text: message }]);
+        }
+    });
+
+    //eat message
+    socket.off('eat').on('eat', ({ actor, eatenItem, actorMessage }) => {
+        let type = 'displayed-stat';
+        if (actor.toLowerCase() === user.characterName.toLowerCase()){
+            setChatHistory(prevState => [...prevState, { type, text: `You eat ${insertArticleSingleValue(eatenItem)}. ${actorMessage}`}]);
+        } else {
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type, text: `${actor} eats ${insertArticleSingleValue(eatenItem)}.`}]);
+            }
         }
     });
 
