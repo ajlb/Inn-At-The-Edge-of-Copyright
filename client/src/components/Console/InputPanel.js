@@ -81,7 +81,7 @@ function InputPanel({
         setInputHistory(prevState => [...prevState, enteredInput])
 
         let discoverableCommands = [];
-        if (location.current.discoverables) {
+        if (location.current && location.current.discoverables) {
             location.current.discoverables.forEach(discObj => {
                 if (discObj.commands) {
                     discObj.commands.forEach(command => discoverableCommands.push(command))
