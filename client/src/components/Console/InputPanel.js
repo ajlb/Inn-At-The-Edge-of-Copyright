@@ -470,7 +470,7 @@ function InputPanel({
                     currentlyAttacking: false
                 });
             } else if (user.characterName === defender) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} you for ${damage} damage!` }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} you for <span className='text-red'>${damage}</span> damage!` }]);
             } else {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} ${defender}!` }]);
             }
@@ -500,7 +500,7 @@ function InputPanel({
                 fighting: false
             });
         } else if (user.characterName === defeated) {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated you! You have died.` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated you! <span className='text-red'>You have died.</span>` }]);
             setActivities({
                 ...activities,
                 currentlyAttacking: false,
