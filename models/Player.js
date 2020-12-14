@@ -105,7 +105,8 @@ const playerSchema = new Schema({
   },
   inventory: [{
     item: {type: Schema.Types.ObjectId, ref: "Item"},
-    quantity: Number
+    quantity: Number,
+    dropTime: Array
   }]
   ,
   lastLocation: {
