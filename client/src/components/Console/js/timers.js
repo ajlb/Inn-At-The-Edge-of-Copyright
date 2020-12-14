@@ -54,6 +54,7 @@ function startDisableInputTimer() {
         if (halfSecondsLeft === 0) {
             document.getElementById('submit-button').disabled = false;
             document.removeEventListener("keypress", disableEnterKey);
+            document.getElementById('inputBar').value = " ";
             clearInterval(timer)
         }
     }, [500])

@@ -29,6 +29,12 @@ function checkLocale(index, allLocations) {
                         }
                     })
                 }
+                // if (quantityToTrash > 0) {
+                //     diffObject[realTimeInventory[itemIndex].item] = quantityToTrash;
+                // }
+                // if (quantityToAdd > 0) {
+                //     diffObject[realTimeInventory[itemIndex].item] = quantityToAdd;
+                // }
             } else {
                 console.log("NO MATCH");
             }
@@ -48,12 +54,6 @@ function checkLocale(index, allLocations) {
             //         }
             //     }
 
-            // }
-            // if (quantityToTrash > 0) {
-            //     diffObject[realTimeInventory[itemIndex].item] = quantityToTrash;
-            // }
-            // if (quantityToAdd > 0) {
-            //     diffObject[realTimeInventory[itemIndex].item] = quantityToAdd;
             // }
             resolve(true)
         }
@@ -84,7 +84,7 @@ async function runSweep() {
 
         }).catch(e => console.log(e));
     } catch (e) {
-        console.log("ERROR FROM runSweet");
+        console.log("ERROR FROM runSweep");
         console.log(e);
     }
 
