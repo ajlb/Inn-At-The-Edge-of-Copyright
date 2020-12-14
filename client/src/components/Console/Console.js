@@ -74,7 +74,7 @@ function Console() {
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
   });
-
+// new, n helped t set region 
   let region = "panel-default " + "inn-welcome-page";
 
   //blur and select functions for input - to set min state
@@ -235,6 +235,16 @@ function Console() {
       mounted = false;
     }
   }, [])
+//t and p troubleshoot
+useEffect(() => {
+  if (!(location.current === undefined)){
+    let thisRegion= location.current.region
+    region= 'panel-default ' + thisRegion.toLowerCase().replace(/\s/g,'-')
+    console.log("found region", region)
+  }
+
+}, [location])
+//end
 
   return (
     <div>
