@@ -55,6 +55,7 @@ function InputPanel({
 
     useEffect(() => {
         isAuthenticated && socket.emit("log in", authUser.email);
+        isAuthenticated && console.log(authUser.email);
         if (!(authUser === undefined)) {
             (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
         }

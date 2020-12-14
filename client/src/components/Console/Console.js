@@ -58,7 +58,7 @@ function Console() {
     help: ['help', '/h'],
     get: ['get', '/g', 'pick up'],
     drop: ['drop', 'discard', '/d'],
-    wear: ['wear', 'put on', 'don'],
+    wear: ['wear', 'put on', 'don', 'equip'],
     remove: ['remove', 'take off', "doff"],
     emote: ['emote', '/e', "/me"],
     juggle: ['juggle'],
@@ -74,7 +74,7 @@ function Console() {
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
   });
-
+  
   //blur and select functions for input - to set min state
   const onSelect = () => {
     setMinState("min");
@@ -145,6 +145,8 @@ function Console() {
       });
     }
   });
+
+
 
   // Socket location inventory update
   socket.off('invUpL').on('invUpL', message => {
