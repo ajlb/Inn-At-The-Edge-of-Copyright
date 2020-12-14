@@ -113,10 +113,19 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
                     })
                 }
             } else {
-                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "You can't 'look out' that! Try 'look at' instead!" }] })
+                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "You can't 'look out' that!" }] })
+                setChatHistory(prevState => { return [...prevState, { type: "displayed-commands faded", text: `Try entering: look at ${toExamine} or look out window` }] })
             }
         } else if (description) {
-
+            setChatHistory(prevState => {
+                if (exampleCommand) {
+                    return [...prevState,
+                    { type: 'displayed-stat mt-3', text: `You see ${description}` },
+                    { type: 'displayed-commands', text: `Try entering: ${exampleCommand}` }]
+                } else {
+                    return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
+                }
+            })
         } else if (isInInventory(toExamine)) {
             getAndDisplayInventoryItem(toExamine)
         } else {
