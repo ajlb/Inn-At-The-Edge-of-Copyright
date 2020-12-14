@@ -58,7 +58,7 @@
         "leftHandSlot": null,
         "legsSlot": null,
         "feetSlot": null,
-        "ringSlot": null,
+        "fingerSlot": null,
         "handsSlot": null,
         "twoHands": null
       },
@@ -100,7 +100,7 @@
         "leftHandSlot": null,
         "legsSlot": null,
         "feetSlot": null,
-        "ringSlot": null,
+        "fingerSlot": null,
         "handsSlot": null,
         "twoHands": null
       },
@@ -140,7 +140,7 @@
         "leftHandSlot": null,
         "legsSlot": null,
         "feetSlot": null,
-        "ringSlot": null,
+        "fingerSlot": null,
         "handsSlot": null,
         "twoHands": null
       },
@@ -180,7 +180,7 @@
         "leftHandSlot": null,
         "legsSlot": null,
         "feetSlot": null,
-        "ringSlot": null,
+        "fingerSlot": null,
         "handsSlot": null,
         "twoHands": null
       },
@@ -221,7 +221,7 @@
         "leftHandSlot": null,
         "legsSlot": null,
         "feetSlot": null,
-        "ringSlot": null,
+        "fingerSlot": null,
         "handsSlot": null,
         "twoHands": null
       },
@@ -262,7 +262,7 @@
         "leftHandSlot": null,
         "legsSlot": null,
         "feetSlot": null,
-        "ringSlot": null,
+        "fingerSlot": null,
         "handsSlot": null,
         "twoHands": null
       },
@@ -302,7 +302,7 @@
         "leftHandSlot": null,
         "legsSlot": null,
         "feetSlot": null,
-        "ringSlot": null,
+        "fingerSlot": null,
         "handsSlot": null,
         "twoHands": null
       },
@@ -342,7 +342,7 @@
         "leftHandSlot": null,
         "legsSlot": null,
         "feetSlot": null,
-        "ringSlot": null,
+        "fingerSlot": null,
         "handsSlot": null,
         "twoHands": null
       },
@@ -446,7 +446,7 @@
         "leftHandSlot" : null,
         "legsSlot" : "pair of brown pants",
         "feetSlot" : "pair of green socks",
-        "ringSlot" : null,
+        "fingerSlot" : null,
         "handsSlot" : null,
         "twoHands" : null
     },

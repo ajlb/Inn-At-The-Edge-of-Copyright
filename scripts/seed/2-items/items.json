@@ -244,7 +244,7 @@
     "inventorySize": 0,
     "edible": false,
     "HPeffect": 0,
-    "equippable": [],
+    "equippable": ["fingerSlot"],
     "DEXeffect": 0,
     "STReffect": 0,
     "WISeffect": 0,
