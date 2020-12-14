@@ -45,8 +45,8 @@ function startCurrentlyAttackingTimer({ setActivities, activities }) {
 }
 
 
-function startDisableInputTimer(input, setInput) {
-    let halfSecondsLeft = 3
+function startDisableInputTimer() {
+    let halfSecondsLeft = 4
     document.getElementById('submit-button').disabled = true;
     document.addEventListener("keypress", disableEnterKey);
     const timer = setInterval(() => {

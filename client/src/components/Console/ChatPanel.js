@@ -185,60 +185,7 @@ function ChatPanel({
         }
     });
 
-    //battle
-    socket.off('battle').on('battle', ({ attacker, defender, action, damage }) => {
-        if (damage) {
-            if (user.characterName === attacker) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You ${action.slice(0, -1)} ${defender} for ${damage} damage!` }]);
-                setActivities({
-                    ...activities,
-                    currentlyAttacking: false
-                });
-            } else if (user.characterName === defender) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} you for ${damage} damage!` }]);
-            } else {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} ${defender}!` }]);
-            }
-        } else {
-            if (user.characterName === attacker) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You try to ${action.slice(0, -1)} ${defender}, but miss.` }]);
-                setActivities({
-                    ...activities,
-                    currentlyAttacking: false
-                });
-            } else if (user.characterName === defender) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action} you, but misses.` }]);
-            } else {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action} ${defender}, but misses.` }]);
-            }
-        }
-    });
-
-    //battleVictory
-    socket.off('battleVictory').on('battleVictory', ({ victor, defeated }) => {
-        if (user.characterName === victor) {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You have defeated ${defeated}!` }]);
-            setActivities({
-                ...activities,
-                currentlyAttacking: false,
-                fighting: false
-            });
-        } else if (user.characterName === defeated) {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated you! You have died.` }]);
-            setActivities({
-                ...activities,
-                currentlyAttacking: false,
-                fighting: false
-            });
-            setPlayer({
-                ...user,
-                isAlive: false
-            });
-        } else {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated ${defeated}!` }]);
-        }
-    });
-
+    
     //shout
     socket.off('shout').on('shout', ({ userMessage, fromUser }) => {
         if (!inConversation) {

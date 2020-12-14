@@ -76,6 +76,8 @@ function Console() {
     eat: ['eat', 'devour', 'ingest'],
   });
 
+
+
   //blur and select functions for input - to set min state
   const onSelect = () => {
     setMinState("min");
@@ -290,6 +292,7 @@ function Console() {
                     setPlayerPosition={setPlayerPosition}
                     location={location}
                     user={player}
+                    setPlayer = {setPlayer}
                     activities={activities}
                     setActivities={setActivities}
                     inConversation={inConversation}

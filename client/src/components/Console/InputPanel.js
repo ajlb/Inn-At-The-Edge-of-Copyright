@@ -37,6 +37,7 @@ function InputPanel({
     setInputHistory,
     actionCalls,
     user,
+    setPlayer,
     setPlayerPosition,
     playerPosition,
     setChatHistory,
@@ -79,7 +80,7 @@ function InputPanel({
             // This is a slow function and occasionally the input variable is already modified by the time
             // this function runs, so it must be set to a different variable to avoid async issues
             setInputHistory(prevState => [...prevState, enteredInput])
-    
+
             let discoverableCommands = [];
             if (location.current && location.current.discoverables) {
                 location.current.discoverables.forEach(discObj => {
@@ -88,14 +89,14 @@ function InputPanel({
                     }
                 })
             }
-    
+
             ////////////////////////////////
             //                            //
             //        USER ACTIONS        //
             //                            //
             //    permissable in convo    //
             ////////////////////////////////
-    
+
             if (user.characterName === undefined) {
                 /////////////////////
                 //  PROMPT LOG IN  //
@@ -146,7 +147,7 @@ function InputPanel({
                 //    WHISPER      //
                 /////////////////////
                 let message = takeTheseOffThat(actionCalls.whisper, input);
-    
+
                 NPCCheck(location.current.NPCs, message)
                     .then(({ NPCName, message }) => {
                         socket.emit('to NPC', { toNPC: NPCName, message })
@@ -216,37 +217,37 @@ function InputPanel({
                 } else {
                     setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You need to be awake to do that` }]);
                 }
-    
-    
-    
+
+
+
                 ////////////////////////////////
                 //                            //
                 //   OUT OF CONVO ACTIONS     //
                 //                            //
                 ////////////////////////////////
-    
-    
-    
+
+
+
             } else if (!inConversation) {
                 // Everything in here cannot be run while in a conversation with an NPC
                 // if (findIn(input, DiscoverableCalls.get(location.current.locationName))) {
                 //     console.log('something discoverable is happening');
                 // } else 
-    
+
                 if (findIn(input, actionCalls.move)) {
                     /////////////////////
                     //      MOVE       //
                     /////////////////////
                     let command = getOneOfTheseOffThat(actionCalls.move, input)
                     processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls, command);
-    
+
                 } else if (findIn(input, actionCalls.speak)) {
                     /////////////////////
                     //     SPEAK       //
                     /////////////////////
                     const message = takeTheseOffThat(actionCalls.speak, input);
                     socket.emit('speak', { message, user: user.characterName, location: location.current.locationName });
-    
+
                 } else if (findIn(input, actionCalls.shout)) {
                     /////////////////////
                     //     SHOUT       //
@@ -276,39 +277,39 @@ function InputPanel({
                     const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
                     toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
                     runExamine({ input, location, command, toExamine, user, setChatHistory });
-    
+
                 } else if (findIn(input, actionCalls.look)) {
                     /////////////////////
                     //      LOOK       //
                     /////////////////////
                     lookAbout(location, setChatHistory);
-    
+
                 } else if (findIn(input, actionCalls.get)) {
                     /////////////////////
                     //      GET        //
                     /////////////////////
                     const target = takeTheseOffThat(actionCalls.get, input);
                     getItem(socket, user, target, location);
-    
+
                 } else if (findIn(input, actionCalls.drop)) {
                     /////////////////////
                     //      DROP       //
                     /////////////////////
                     const target = takeTheseOffThat(actionCalls.drop, input);
                     dropItem(socket, location, target, user);
-    
+
                 } else if (findIn(input, actionCalls.wear)) {
                     /////////////////////
                     //      WEAR       //
                     /////////////////////
                     wear(input, user, actionCalls.wear);
-    
+
                 } else if (findIn(input, actionCalls.remove)) {
                     /////////////////////
                     //     REMOVE      //
                     /////////////////////
                     remove(input, user, actionCalls.remove);
-    
+
                 } else if (findIn(input, actionCalls.emote)) {
                     /////////////////////
                     //      EMOTE      //
@@ -320,7 +321,7 @@ function InputPanel({
                     } else {
                         setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Looks like you didn't emote anything! Try ${command} runs around wildly` }]);
                     }
-    
+
                 } else if (findIn(input, actionCalls.sleep)) {
                     /////////////////////
                     //      SLEEP      //
@@ -333,7 +334,7 @@ function InputPanel({
                         setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You need to lie down to do that!` }]);
                     }
                     // socket.emit('sleep', input)
-    
+
                 } else if (findIn(input, actionCalls.wake)) {
                     /////////////////////
                     //      WEAR       //
@@ -343,7 +344,7 @@ function InputPanel({
                     } else {
                         socket.emit('wake', { userToWake: user.characterName, location: location.current.locationName })
                     }
-    
+
                 } else if (findIn(input, actionCalls.give)) {
                     /////////////////////
                     //      GIVE       //
@@ -352,7 +353,7 @@ function InputPanel({
                     let item = inputString.split(" to ")[0];
                     let target = takeTheseOffThat([item + " to "], inputString);
                     giveItem(socket, item, target, user, location);
-    
+
                 } else if (findIn(input, actionCalls.attack)) {
                     /////////////////////
                     //     ATTACK      //
@@ -363,10 +364,14 @@ function InputPanel({
                     } else {
                         let target = takeTheseOffThat(actionCalls.attack, input).toLowerCase();
                         target = takeTheseOffThat(["the, a, an, that"], target);
-                        attackCreature({socket, user, location, target, activities, setActivities});
-                        startDisableInputTimer(input, setInput);
+                        attackCreature({ socket, user, location, target, activities, setActivities });
+                        startDisableInputTimer();
+                        // document.getElementById('submit-button').disabled = true;
+                        // document.addEventListener("keypress", disableEnterKey);
+
+
                     }
-    
+
                 } else if (findIn(input, ["logout", "log out", "log off"])) {
                     /////////////////////
                     //      LOGOUT     //
@@ -374,21 +379,21 @@ function InputPanel({
                     takeTheseOffThat(["logout, log out", "log off"], input);
                     logout({ returnTo: window.location.origin });
                     // socket.emit('logout', location.current.locationName);
-    
+
                 } else if (findIn(input, actionCalls.eat)) {
                     /////////////////////
                     //       EAT       //
                     /////////////////////
                     const eatMessage = takeTheseOffThat(actionCalls.eat, input);
                     eatItem(socket, eatMessage, user, location.current.locationName);
-    
+
                 } else {
                     /////////////////////
                     //  UNKNOWN INPUT  //
                     /////////////////////
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Hmmmm... that didn't quite make sense. Try 'help' for a list of commands!` }]);
                 }
-    
+
             } else if (inConversation) {
                 //////////////////////
                 // NPC CONVERSATION //
@@ -402,14 +407,14 @@ function InputPanel({
                         console.log(err.message);
                         setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `It looks like ${inConversation.with} has left` }]);
                     })
-    
+
             } else {
                 /////////////////////
                 //  UNKNOWN INPUT  //
                 /////////////////////
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Hmmmm... that didn't quite make sense. Try 'help' for a list of commands!` }]);
             }
-    
+
             setInput('');
 
         } catch (e) {
@@ -443,6 +448,78 @@ function InputPanel({
             }
         }
     }
+
+
+
+    //disable enter key and input button when user needs to just wait a minute
+    function disableEnterKey(event) {
+        event.preventDefault();
+        console.log(event.key);
+        document.getElementById("inputBar").value = "...you are momentarily quite busy";
+    }
+
+
+    //battle
+    socket.off('battle').on('battle', ({ attacker, defender, action, damage }) => {
+        if (damage) {
+            if (user.characterName === attacker) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You ${action.slice(0, -1)} ${defender} for ${damage} damage!` }]);
+                document.removeEventListener("keypress", disableEnterKey);
+                setActivities({
+                    ...activities,
+                    currentlyAttacking: false
+                });
+            } else if (user.characterName === defender) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} you for ${damage} damage!` }]);
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} ${defender}!` }]);
+            }
+        } else {
+            if (user.characterName === attacker) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You try to ${action.slice(0, -1)} ${defender}, but miss.` }]);
+                setActivities({
+                    ...activities,
+                    currentlyAttacking: false
+                });
+            } else if (user.characterName === defender) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action.slice(0,-1)} you, but misses.` }]);
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action.slice(0,-1)} ${defender}, but misses.` }]);
+            }
+        }
+    });
+
+    //battleVictory
+    socket.off('battleVictory').on('battleVictory', ({ victor, defeated }) => {
+        if (user.characterName === victor) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You have defeated ${defeated}!` }]);
+            document.removeEventListener("keypress", disableEnterKey);
+            setActivities({
+                ...activities,
+                currentlyAttacking: false,
+                fighting: false
+            });
+        } else if (user.characterName === defeated) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated you! You have died.` }]);
+            setActivities({
+                ...activities,
+                currentlyAttacking: false,
+                fighting: false
+            });
+            setPlayer({
+                ...user,
+                isAlive: false
+            });
+        } else {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated ${defeated}!` }]);
+        }
+    });
+
+
+
+
+
+
 
     return (
         <div>
