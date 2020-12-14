@@ -4,8 +4,8 @@
       "$oid": "5fd6a35323c222361c1b9483"
     },
     "locationName": "Start Room",
-    "dayDescription": "Looking around, you notice a large mirror hung on the wall next to a large closed wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with white curtains but a large tree seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
-    "nightDescription": "Looking around, you notice a large mirror hung on the wall next to a large closed wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with curtains but a large shadow seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
+    "dayDescription": "Looking around, you notice a large mirror hung on the wall next to a large wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with white curtains but a large tree seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
+    "nightDescription": "Looking around, you notice a large mirror hung on the wall next to a large wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with curtains but a large shadow seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
     "region": "Start Room",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -49,6 +49,14 @@
           "window"
         ],
         "description": "a large tree blocking any semblance of a view. Someone really needs to trim that!",
+        "exampleCommand": "look around"
+      },
+      {
+        "names": [
+          "curtain",
+          "curtains"
+        ],
+        "description": "two tattered white curtains on either side of the window",
         "exampleCommand": "look around"
       },
       {
