@@ -4,8 +4,8 @@
       "$oid": "5fd6a35323c222361c1b9483"
     },
     "locationName": "Start Room",
-    "dayDescription": "Looking around, you notice a large mirror hung on the wall next to a large closed wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with white curtains but a large tree seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
-    "nightDescription": "Looking around, you notice a large mirror hung on the wall next to a large closed wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with curtains but a large shadow seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
+    "dayDescription": "Looking around, you notice a large mirror hung on the wall next to a large wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with white curtains but a large tree seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
+    "nightDescription": "Looking around, you notice a large mirror hung on the wall next to a large wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with curtains but a large shadow seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
     "region": "Start Room",
     "indoorOutdoor": "indoor",
     "NPCs": [],
@@ -20,6 +20,17 @@
           "$oid": "5fc32531b2009d226ef5b85e"
         },
         "quantity": 1
+      },
+      {
+        "dropTime": [
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          }
+        ],
+        "item": {
+          "$oid": "5fd704e94c88070749b5ba12"
+        },
+        "quantity": 1
       }
     ],
     "exits": {
@@ -32,6 +43,21 @@
         ],
         "description": "a black-framed ovular mirror in which your reflection stares back... did it just blink?",
         "exampleCommand": "stats"
+      },
+      {
+        "names": [
+          "window"
+        ],
+        "description": "a large tree blocking any semblance of a view. Someone really needs to trim that!",
+        "exampleCommand": "look around"
+      },
+      {
+        "names": [
+          "curtain",
+          "curtains"
+        ],
+        "description": "two tattered white curtains on either side of the window",
+        "exampleCommand": "look around"
       },
       {
         "names": [
@@ -68,7 +94,13 @@
           "move east",
           "move e",
           "/m east",
-          "/m e"
+          "/m e",
+          "walk east",
+          "walk e",
+          "go east",
+          "go e",
+          "exit east",
+          "exit e"
         ],
         "action": "moveEast"
       },
@@ -81,6 +113,19 @@
           "/g"
         ],
         "action": "get"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "look at",
+          "look in",
+          "look out",
+          "examine",
+          "study",
+          "inspect"
+        ],
+        "action": "examine"
       },
       {
         "names": [],
@@ -100,6 +145,15 @@
           "check inventory"
         ],
         "action": "inventory"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "help",
+          "/h"
+        ],
+        "action": "help"
       },
       {
         "names": [],

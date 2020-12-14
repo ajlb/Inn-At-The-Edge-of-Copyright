@@ -81,17 +81,13 @@ function InputPanel({
         setInputHistory(prevState => [...prevState, enteredInput])
 
         let discoverableCommands = [];
-        /*
-        NICK: I've commented this out so I can login with out getting the undefined error that shows on login.  
-        Maybe need to ensure that this can handle the login has no location defined?
-        */
-        // if (location.current.discoverables) {
-        //     location.current.discoverables.forEach(discObj => {
-        //         if (discObj.commands) {
-        //             discObj.commands.forEach(command => discoverableCommands.push(command))
-        //         }
-        //     })
-        // }
+        if (location.current && location.current.discoverables) {
+            location.current.discoverables.forEach(discObj => {
+                if (discObj.commands) {
+                    discObj.commands.forEach(command => discoverableCommands.push(command))
+                }
+            })
+        }
 
         ////////////////////////////////
         //                            //
@@ -116,10 +112,12 @@ function InputPanel({
             /////////////////////
             console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
-        } else if (findIn(input, discoverableCommands)) {
+        } else if (findIn(input, discoverableCommands) || findIn(input.replace(' the', ''), discoverableCommands)) {
             /////////////////////
             //  DISCOVERABLES  //
             /////////////////////
+            console.log(location)
+            input = input.replace(' the', '')
             let command = getOneOfTheseOffThat(discoverableCommands, input);
             let foundDisc = location.current.discoverables.find(discObj => {
                 if (discObj.commands) {
@@ -130,8 +128,8 @@ function InputPanel({
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat faded mt-3", text: foundDisc.actionDescription }]);
             }
             if (foundDisc.action) {
-                input = takeTheseOffThat(discoverableCommands, input).toLowerCase().trim();
-                discoverableFunctions[location.current.locationName][foundDisc.action]({ isSleeping: activities.sleeping, socket, location, user, input, playerPosition, setChatHistory, actionCalls });
+                input = takeTheseOffThat(discoverableCommands.concat(['the', 'a', 'an', "that"]), input).toLowerCase().trim();
+                discoverableFunctions[location.current.locationName][foundDisc.action]({ isSleeping: activities.sleeping, socket, location, user, input, playerPosition, setChatHistory, actionCalls, command });
             }
         } else if (findIn(input, actionCalls.reply)) {
             /////////////////////
@@ -186,23 +184,35 @@ function InputPanel({
             /////////////////////
             //    POSITION     //
             /////////////////////
-            console.log("Position invoked")
-            console.log("activities.sleeping:", activities.sleeping)
-            console.log("position", playerPosition)
+            let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (!activities.sleeping) {
-                let command = getOneOfTheseOffThat(actionCalls.position, input);
                 if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
                     setPlayerPosition('lying down');
                     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now lying down.` }]);
                 } else if (findIn(command, ['sit']) && playerPosition !== 'sitting') {
                     setPlayerPosition('sitting');
                     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting.` }]);
-                } else if (findIn(command, ['stand', 'get']) && playerPosition !== 'standing') {
+                } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
                     setPlayerPosition('standing');
                     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
+                } else if (findIn(command, ['get up'])) {
+                    console.log(playerPosition)
+                    if (playerPosition === 'lying down') {
+                        setPlayerPosition('sitting')
+                        setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting.` }]);
+                    } else if (playerPosition === 'sitting') {
+                        setPlayerPosition('standing')
+                        setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
+                    } else if (playerPosition === 'standing') {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-green", text: `You are already ${playerPosition}` }]);
+                    }
+                } else if (findIn(command, ['position', 'get position'])) {
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are ${playerPosition}` }]);
                 } else {
                     setChatHistory(prevState => [...prevState, { type: "displayed-green", text: `You are already ${playerPosition}` }]);
                 }
+            } else if (findIn(command, ['position', 'get position'])) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are ${playerPosition} and are asleep` }]);
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You need to be awake to do that` }]);
             }
@@ -227,7 +237,8 @@ function InputPanel({
                 /////////////////////
                 //      MOVE       //
                 /////////////////////
-                processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls);
+                let command = getOneOfTheseOffThat(actionCalls.move, input)
+                processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls, command);
 
             } else if (findIn(input, actionCalls.speak)) {
                 /////////////////////
@@ -257,6 +268,15 @@ function InputPanel({
                     }
                 }
                 // console.log(user)
+            } else if (findIn(input, actionCalls.examine)) {
+                /////////////////////
+                //     EXAMINE     //
+                /////////////////////
+                let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
+                const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
+                toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
+                runExamine({ input, location, command, toExamine, user, setChatHistory });
+
             } else if (findIn(input, actionCalls.look)) {
                 /////////////////////
                 //      LOOK       //
@@ -332,15 +352,6 @@ function InputPanel({
                 let item = inputString.split(" to ")[0];
                 let target = takeTheseOffThat([item + " to "], inputString);
                 giveItem(socket, item, target, user, location);
-
-            } else if (findIn(input, actionCalls.examine)) {
-                /////////////////////
-                //     EXAMINE     //
-                /////////////////////
-                let toExamine = takeTheseOffThat(actionCalls.examine, input.toLowerCase());
-                const command = getOneOfTheseOffThat(actionCalls.examine, input.toLowerCase());
-                toExamine = takeTheseOffThat(['the', 'a', 'an'], toExamine)
-                runExamine({ input, location, command, toExamine, user, setChatHistory });
 
             } else if (findIn(input, actionCalls.attack)) {
                 /////////////////////
