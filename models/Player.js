@@ -141,7 +141,7 @@ const playerSchema = new Schema({
       feetSlot: {
         type: String
       },
-      ringSlot: {
+      fingerSlot: {
         type: String
       },
       handsSlot: {
