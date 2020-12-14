@@ -184,23 +184,35 @@ function InputPanel({
             /////////////////////
             //    POSITION     //
             /////////////////////
-            console.log("Position invoked")
-            console.log("activities.sleeping:", activities.sleeping)
-            console.log("position", playerPosition)
+            let command = getOneOfTheseOffThat(actionCalls.position, input);
             if (!activities.sleeping) {
-                let command = getOneOfTheseOffThat(actionCalls.position, input);
                 if (findIn(command, ['lie', 'lay']) && playerPosition !== 'lying down') {
                     setPlayerPosition('lying down');
                     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now lying down.` }]);
                 } else if (findIn(command, ['sit']) && playerPosition !== 'sitting') {
                     setPlayerPosition('sitting');
                     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting.` }]);
-                } else if (findIn(command, ['stand', 'get']) && playerPosition !== 'standing') {
+                } else if (findIn(command, ['stand']) && playerPosition !== 'standing') {
                     setPlayerPosition('standing');
                     setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
+                } else if (findIn(command, ['get up'])) {
+                    console.log(playerPosition)
+                    if (playerPosition === 'lying down') {
+                        setPlayerPosition('sitting')
+                        setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting.` }]);
+                    } else if (playerPosition === 'sitting') {
+                        setPlayerPosition('standing')
+                        setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
+                    } else if (playerPosition === 'standing') {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-green", text: `You are already ${playerPosition}` }]);
+                    }
+                } else if (findIn(command, ['position', 'get position'])) {
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are ${playerPosition}` }]);
                 } else {
                     setChatHistory(prevState => [...prevState, { type: "displayed-green", text: `You are already ${playerPosition}` }]);
                 }
+            } else if (findIn(command, ['position', 'get position'])) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are ${playerPosition} and are asleep` }]);
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `You need to be awake to do that` }]);
             }
