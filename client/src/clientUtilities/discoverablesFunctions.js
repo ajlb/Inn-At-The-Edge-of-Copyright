@@ -16,9 +16,9 @@ const discFunctions = {
         /*         Library           */
         /*****************************/
 
-        pullBook: function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
+        pullBook: function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
             setTimeout(() => {
-                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls)
+                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command)
             }, 1000)
         }
 
@@ -30,9 +30,9 @@ const discFunctions = {
         /*      Inn Laundry Room     */
         /*****************************/
 
-        mousehole: function mousehole({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
+        mousehole: function mousehole({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
             setTimeout(() => {
-                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls)
+                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command)
             }, 1000)
         }
 
@@ -183,14 +183,14 @@ const discFunctions = {
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent mt-3', text: `You appear to only be wearing underwear!` }]);
         },
 
-        moveEast: function moveEast({ socket, input, location, user, playerPosition, setChatHistory, actionCalls, isSleeping }) {
+        moveEast: function moveEast({ socket, command, location, user, playerPosition, setChatHistory, actionCalls, isSleeping }) {
             if (!isSleeping && playerPosition === 'standing') {
                 setTimeout(() => {
                     if (startDoorisLocked) {
                         setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "Looks like the door is locked! If only you had a  key..." }]);
                     } else {
                         setChatHistory(prevState => [...prevState, { type: "displayed-stat mt-3", text: "You step through the wooden doorframe, the floorboards creaking beneath your feet. The door suddenly slams behind you!" }]);
-                        processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls)
+                        processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls, command)
                     }
                 }, 500)
             } else if (playerPosition !== 'standing') {

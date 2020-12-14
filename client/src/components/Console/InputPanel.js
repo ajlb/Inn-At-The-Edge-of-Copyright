@@ -225,7 +225,8 @@ function InputPanel({
                 /////////////////////
                 //      MOVE       //
                 /////////////////////
-                processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls);
+                let command = getOneOfTheseOffThat(actionCalls.move, input)
+                processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls, command);
 
             } else if (findIn(input, actionCalls.speak)) {
                 /////////////////////
