@@ -117,7 +117,8 @@
         "commands": [
           "wear",
           "don",
-          "put on"
+          "put on",
+          "equip"
         ],
         "actionDescription": "You can't do that right now"
       },
