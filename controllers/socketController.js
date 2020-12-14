@@ -13,6 +13,7 @@ const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fi
 const runNPC = require("./NPCEngine");
 const { validateName, createCharacter } = require("./userInput/userCreation");
 const { eatItem } = require("./userInput/eat");
+const runSweep = require("./sweeper");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -520,6 +521,10 @@ module.exports = function (io) {
         socket.on('joinRequest', (message) => {
             socket.join(message);
         });
+
+
+
+        runSweep();
     })
 
 }
