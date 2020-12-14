@@ -103,7 +103,7 @@ const discFunctions = {
                     setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: `In the wardrobe you see ${inWardrobe}` }]);
                     setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: `Try entering: pick up ${lastWord}` }]);
                 } else {
-                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: `Try entering: inspect mirror or examine wardrobe` }]);
+                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: `Try entering: look in mirror or examine wardrobe` }]);
                 }
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
@@ -136,6 +136,24 @@ const discFunctions = {
                 setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: "There's nothing by that name here" }]);
+            }
+        },
+
+        help: function help({ setChatHistory, input, socket }) {
+            console.log(input)
+            if (input.trim() === '') {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `HELP` }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(help) -  Try entering: help <command>' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(examine) -  Look closely at something' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(get) -  Pick up an item' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(look) -  Look around you' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(move) -  Move through an exit' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(inventory) -  Check your inventory' }]);
+            } else {
+                socket.emit("help", { message: input })
             }
         },
 

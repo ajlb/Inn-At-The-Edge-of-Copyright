@@ -150,6 +150,15 @@
         "names": [],
         "description": "",
         "commands": [
+          "help",
+          "/h"
+        ],
+        "action": "help"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
           "give"
         ],
         "actionDescription": "You can't do that right now"
