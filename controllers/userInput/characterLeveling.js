@@ -1,4 +1,4 @@
-let WIS, DEX, STR, HP;
+let WIS, DEX, STR, HP, CHA;
 
 // Dice roller functionality
 function getRandomInt (max) {
@@ -13,6 +13,7 @@ function roll (dice) {
             sum += getRandomInt(die[1]) + 1
         }
     })
+    fairnessModulator(sum, dice[0], dice[1]*dice[0])
     return sum
 }
 
@@ -26,7 +27,19 @@ function generateBaseStats() {
     STR = roll([[4,6]]);//roll 4d6  
     CHA = roll([[4,6]]);//roll 4d6
     HP = roll([[6,6]]);//roll 4d6
+
     return {WIS, DEX, STR, CHA, HP}
+}
+
+function fairnessModulator(inputStat, min, max) {
+    if (inputStat === min){
+        //increase stat
+        return min+6
+    }
+    if (inputStat === max) {
+        //decrease stat
+        return max-6
+    }
 }
 
 module.exports = {

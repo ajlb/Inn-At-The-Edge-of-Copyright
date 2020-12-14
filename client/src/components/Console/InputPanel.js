@@ -81,13 +81,17 @@ function InputPanel({
         setInputHistory(prevState => [...prevState, enteredInput])
 
         let discoverableCommands = [];
-        if (location.current.discoverables) {
-            location.current.discoverables.forEach(discObj => {
-                if (discObj.commands) {
-                    discObj.commands.forEach(command => discoverableCommands.push(command))
-                }
-            })
-        }
+        /*
+        NICK: I've commented this out so I can login with out getting the undefined error that shows on login.  
+        Maybe need to ensure that this can handle the login has no location defined?
+        */
+        // if (location.current.discoverables) {
+        //     location.current.discoverables.forEach(discObj => {
+        //         if (discObj.commands) {
+        //             discObj.commands.forEach(command => discoverableCommands.push(command))
+        //         }
+        //     })
+        // }
 
         ////////////////////////////////
         //                            //
