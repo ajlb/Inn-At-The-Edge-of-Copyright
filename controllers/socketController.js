@@ -11,6 +11,7 @@ const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fi
 // const { response } = require("express");
 
 const runNPC = require("./NPCEngine");
+const runDiscoverable = require('./discoverables')
 const { validateName, createCharacter } = require("./userInput/userCreation");
 const { eatItem } = require("./userInput/eat");
 
@@ -190,6 +191,15 @@ module.exports = function (io) {
             }
         })
 
+
+        /*****************************/
+        /*        DISCOVERABLE       */
+        /*****************************/
+        socket.on('discoverable', (props) => {
+            props["socket"] = socket;
+            props["io"] = io;
+            runDiscoverable(props);
+        })
 
         /*****************************/
         /*            MOVE           */
@@ -481,11 +491,11 @@ module.exports = function (io) {
         /*          POSITION         */
         /*****************************/
 
-        
+
         /*****************************/
         /*           ATTACK          */
         /*****************************/
-        socket.on('attackCreature', ({target, user, location})=>{
+        socket.on('attackCreature', ({ target, user, location }) => {
             console.log(`${target.name} is being attacked by ${user.characterName} in the ${location.locationName}.`);
             receiveAttack(io, socket, target, user, location);
         })
