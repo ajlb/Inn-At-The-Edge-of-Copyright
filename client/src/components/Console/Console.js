@@ -58,7 +58,7 @@ function Console() {
     help: ['help', '/h'],
     get: ['get', '/g', 'pick up'],
     drop: ['drop', 'discard', '/d'],
-    wear: ['wear', 'put on', 'don'],
+    wear: ['wear', 'put on', 'don', 'equip'],
     remove: ['remove', 'take off', "doff"],
     emote: ['emote', '/e', "/me"],
     juggle: ['juggle'],
@@ -74,9 +74,7 @@ function Console() {
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
   });
-
-  let region = "panel-default " + "inn-welcome-page";
-
+  
   //blur and select functions for input - to set min state
   const onSelect = () => {
     setMinState("min");
@@ -148,6 +146,8 @@ function Console() {
     }
   });
 
+
+
   // Socket location inventory update
   socket.off('invUpL').on('invUpL', message => {
     if (!(message === null)) {
@@ -163,24 +163,20 @@ function Console() {
 
   // Socket location fightables update
   socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {
-    if (!(data === null)) {
-      if (targetLocation === location.current.locationName){
+    console.log('GOT FIGHTABLES');
+    console.log(data);
+    if (!(data === undefined) && !(data === null)) {
+      if (targetLocation === location.current.locationName) {
         setLocation({
           ...location,
-          current: {
-            ...location.current,
-            data
-          }
+          current: data
         });
       } else {
-        for (const param in location){
-          if (location[param].locationName === targetLocation){
+        for (const param in location) {
+          if (location[param].locationName === targetLocation) {
             setLocation({
               ...location,
-              param: {
-                ...location[param],
-                data
-              }
+              param: data
             });
           }
         }
@@ -300,7 +296,6 @@ function Console() {
                     muted={muted}
                     setMuted={setMuted}
                     canReply={canReply}
-                    setReplyTo={setReplyTo}
                   />
                 </div>
               </div>
