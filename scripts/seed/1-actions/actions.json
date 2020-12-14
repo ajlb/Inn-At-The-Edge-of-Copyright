@@ -51,7 +51,7 @@
     "actionName": "move",
     "commandBriefDescription": "You move through an exit",
     "commandLongDescription": "When you type a move command word followed by an available exit from your location, you will move in that direction.",
-    "waysToCall": "move, /m, go, walk",
+    "waysToCall": "move, /m, go, walk, exit",
     "exampleCall": "move north",
     "exampleResult": "You exit."
   },

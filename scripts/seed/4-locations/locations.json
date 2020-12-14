@@ -68,7 +68,11 @@
           "move east",
           "move e",
           "/m east",
-          "/m e"
+          "/m e",
+          "walk east",
+          "walk e",
+          "go east",
+          "go e"
         ],
         "action": "moveEast"
       },

@@ -51,7 +51,7 @@ function Console() {
   const [playerPosition, setPlayerPosition] = useState('standing');
 
   const [actionCalls] = useState({
-    move: ['move', '/m', 'walk', 'exit'],
+    move: ['move', '/m', 'walk', 'exit', "go"],
     inventory: ['inventory', '/i', 'check inventory'],
     speak: ['speak', 'say', '/s'],
     look: ['look', '/l'],
@@ -74,7 +74,7 @@ function Console() {
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
   });
-  
+
   //blur and select functions for input - to set min state
   const onSelect = () => {
     setMinState("min");
