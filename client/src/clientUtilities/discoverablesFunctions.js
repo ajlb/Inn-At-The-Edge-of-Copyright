@@ -1,4 +1,5 @@
 import processMove from '../components/Console/js/move';
+import runExamine from "../components/Console/js/examine";
 
 /* ---------Global Variables----------*/
 let startDoorisLocked = true;
@@ -15,9 +16,9 @@ const discFunctions = {
         /*         Library           */
         /*****************************/
 
-        pullBook: function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
+        pullBook: function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
             setTimeout(() => {
-                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls)
+                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command)
             }, 1000)
         }
 
@@ -29,9 +30,9 @@ const discFunctions = {
         /*      Inn Laundry Room     */
         /*****************************/
 
-        mousehole: function mousehole({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
+        mousehole: function mousehole({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
             setTimeout(() => {
-                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls)
+                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command)
             }, 1000)
         }
 
@@ -102,10 +103,57 @@ const discFunctions = {
                     setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: `In the wardrobe you see ${inWardrobe}` }]);
                     setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: `Try entering: pick up ${lastWord}` }]);
                 } else {
-                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: `Try entering: inspect mirror or examine wardrobe` }]);
+                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: `Try entering: look in mirror or examine wardrobe` }]);
                 }
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+            }
+        },
+
+        examine: function examine({ location, command, user, setChatHistory, input }) {
+            let toExamine = input;
+            console.log(toExamine)
+            function isAllowed(toExamine) {
+                let itIs = false;
+                wardrobeList.forEach(item => {
+                    if (item.includes(toExamine)) {
+                        itIs = true;
+                    }
+                })
+                location.current.discoverables.forEach(discObj => {
+                    if (discObj.names.includes(toExamine)) {
+                        itIs = true;
+                    }
+                })
+                if (toExamine === 'window') {
+                    itIs = true;
+                }
+                return itIs;
+            }
+            if (isAllowed(toExamine)) {
+                runExamine({ location, command, toExamine, user, setChatHistory })
+            } else if (toExamine === '') {
+                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
+            } else {
+                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: "There's nothing by that name here" }]);
+            }
+        },
+
+        help: function help({ setChatHistory, input, socket }) {
+            console.log(input)
+            if (input.trim() === '') {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `HELP` }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(help) -  Try entering: help <command>' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(examine) -  Look closely at something' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(get) -  Pick up an item' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(look) -  Look around you' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(move) -  Move through an exit' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(inventory) -  Check your inventory' }]);
+            } else {
+                socket.emit("help", { message: input })
             }
         },
 
@@ -145,21 +193,22 @@ const discFunctions = {
         },
 
         inventory: function inventory({ setChatHistory }) {
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat mt-4 mb-2", text: "You are carrying:" }]);
+            setChatHistory(prevState => [...prevState, { type: "displayed-indent mt-4 mb-2", text: `You are carrying${playerStartRoomInventory.length >= 1 ? ':' : " nothing"}` }]);
 
             playerStartRoomInventory.forEach(item => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: item }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-indent", text: item }]);
             })
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent mt-3', text: `You appear to only be wearing underwear!` }]);
         },
 
-        moveEast: function moveEast({ socket, input, location, user, playerPosition, setChatHistory, actionCalls, isSleeping }) {
+        moveEast: function moveEast({ socket, command, location, user, playerPosition, setChatHistory, actionCalls, isSleeping }) {
             if (!isSleeping && playerPosition === 'standing') {
                 setTimeout(() => {
                     if (startDoorisLocked) {
                         setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "Looks like the door is locked! If only you had a  key..." }]);
                     } else {
                         setChatHistory(prevState => [...prevState, { type: "displayed-stat mt-3", text: "You step through the wooden doorframe, the floorboards creaking beneath your feet. The door suddenly slams behind you!" }]);
-                        processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls)
+                        processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls, command)
                     }
                 }, 500)
             } else if (playerPosition !== 'standing') {

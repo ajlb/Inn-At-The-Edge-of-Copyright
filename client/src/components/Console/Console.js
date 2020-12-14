@@ -51,7 +51,7 @@ function Console() {
   const [playerPosition, setPlayerPosition] = useState('standing');
 
   const [actionCalls] = useState({
-    move: ['move', '/m', 'walk', 'exit'],
+    move: ['move', '/m', 'walk', 'exit', "go"],
     inventory: ['inventory', '/i', 'check inventory'],
     speak: ['speak', 'say', '/s'],
     look: ['look', '/l'],
@@ -65,16 +65,16 @@ function Console() {
     stats: ['stats'],
     sleep: ['sleep', 'fall asleep'],
     wake: ['wake', 'wake up', 'awaken'],
-    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie', 'get up'],
+    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie', 'get up', 'position', 'get position'],
     give: ['give'],
-    examine: ['examine', 'study', 'inspect'],
+    examine: ['examine', 'study', 'inspect', "look at", "look in", "look out"],
     whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
     attack: ['attack', 'fight', 'battle', 'kill'],
     shout: ['shout', 'yell'],
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
   });
-  
+
   //blur and select functions for input - to set min state
   const onSelect = () => {
     setMinState("min");
