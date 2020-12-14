@@ -233,8 +233,20 @@ function InputPanel({
                 // if (findIn(input, DiscoverableCalls.get(location.current.locationName))) {
                 //     console.log('something discoverable is happening');
                 // } else 
+                if (findIn(input, actionCalls.sleep)) {
+                    /////////////////////
+                    //      SLEEP      //
+                    /////////////////////
+                    if (activities.sleeping) {
+                        setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);
+                    } else if (playerPosition === "lying down") {
+                        socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
+                    } else {
+                        setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You need to lie down to do that!` }]);
+                    }
+                    // socket.emit('sleep', input)
 
-                if (findIn(input, actionCalls.move)) {
+                } else if (findIn(input, actionCalls.move)) {
                     /////////////////////
                     //      MOVE       //
                     /////////////////////
@@ -321,19 +333,6 @@ function InputPanel({
                     } else {
                         setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Looks like you didn't emote anything! Try ${command} runs around wildly` }]);
                     }
-
-                } else if (findIn(input, actionCalls.sleep)) {
-                    /////////////////////
-                    //      SLEEP      //
-                    /////////////////////
-                    if (activities.sleeping) {
-                        setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already sleeping.` }]);
-                    } else if (playerPosition === "lying down") {
-                        socket.emit('sleep', { userToSleep: user.characterName, location: location.current.locationName });
-                    } else {
-                        setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You need to lie down to do that!` }]);
-                    }
-                    // socket.emit('sleep', input)
 
                 } else if (findIn(input, actionCalls.wake)) {
                     /////////////////////
@@ -482,9 +481,9 @@ function InputPanel({
                     currentlyAttacking: false
                 });
             } else if (user.characterName === defender) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action.slice(0,-1)} you, but misses.` }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action.slice(0, -1)} you, but misses.` }]);
             } else {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action.slice(0,-1)} ${defender}, but misses.` }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action.slice(0, -1)} ${defender}, but misses.` }]);
             }
         }
     });
