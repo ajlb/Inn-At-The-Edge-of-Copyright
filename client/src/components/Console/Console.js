@@ -311,7 +311,7 @@ function Console() {
         <div className="push"></div>
       }
       {(minState === "max") &&
-        <footer id="about-link"><a style={{ color: "white" }} href="/about">Meet our team!</a></footer>
+        <footer id="about-link"><a style={{ color: "white" }} href="/about" rel="no-referrer" target="_blank">Meet our team!</a></footer>
       }
       {/* {isAuthenticated ? <LogoutButton /> : <LoginButton />} */}
     </div>
