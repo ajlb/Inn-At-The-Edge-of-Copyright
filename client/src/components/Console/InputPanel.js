@@ -15,7 +15,7 @@ import { showInventory } from "./js/inventory";
 import NPCCheck from "../../clientUtilities/NPCChecks";
 import { useAuth0 } from "@auth0/auth0-react";
 // import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
-// import DiscoverableFunctions from "../../clientUtilities/discoverablesFunctions";
+import discoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 import { lookAbout } from './js/look';
 import { attackCreature } from "./js/monsters";
 import processMove from './js/move';
@@ -47,8 +47,7 @@ function InputPanel({
     setConversation,
     muted,
     setMuted,
-    canReply,
-    setReplyTo
+    canReply
 }) {
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -76,8 +75,23 @@ function InputPanel({
     const handleMessage = (event) => {
         event.preventDefault();
 
-        setInputHistory(prevState => [...prevState, input])
+        let enteredInput = input
+        // This is a slow function and occasionally the input variable is already modified by the time
+        // this function runs, so it must be set to a different variable to avoid async issues
+        setInputHistory(prevState => [...prevState, enteredInput])
 
+        let discoverableCommands = [];
+        /*
+        NICK: I've commented this out so I can login with out getting the undefined error that shows on login.  
+        Maybe need to ensure that this can handle the login has no location defined?
+        */
+        // if (location.current.discoverables) {
+        //     location.current.discoverables.forEach(discObj => {
+        //         if (discObj.commands) {
+        //             discObj.commands.forEach(command => discoverableCommands.push(command))
+        //         }
+        //     })
+        // }
 
         ////////////////////////////////
         //                            //
@@ -96,14 +110,29 @@ function InputPanel({
             } else {
                 socket.emit("log in", "You must log in first! Type 'log in [username]'");
             }
-
         } else if (user.characterName === "newUser") {
             /////////////////////
             //    NEW USER     //
             /////////////////////
             console.log('Emit newUser')
             socket.emit('newUser', { input, email: authUser.email });
-
+        } else if (findIn(input, discoverableCommands)) {
+            /////////////////////
+            //  DISCOVERABLES  //
+            /////////////////////
+            let command = getOneOfTheseOffThat(discoverableCommands, input);
+            let foundDisc = location.current.discoverables.find(discObj => {
+                if (discObj.commands) {
+                    return discObj.commands.includes(command)
+                }
+            })
+            if (foundDisc.actionDescription) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded mt-3", text: foundDisc.actionDescription }]);
+            }
+            if (foundDisc.action) {
+                input = takeTheseOffThat(discoverableCommands, input).toLowerCase().trim();
+                discoverableFunctions[location.current.locationName][foundDisc.action]({ isSleeping: activities.sleeping, socket, location, user, input, playerPosition, setChatHistory, actionCalls });
+            }
         } else if (findIn(input, actionCalls.reply)) {
             /////////////////////
             //      REPLY      //
@@ -114,7 +143,6 @@ function InputPanel({
             } else {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: "You have nobody to reply to!" }]);
             }
-
         } else if (findIn(input, actionCalls.whisper)) {
             /////////////////////
             //    WHISPER      //
@@ -130,14 +158,12 @@ function InputPanel({
                     // fyi, checking if the message begins with someone's name is handled on the server side
                     socket.emit('whisper', { message, userData: user })
                 })
-
         } else if (findIn(input, actionCalls.inventory)) {
             /////////////////////
             //    INVENTORY    //
             /////////////////////
             // let inventory = takeTheseOffThat(actionCalls.inventory, input)
             showInventory(user, setChatHistory);
-
         } else if (findIn(input, actionCalls.juggle)) {
             /////////////////////
             //     JUGGLE      //
@@ -145,20 +171,17 @@ function InputPanel({
             juggle(input, user, location.current.locationName);
         } else if (input.toLowerCase() === "stop juggling") {
             stopJuggling(user.characterName, true);
-
         } else if (findIn(input, actionCalls.stats)) {
             /////////////////////
             //      STATS      //
             /////////////////////
             showStats(user, setChatHistory, actionCalls.stats, input);
-
         } else if (findIn(input, actionCalls.help)) {
             /////////////////////
             //      HELP       //
             /////////////////////
             let help = takeTheseOffThat(actionCalls.help, input);
             socket.emit('help', { message: help });
-
         } else if (findIn(input, actionCalls.position)) {
             /////////////////////
             //    POSITION     //
@@ -323,7 +346,7 @@ function InputPanel({
                 /////////////////////
                 //     ATTACK      //
                 /////////////////////
-                if (!(playerPosition === 'standing')){
+                if (!(playerPosition === 'standing')) {
                     setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You should probably stand up to do that.` }]);
                 } else {
                     let target = takeTheseOffThat(actionCalls.attack, input).toLowerCase();

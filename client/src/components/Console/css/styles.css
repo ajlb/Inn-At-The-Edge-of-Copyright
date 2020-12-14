@@ -101,8 +101,7 @@ figure {
 
 .inn-welcome-page {
     background-image: url("../images/the-inn.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 .meadow {
@@ -119,8 +118,7 @@ figure {
 
 .pumpkin-patch {
     background-image: url("../images/the-pumpkin-patch.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 .spaceship {
@@ -221,6 +219,10 @@ figure {
 }
 
 /* message display */
+
+.faded {
+    opacity: 80%;
+}
 
 .error-message {
     margin-left: 20px;

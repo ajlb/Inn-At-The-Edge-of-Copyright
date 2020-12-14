@@ -4,9 +4,9 @@
       "$oid": "5fd6a35323c222361c1b9483"
     },
     "locationName": "Start Room",
-    "dayDescription": "Looking around, you notice a large mirror hung on the wall next to a large open wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with white curtains but a large tree seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
-    "nightDescription": "Looking around, you notice a large mirror hung on the wall next to a large open wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with curtains but a large shadow seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
-    "region": "The Inn",
+    "dayDescription": "Looking around, you notice a large mirror hung on the wall next to a large closed wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with white curtains but a large tree seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
+    "nightDescription": "Looking around, you notice a large mirror hung on the wall next to a large closed wardrobe that contains a variety of items and clothing. The large window on the north wall is framed with curtains but a large shadow seems to be blocking any semblance of a view outside. A door sits on the east wall but an attempt to turn the doorknob reveals that it's locked.",
+    "region": "Start Room",
     "indoorOutdoor": "indoor",
     "NPCs": [],
     "inventory": [
@@ -25,6 +25,123 @@
     "exits": {
       "east": "Hallway"
     },
+    "discoverables": [
+      {
+        "names": [
+          "mirror"
+        ],
+        "description": "a black-framed ovular mirror in which your reflection stares back... did it just blink?",
+        "exampleCommand": "stats"
+      },
+      {
+        "names": [
+          "wardrobe",
+          "closet"
+        ],
+        "description": "an old wooden wardrobe with intricate carvings adorning its doors depicting tales of the heroes of old",
+        "exampleCommand": "open wardrobe",
+        "commands": [
+          "open wardrobe",
+          "open closet"
+        ],
+        "action": "openWardrobe"
+      },
+      {
+        "names": [
+          "wooden door",
+          "door"
+        ],
+        "description": "a weathered wooden door with an iron doorknob and a silver latch",
+        "exampleCommand": "unlock door",
+        "commands": [
+          "unlock door",
+          "unlock wooden door",
+          "open door",
+          "open wooden door"
+        ],
+        "action": "unlockDoor"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "move east",
+          "move e",
+          "/m east",
+          "/m e"
+        ],
+        "action": "moveEast"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "get",
+          "pick up",
+          "/g"
+        ],
+        "action": "get"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "look",
+          "/l"
+        ],
+        "action": "look"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "inventory",
+          "/i",
+          "check inventory"
+        ],
+        "action": "inventory"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "give"
+        ],
+        "actionDescription": "You can't do that right now"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "drop",
+          "discard",
+          "/d"
+        ],
+        "actionDescription": "You can't do that right now"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "wear",
+          "don",
+          "put on",
+          "equip"
+        ],
+        "actionDescription": "You can't do that right now"
+      },
+      {
+        "names": [],
+        "description": "",
+        "commands": [
+          "attack",
+          "fight",
+          "battle",
+          "kill"
+        ],
+        "actionDescription": "You can't do that right now"
+      }
+    ],
     "fightables": []
   },
   {
@@ -387,6 +504,32 @@
         "quantity": 13
       }
     ],
+    "discoverables": [
+      {
+        "names": [
+          "mouse hole",
+          "hole",
+          "mousehole"
+        ],
+        "description": "a mousehole on the western wall that seems like the perfect size for a curious explorer to squeeze through...",
+        "exampleCommand": "crawl into mouse hole",
+        "commands": [
+          "crawl in hole",
+          "crawl in mouse",
+          "crawl in mousehole",
+          "crawl into hole",
+          "crawl into mousehole",
+          "crawl into mouse hole",
+          "go through hole",
+          "go into hole",
+          "go in hole",
+          "go in mouse",
+          "go in mousehole"
+        ],
+        "actionDescription": "You crawl into the dark, narrow mouse hole...",
+        "action": "mousehole"
+      }
+    ],
     "exits": {
       "north": "Inn Lobby",
       "west": "Library",
@@ -649,6 +792,33 @@
       "south": "Inn Lobby",
       "east": "Backyard"
     },
+    "discoverables": [
+      {
+        "names": [
+          "pot",
+          "bubbling pot"
+        ],
+        "description": "a copper pot sitting atop the wood-fired stove while a silver ladle hangs off the edge of the pot",
+        "exampleCommand": "examine ladle"
+      },
+      {
+        "names": [
+          "ladle",
+          "silver ladle"
+        ],
+        "description": "a silver ladle hanging off the edge of the pot. It seems to have a bit of weight to it",
+        "exampleCommand": "pick up ladle",
+        "commands": [
+          "get ladle",
+          "/g ladle",
+          "pick up ladle",
+          "get silver ladle",
+          "/g silver ladle",
+          "pick up silver ladle"
+        ],
+        "action": "getLadle"
+      }
+    ],
     "fightables": []
   },
   {
@@ -734,6 +904,32 @@
     "indoorOutdoor": "indoor",
     "NPCs": [],
     "inventory": [],
+    "discoverables": [
+      {
+        "names": [
+          "book shelf",
+          "bookshelf",
+          "bookcase",
+          "book case"
+        ],
+        "description": "an old, mahogany bookcase filled with old history books from which you can nearly hear the whispers of long lost legends, though one leather-bound book seems awfully...",
+        "exampleCommand": "inspect book"
+      },
+      {
+        "names": [
+          "book"
+        ],
+        "description": "an odd-looking book sitting on the dusty bookcase that seems to be attached to some kind of lever mechanism",
+        "exampleCommand": "pull book",
+        "commands": [
+          "pull book",
+          "pull books",
+          "pull the book"
+        ],
+        "actionDescription": "You pull back the worn, leather-bound book which appears to be attached to some kind of lever. You hear a click and the bookcase opens like a door and you enter the dark tunnel beyond...",
+        "action": "pullBook"
+      }
+    ],
     "exits": {
       "south": "Inn Laundry Room",
       "east": "Inn Lobby"
