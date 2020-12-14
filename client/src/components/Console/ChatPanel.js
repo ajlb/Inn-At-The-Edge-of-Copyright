@@ -217,6 +217,7 @@ function ChatPanel({
         }
     });
 
+    //shout
     socket.off('shout').on('shout', ({ userMessage, fromUser }) => {
         if (!inConversation) {
             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: userMessage }]);
@@ -286,7 +287,7 @@ function ChatPanel({
         }
     })
 
-
+    //juggle
     socket.off('juggle').on('juggle', ({ user, target, num }) => {
         if (user === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You begin to juggle ${num} ${target}.` }]);
@@ -327,6 +328,7 @@ function ChatPanel({
         clearJuggleTime();
     })
 
+    //wear
     socket.off('wear').on('wear', message => {
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: message }]);
