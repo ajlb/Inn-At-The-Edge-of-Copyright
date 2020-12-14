@@ -170,11 +170,12 @@ const discFunctions = {
         },
 
         inventory: function inventory({ setChatHistory }) {
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat mt-4 mb-2", text: "You are carrying:" }]);
+            setChatHistory(prevState => [...prevState, { type: "displayed-indent mt-4 mb-2", text: `You are carrying${playerStartRoomInventory.length >= 1 ? ':' : " nothing"}` }]);
 
             playerStartRoomInventory.forEach(item => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: item }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-indent", text: item }]);
             })
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent mt-3', text: `You appear to only be wearing underwear!` }]);
         },
 
         moveEast: function moveEast({ socket, input, location, user, playerPosition, setChatHistory, actionCalls, isSleeping }) {
