@@ -18,7 +18,6 @@ const discFunctions = {
                         io.to(socket.id).emit('invUpP', returnData.inventory);
                     })
                 }
-                io.to(location).emit('get', { target: itemName, actor: user });
             });
             if (!quiet) {
                 io.to(socket.id).emit('genericMessage', `You pick up the ${itemName}`)

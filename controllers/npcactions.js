@@ -29,7 +29,6 @@ const npcFunctions = {
                                 io.to(socket.id).emit('invUpP', returnData.inventory);
                             })
                         }
-                        io.to(location).emit('get', { target: itemName, actor: user });
                     });
                 }
             }
