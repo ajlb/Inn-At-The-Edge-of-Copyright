@@ -97,7 +97,7 @@ figure {
 .the-inn {
     background-image: url("../images/the-inn.png");
     background-repeat: repeat;
-}
+} 
 
 .meadow {
     background-image: url("../images/the-meadow.png");
@@ -124,7 +124,7 @@ figure {
     background-repeat: repeat;
 }
 
-/* Background ends */
+/* Backgrounds end */
 
 .new-panel {
     /* background-position: center; */
@@ -146,7 +146,8 @@ figure {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 15px solid rgb(180, 180, 180);
+    /* border: 15px solid rgb(180, 180, 180); */
+    border: 5vw solid transparent;
     height: 70vh;
     width: 80vw;
     border-radius: 25px;
