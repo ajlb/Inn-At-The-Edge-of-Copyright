@@ -1368,7 +1368,7 @@
         "exitName": "Cavetown Ruins"
       },
       "east": {
-        "exitName": "West Tunnel"
+        "exitName": "East Tunnel"
       }
     },
     "fightables": []
