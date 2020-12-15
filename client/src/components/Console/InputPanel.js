@@ -340,7 +340,7 @@ function InputPanel({
 
                 } else if (findIn(input, actionCalls.wake)) {
                     /////////////////////
-                    //      WEAR       //
+                    //      WAKE       //
                     /////////////////////
                     if (!activities.sleeping) {
                         setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already awake!` }]);

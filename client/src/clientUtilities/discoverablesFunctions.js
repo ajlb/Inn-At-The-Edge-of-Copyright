@@ -1,5 +1,6 @@
 import processMove from '../components/Console/js/move';
 import runExamine from "../components/Console/js/examine";
+import { wear as realWear } from "../components/Console/js/wearRemove";
 
 /* ---------Global Variables----------*/
 let startDoorisLocked = true;
@@ -7,7 +8,7 @@ let hasStartKey = false;
 let wardrobeIsOpen = false;
 let wardrobeList = [];
 let playerStartRoomInventory = [];
-
+let playerStartRoomWearing = [];
 
 
 const discFunctions = {
@@ -192,17 +193,54 @@ const discFunctions = {
             }
         },
 
+        wear: function wear({ command, setChatHistory, input, playerPosition, isSleeping, user }) {
+            let isInInventory = false;
+            let itemToWear;
+            playerStartRoomInventory.forEach((item, index) => {
+                if (item !== 'a shiny key') {
+                    if (item.includes(input)) {
+                        isInInventory = true;
+                        itemToWear = item;
+                        playerStartRoomInventory.splice(index, 1);
+                        playerStartRoomWearing.push(item)
+                    }
+                }
+            })
+            if (input && input.trim() !== '' && playerPosition !== 'lying down' && !isSleeping && isInInventory) {
+                console.log(`Attempting to ${command} ${input}`)
+                debugger;
+                realWear(input, user, ['wear'])
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition === 'lying down') {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You can't do that while you're lying down!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            } else if (!isInInventory) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You don't have anything by that name to wear!" }]);
+            } else {
+                setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anything to ${command}! Try entering: ${command} <something>` }] })
+            }
+        },
+
         inventory: function inventory({ setChatHistory }) {
             setChatHistory(prevState => [...prevState, { type: "displayed-indent mt-4 mb-2", text: `You are carrying${playerStartRoomInventory.length >= 1 ? ':' : " nothing"}` }]);
 
             playerStartRoomInventory.forEach(item => {
                 setChatHistory(prevState => [...prevState, { type: "displayed-indent", text: item }]);
             })
-            setChatHistory(prevState => [...prevState, { type: 'displayed-indent mt-3', text: `You appear to only be wearing underwear!` }]);
+            if (playerStartRoomWearing.length >= 1) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent my-3', text: `You are wearing:` }]);
+                playerStartRoomWearing.forEach(item => {
+                    setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
+                })
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent mt-3', text: `You appear to only be wearing underwear!` }]);
+            }
         },
 
         moveEast: function moveEast({ socket, command, location, user, playerPosition, setChatHistory, actionCalls, isSleeping }) {
-            if (!isSleeping && playerPosition === 'standing') {
+            if (!isSleeping && playerPosition === 'standing' && playerStartRoomWearing.includes('a pair of brown pants')) {
                 setTimeout(() => {
                     if (startDoorisLocked) {
                         setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "Looks like the door is locked! If only you had a  key..." }]);
@@ -215,6 +253,9 @@ const discFunctions = {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to be standing to do that!" }]);
             } else if (isSleeping) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+            } else if (!playerStartRoomWearing.includes('a pair of brown pants')) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red mt-2", text: "You should probably put on some clothes before you do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wear pants" }]);
             }
         }
 
