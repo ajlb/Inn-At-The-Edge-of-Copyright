@@ -259,6 +259,36 @@ module.exports = function (io) {
             io.to(location).emit('speak', `${user}: ${message}`);
         });
 
+        /****************************/
+        /*          WEATHER         */
+        /****************************/
+
+        // socket.on('weatherData', ({ location, region, message }) => {
+        //     console.log(`${message} to ${region}`);
+        //     db.Weather.find({})
+        //         .then(weatherData => {
+        //             const shuffleWeather = weatherData.map((weather) => ({ sort: Math.random(), value: weather.weatherCondition }))
+        //     .sort((weather, element) => weather.sort - element.sort)
+        //     .map((weather) => weather.value);
+        //             shuffleWeather.forEach(element => {
+        //                 db.Location.findOne({locationName: region})
+        //                 .then(locationData => {
+        //                     if (locationData && locationData !== {}) {
+        //                         db.Location.find({ region: locationData.region })
+        //                         .then(locationsArray => {
+        //                             if (locationsArray  && locationsArray.length > 0) {
+        //                                 locationsArray.forEach(locationObject => {
+        //                                     let weatherMessage = `<span className='text-green'> ${element} current: </span>`
+        //                                     io.to(locationObject.locationName).emit('weatherData', {weatherMessage, location})
+        //                                 })
+        //                             }
+        //                         })
+        //                     }
+        //                 })
+        //             })
+        //         })
+        // });
+
 
         /*****************************/
         /*           SHOUT           */
@@ -426,6 +456,7 @@ module.exports = function (io) {
         socket.on('stats', () => {
             // db for player stats
             // emit stats to player
+
             db.Player.find({})
                 .then((statsData) => {
                     if (statsData !== null) {
@@ -458,29 +489,26 @@ module.exports = function (io) {
         /*****************************/
         /*             WAKE          */
         /*****************************/
-        socket.on('wake', ({ userToWake, location }) => {
+        socket.on('wake', ({ userToWake }) => {
             wakeUp(io, socket, userToWake).then(userWasAsleep => {
                 socket.join(location);
                 if (userWasAsleep) {
                     io.to(location).emit('wake', { userToWake });
+                    db.Weather.find({})
+                        .then((weatherData) => {
+                            io.to(location).emit('weatherData', { weatherData });
+                        });
+
                 } else {
-                    const action = 
+                    const action = `
                     setActivities(prevState => {
                         console.log('action running')
                         return { ...prevState, sleeping: false }
                     })
+                    `
                     io.to(socket.id).emit('error', { message: "You are already awake!", action });
-                    
                 }
-            }); 
-            db.Weather.find({})
-            .then((weatherData) => {
-               io.emit('weatherData',  {weatherData})
-                console.log(weatherData);
-            })
-            .catch(e => {
-                console.log(e);
-            })
+            });
         });
 
 
@@ -488,11 +516,11 @@ module.exports = function (io) {
         /*          POSITION         */
         /*****************************/
 
-        
+
         /*****************************/
         /*           ATTACK          */
         /*****************************/
-        socket.on('attackCreature', ({target, user, location})=>{
+        socket.on('attackCreature', ({ target, user, location }) => {
             console.log(`${target.name} is being attacked by ${user.characterName} in the ${location.locationName}.`);
             receiveAttack(io, socket, target, user, location);
         })
@@ -508,13 +536,9 @@ module.exports = function (io) {
         /*****************************/
         /* DAY/NIGHT - DATA REQUEST  */
         /*****************************/
-        socket.on('dataRequest', ({playernicknames}) => {
-            db.Weather.find({})
-            .then((weatherData) => {
-            io.to(socket.id).emit('dataRequest', playernicknames, {weatherData})
-            console.log(weatherData) //changed this from users, have not yet changed day/night to reflect this, since day/night is not currently working.
-        })
-    });
+        socket.on('dataRequest', () => {
+            io.emit('dataRequest', playernicknames) //changed this from users, have not yet changed day/night to reflect this, since day/night is not currently working.
+        });
 
 
         /*****************************/
@@ -531,16 +555,5 @@ module.exports = function (io) {
         socket.on('joinRequest', (message) => {
             socket.join(message);
         });
-
-        socket.on('weatherData', ({day, night, location, user}) => {
-            db.Weather.find({})
-            .then((weatherData) => {
-                socket.emit('weatherData',  {weatherData, day, night, location, user})
-                console.log(weatherData);
-            })
-            .catch(e => {
-                console.log(e);
-            })
-        })
     })
 }

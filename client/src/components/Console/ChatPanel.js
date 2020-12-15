@@ -4,6 +4,7 @@ import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { clearJuggleTime } from "./js/juggle";
 import { getOneOfTheseOffThat, takeTheseOffThat } from '../../clientUtilities/finders';
 import { ConnectionStates } from 'mongoose';
+//import {updateHourly} from './js/weather';
 
 
 
@@ -178,11 +179,11 @@ function ChatPanel({
     //eat message
     socket.off('eat').on('eat', ({ actor, eatenItem, actorMessage }) => {
         let type = 'displayed-stat';
-        if (actor.toLowerCase() === user.characterName.toLowerCase()){
-            setChatHistory(prevState => [...prevState, { type, text: `You eat ${insertArticleSingleValue(eatenItem)}. ${actorMessage}`}]);
+        if (actor.toLowerCase() === user.characterName.toLowerCase()) {
+            setChatHistory(prevState => [...prevState, { type, text: `You eat ${insertArticleSingleValue(eatenItem)}. ${actorMessage}` }]);
         } else {
             if (!inConversation) {
-                setChatHistory(prevState => [...prevState, { type, text: `${actor} eats ${insertArticleSingleValue(eatenItem)}.`}]);
+                setChatHistory(prevState => [...prevState, { type, text: `${actor} eats ${insertArticleSingleValue(eatenItem)}.` }]);
             }
         }
     });
@@ -350,19 +351,22 @@ function ChatPanel({
         });
     })
 
-    socket.off('weatherData').on('weatherData', ({ weatherData}) => {
+    socket.off('weatherData').on('weatherData', ({ weatherData }) => {
         console.log("hello data", weatherData);
 
         const shuffleWeather = weatherData.map((weather) => ({ sort: Math.random(), value: weather.weatherCondition }))
             .sort((weather, element) => weather.sort - element.sort)
             .map((weather) => weather.value);
 
-        shuffleWeather.forEach((setLocation) => {
+        // let intervalId;
 
-            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Current forecast is ${setLocation}.` }]);
-            console.log(location);
-            console.log(shuffleWeather);
-        });
+        // function updateHour() {
+        // intervalId = setInterval(perHour, 1000* 60 * 60);
+        
+        // }
+      const weatherCondition = shuffleWeather.pop();
+          setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${weatherCondition}`}]);
+            console.log(weatherCondition);
     });
 
 
