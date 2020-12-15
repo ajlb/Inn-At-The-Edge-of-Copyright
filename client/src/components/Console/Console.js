@@ -166,8 +166,8 @@ function Console() {
 
   // Socket location fightables update
   socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {
-    console.log('GOT FIGHTABLES');
-    console.log(data);
+    // console.log('GOT FIGHTABLES');
+    // console.log(data);
     if (!(data === undefined) && !(data === null)) {
       if (targetLocation === location.current.locationName) {
         setLocation({
@@ -292,7 +292,7 @@ function Console() {
                     setPlayerPosition={setPlayerPosition}
                     location={location}
                     user={player}
-                    setPlayer = {setPlayer}
+                    setPlayer={setPlayer}
                     activities={activities}
                     setActivities={setActivities}
                     inConversation={inConversation}

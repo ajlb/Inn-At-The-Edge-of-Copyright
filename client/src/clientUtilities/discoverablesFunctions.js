@@ -113,7 +113,7 @@ const discFunctions = {
 
         examine: function examine({ location, command, user, setChatHistory, input }) {
             let toExamine = input;
-            console.log(toExamine)
+            // console.log(toExamine)
             function isAllowed(toExamine) {
                 let itIs = false;
                 wardrobeList.forEach(item => {
@@ -141,7 +141,7 @@ const discFunctions = {
         },
 
         help: function help({ setChatHistory, input, socket }) {
-            console.log(input)
+            // console.log(input)
             if (input.trim() === '') {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
                 setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `HELP` }]);
@@ -195,19 +195,17 @@ const discFunctions = {
 
         wear: function wear({ command, setChatHistory, input, playerPosition, isSleeping, user }) {
             let isInInventory = false;
-            let itemToWear;
             playerStartRoomInventory.forEach((item, index) => {
                 if (item !== 'a shiny key') {
                     if (item.includes(input)) {
                         isInInventory = true;
-                        itemToWear = item;
                         playerStartRoomInventory.splice(index, 1);
                         playerStartRoomWearing.push(item)
                     }
                 }
             })
             if (input && input.trim() !== '' && playerPosition !== 'lying down' && !isSleeping && isInInventory) {
-                console.log(`Attempting to ${command} ${input}`)
+                // console.log(`Attempting to ${command} ${input}`)
                 debugger;
                 realWear(input, user, ['wear'])
             } else if (isSleeping) {
@@ -268,7 +266,6 @@ const discFunctions = {
         /*****************************/
 
         getLadle: function getLadle({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
-            console.log('getting ladle')
             socket.emit('discoverable', { itemName: "silver ladle", socketProp: 'hasLadle', discFunction: 'discGet', itemID: "5fd69bff4c88070749b5ba11", user })
         }
     }

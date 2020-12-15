@@ -13,7 +13,7 @@ function PlayerViewAll() {
     useEffect(() => {
         getPlayers().then(PlayerData => {
             setPlayerData(PlayerData.data);
-            console.log(PlayerData.data);
+            // console.log(PlayerData.data);
         }
         )
     }, [])

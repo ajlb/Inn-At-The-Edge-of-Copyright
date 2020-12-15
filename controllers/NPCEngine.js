@@ -53,7 +53,7 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
                 npcFunctions[NPCName][action]({ io, socket, socketProp, user })
             }
         }
-        else console.log('no action')
+        // else console.log('no action')
         // emits all the necessary info to the user
         io.to(fromClient).emit('from NPC', {
             NPCName,

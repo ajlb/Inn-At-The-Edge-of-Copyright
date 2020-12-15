@@ -56,7 +56,7 @@ function InputPanel({
 
     useEffect(() => {
         isAuthenticated && socket.emit("log in", authUser.email);
-        isAuthenticated && console.log(authUser.email);
+        // isAuthenticated && console.log(authUser.email);
         if (!(authUser === undefined)) {
             (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
         }
@@ -90,8 +90,6 @@ function InputPanel({
                 })
             }
 
-            console.log(user)
-
             ////////////////////////////////
             //                            //
             //        USER ACTIONS        //
@@ -113,7 +111,7 @@ function InputPanel({
                 /////////////////////
                 //    NEW USER     //
                 /////////////////////
-                console.log('Emit newUser')
+                // console.log('Emit newUser')
                 socket.emit('newUser', { input, email: authUser.email });
             } else if (
                 findIn(input, discoverableCommands) ||
@@ -201,7 +199,7 @@ function InputPanel({
                         setPlayerPosition('standing');
                         setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
                     } else if (findIn(command, ['get up'])) {
-                        console.log(playerPosition)
+                        // console.log(playerPosition)
                         if (playerPosition === 'lying down') {
                             setPlayerPosition('sitting')
                             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting.` }]);
@@ -361,7 +359,7 @@ function InputPanel({
                     /////////////////////
                     //     ATTACK      //
                     /////////////////////
-                    console.log(activities);
+                    // console.log(activities);
                     if (!(playerPosition === 'standing')) {
                         setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You should probably stand up to do that.` }]);
                     } else {
@@ -422,7 +420,7 @@ function InputPanel({
 
         } catch (e) {
             console.log("ERROR FROM handleMessage(inputPanel.js):");
-            console.log(e);
+            console.log(e.message);
         }
     }
 
@@ -457,7 +455,7 @@ function InputPanel({
     //disable enter key and input button when user needs to just wait a minute
     function disableEnterKey(event) {
         event.preventDefault();
-        console.log(event.key);
+        // console.log(event.key);
         document.getElementById("inputBar").value = "...you are momentarily quite busy";
     }
 

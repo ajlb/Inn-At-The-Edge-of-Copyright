@@ -102,7 +102,7 @@ function ChatPanel({
             }
             const fightables = location[direction].fightables.filter(en => en.isAlive);
             if (fightables) {
-                console.log(fightables);
+                // console.log(fightables);
                 if (fightables.length > 0) {
                     setChatHistory(prevState => [...prevState, {
                         type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
@@ -116,7 +116,7 @@ function ChatPanel({
         } catch (e) {
             socket.emit('failure', "Hmmm... it seems like something went wrong.");
             console.log("error from receive yourMove");
-            console.log(e);
+            console.log(e.message);
         }
 
 
@@ -126,8 +126,8 @@ function ChatPanel({
 
     // Socket location chunk
     socket.off('locationChunk').on('locationChunk', message => {
-        console.log('received locationChunk');
-        console.log(message);
+        // console.log('received locationChunk');
+        // console.log(message);
         if (location.current === undefined) {
             let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
             setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
