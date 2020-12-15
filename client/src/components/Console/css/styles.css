@@ -97,7 +97,7 @@ figure {
 .the-inn {
     background-image: url("../images/the-inn.png");
     background-repeat: repeat;
-} 
+}
 
 .meadow {
     background-image: url("../images/the-meadow.png");
@@ -213,7 +213,7 @@ figure {
 /* message display */
 
 .faded {
-    opacity: 80%;
+    opacity: .8;
 }
 
 .error-message {
