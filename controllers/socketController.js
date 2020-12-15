@@ -538,7 +538,7 @@ module.exports = function (io) {
 
         SweeperInterval = setInterval(function() {
             runSweep(io, socket);
-        }, 300000)
+        }, 600000)
     })
 
 }
