@@ -853,7 +853,7 @@
     },
     "locationName": "Inn Kitchen",
     "dayDescription": "The Inn kitchen smells of freshly baked bread and garlic. A bubbling pot sits on the stove unattended. Two doors lead outside to the north and the east. The swinging door to the Lobby is left slightly cracked open on the south wall.",
-    "nightDescription": "The Inn kitchen smells of roasted meat and squash. A pot sits on the stove unattended, it's contents burned away. Two doors lead outside to the north and the east. The swinging door to the Lobby is left slightly cracked open on the south wall.",
+    "nightDescription": "The Inn kitchen smells of roasted meat and squash. A pot sits on the stove unattended, its contents burned away. Two doors lead outside to the north and the east. The swinging door to the Lobby is left slightly cracked open on the south wall.",
     "region": "The Inn",
     "indoorOutdoor": "indoor",
     "NPCs": [],

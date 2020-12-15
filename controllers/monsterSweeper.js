@@ -24,7 +24,7 @@ function repopLocation(io, socket, index, location) {
 
 function repopMobs(io, socket) {
     try {
-        console.log("inside repopMobs");
+        console.log("running repop mobs");
         db.Location.find({}).then(allLocations => {
             for (const index in allLocations) {
                 const location = allLocations[index];

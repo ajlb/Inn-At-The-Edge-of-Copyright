@@ -294,7 +294,7 @@ function ChatPanel({
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
             }
         }
-        console.log('calling clear juggle time');
+        // console.log('calling clear juggle time');
         clearJuggleTime();
     })
 
@@ -351,8 +351,6 @@ function ChatPanel({
     socket.off('stats').on('stats', () => {
 
     });
-
-
 
     //where is the user scrolled to?
     const handleScroll = (e) => {

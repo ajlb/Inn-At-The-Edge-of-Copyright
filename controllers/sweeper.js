@@ -84,6 +84,7 @@ function checkLocale(index, allLocations) {
 }
 
 async function runSweep(io, socket) {
+    console.log("sweeping items");
     try {
         db.Location.find({}).then(allLocations => {
 

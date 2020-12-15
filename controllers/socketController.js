@@ -14,6 +14,7 @@ const { validateName, createCharacter } = require("./userInput/userCreation");
 const { eatItem } = require("./userInput/eat");
 const runSweep = require("./sweeper");
 const { repopMobs } = require("./monsterSweeper");
+const dayNight = require("./dayNight");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -26,7 +27,8 @@ location = {};
 let itemSweeperInterval;
 //how often do we repop the mobs
 let monsterSweeperInterval;
-
+//make sure we only run day/Night once
+let isDayNightRunning = false;
 
 
 
@@ -41,6 +43,8 @@ module.exports = function (io) {
         console.log(`${socket.id} connected!`);
         // possibly do a DB call to state that the use is online?
         io.to(socket.id).emit('data request');
+        io.to(socket.id).emit('locationRequest');
+
 
         /*****************************/
         /*         DISCONNECT        */
@@ -48,6 +52,7 @@ module.exports = function (io) {
         socket.on('disconnect', () => {
             console.log(`${socket.id} disconnected...`);
             players = players.filter(player => !(player === socket.nickname));
+            delete playernicknames[socket.id];
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false, isAwake: true } }, { new: true })
                 .then(returnData => {
                     // console.log("isAwake on disconnect:", returnData.isAwake)
@@ -84,8 +89,14 @@ module.exports = function (io) {
                                     //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
                                     socket.nickname = userCharacter;
                                     socket.lowerName = userCharacter.toLowerCase();
-                                    playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
+                                    if (!playernicknames[socket.id]){
+                                        playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
+                                    } else {
+                                        playernicknames[socket.id].nickname = socket.nickname;
+                                        playernicknames[socket.id].lowerName = socket.lowerName;
+                                    }
 
+                                    io.to(socket.id).emit('locationRequest');
                                     await getUsers(io, userLocation, playernicknames);
 
                                     //find locations, return initial and then chunk
@@ -501,7 +512,7 @@ module.exports = function (io) {
         })
 
         /*****************************/
-        /*        DAY/NIGHT          */
+        /*   DAY/NIGHT - SEND DATA   */
         /*****************************/
         socket.on('dayNight', ({ day, user }) => {
             io.to(user.toLowerCase()).emit('dayNight', day);
@@ -509,40 +520,45 @@ module.exports = function (io) {
 
 
         /*****************************/
-        /* DAY/NIGHT - DATA REQUEST  */
-        /*****************************/
-        socket.on('dataRequest', () => {
-            io.emit('dataRequest', playernicknames) //changed this from users, have not yet changed day/night to reflect this, since day/night is not currently working.
-        });
-
-
-        /*****************************/
         /* DAY/NIGHT - USER LOCATION */
         /*****************************/
         socket.on('location', (locationData) => {
-            io.to('backEngine').emit('location', { locationData, id: socket.id });
+            // console.log("location:", socket.id);
+            // console.log(locationData);
+            if (!playernicknames[socket.id]){
+                playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName }
+            }
+            playernicknames[socket.id].latitude = locationData.latitude
+            playernicknames[socket.id].longitude = locationData.longitude
+
+            // console.log(playernicknames[socket.id]);
         });
 
 
         /*****************************/
-        /* DAY/NIGHT - USER LOCATION */
+        /* DAY/NIGHT - RUN FUNCTION  */
         /*****************************/
-        socket.on('joinRequest', (message) => {
-            socket.join(message);
-        });
+        if (!isDayNightRunning){
+            dayNight(io, socket, playernicknames);
+            isDayNightRunning = true;
+        }
 
 
         /*****************************/
         /*          SWEEPERS         */
         /*****************************/
 
-        itemSweeperInterval = setInterval(function () {
-            runSweep(io, socket);
-        }, 600000)
+        if( itemSweeperInterval === undefined ){
+            itemSweeperInterval = setInterval(function () {
+                runSweep(io, socket);
+            }, 600000)
+        }
 
-        monsterSweeperInterval = setInterval(function () {
-            repopMobs(io, socket);
-        }, 120000)
+        if (monsterSweeperInterval === undefined){
+            monsterSweeperInterval = setInterval(function () {
+                repopMobs(io, socket);
+            }, 120000)
+        }
     })
 
 }

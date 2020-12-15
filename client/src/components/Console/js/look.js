@@ -3,7 +3,7 @@ import { pluralizeAppropriateWords } from "./inventory";
 
 
 
-function lookAbout(location, setChatHistory) {
+function lookAbout(location, setChatHistory, day) {
     // console.log("INSIDE LOOK:");
     // console.log(location);
     try {
@@ -27,7 +27,7 @@ function lookAbout(location, setChatHistory) {
             exitDescriptors.push(`${exitPath}`);
         }
 
-        lookArray.push(`${location.current.dayDescription}`);
+        lookArray.push(day ? `${location.current.dayDescription}` : `${location.current.nightDescription}`);
 
         setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'You look around:' }]);
 
