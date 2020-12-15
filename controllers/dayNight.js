@@ -1,11 +1,6 @@
 const axios = require("axios");
 const db = require("../models");
 
-//random in range from sergey metlov
-function getRandomInRange(from, to, fixed) {
-    return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
-    // .toFixed() returns string, so ' * 1' is a trick to convert to number
-}
 
 module.exports = function dayNight(io, socket, objectOfUsers) {
     try {
@@ -27,10 +22,7 @@ module.exports = function dayNight(io, socket, objectOfUsers) {
 
                         let lat = objectOfUsers[user].latitude;
                         let lon = objectOfUsers[user].longitude;
-                        
-                        lat = lat ? lat : getRandomInRange(-80, 80, 2);
-                        lon = lon ? lon : getRandomInRange(-170, 170, 2);
-
+                        // console.log(lat, lon);
 
                             // weather call to determine user sunrise/sunset time
                             axios.get("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=a2e2e87c947af1ae1888811705b0441c").then(weatherData => {
@@ -64,9 +56,9 @@ module.exports = function dayNight(io, socket, objectOfUsers) {
                 }
 
             }
-        }, 600000)
+        }, 2000)
     } catch (e) {
         console.log("ERROR FROM dayNight:");
         console.log(e);
     }
-}
+}//600000

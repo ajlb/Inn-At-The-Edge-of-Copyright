@@ -89,7 +89,7 @@ module.exports = function (io) {
                                     //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
                                     socket.nickname = userCharacter;
                                     socket.lowerName = userCharacter.toLowerCase();
-                                    if (!playernicknames[socket.id]){
+                                    if (!playernicknames[socket.id]) {
                                         playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
                                     } else {
                                         playernicknames[socket.id].nickname = socket.nickname;
@@ -522,14 +522,24 @@ module.exports = function (io) {
         /*****************************/
         /* DAY/NIGHT - USER LOCATION */
         /*****************************/
+
+        //random in range from sergey metlov
+        function getRandomInRange(from, to, fixed) {
+            return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
+            // .toFixed() returns string, so ' * 1' is a trick to convert to number
+        }
+
+
         socket.on('location', (locationData) => {
             // console.log("location:", socket.id);
             // console.log(locationData);
-            if (!playernicknames[socket.id]){
+            if (!playernicknames[socket.id]) {
                 playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName }
             }
-            playernicknames[socket.id].latitude = locationData.latitude
-            playernicknames[socket.id].longitude = locationData.longitude
+            playernicknames[socket.id].latitude = locationData.latitude ? locationData.latitude : getRandomInRange(-80, 80, 3);
+            playernicknames[socket.id].longitude = locationData.longitude ? locationData.longitude : getRandomInRange(-170, 170, 3);
+
+
 
             // console.log(playernicknames[socket.id]);
         });
@@ -538,7 +548,7 @@ module.exports = function (io) {
         /*****************************/
         /* DAY/NIGHT - RUN FUNCTION  */
         /*****************************/
-        if (!isDayNightRunning){
+        if (!isDayNightRunning) {
             dayNight(io, socket, playernicknames);
             isDayNightRunning = true;
         }
@@ -548,13 +558,13 @@ module.exports = function (io) {
         /*          SWEEPERS         */
         /*****************************/
 
-        if( itemSweeperInterval === undefined ){
+        if (itemSweeperInterval === undefined) {
             itemSweeperInterval = setInterval(function () {
                 runSweep(io, socket);
             }, 600000)
         }
 
-        if (monsterSweeperInterval === undefined){
+        if (monsterSweeperInterval === undefined) {
             monsterSweeperInterval = setInterval(function () {
                 repopMobs(io, socket);
             }, 120000)
