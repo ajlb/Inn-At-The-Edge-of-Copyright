@@ -114,7 +114,8 @@
           "pick up",
           "/g",
           "take",
-          "grab"
+          "grab",
+          "pickup"
         ],
         "action": "get"
       },
@@ -908,7 +909,8 @@
           "pick up ladle",
           "get silver ladle",
           "/g silver ladle",
-          "pick up silver ladle"
+          "pickup silver ladle",
+          "pickup ladle"
         ],
         "action": "getLadle"
       }
