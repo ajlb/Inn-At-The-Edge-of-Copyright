@@ -120,8 +120,14 @@ function updateAndDisseminateFightables({ io, singleLocationChunk, monsterObject
                     //send location update to anyone with that location in their locationChunk
                     if (returnData) {
                         console.log(`sending location update to ${returnData.locationName}`);
-                        console.log("------------------- THE DATA - DOES IT EXIST? FIRST IF ----------------------");
-                        console.log(returnData);
+                        // console.log("------------------- THE DATA - DOES IT EXIST? FIRST IF ----------------------");
+                        // console.log(returnData);
+                        if (isAlive === true){
+                            let monsterName = insertArticleSingleValue(monsterObject.name);
+                            monsterName = monsterName.charAt(0).toUpperCase() + monsterName.slice(1)
+                            console.log(monsterName);
+                            io.to(singleLocationChunk.locationName).emit('genericMessage', `<span className='text-warning'>${monsterName} slinks into the area.</span>`);
+                        }
                         io.to(singleLocationChunk.locationName).emit('updateFightables', { data: returnData, targetLocation: returnData.locationName });
                         for (const param in returnData.exits) {
                             io.to(returnData[param]).emit('updateFightables', { data: returnData, targetLocation: returnData.locationName });
@@ -137,8 +143,8 @@ function updateAndDisseminateFightables({ io, singleLocationChunk, monsterObject
                 .then(returnData => {
                     //send location update to anyone with that location in their locationChunk
                     if (returnData) {
-                        console.log("------------------- THE DATA - DOES IT EXIST? SECOND IF ----------------------");
-                        console.log(returnData);
+                        // console.log("------------------- THE DATA - DOES IT EXIST? SECOND IF ----------------------");
+                        // console.log(returnData);
                         io.to(singleLocationChunk.locationName).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
                         for (const param in returnData.exits) {
                             io.to(returnData[param]).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
@@ -151,8 +157,8 @@ function updateAndDisseminateFightables({ io, singleLocationChunk, monsterObject
             .then(returnData =>{
                 //send location update to anyone with that location in their locationChunk
                 if (returnData) {
-                    console.log(returnData);
-                    console.log("------------------- THE DATA - DOES IT EXIST? THIRD IF ----------------------");
+                    // console.log(returnData);
+                    // console.log("------------------- THE DATA - DOES IT EXIST? THIRD IF ----------------------");
                     io.to(singleLocationChunk.locationName).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
                     for (const param in returnData.exits) {
                         io.to(returnData[param]).emit('updateFightables', { data:returnData, targetLocation: returnData.locationName });
@@ -162,6 +168,7 @@ function updateAndDisseminateFightables({ io, singleLocationChunk, monsterObject
         }
     } catch (e) {
         console.log("ERROR FROM updateAndDisseminateFightables:");
+        console.log(singleLocationChunk);
         console.log(e);
     }
 }
@@ -319,5 +326,7 @@ module.exports = {
     awakenMonsters,
     sleepMonsters,
     wakeMonstersOnMove,
-    sleepMonstersOnMove
+    sleepMonstersOnMove,
+    updateAndDisseminateFightables,
+    insertArticleSingleValue
 }

@@ -31,8 +31,9 @@
     "if-env": "^1.0.4",
     "inn": "file:client",
     "mongo-seeding-cli": "^3.5.0",
+    "mongodb": "^3.6.3",
     "mongoose": "^5.10.14",
-    "socket.io": "^3.0.3",
+    "socket.io": "^3.0.4",
     "socket.io-client": "^3.0.3"
   }
 }
