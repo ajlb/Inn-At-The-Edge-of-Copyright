@@ -1,4 +1,3 @@
-import Play from "./pages/Play/Index";
 import Home from "./pages/Home/Index";
 import Signup from "./pages/Signup/Index";
 import About from "./pages/About";
