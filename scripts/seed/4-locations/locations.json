@@ -1068,7 +1068,17 @@
         "exitName": "Inn Garden"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1095,7 +1105,35 @@
         "exitName": "Pumpkin Patch East"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1122,7 +1160,26 @@
         "exitName": "Pumpkin Patch Northeast"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1146,7 +1203,53 @@
         "exitName": "Pumpkin Patch Entrance"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1170,7 +1273,17 @@
         "exitName": "Pumpkin Patch Entrance"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1194,7 +1307,17 @@
         "exitName": "Pumpkin Patch Center"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1215,7 +1338,26 @@
         "exitName": "Pumpkin Patch East"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1260,7 +1402,44 @@
         "exitName": "Pumpkin Patch South"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1284,7 +1463,17 @@
         "exitName": "Inn Garden"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1455,7 +1644,35 @@
         "exitName": "Surface Elevator"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1497,7 +1714,71 @@
         "exitName": "The Seven Stones"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1790,7 +2071,26 @@
         "exitName": "Steep Hike West"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1811,7 +2111,44 @@
         "exitName": "Gentle Slope West"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -1943,7 +2280,26 @@
         "exitName": "Town East"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -2012,7 +2368,54 @@
         "exitName": "Town Northeast"
       }
     },
-    "fightables": []
+    "fightables": [
+      
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -2093,7 +2496,17 @@
         "exitName": "Town North"
       }
     },
-    "fightables": []
+    "fightables": [
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
@@ -2225,7 +2638,27 @@
         "exitName": "Mountain Trail North"
       }
     },
-    "fightables": []
+    "fightables": [
+
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      },
+      {
+        "name": "Christmas Jello",
+        "isFighting": false,
+        "id": 964821307,
+        "attack": "slimes",
+        "isAlive": true,
+        "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
+        "race": "Holiday Dessert"
+      }
+    ]
   },
   {
     "_id": {
