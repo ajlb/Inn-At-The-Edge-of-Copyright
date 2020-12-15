@@ -48,7 +48,8 @@ function InputPanel({
     setConversation,
     muted,
     setMuted,
-    canReply
+    canReply,
+    day
 }) {
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -297,7 +298,7 @@ function InputPanel({
                     /////////////////////
                     //      LOOK       //
                     /////////////////////
-                    lookAbout(location, setChatHistory);
+                    lookAbout(location, setChatHistory, day);
 
                 } else if (findIn(input, actionCalls.get)) {
                     /////////////////////
