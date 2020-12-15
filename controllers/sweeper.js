@@ -42,7 +42,7 @@ function checkLocale(index, allLocations) {
                     }
                     // console.log("number to remove", quantityToTrash, realItem.item);
                     if (quantityToTrash > 0) {
-                        diffObject[realItem.item] = quantityToTrash;
+                        diffObject[realItem.item] = -quantityToTrash;
                     }
                 }
             } else {
