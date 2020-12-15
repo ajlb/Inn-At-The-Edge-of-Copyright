@@ -69,68 +69,59 @@ figure {
 
 /* Backgrounds begin */
 
+.cavern {
+    background-image: url("../images/the-cavern.png");
+    background-repeat: repeat;
+}
+
 .cavern-elevator {
     background-image: url("../images/the-cavern-elevator.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 .cavern-lake {
     background-image: url("../images/the-cavern-lake.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.cavern {
-    background-image: url("../images/the-cavern.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 .cloud-city {
     background-image: url("../images/the-clouds.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 .forest {
     background-image: url("../images/the-forest.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
-.inn-welcome-page {
+.the-inn {
     background-image: url("../images/the-inn.png");
     background-repeat: repeat;
 }
 
 .meadow {
     background-image: url("../images/the-meadow.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 .mountain {
     background-image: url("../images/the-mountains.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
-.pumpkin-patch {
+.fall {
     background-image: url("../images/the-pumpkin-patch.png");
     background-repeat: repeat;
 }
 
 .vogon-spaceship {
     background-image: url("../images/the-spaceship.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 .country-and-town {
     background-image: url("../images/the-town-crossroads.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 /* Background ends */
