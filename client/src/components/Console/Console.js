@@ -59,7 +59,7 @@ function Console() {
     speak: ['speak', 'say', '/s'],
     look: ['look around', 'look', '/l'],
     help: ['help', '/h'],
-    get: ['get', '/g', 'pick up', 'grab', 'take'],
+    get: ['get', '/g', 'pick up', 'grab', 'take', "pickup"],
     drop: ['drop', 'discard', '/d', 'toss out', 'toss'],
     wear: ['wear', 'put on', 'don', 'equip'],
     remove: ['remove', 'take off', "doff", 'unequip'],

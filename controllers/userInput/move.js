@@ -6,9 +6,15 @@ const getLocationChunk = async (data) => {
     let locationObject = {};
     locationObject.current = data;
     for (const exit in data.exits) {
-        const thisLocation = data.exits[exit];
+        const thisLocation = data.exits[exit].exitName;
+        const isHidden = data.exits[exit].hidden
         try {
             locationObject[exit] = await db.Location.findOne({ locationName: thisLocation }).populate('inventory.item');
+            if (isHidden) {
+                const parsedObject = locationObject[exit].toJSON()
+                parsedObject.hidden = true;
+                locationObject[exit] = parsedObject;
+            }
         } catch (e) {
             console.log('ERROR IN DB CALL');
             console.log(e);
