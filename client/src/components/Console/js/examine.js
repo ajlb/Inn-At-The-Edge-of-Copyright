@@ -31,7 +31,7 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
     }
 
     function getAndDisplayInventoryItem(toExamine) {
-        console.log('getAndDisplayInventoryItem')
+        // console.log('getAndDisplayInventoryItem')
         let foundItem = user.inventory.find(param => {
             return param.item.itemName.includes(toExamine.trim())
         })
@@ -93,7 +93,7 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
         discoverables.forEach(discoverable => {
             discoverable.names.forEach(name => {
                 if (name.startsWith(toExamine.toLowerCase()) && toExamine.trim() !== '') {
-                    console.log("You found the", name);
+                    // console.log("You found the", name);
                     description = discoverable.description;
                     exampleCommand = discoverable.exampleCommand;
                 }
@@ -136,7 +136,7 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
         getAndDisplayInventoryItem(toExamine)
     }
     else if (isInLocationInventory(toExamine)) {
-        console.log("found in location")
+        // console.log("found in location")
         getAndDisplayLocationItem(toExamine)
     }
     else if (isInFightables(toExamine)) {

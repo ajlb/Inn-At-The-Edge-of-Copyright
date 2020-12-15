@@ -12,31 +12,31 @@ function wear(input, playerData, wearCalls) {
         input = input.split(" on ");
     } else {
         input = input.split(" in ");
-    } 
+    }
     const inputItem = input[0].toLowerCase();
     let targetWords = input.length > 1 ? input[1] : false;
     targetWords = targetWords ? takeTheseOffThat(["my", "the"], targetWords) : false;
-    
-    console.log(`WEAR: item - ${inputItem}, target: ${targetWords}`);
-    
+
+    // console.log(`WEAR: item - ${inputItem}, target: ${targetWords}`);
+
     const potentialArray = [];
     let thisItem;
     let thisItemId;
-    
+
     for (const item of playerData.inventory) {
-        console.log(`potential item: `);
-        console.log(item);
+        // console.log(`potential item: `);
+        // console.log(item);
         thisItem = item.item.itemName;
 
-        console.log(`Input item is: ${inputItem} and `, thisItem.toLowerCase());
+        // console.log(`Input item is: ${inputItem} and `, thisItem.toLowerCase());
         if (thisItem.toLowerCase() === inputItem) {
             thisItemId = item.item._id;
-            console.log(`${thisItem} has an ID of ${thisItemId}`);
+            // console.log(`${thisItem} has an ID of ${thisItemId}`);
             socket.emit('wear', { user: playerData.characterName, item: inputItem, id: thisItemId, targetWords });
             return true;
         } else if (thisItem.startsWith(inputItem) || thisItem.endsWith(inputItem)) {
             thisItemId = item.item._id;
-            console.log(`${thisItem} has an ID of ${thisItemId}`);
+            // console.log(`${thisItem} has an ID of ${thisItemId}`);
             potentialArray.push(thisItem);
         }
     }
@@ -68,13 +68,13 @@ function remove(input, playerData, removeCalls) {
         if (slotItem === inputItem) {
             potentialArray.push(slot);
             if ((slot.toLowerCase() === (targetSlot + 'slot')) || (targetSlot === false)) {
-                console.log('exact match: ' + slot, inputItem);
-                socket.emit('remove', { user: playerData.characterName, item: inputItem, targetSlot:slot });
+                // console.log('exact match: ' + slot, inputItem);
+                socket.emit('remove', { user: playerData.characterName, item: inputItem, targetSlot: slot });
                 return true;
             }
         } else if (!(slotItem === null)) {
             if (((slotItem.startsWith(inputItem)) || (slotItem.endsWith(inputItem))) && (slot.toLowerCase() === (targetSlot + 'slot'))) {
-                socket.emit('remove', { user: playerData.characterName, item: slotItem, targetSlot:slot });
+                socket.emit('remove', { user: playerData.characterName, item: slotItem, targetSlot: slot });
                 return true;
             } else if (((slotItem.startsWith(inputItem)) || (slotItem.endsWith(inputItem))) && (targetSlot === false)) {
                 itemMatches.push(slotItem);
@@ -84,7 +84,7 @@ function remove(input, playerData, removeCalls) {
         }
     }
     if (itemMatches.length === 1) {
-        console.log('One Match: ' + itemMatches[0]);
+        // console.log('One Match: ' + itemMatches[0]);
         socket.emit('remove', { user: playerData.characterName, item: itemMatches[0], targetSlot: potentialArray[0] });
         return true;
     } else if (itemMatches.length > 1) {

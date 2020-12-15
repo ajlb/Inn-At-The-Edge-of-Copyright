@@ -9,8 +9,8 @@ function getLocation(locationID) {
 }
 
 function getAllLocations() {
-    return new Promise(function(resolve, reject){
-        $.get("/api/locations/", function(data){
+    return new Promise(function (resolve, reject) {
+        $.get("/api/locations/", function (data) {
             resolve(data);
         });
     });
@@ -114,7 +114,7 @@ function scrubInventory() {
 
 function findAllItems() {
     return new Promise(function (resolve, reject) {
-        $.get("api/items/", function(data){
+        $.get("api/items/", function (data) {
             resolve(data);
         });
     });
@@ -143,17 +143,17 @@ function addItemToInventory(item, location, amount) {
 }
 
 function loginPlayer(characterName, password) {
-    console.log("You're in loginPlayer");
+    // console.log("You're in loginPlayer");
     $.post("/login", { characterName: characterName, password: password }).then(function (data) {
         window.location.replace("/play");
     }).catch(e => {
-        console.log(e);
+        console.log(e.message);
         window.location.replace("/play")
     });
 }
 
 function signupPlayer(name, password, stats, race, profession) {
-    console.log(`creating ${name} with ${stats}`);
+    // console.log(`creating ${name} with ${stats}`);
     let newCharObject = {
         characterName: name,
         password: password,
@@ -162,17 +162,17 @@ function signupPlayer(name, password, stats, race, profession) {
         STR: stats.str,
         HP: stats.hp,
         race: race,
-        class : profession,
+        class: profession,
         lastLocation: 1002,
-        description: `${ name } is a ${ race } ${ profession }`
+        description: `${name} is a ${race} ${profession}`
     }
     return new Promise(function (resolve, reject) {
         $.post('/signup', newCharObject, function (data) {
-            console.log(data);
+            // console.log(data);
             loginPlayer(newCharObject.characterName, newCharObject.password);
             resolve();
         }).catch(e => {
-            console.log(e);
+            console.log(e.message);
             loginPlayer(newCharObject.characterName, newCharObject.password);
             resolve(e);
         });
@@ -236,7 +236,7 @@ function whosOnline() {
                 includeState: true
             },
             function (status, response) {
-                console.log(response);
+                // console.log(response);
                 resolve(response);
             }
         );

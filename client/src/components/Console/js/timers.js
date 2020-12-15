@@ -1,6 +1,6 @@
 function disableEnterKey(event) {
     event.preventDefault();
-    console.log(event.key);
+    // console.log(event.key);
     document.getElementById("inputBar").value = "...you are momentarily quite busy";
 }
 

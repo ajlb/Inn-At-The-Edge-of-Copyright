@@ -182,7 +182,7 @@
           "put on",
           "equip"
         ],
-        "actionDescription": "You can't do that right now"
+        "action": "wear"
       },
       {
         "names": [],
