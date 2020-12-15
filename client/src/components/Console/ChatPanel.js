@@ -97,7 +97,8 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
             let exits = [];
             for (const param in location[direction].exits) {
-                if (param !== "current") {
+                // console.log(param)
+                if (param !== "current" && !location[direction].exits[param].hidden) {
                     exits.push(param);
                 }
             }
@@ -135,7 +136,7 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
             let exits = [];
             for (const param in message) {
-                if (param !== "current") {
+                if (param !== "current" && !message[param].hidden) {
                     exits.push(param);
                 }
             }
