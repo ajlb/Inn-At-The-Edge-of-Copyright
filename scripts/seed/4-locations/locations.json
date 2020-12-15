@@ -2136,6 +2136,7 @@
     "inventory": [],
     "exits": {
       "west": "Sky Fishing Hole"
-    }
+    },
+    "fightables": []
   }
 ]

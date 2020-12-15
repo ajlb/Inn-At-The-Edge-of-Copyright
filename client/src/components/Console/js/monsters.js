@@ -46,7 +46,7 @@ function chooseEnemyAndReturnFightables({ socket, user, location, target, activi
         } else if (potentialArray.length > 1) {
             if (allTheSame(potentialArray.map(el => el.name))) {
                 // console.log('picked one of many:');
-                console.log(potentialArray[0]);
+                // console.log(potentialArray[0]);
                 startCurrentlyAttackingTimer({ setActivities, activities });
                 socket.emit('attackCreature', { target: potentialArray[0], user, location: location.current });
 
