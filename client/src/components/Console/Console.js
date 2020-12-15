@@ -27,8 +27,6 @@ function Console() {
 
   const [gameInfo] = useState(initialGameInfo);
 
-  const [day] = useState(true);
-
   const [activities, setActivities] = useState({
     sleeping: false,
     juggling: false,
@@ -215,6 +213,18 @@ function Console() {
     }
   })
 
+
+  socket.off('locationRequest').on('locationRequest', () => {
+    // console.log('got a location request');
+    fetch('https://ipapi.co/json/')
+      .then(response => response.json())
+      .then(locationData => {
+        // console.log('sending this location data:');
+        // console.log(locationData);
+        socket.emit('location', locationData)
+      });
+  })
+
   //initialize console with black background, minState="max", and then fetch data for GamewideData
   useEffect(() => {
     let mounted = true;
@@ -223,11 +233,6 @@ function Console() {
       setMinState("max");
     }
 
-    fetch('https://ipapi.co/json/')
-      .then(response => response.json())
-      .then(locationData => {
-        mounted && socket.emit('location', locationData)
-      });
 
 
     // sets a default chat history because chat history needs to be iterable to be mapped
@@ -306,7 +311,7 @@ function Console() {
                     user={player}
                     location={location}
                     setLocation={setLocation}
-                    day={day}
+                    day={player.day}
                     inConversation={inConversation}
                     setConversation={setConversation}
                     setPlayer={setPlayer}
@@ -326,6 +331,7 @@ function Console() {
                     setPlayerPosition={setPlayerPosition}
                     location={location}
                     user={player}
+                    day={player.day}
                     setPlayer={setPlayer}
                     activities={activities}
                     setActivities={setActivities}
