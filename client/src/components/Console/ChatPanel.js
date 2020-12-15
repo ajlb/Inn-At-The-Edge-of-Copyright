@@ -176,16 +176,16 @@ function ChatPanel({
     //eat message
     socket.off('eat').on('eat', ({ actor, eatenItem, actorMessage }) => {
         let type = 'displayed-stat';
-        if (actor.toLowerCase() === user.characterName.toLowerCase()){
-            setChatHistory(prevState => [...prevState, { type, text: `You eat ${insertArticleSingleValue(eatenItem)}. ${actorMessage}`}]);
+        if (actor.toLowerCase() === user.characterName.toLowerCase()) {
+            setChatHistory(prevState => [...prevState, { type, text: `You eat ${insertArticleSingleValue(eatenItem)}. ${actorMessage}` }]);
         } else {
             if (!inConversation) {
-                setChatHistory(prevState => [...prevState, { type, text: `${actor} eats ${insertArticleSingleValue(eatenItem)}.`}]);
+                setChatHistory(prevState => [...prevState, { type, text: `${actor} eats ${insertArticleSingleValue(eatenItem)}.` }]);
             }
         }
     });
 
-    
+
     //shout
     socket.off('shout').on('shout', ({ userMessage, fromUser }) => {
         if (!inConversation) {
@@ -232,11 +232,10 @@ function ChatPanel({
     })
 
     //sleep
-    socket.off('sleep').on('sleep', ({ userToSleep }) => {
-        console.log('sleep received')
+    socket.off('sleep').on('sleep', ({ userToSleep, quiet }) => {
         if (userToSleep === user.characterName) {
             setActivities(prevState => { return { ...prevState, sleeping: true } });
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
+            if (!quiet) setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
         } else {
             if (!inConversation) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} falls asleep.` }]);
@@ -245,10 +244,10 @@ function ChatPanel({
     })
 
     //wake
-    socket.off('wake').on('wake', ({ userToWake }) => {
+    socket.off('wake').on('wake', ({ userToWake, quiet }) => {
         if (userToWake === user.characterName) {
             setActivities(prevState => { return { ...prevState, sleeping: false } });
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
+            if (!quiet) setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
         } else {
             if (!inConversation) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToWake} wakes up.` }]);
@@ -319,11 +318,9 @@ function ChatPanel({
         });
     })
 
-    socket.off('error').on('error', ({ message, action }) => {
+    socket.off('error').on('error', ({ message }) => {
         let type = 'displayed-error';
         setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
-        console.log('action:', action)
-        if (action) eval(action);
     });
 
     socket.off('help').on('help', ({ actionData, type }) => {
