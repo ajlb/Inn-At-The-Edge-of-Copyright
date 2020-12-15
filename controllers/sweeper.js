@@ -1,5 +1,7 @@
 const db = require("../models");
 const locationSeed = require("../scripts/seed/4-locations/locations.json");
+const { pushItemToInventoryReturnData, incrementItemUpdateOne, findPlayerData, decrementItemUpdateOne, scrubInventoryReturnData } = require("./userInput/getDrop");
+const { findLocationData } = require("./userInput/move");
 
 
 
@@ -33,7 +35,7 @@ function checkLocale(index, allLocations) {
                     quantityToTrash = realItem.quantity - matchedInSeedArray[0].quantity;
                     let timesToRemove = realItem.dropTime.filter(time => {
                         // console.log(((new Date() - new Date(time)) * (1000 * 60)) > 2);
-                        if (((new Date() - new Date(time)) * (1000 * 60)) > 2) {
+                        if (((new Date() - new Date(time)) * (1000 * 60)) > 30) {
                             return time
                         }
                     })
@@ -49,10 +51,13 @@ function checkLocale(index, allLocations) {
                 // console.log("UNWANTED ITEM:", realItem.quantity);
                 let timesToRemove = realItem.dropTime.filter(time => {
                     // console.log(((new Date() - new Date(time)) * (1000 * 60)) > 2);
-                    if (((new Date() - new Date(time)) * (1000 * 60)) > 2) {
+                    if (((new Date() - new Date(time)) * (1000 * 60)) > 30) {
                         return time
                     }
                 })
+                // console.log("HERE'S SOMETHING THAT DOESN'T GO.");
+                // console.log(timesToRemove.length);
+                diffObject[realItem.item] = -timesToRemove.length;
                 // console.log("quantity to remove of unmatched item:", timesToRemove.length, realItem.item);
             }
 
@@ -72,13 +77,13 @@ function checkLocale(index, allLocations) {
             resolve(false);
         } else {
             diffObject.locationName = allLocations[index].locationName
-            console.log(diffObject);
+            // console.log(diffObject);
             resolve(diffObject);
         }
     });
 }
 
-async function runSweep() {
+async function runSweep(io, socket) {
     try {
         db.Location.find({}).then(allLocations => {
 
@@ -87,6 +92,28 @@ async function runSweep() {
                     if (!(changeDetected === false)) {
                         console.log("Found a change!");
                         console.log(changeDetected);
+                        for (const itemId in changeDetected) {
+                            if (changeDetected[itemId] > 0) {
+                                incrementItemUpdateOne(itemId, changeDetected.locationName, "location").then(updateData => {
+                                    if (!updateData) {
+                                        pushItemToInventoryReturnData(itemId, changeDetected.locationName, "location").then(locationData => {
+                                            io.to(location).emit('invUpL', locationData.inventory);
+                                        })
+                                    } else {
+                                        findLocationData(changeDetected.locationName).then(locationData => {
+                                            io.to(location).emit('invUpL', locationData.inventory);
+                                        })
+                                    }
+                                })
+                            } else if (changeDetected[itemId] < 0) {
+                                console.log('WE SHOULD BE DECREMENTING THIS');
+                                decrementItemUpdateOne(itemId, changeDetected.locationName, "location").then(() => {
+                                    scrubInventoryReturnData(changeDetected.locationName, "location").then(locationData => {
+                                        io.to(location).emit('invUpL', locationData.inventory);
+                                    })
+                                })
+                            }
+                        }
                     }
                 })
             }
