@@ -174,6 +174,8 @@ function InputPanel({
                 juggle(input, user, location.current.locationName);
             } else if (input.toLowerCase() === "stop juggling") {
                 stopJuggling(user.characterName, true);
+            } else if (findIn(input, actionCalls.weather)) {
+                socket.emit('weatherData', { region: location.current.region });
             } else if (findIn(input, actionCalls.stats)) {
                 /////////////////////
                 //      STATS      //

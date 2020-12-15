@@ -74,6 +74,7 @@ function Console() {
     shout: ['shout', 'yell'],
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
+    weather: ['get weather']
   });
 
   // ANCHOR new, n helped t set region 
@@ -166,19 +167,19 @@ function Console() {
     }
   });
 
-    // Socket location chunk update
-    socket.off('locationChunkUpdate').on('locationChunkUpdate', ({newData, targetLocation}) => {
-      if (!(newData === null) && !(newData === undefined)) {
-        for (const param in location) {
-          if (location[param].locationName === targetLocation) {
-            setLocation({
-              ...location,
-              param: newData
-            });
-          }
+  // Socket location chunk update
+  socket.off('locationChunkUpdate').on('locationChunkUpdate', ({ newData, targetLocation }) => {
+    if (!(newData === null) && !(newData === undefined)) {
+      for (const param in location) {
+        if (location[param].locationName === targetLocation) {
+          setLocation({
+            ...location,
+            param: newData
+          });
         }
       }
-    });
+    }
+  });
 
   // Socket location fightables update
   socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {

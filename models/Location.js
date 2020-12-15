@@ -23,18 +23,21 @@ let locationSchema = new Schema({
   NPCs: {
     type: Array
   },
-  inventory: 
+  inventory:
     [{
-    item: {type: Schema.Types.ObjectId, ref: "Item"},
-    quantity: Number,
-    dropTime: Array
-    } ]
+      item: { type: Schema.Types.ObjectId, ref: "Item" },
+      quantity: Number,
+      dropTime: Array
+    }]
   ,
   discoverables: {
     type: Array,
     default: undefined
   },
   indoorOutdoor: {
+    type: String
+  },
+  weather: {
     type: String
   },
   fightables: {

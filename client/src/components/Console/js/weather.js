@@ -1,17 +1,14 @@
 
 let intervalId;
 
-function updateHourly() {
- intervalId = setInterval(perHour, 1000* 60 * 60);
+function updateHourly()
+intervalId = setInterval(perHour, 1000 * 60 * 60);
 
-}
 
-function perHour() {
-    alert('Weather has Changed')
-}
 
-export  {
-    updateHourly
+
+export {
+    updateHourly,
 }
 // export default shuffleWeather;
 
