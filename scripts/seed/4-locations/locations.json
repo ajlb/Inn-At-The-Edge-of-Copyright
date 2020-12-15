@@ -2369,7 +2369,6 @@
       }
     },
     "fightables": [
-      
       {
         "name": "Christmas Jello",
         "isFighting": false,
@@ -2639,7 +2638,6 @@
       }
     },
     "fightables": [
-
       {
         "name": "Christmas Jello",
         "isFighting": false,
@@ -2760,9 +2758,25 @@
         "exitName": "Mountain Trail South"
       },
       "south": {
-        "exitName": "Ships Hold"
+        "exitName": "Ships Hold",
+        "hidden": true
       }
     },
+    "discoverables": [
+      {
+        "names": [
+          "cliff",
+          "edge"
+        ],
+        "description": "a sheer drop that must be hundreds if not thousands of feet tall...",
+        "exampleCommand": "leap off cliff",
+        "commands": [
+          "jump off",
+          "leap off"
+        ],
+        "action": "jumpOff"
+      }
+    ],
     "fightables": []
   },
   {

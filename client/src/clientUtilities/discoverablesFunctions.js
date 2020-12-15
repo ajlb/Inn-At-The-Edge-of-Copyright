@@ -268,6 +268,37 @@ const discFunctions = {
         getLadle: function getLadle({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
             socket.emit('discoverable', { itemName: "silver ladle", socketProp: 'hasLadle', discFunction: 'discGet', itemID: "5fd69bff4c88070749b5ba11", user })
         }
+    },
+
+    "Cliff's Edge": {
+        jumpOff: function jumpOff({ setChatHistory, user, playerPosition, socket, location, actionCalls, command }) {
+            let ringIsWorn = false;
+            let ringInPockets = false;
+            user.inventory.forEach(({ item }) => {
+                if (item.itemName === 'dull ring') ringInPockets = true;
+            })
+            if (user.wornItems.fingerSlot === 'dull ring') ringIsWorn = true;
+            setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You leap off the cliff!" }]);
+            setTimeout(() => {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Gentle mist brushes your face as you fall through the sparse clouds..." }]);
+                setTimeout(() => {
+                    if (ringIsWorn) {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Your life flashes before your eyes and... suddenly you hear a beep and a bright flash blinds you!" }]);
+                        setTimeout(() => {
+                            processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true)
+                        }, 1500);
+                    } else {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly a strong gust of wind lifts you up and throws you unceremoniously back onto the cliff edge..." }]);
+                        if (ringInPockets) {
+                            setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel the ring in your pocket grow warm" }]);
+                            setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wear ring" }]);
+                        }
+                    }
+                }, 1000);
+            }, 1000);
+
+            console.log('jumping off cliff')
+        }
     }
 }
 
