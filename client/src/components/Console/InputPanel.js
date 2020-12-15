@@ -76,6 +76,7 @@ function InputPanel({
     const handleMessage = (event) => {
         try {
             event.preventDefault();
+
             let enteredInput = input
             // This is a slow function and occasionally the input variable is already modified by the time
             // this function runs, so it must be set to a different variable to avoid async issues
@@ -415,6 +416,11 @@ function InputPanel({
                 /////////////////////
                 setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `Hmmmm... that didn't quite make sense. Try 'help' for a list of commands!` }]);
             }
+
+            setTimeout(() => {
+                let anchorDiv = document.getElementById('anchor');
+                anchorDiv.scrollIntoView({ behavior: "smooth" });
+            }, 250)
 
             setInput('');
 
