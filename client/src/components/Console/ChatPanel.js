@@ -96,7 +96,7 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
             let exits = [];
             for (const param in location[direction].exits) {
-                console.log(param)
+                // console.log(param)
                 if (param !== "current" && !location[direction].exits[param].hidden) {
                     exits.push(param);
                 }
@@ -127,8 +127,8 @@ function ChatPanel({
 
     // Socket location chunk
     socket.off('locationChunk').on('locationChunk', message => {
-        console.log('received locationChunk');
-        console.log(message);
+        // console.log('received locationChunk');
+        // console.log(message);
         if (location.current === undefined) {
             let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
             setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
