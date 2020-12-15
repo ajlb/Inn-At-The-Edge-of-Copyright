@@ -14,7 +14,9 @@ function lookAbout(location, setChatHistory, day) {
         const fightables = location.current.fightables.filter(en => en.isAlive);
 
         location.current.inventory.forEach(param => {
-            inventoryArray.push(`${param.quantity} ${pluralizeAppropriateWords(param.item.itemName, param.quantity)}`);
+            if (param.quantity > 0){
+                inventoryArray.push(`${param.quantity} ${pluralizeAppropriateWords(param.item.itemName, param.quantity)}`);
+            }
         })
 
         location.current.NPCs.forEach(npc => {
