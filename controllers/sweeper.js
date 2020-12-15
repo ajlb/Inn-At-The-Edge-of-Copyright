@@ -102,14 +102,14 @@ async function runSweep(io, socket) {
                                         pushItemToInventoryReturnData(itemId, changeDetected.locationName, "location").then(locationData => {
                                             io.to(locationData.locationName).emit('invUpL', locationData.inventory);
                                             for (const param in locationData.exits){
-                                                io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetName:locationData.locationName})
+                                                io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetLocation:locationData.locationName})
                                             }
                                         })
                                     } else {
                                         findLocationData(changeDetected.locationName).then(locationData => {
                                             io.to(locationData.locationName).emit('invUpL', locationData.inventory);
                                             for (const param in locationData.exits){
-                                                io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetName:locationData.locationName})
+                                                io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetLocation:locationData.locationName})
                                             }
                                         })
                                     }
@@ -120,7 +120,7 @@ async function runSweep(io, socket) {
                                     scrubInventoryReturnData(changeDetected.locationName, "location").then(locationData => {
                                         io.to(locationData.locationName).emit('invUpL', locationData.inventory);
                                         for (const param in locationData.exits){
-                                            io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetName:locationData.locationName})
+                                            io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetLocation:locationData.locationName})
                                         }
                                     })
                                 })
