@@ -19,7 +19,7 @@ const discFunctions = {
 
         pullBook: function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
             setTimeout(() => {
-                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command)
+                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true)
             }, 1000)
         }
 
@@ -33,7 +33,7 @@ const discFunctions = {
 
         mousehole: function mousehole({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
             setTimeout(() => {
-                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command)
+                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
             }, 1000)
         }
 

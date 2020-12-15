@@ -34,7 +34,9 @@
       }
     ],
     "exits": {
-      "east": "Hallway"
+      "east": {
+        "exitName": "Hallway"
+      }
     },
     "discoverables": [
       {
@@ -212,7 +214,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "east": "Inn Lobby"
+      "east": {
+        "exitName": "Inn Lobby"
+      }
     },
     "fightables": []
   },
@@ -384,10 +388,18 @@
       }
     ],
     "exits": {
-      "north": "Inn Kitchen",
-      "west": "Library",
-      "south": "Inn Laundry Room",
-      "east": "Front Yard"
+      "north": {
+        "exitName": "Inn Kitchen"
+      },
+      "west": {
+        "exitName": "Library"
+      },
+      "south": {
+        "exitName": "Inn Laundry Room"
+      },
+      "east": {
+        "exitName": "Front Yard"
+      }
     },
     "fightables": []
   },
@@ -576,6 +588,9 @@
           "crawl into hole",
           "crawl into mousehole",
           "crawl into mouse hole",
+          "crawl through hole",
+          "crawl through mouse hole",
+          "crawl through mousehole",
           "go through hole",
           "go into hole",
           "go in hole",
@@ -587,9 +602,16 @@
       }
     ],
     "exits": {
-      "north": "Inn Lobby",
-      "west": "Library",
-      "east": "Front Yard"
+      "north": {
+        "exitName": "Inn Lobby"
+      },
+      "west": {
+        "exitName": "Library",
+        "hidden": true
+      },
+      "east": {
+        "exitName": "Front Yard"
+      }
     },
     "fightables": []
   },
@@ -738,10 +760,18 @@
       }
     ],
     "exits": {
-      "north": "Inn Lobby",
-      "west": "Inn Laundry Room",
-      "south": "Shed",
-      "east": "Crossroads"
+      "north": {
+        "exitName": "Inn Lobby"
+      },
+      "west": {
+        "exitName": "Inn Laundry Room"
+      },
+      "south": {
+        "exitName": "Shed"
+      },
+      "east": {
+        "exitName": "Crossroads"
+      }
     },
     "fightables": []
   },
@@ -810,7 +840,9 @@
       }
     ],
     "exits": {
-      "north": "Front Yard"
+      "north": {
+        "exitName": "Front Yard"
+      }
     },
     "fightables": []
   },
@@ -844,9 +876,15 @@
       }
     ],
     "exits": {
-      "north": "Inn Garden",
-      "south": "Inn Lobby",
-      "east": "Backyard"
+      "north": {
+        "exitName": "Inn Garden"
+      },
+      "south": {
+        "exitName": "Inn Lobby"
+      },
+      "east": {
+        "exitName": "Backyard"
+      }
     },
     "discoverables": [
       {
@@ -889,8 +927,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Inn Garden",
-      "south": "Inn Kitchen"
+      "west": {
+        "exitName": "Inn Garden"
+      },
+      "south": {
+        "exitName": "Inn Kitchen"
+      }
     },
     "fightables": [
       {
@@ -943,9 +985,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Path to Pumpkin Patch",
-      "south": "Inn Kitchen",
-      "east": "Backyard"
+      "west": {
+        "exitName": "Path to Pumpkin Patch"
+      },
+      "south": {
+        "exitName": "Inn Kitchen"
+      },
+      "east": {
+        "exitName": "Backyard"
+      }
     },
     "fightables": []
   },
@@ -989,8 +1037,13 @@
       }
     ],
     "exits": {
-      "south": "Inn Laundry Room",
-      "east": "Inn Lobby"
+      "south": {
+        "exitName": "Inn Laundry Room",
+        "hidden": true
+      },
+      "east": {
+        "exitName": "Inn Lobby"
+      }
     },
     "fightables": []
   },
@@ -1006,8 +1059,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Pumpkin Patch Entrance",
-      "east": "Inn Garden"
+      "north": {
+        "exitName": "Pumpkin Patch Entrance"
+      },
+      "east": {
+        "exitName": "Inn Garden"
+      }
     },
     "fightables": []
   },
@@ -1023,10 +1080,18 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Pumpkin Patch North",
-      "west": "Pumpkin Patch West",
-      "south": "Pumpkin Patch South",
-      "east": "Pumpkin Patch East"
+      "north": {
+        "exitName": "Pumpkin Patch North"
+      },
+      "west": {
+        "exitName": "Pumpkin Patch West"
+      },
+      "south": {
+        "exitName": "Pumpkin Patch South"
+      },
+      "east": {
+        "exitName": "Pumpkin Patch East"
+      }
     },
     "fightables": []
   },
@@ -1042,10 +1107,18 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Rabbit Hole",
-      "west": "Pumpkin Patch Northwest",
-      "south": "Pumpkin Patch Center",
-      "east": "Pumpkin Patch Northeast"
+      "north": {
+        "exitName": "Rabbit Hole"
+      },
+      "west": {
+        "exitName": "Pumpkin Patch Northwest"
+      },
+      "south": {
+        "exitName": "Pumpkin Patch Center"
+      },
+      "east": {
+        "exitName": "Pumpkin Patch Northeast"
+      }
     },
     "fightables": []
   },
@@ -1061,9 +1134,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Pumpkin Patch Northeast",
-      "west": "Pumpkin Patch Center",
-      "south": "Pumpkin Patch Entrance"
+      "north": {
+        "exitName": "Pumpkin Patch Northeast"
+      },
+      "west": {
+        "exitName": "Pumpkin Patch Center"
+      },
+      "south": {
+        "exitName": "Pumpkin Patch Entrance"
+      }
     },
     "fightables": []
   },
@@ -1079,9 +1158,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Pumpkin Patch Center",
-      "west": "Pumpkin Patch Southwest",
-      "east": "Pumpkin Patch Entrance"
+      "north": {
+        "exitName": "Pumpkin Patch Center"
+      },
+      "west": {
+        "exitName": "Pumpkin Patch Southwest"
+      },
+      "east": {
+        "exitName": "Pumpkin Patch Entrance"
+      }
     },
     "fightables": []
   },
@@ -1097,9 +1182,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Pumpkin Patch Northwest",
-      "south": "Pumpkin Patch Southwest",
-      "east": "Pumpkin Patch Center"
+      "north": {
+        "exitName": "Pumpkin Patch Northwest"
+      },
+      "south": {
+        "exitName": "Pumpkin Patch Southwest"
+      },
+      "east": {
+        "exitName": "Pumpkin Patch Center"
+      }
     },
     "fightables": []
   },
@@ -1115,8 +1206,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Pumpkin Patch North",
-      "south": "Pumpkin Patch East"
+      "west": {
+        "exitName": "Pumpkin Patch North"
+      },
+      "south": {
+        "exitName": "Pumpkin Patch East"
+      }
     },
     "fightables": []
   },
@@ -1132,9 +1227,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Path to Haunted Forest",
-      "south": "Pumpkin Patch West",
-      "east": "Pumpkin Patch North"
+      "north": {
+        "exitName": "Path to Haunted Forest"
+      },
+      "south": {
+        "exitName": "Pumpkin Patch West"
+      },
+      "east": {
+        "exitName": "Pumpkin Patch North"
+      }
     },
     "fightables": []
   },
@@ -1150,8 +1251,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Pumpkin Patch West",
-      "east": "Pumpkin Patch South"
+      "north": {
+        "exitName": "Pumpkin Patch West"
+      },
+      "east": {
+        "exitName": "Pumpkin Patch South"
+      }
     },
     "fightables": []
   },
@@ -1167,9 +1272,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Pumpkin Patch East",
-      "west": "Pumpkin Patch South",
-      "south": "Inn Garden"
+      "north": {
+        "exitName": "Pumpkin Patch East"
+      },
+      "west": {
+        "exitName": "Pumpkin Patch South"
+      },
+      "south": {
+        "exitName": "Inn Garden"
+      }
     },
     "fightables": []
   },
@@ -1185,8 +1296,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "south": "Pumpkin Patch North",
-      "east": "South Tunnel"
+      "south": {
+        "exitName": "Pumpkin Patch North"
+      },
+      "east": {
+        "exitName": "South Tunnel"
+      }
     },
     "fightables": []
   },
@@ -1202,8 +1317,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "East Tunnel",
-      "west": "Rabbit Hole"
+      "north": {
+        "exitName": "East Tunnel"
+      },
+      "west": {
+        "exitName": "Rabbit Hole"
+      }
     },
     "fightables": []
   },
@@ -1219,8 +1338,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Tree Tunnel South",
-      "south": "Pumpkin Patch Northwest"
+      "north": {
+        "exitName": "Tree Tunnel South"
+      },
+      "south": {
+        "exitName": "Pumpkin Patch Northwest"
+      }
     },
     "fightables": []
   },
@@ -1236,9 +1359,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Crystal Cavern",
-      "south": "Cavetown Ruins",
-      "east": "West Tunnel"
+      "west": {
+        "exitName": "Crystal Cavern"
+      },
+      "south": {
+        "exitName": "Cavetown Ruins"
+      },
+      "east": {
+        "exitName": "West Tunnel"
+      }
     },
     "fightables": []
   },
@@ -1254,7 +1383,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "West Tunnel"
+      "north": {
+        "exitName": "West Tunnel"
+      }
     },
     "fightables": []
   },
@@ -1270,8 +1401,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Raging River",
-      "east": "West Tunnel"
+      "north": {
+        "exitName": "Raging River"
+      },
+      "east": {
+        "exitName": "West Tunnel"
+      }
     },
     "fightables": []
   },
@@ -1287,9 +1422,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Murky Pond",
-      "south": "Crystal Cavern",
-      "east": "Cavern Lake"
+      "west": {
+        "exitName": "Murky Pond"
+      },
+      "south": {
+        "exitName": "Crystal Cavern"
+      },
+      "east": {
+        "exitName": "Cavern Lake"
+      }
     },
     "fightables": []
   },
@@ -1305,8 +1446,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Raging River",
-      "east": "Surface Elevator"
+      "west": {
+        "exitName": "Raging River"
+      },
+      "east": {
+        "exitName": "Surface Elevator"
+      }
     },
     "fightables": []
   },
@@ -1322,9 +1467,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Haunted Shack",
-      "west": "Cavern Lake",
-      "south": "East Tunnel"
+      "north": {
+        "exitName": "Haunted Shack"
+      },
+      "west": {
+        "exitName": "Cavern Lake"
+      },
+      "south": {
+        "exitName": "East Tunnel"
+      }
     },
     "fightables": []
   },
@@ -1340,7 +1491,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "south": "The Seven Stones"
+      "south": {
+        "exitName": "The Seven Stones"
+      }
     },
     "fightables": []
   },
@@ -1356,8 +1509,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Murky Pond",
-      "west": "Large Clearing"
+      "north": {
+        "exitName": "Murky Pond"
+      },
+      "west": {
+        "exitName": "Large Clearing"
+      }
     },
     "fightables": []
   },
@@ -1373,10 +1530,18 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "The Elder Trees",
-      "west": "Crazy Cat Lady's Shack",
-      "south": "Tree Tunnel North",
-      "east": "The Seven Stones"
+      "north": {
+        "exitName": "The Elder Trees"
+      },
+      "west": {
+        "exitName": "Crazy Cat Lady's Shack"
+      },
+      "south": {
+        "exitName": "Tree Tunnel North"
+      },
+      "east": {
+        "exitName": "The Seven Stones"
+      }
     },
     "fightables": []
   },
@@ -1392,8 +1557,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Large Clearing",
-      "south": "Tree Tunnel South"
+      "north": {
+        "exitName": "Large Clearing"
+      },
+      "south": {
+        "exitName": "Tree Tunnel South"
+      }
     },
     "fightables": []
   },
@@ -1409,8 +1578,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Tree Tunnel North",
-      "south": "Path to Haunted Forest"
+      "north": {
+        "exitName": "Tree Tunnel North"
+      },
+      "south": {
+        "exitName": "Path to Haunted Forest"
+      }
     },
     "fightables": []
   },
@@ -1426,8 +1599,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "south": "Large Clearing",
-      "east": "The Great Tree"
+      "south": {
+        "exitName": "Large Clearing"
+      },
+      "east": {
+        "exitName": "The Great Tree"
+      }
     },
     "fightables": []
   },
@@ -1451,7 +1628,9 @@
     ],
     "inventory": [],
     "exits": {
-      "west": "The Elder Trees"
+      "west": {
+        "exitName": "The Elder Trees"
+      }
     },
     "fightables": []
   },
@@ -1467,7 +1646,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "east": "Large Clearing"
+      "east": {
+        "exitName": "Large Clearing"
+      }
     },
     "fightables": []
   },
@@ -1483,9 +1664,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Surface Elevator",
-      "west": "West Tunnel",
-      "south": "South Tunnel"
+      "north": {
+        "exitName": "Surface Elevator"
+      },
+      "west": {
+        "exitName": "West Tunnel"
+      },
+      "south": {
+        "exitName": "South Tunnel"
+      }
     },
     "fightables": []
   },
@@ -1501,10 +1688,18 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "North Country Lane",
-      "west": "Front Yard",
-      "south": "South Country Lane",
-      "east": "Meadow Path"
+      "north": {
+        "exitName": "North Country Lane"
+      },
+      "west": {
+        "exitName": "Front Yard"
+      },
+      "south": {
+        "exitName": "South Country Lane"
+      },
+      "east": {
+        "exitName": "Meadow Path"
+      }
     },
     "fightables": []
   },
@@ -1520,8 +1715,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Crossroads",
-      "south": "Sky Cannon"
+      "north": {
+        "exitName": "Crossroads"
+      },
+      "south": {
+        "exitName": "Sky Cannon"
+      }
     },
     "fightables": []
   },
@@ -1537,8 +1736,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Town Southwest",
-      "south": "Crossroads"
+      "north": {
+        "exitName": "Town Southwest"
+      },
+      "south": {
+        "exitName": "Crossroads"
+      }
     },
     "fightables": []
   },
@@ -1554,8 +1757,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Crossroads",
-      "east": "Creek Bridge"
+      "west": {
+        "exitName": "Crossroads"
+      },
+      "east": {
+        "exitName": "Creek Bridge"
+      }
     },
     "fightables": []
   },
@@ -1571,9 +1778,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Meadow Path",
-      "south": "Pond's Edge",
-      "east": "Steep Hike West"
+      "west": {
+        "exitName": "Meadow Path"
+      },
+      "south": {
+        "exitName": "Pond's Edge"
+      },
+      "east": {
+        "exitName": "Steep Hike West"
+      }
     },
     "fightables": []
   },
@@ -1589,8 +1802,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Creek Bridge",
-      "east": "Gentle Slope West"
+      "north": {
+        "exitName": "Creek Bridge"
+      },
+      "east": {
+        "exitName": "Gentle Slope West"
+      }
     },
     "fightables": []
   },
@@ -1606,8 +1823,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "South Country Lane",
-      "east": "Ships Hold"
+      "north": {
+        "exitName": "South Country Lane"
+      },
+      "east": {
+        "exitName": "Ships Hold"
+      }
     },
     "fightables": []
   },
@@ -1623,9 +1844,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Town West",
-      "south": "North Country Lane",
-      "east": "Town Southeast"
+      "north": {
+        "exitName": "Town West"
+      },
+      "south": {
+        "exitName": "North Country Lane"
+      },
+      "east": {
+        "exitName": "Town Southeast"
+      }
     },
     "fightables": []
   },
@@ -1641,8 +1868,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Town East",
-      "west": "Town Southwest"
+      "north": {
+        "exitName": "Town East"
+      },
+      "west": {
+        "exitName": "Town Southwest"
+      }
     },
     "fightables": []
   },
@@ -1658,8 +1889,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Town West",
-      "east": "Garden"
+      "west": {
+        "exitName": "Town West"
+      },
+      "east": {
+        "exitName": "Garden"
+      }
     },
     "fightables": []
   },
@@ -1675,9 +1910,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Town Northeast",
-      "west": "Garden",
-      "south": "Town Southeast"
+      "north": {
+        "exitName": "Town Northeast"
+      },
+      "west": {
+        "exitName": "Garden"
+      },
+      "south": {
+        "exitName": "Town Southeast"
+      }
     },
     "fightables": []
   },
@@ -1693,8 +1934,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Item Store",
-      "east": "Town East"
+      "west": {
+        "exitName": "Item Store"
+      },
+      "east": {
+        "exitName": "Town East"
+      }
     },
     "fightables": []
   },
@@ -1710,9 +1955,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Special Item Store",
-      "south": "Town West",
-      "east": "Town Northeast"
+      "west": {
+        "exitName": "Special Item Store"
+      },
+      "south": {
+        "exitName": "Town West"
+      },
+      "east": {
+        "exitName": "Town Northeast"
+      }
     },
     "fightables": []
   },
@@ -1728,10 +1979,18 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Town North",
-      "west": "Town Northwest",
-      "south": "Town East",
-      "east": "River's Edge"
+      "north": {
+        "exitName": "Town North"
+      },
+      "west": {
+        "exitName": "Town Northwest"
+      },
+      "south": {
+        "exitName": "Town East"
+      },
+      "east": {
+        "exitName": "River's Edge"
+      }
     },
     "fightables": []
   },
@@ -1747,7 +2006,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Town Northeast"
+      "west": {
+        "exitName": "Town Northeast"
+      }
     },
     "fightables": []
   },
@@ -1763,7 +2024,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "east": "Town West"
+      "east": {
+        "exitName": "Town West"
+      }
     },
     "fightables": []
   },
@@ -1779,8 +2042,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Wishing Well",
-      "south": "Town Northeast"
+      "west": {
+        "exitName": "Wishing Well"
+      },
+      "south": {
+        "exitName": "Town Northeast"
+      }
     },
     "fightables": []
   },
@@ -1796,8 +2063,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Surface Elevator",
-      "east": "Wishing Well"
+      "west": {
+        "exitName": "Surface Elevator"
+      },
+      "east": {
+        "exitName": "Wishing Well"
+      }
     },
     "fightables": []
   },
@@ -1813,8 +2084,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Haunted Shack",
-      "east": "Town North"
+      "west": {
+        "exitName": "Haunted Shack"
+      },
+      "east": {
+        "exitName": "Town North"
+      }
     },
     "fightables": []
   },
@@ -1830,9 +2105,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Town Northwest",
-      "south": "Town Southwest",
-      "east": "Item Store"
+      "north": {
+        "exitName": "Town Northwest"
+      },
+      "south": {
+        "exitName": "Town Southwest"
+      },
+      "east": {
+        "exitName": "Item Store"
+      }
     },
     "fightables": []
   },
@@ -1848,8 +2129,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Creek Bridge",
-      "east": "Steep Hike East"
+      "west": {
+        "exitName": "Creek Bridge"
+      },
+      "east": {
+        "exitName": "Steep Hike East"
+      }
     },
     "fightables": []
   },
@@ -1865,8 +2150,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Pond's Edge",
-      "east": "Gentle Slope East"
+      "west": {
+        "exitName": "Pond's Edge"
+      },
+      "east": {
+        "exitName": "Gentle Slope East"
+      }
     },
     "fightables": []
   },
@@ -1882,9 +2171,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Steep Hike West",
-      "south": "Waterfall",
-      "east": "Mountain Trail North"
+      "west": {
+        "exitName": "Steep Hike West"
+      },
+      "south": {
+        "exitName": "Waterfall"
+      },
+      "east": {
+        "exitName": "Mountain Trail North"
+      }
     },
     "fightables": []
   },
@@ -1900,9 +2195,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Girl's Bathroom",
-      "west": "Steep Hike East",
-      "south": "Mountain Trail Center"
+      "north": {
+        "exitName": "Girl's Bathroom"
+      },
+      "west": {
+        "exitName": "Steep Hike East"
+      },
+      "south": {
+        "exitName": "Mountain Trail Center"
+      }
     },
     "fightables": []
   },
@@ -1918,7 +2219,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "south": "Mountain Trail North"
+      "south": {
+        "exitName": "Mountain Trail North"
+      }
     },
     "fightables": []
   },
@@ -1934,7 +2237,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Steep Hike East"
+      "north": {
+        "exitName": "Steep Hike East"
+      }
     },
     "fightables": []
   },
@@ -1950,9 +2255,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Mountain Trail North",
-      "south": "Mountain Trail South",
-      "east": "Crater's Rim"
+      "north": {
+        "exitName": "Mountain Trail North"
+      },
+      "south": {
+        "exitName": "Mountain Trail South"
+      },
+      "east": {
+        "exitName": "Crater's Rim"
+      }
     },
     "fightables": []
   },
@@ -1968,7 +2279,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Mountain Trail Center"
+      "west": {
+        "exitName": "Mountain Trail Center"
+      }
     },
     "fightables": []
   },
@@ -1984,9 +2297,15 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Mountain Trail Center",
-      "west": "Gentle Slope East",
-      "south": "Cliff's Edge"
+      "north": {
+        "exitName": "Mountain Trail Center"
+      },
+      "west": {
+        "exitName": "Gentle Slope East"
+      },
+      "south": {
+        "exitName": "Cliff's Edge"
+      }
     },
     "fightables": []
   },
@@ -2002,8 +2321,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Mountain Trail South",
-      "south": "Ships Hold"
+      "north": {
+        "exitName": "Mountain Trail South"
+      },
+      "south": {
+        "exitName": "Ships Hold"
+      }
     },
     "fightables": []
   },
@@ -2019,8 +2342,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Gentle Slope West",
-      "east": "Mountain Trail South"
+      "west": {
+        "exitName": "Gentle Slope West"
+      },
+      "east": {
+        "exitName": "Mountain Trail South"
+      }
     },
     "fightables": []
   },
@@ -2036,7 +2363,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "south": "Inn Lobby"
+      "south": {
+        "exitName": "Inn Lobby"
+      }
     },
     "fightables": []
   },
@@ -2052,8 +2381,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Cafe",
-      "east": "Ships Hold"
+      "west": {
+        "exitName": "Cafe"
+      },
+      "east": {
+        "exitName": "Ships Hold"
+      }
     },
     "fightables": []
   },
@@ -2069,7 +2402,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "east": "Captain's Quarters"
+      "east": {
+        "exitName": "Captain's Quarters"
+      }
     },
     "fightables": []
   },
@@ -2085,7 +2420,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "south": "Mystery Button"
+      "south": {
+        "exitName": "Mystery Button"
+      }
     },
     "fightables": []
   },
@@ -2101,8 +2438,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "north": "Sky Poppy Field",
-      "east": "Sky Fishing Hole"
+      "north": {
+        "exitName": "Sky Poppy Field"
+      },
+      "east": {
+        "exitName": "Sky Fishing Hole"
+      }
     },
     "fightables": []
   },
@@ -2118,8 +2459,12 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Mystery Button",
-      "east": "Fairy Godfather's Sky Hut"
+      "west": {
+        "exitName": "Mystery Button"
+      },
+      "east": {
+        "exitName": "Fairy Godfather's Sky Hut"
+      }
     },
     "fightables": []
   },
@@ -2135,7 +2480,9 @@
     "NPCs": [],
     "inventory": [],
     "exits": {
-      "west": "Sky Fishing Hole"
+      "west": {
+        "exitName": "Sky Fishing Hole"
+      }
     }
   }
 ]

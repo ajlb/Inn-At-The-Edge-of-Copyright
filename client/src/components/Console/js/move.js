@@ -15,10 +15,10 @@ socket.off('moveQueueForeward').on('moveQueueForeward', ({ chunk, characterName 
     }
 })
 
-function makeMove(socket, location, characterName, direction) {
+function makeMove(socket, location, characterName, direction, allowed) {
     let moved = false;
     for (const param in location) {
-        if (param === direction) {
+        if ((param === direction && !location[param].hidden) || param === direction && allowed) {
             if (location[param] === null) {
                 socket.emit('failure', `Something seems to prevent you from moving ${direction}.`);
                 moveQueue.dequeue();
@@ -35,7 +35,7 @@ function makeMove(socket, location, characterName, direction) {
     }
 }
 
-function processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls, command) {
+function processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls, command, allowed) {
     if (playerPosition === "standing") {
         let direction = takeTheseOffThat(actionCalls.move, input);
         if (direction !== '') {
@@ -46,7 +46,7 @@ function processMove(socket, location, user, input, playerPosition, setChatHisto
             }
             moveQueue.enqueue({ location: location.current.locationName, direction });
             if (moveQueue.length() === 1) {
-                makeMove(socket, location, user.characterName, direction);
+                makeMove(socket, location, user.characterName, direction, allowed);
             }
         } else {
             setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anywhere to ${command}! Try entering: ${command} <direction>` }] })
