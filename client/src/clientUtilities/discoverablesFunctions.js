@@ -153,6 +153,7 @@ const discFunctions = {
                 setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(look) -  Look around you' }]);
                 setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(move) -  Move through an exit' }]);
                 setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(inventory) -  Check your inventory' }]);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: '(wear) -  Put on a wearable item' }]);
             } else {
                 socket.emit("help", { message: input })
             }
