@@ -50,7 +50,7 @@ module.exports = function (io) {
             players = players.filter(player => !(player === socket.nickname));
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false, isAwake: true } }, { new: true })
                 .then(returnData => {
-                    console.log("isAwake on disconnect:", returnData.isAwake)
+                    // console.log("isAwake on disconnect:", returnData.isAwake)
                     if (!(returnData === null)) {
                         if (!(returnData.lastLocation === null)) {
                             io.to(returnData.lastLocation).emit('logout', { user: socket.nickname, message: `${socket.nickname} disappears into the ether.` });
@@ -535,12 +535,12 @@ module.exports = function (io) {
         /*****************************/
         /*          SWEEPERS         */
         /*****************************/
-        
-        itemSweeperInterval = setInterval(function() {
+
+        itemSweeperInterval = setInterval(function () {
             runSweep(io, socket);
         }, 600000)
-        
-        monsterSweeperInterval = setInterval(function() {
+
+        monsterSweeperInterval = setInterval(function () {
             repopMobs(io, socket);
         }, 120000)
     })
