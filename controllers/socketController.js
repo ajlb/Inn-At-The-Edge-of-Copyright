@@ -23,6 +23,9 @@ let playernicknames = {};
 //temp things to simulate display while working on server side only
 location = {};
 
+//how often do we sweep the rooms
+let SweeperInterval;
+
 
 
 
@@ -533,8 +536,9 @@ module.exports = function (io) {
         });
 
 
-
-        runSweep(io, socket);
+        SweeperInterval = setInterval(function() {
+            runSweep(io, socket);
+        }, 300000)
     })
 
 }
