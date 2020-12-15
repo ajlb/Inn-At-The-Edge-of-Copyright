@@ -299,6 +299,34 @@ const discFunctions = {
 
             console.log('jumping off cliff')
         }
+    },
+
+    "Sky Cannon": {
+        shootCannon: function shootCannon({ user, setChatHistory, socket, location, playerPosition, actionCalls, command }) {
+            let ringIsWorn = false;
+            let ringInPockets = false;
+            user.inventory.forEach(({ item }) => {
+                if (item.itemName === 'dull ring') ringInPockets = true;
+            })
+            if (user.wornItems.fingerSlot === 'dull ring') ringIsWorn = true;
+            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the cannon first, launching you high into the air!" }]);
+            setTimeout(() => {
+                if (ringIsWorn) {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Your life flashes before your eyes and... suddenly you hear a beep and a bright flash blinds you!" }]);
+                    setTimeout(() => {
+                        processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls, command, true)
+                    }, 1500);
+                } else {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "You can barely even let out a scream before you smack back down on the brick path next to the cannon..." }]);
+                    if (ringInPockets) {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel the ring in your pocket grow warm" }]);
+                        setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wear ring" }]);
+                    }
+                }
+            }, 1000);
+
+            console.log('Firing cannon')
+        }
     }
 }
 
