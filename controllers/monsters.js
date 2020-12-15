@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 function randomJelloFlavor(num){
     try {
-        const possibleFlavors = ["strawberry", "lime", "coconut"];
+        const possibleFlavors = ["coconut", "lime", "strawberry"];
         let jelloCups = [];
         for (i=0; i < num; i++){
             let index = Math.floor(Math.random() * possibleFlavors.length);
