@@ -86,23 +86,31 @@ function checkLocale(index, allLocations) {
 async function runSweep(io, socket) {
     console.log("sweeping items");
     try {
-        db.Location.find({}).then(allLocations => {
+        let anyItemsSwept = [];
+        db.Location.find({}).then(async allLocations => {
 
             for (const index in allLocations) {
-                checkLocale(index, allLocations).then(changeDetected => {
+                await checkLocale(index, allLocations).then(changeDetected => {
                     if (!(changeDetected === false)) {
                         console.log("Found a change!");
+                        anyItemsSwept.push(changeDetected.locationName);
                         console.log(changeDetected);
                         for (const itemId in changeDetected) {
                             if (changeDetected[itemId] > 0) {
                                 incrementItemUpdateOne(itemId, changeDetected.locationName, "location").then(updateData => {
                                     if (!updateData) {
                                         pushItemToInventoryReturnData(itemId, changeDetected.locationName, "location").then(locationData => {
-                                            io.to(location).emit('invUpL', locationData.inventory);
+                                            io.to(locationData.locationName).emit('invUpL', locationData.inventory);
+                                            for (const param in locationData.exits){
+                                                io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetLocation:locationData.locationName})
+                                            }
                                         })
                                     } else {
                                         findLocationData(changeDetected.locationName).then(locationData => {
-                                            io.to(location).emit('invUpL', locationData.inventory);
+                                            io.to(locationData.locationName).emit('invUpL', locationData.inventory);
+                                            for (const param in locationData.exits){
+                                                io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetLocation:locationData.locationName})
+                                            }
                                         })
                                     }
                                 })
@@ -110,7 +118,10 @@ async function runSweep(io, socket) {
                                 console.log('WE SHOULD BE DECREMENTING THIS');
                                 decrementItemUpdateOne(itemId, changeDetected.locationName, "location").then(() => {
                                     scrubInventoryReturnData(changeDetected.locationName, "location").then(locationData => {
-                                        io.to(location).emit('invUpL', locationData.inventory);
+                                        io.to(locationData.locationName).emit('invUpL', locationData.inventory);
+                                        for (const param in locationData.exits){
+                                            io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetLocation:locationData.locationName})
+                                        }
                                     })
                                 })
                             }
@@ -118,8 +129,12 @@ async function runSweep(io, socket) {
                     }
                 })
             }
-
-
+            
+            if (anyItemsSwept.length > 0){
+                for (locationName of anyItemsSwept){
+                    io.to(locationName).emit('genericMessage', `A shiny stainless steel roomba zips through, paushing briefly to brandish a knife at you, before sweeping up some items and racing out.`);
+                }
+            }
 
 
         }).catch(e => console.log(e));
