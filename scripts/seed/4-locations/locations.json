@@ -110,7 +110,9 @@
         "commands": [
           "get",
           "pick up",
-          "/g"
+          "/g",
+          "take",
+          "grab"
         ],
         "action": "get"
       },
