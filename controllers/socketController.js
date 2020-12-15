@@ -535,13 +535,14 @@ module.exports = function (io) {
         /*****************************/
         /*          SWEEPERS         */
         /*****************************/
-        console.log("down near repopMobs");
-        repopMobs(io, socket);
-
+        
         itemSweeperInterval = setInterval(function() {
             runSweep(io, socket);
         }, 600000)
-
+        
+        monsterSweeperInterval = setInterval(function() {
+            repopMobs(io, socket);
+        }, 120000)
     })
 
 }

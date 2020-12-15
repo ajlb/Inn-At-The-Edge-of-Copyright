@@ -1,26 +1,25 @@
 const db = require("../models");
 const locationSeed = require("../scripts/seed/4-locations/locations.json");
-const { findLocationData } = require("./userInput/move");
+const { updateAndDisseminateFightables, insertArticleSingleValue } = require("./fighting");
 
 
-
-function repopLocation(index, location){
+function repopLocation(io, socket, index, location){
     return new Promise(function(resolve, reject){
+
         const realFightables = location.fightables;
         const seedFightables = locationSeed[index].fightables;
-        console.log(realFightables);
-        console.log(locationFightables);
+        if (seedFightables.length > 0){
+            for (const monsterIndex in seedFightables){
+                if ((seedFightables[monsterIndex].isAlive === true) && (realFightables[monsterIndex].isAlive === false)){
+                    let monster = seedFightables[monsterIndex];
+                    updateAndDisseminateFightables({io, singleLocationChunk:location, monsterObject:monster, isAlive:true, isFighting:false});
+                    // console.log(location.locationName);
+                }
+            }
+
+        }
     });
 }
-
-
-
-
-
-
-
-
-
 
 
 function repopMobs(io, socket){
@@ -29,10 +28,7 @@ function repopMobs(io, socket){
         db.Location.find({}).then(allLocations => {
             for (const index in allLocations){
                 const location = allLocations[index];
-                repopLocation(index, location).then(changeDetected => {
-                    console.log(changeDetected);
-
-                });
+                repopLocation(io, socket, index, location);
             }
         }).catch(e=>console.log(e));
     
