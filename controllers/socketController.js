@@ -8,13 +8,12 @@ const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
 const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fighting");
-// const { response } = require("express");
-
 const runNPC = require("./NPCEngine");
 const runDiscoverable = require('./discoverables')
 const { validateName, createCharacter } = require("./userInput/userCreation");
 const { eatItem } = require("./userInput/eat");
 const runSweep = require("./sweeper");
+const { repopMobs } = require("./monsterSweeper");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -24,7 +23,9 @@ let playernicknames = {};
 location = {};
 
 //how often do we sweep the rooms
-let SweeperInterval;
+let itemSweeperInterval;
+//how often do we repop the mobs
+let monsterSweeperInterval;
 
 
 
@@ -531,9 +532,16 @@ module.exports = function (io) {
         });
 
 
-        SweeperInterval = setInterval(function() {
+        /*****************************/
+        /*          SWEEPERS         */
+        /*****************************/
+        console.log("down near repopMobs");
+        repopMobs(io, socket);
+
+        itemSweeperInterval = setInterval(function() {
             runSweep(io, socket);
         }, 600000)
+
     })
 
 }
