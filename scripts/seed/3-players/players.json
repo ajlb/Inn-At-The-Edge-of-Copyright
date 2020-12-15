@@ -1,458 +1,492 @@
 [
-    {
-      "characterName": "Boomels",
-      "characterNameLowerCase": "boomels",
-      "password": "$2a$10$BE5fPitvz.mDKhLWGGKyOOhSjh7/Zj6.JPWVxbhB0XRzPED32OkSa",
-      "email": "innattheedgeofcopyright@gmail.com",
-      "isLiving": true,
-      "isAwake": true,
-      "isOnline": false,
-      "isNPC": false,
-      "stats": {
-        "WIS": 10,
-        "DEX": 14,
-        "STR": 10,
-        "HP": 30,
-        "maxWIS": 50,
-        "maxDEX": 50,
-        "maxSTR": 50,
-        "maxHP": 50,
-        "XP": 1,
-        "level": 1
-      },
-      "race": "Faerie",
-      "profession": "Bard",
-      "abilities": "NULL",
-      "inventory": [
-        {
-          "dropTime": [
+  {
+    "characterName": "Boomels",
+    "characterNameLowerCase": "boomels",
+    "password": "$2a$10$BE5fPitvz.mDKhLWGGKyOOhSjh7/Zj6.JPWVxbhB0XRzPED32OkSa",
+    "email": "innattheedgeofcopyright@gmail.com",
+    "isLiving": true,
+    "isAwake": true,
+    "isOnline": false,
+    "isNPC": false,
+    "stats": {
+      "WIS": 10,
+      "DEX": 14,
+      "STR": 10,
+      "CHA": 8,
+      "HP": 30,
+      "maxWIS": 50,
+      "maxDEX": 50,
+      "maxSTR": 50,
+      "maxCHA": 50,
+      "maxHP": 50,
+      "XP": 1,
+      "level": 1
+    },
+    "race": "Faerie",
+    "profession": "Bard",
+    "abilities": "NULL",
+    "inventory": [
+      {
+        "dropTime": [
           {
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
-          "item": {
-            "$oid": "5fc32531b2009d226ef5b85e"
-          },
-          "quantity": 1
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b85e"
         },
-        {
-          "dropTime": [
+        "quantity": 1
+      },
+      {
+        "dropTime": [
           {
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
-          "item": {
-            "$oid": "5fc32531b2009d226ef5b85c"
-          },
-          "quantity": 1
-        }
-      ],
-      "lastLocation": "Inn Lobby",
-      "backstory": "Boomels is a Fae young adult, out seeking their own way in a harsh world.",
-      "description": "A tan skinned Faerie with curly dark green hair and brown feathered wings",
-      "wornItems": {
-        "headSlot": null,
-        "neckSlot": null,
-        "torsoSlot": null,
-        "rightHandSlot": null,
-        "leftHandSlot": null,
-        "legsSlot": null,
-        "feetSlot": null,
-        "fingerSlot": null,
-        "handsSlot": null,
-        "twoHands": null
-      },
-      "day": true
-    },
-    {
-      "characterName": "Shambles",
-      "characterNameLowerCase": "shambles",
-      "password": "$2a$10$5DQZP072PCTV0seETmkld.iTbp3/PiOh06ymdS3LR6SUk1JDopVUm",
-      "email": "nicholaskonzen@gmail.com",
-      "isLiving": true,
-      "isAwake": true,
-      "isOnline": false,
-      "isNPC": false,
-      "stats": {
-        "WIS": 10,
-        "DEX": 10,
-        "STR": 10,
-        "HP": 50,
-        "maxWIS": 50,
-        "maxDEX": 50,
-        "maxSTR": 50,
-        "maxHP": 50,
-        "XP": 0,
-        "level": 1
-      },
-      "race": "Flamingo",
-      "profession": "Hunter",
-      "abilities": "NULL",
-      "inventory": [],
-      "lastLocation": "Inn Lobby",
-      "backstory": "NULL",
-      "description": "NULL",
-      "wornItems": {
-        "headSlot": null,
-        "neckSlot": null,
-        "torsoSlot": null,
-        "rightHandSlot": null,
-        "leftHandSlot": null,
-        "legsSlot": null,
-        "feetSlot": null,
-        "fingerSlot": null,
-        "handsSlot": null,
-        "twoHands": null
-      },
-      "day": true
-    },
-    {
-      "characterName": "Quill",
-      "characterNameLowerCase": "quill",
-      "password": "$2a$10$O9KNUfK6hA/XtEQESixKg.P.K7U1VmOT8PUs9G.yynLRXG89VROCe",
-      "email": "vazqueztalia@outlook.com",
-      "isLiving": true,
-      "isAwake": true,
-      "isOnline": false,
-      "isNPC": false,
-      "stats": {
-        "WIS": 10,
-        "DEX": 10,
-        "STR": 10,
-        "HP": 50,
-        "maxWIS": 50,
-        "maxDEX": 50,
-        "maxSTR": 50,
-        "maxHP": 50,
-        "XP": 0,
-        "level": 1
-      },
-      "race": "NULL",
-      "abilities": "NULL",
-      "inventory": [],
-      "lastLocation": "Inn Lobby",
-      "backstory": "NULL",
-      "description": "NULL",
-      "wornItems": {
-        "headSlot": null,
-        "neckSlot": null,
-        "torsoSlot": null,
-        "rightHandSlot": null,
-        "leftHandSlot": null,
-        "legsSlot": null,
-        "feetSlot": null,
-        "fingerSlot": null,
-        "handsSlot": null,
-        "twoHands": null
-      },
-      "day": true
-    },
-    {
-      "characterName": "Arthur",
-      "characterNameLowerCase": "arthur",
-      "password": "$2a$10$.O4WcHp4ikibo086ziU12eToEvi2IS.RBSbfRrg633f4HTwcUX1rO",
-      "email": "nlbmakes@gmail.com",
-      "isLiving": true,
-      "isAwake": true,
-      "isOnline": false,
-      "isNPC": false,
-      "stats": {
-        "WIS": 10,
-        "DEX": 10,
-        "STR": 14,
-        "HP": 15,
-        "maxWIS": 50,
-        "maxDEX": 50,
-        "maxSTR": 50,
-        "maxHP": 50,
-        "XP": 0,
-        "level": 1
-      },
-      "race": "human",
-      "abilities": "NULL",
-      "inventory": [],
-      "lastLocation": "Inn Lobby",
-      "backstory": "NULL",
-      "description": "Arthur is a human sandwich-maker",
-      "wornItems": {
-        "headSlot": null,
-        "neckSlot": null,
-        "torsoSlot": null,
-        "rightHandSlot": null,
-        "leftHandSlot": null,
-        "legsSlot": null,
-        "feetSlot": null,
-        "fingerSlot": null,
-        "handsSlot": null,
-        "twoHands": null
-      },
-      "day": false
-    },
-    {
-      "characterName": "Cosmo The Magnificent",
-      "characterNameLowerCase": "cosmo the magnificent",
-      "password": "$2a$10$mQ9dxmH0s13wToMtab1JN.fvRbueGJhz2oFiQx7f7zvRoAf/5IETS",
-      "email": "armydillo007@gmail.com",
-      "isLiving": true,
-      "isAwake": true,
-      "isOnline": false,
-      "isNPC": false,
-      "stats": {
-        "WIS": 14,
-        "DEX": 12,
-        "STR": 8,
-        "HP": 11,
-        "maxWIS": 50,
-        "maxDEX": 50,
-        "maxSTR": 50,
-        "maxHP": 50,
-        "XP": 0,
-        "level": 1
-      },
-      "race": "human",
-      "abilities": "NULL",
-      "inventory": [],
-      "lastLocation": "Inn Lobby",
-      "backstory": "NULL",
-      "description": "Cosmo The Magnificent is a human sandwich-maker",
-      "wornItems": {
-        "headSlot": null,
-        "neckSlot": null,
-        "torsoSlot": null,
-        "rightHandSlot": null,
-        "leftHandSlot": null,
-        "legsSlot": null,
-        "feetSlot": null,
-        "fingerSlot": null,
-        "handsSlot": null,
-        "twoHands": null
-      },
-      "day": true
-    },
-    {
-      "characterName": "Bismuth",
-      "characterNameLowerCase": "bismuth",
-      "password": "$2a$10$WDcH3t4zEufOQvynHGRHoeGvKBMjPk.Tq6j4K6.i7P54xeFwHPbHu",
-      "email": "kiralowrey@gmail.com",
-      "isLiving": true,
-      "isAwake": true,
-      "isOnline": false,
-      "isNPC": false,
-      "stats": {
-        "WIS": 16,
-        "DEX": 20,
-        "STR": 18,
-        "HP": 15,
-        "maxWIS": 50,
-        "maxDEX": 50,
-        "maxSTR": 50,
-        "maxHP": 50,
-        "XP": 0,
-        "level": 1
-      },
-      "race": "human",
-      "abilities": "NULL",
-      "inventory": [],
-      "lastLocation": "Inn Lobby",
-      "backstory": "NULL",
-      "description": "Bismuth is a human sandwich-maker",
-      "wornItems": {
-        "headSlot": null,
-        "neckSlot": null,
-        "torsoSlot": null,
-        "rightHandSlot": null,
-        "leftHandSlot": null,
-        "legsSlot": null,
-        "feetSlot": null,
-        "fingerSlot": null,
-        "handsSlot": null,
-        "twoHands": null
-      },
-      "day": true
-    },
-    {
-      "characterName": "Chordori",
-      "characterNameLowerCase": "chordori",
-      "password": "$2a$10$vjgwkAeLuthYgTObhqKdG.ZttP.29ul6nZLJIviajV9pGKcC4TTya",
-      "isLiving": true,
-      "isAwake": true,
-      "isOnline": false,
-      "isNPC": false,
-      "stats": {
-        "WIS": 16,
-        "DEX": 19.75,
-        "STR": 16,
-        "HP": 19,
-        "maxWIS": 50,
-        "maxDEX": 50,
-        "maxSTR": 50,
-        "maxHP": 50,
-        "XP": 0,
-        "level": 1
-      },
-      "race": "human",
-      "abilities": "NULL",
-      "inventory": [],
-      "lastLocation": "Inn Lobby",
-      "backstory": "NULL",
-      "description": "Chordori is a human sandwich-maker",
-      "wornItems": {
-        "headSlot": null,
-        "neckSlot": null,
-        "torsoSlot": null,
-        "rightHandSlot": null,
-        "leftHandSlot": null,
-        "legsSlot": null,
-        "feetSlot": null,
-        "fingerSlot": null,
-        "handsSlot": null,
-        "twoHands": null
-      },
-      "day": true
-    },
-    {
-      "characterName": "Severian",
-      "characterNameLowerCase": "severian",
-      "password": "$2a$10$l4pWFzh8fkiFbSVjO2EPOOMFXuR42l/DTSRFcP0y2DAyGxiprlaJK",
-      "isLiving": true,
-      "isAwake": true,
-      "isOnline": false,
-      "isNPC": false,
-      "stats": {
-        "WIS": 17,
-        "DEX": 21,
-        "STR": 14,
-        "HP": 14,
-        "maxHP": 50,
-        "maxWIS": 50,
-        "maxDEX": 50,
-        "maxSTR": 50,
-        "XP": 0,
-        "level": 1
-      },
-      "race": "human",
-      "abilities": "NULL",
-      "inventory": [],
-      "lastLocation": "Inn Lobby",
-      "backstory": "NULL",
-      "description": "Severian is a human sandwich-maker",
-      "wornItems": {
-        "headSlot": null,
-        "neckSlot": null,
-        "torsoSlot": null,
-        "rightHandSlot": null,
-        "leftHandSlot": null,
-        "legsSlot": null,
-        "feetSlot": null,
-        "fingerSlot": null,
-        "handsSlot": null,
-        "twoHands": null
-      },
-      "day": true
-    },
-    {
-      "_id" : {"$oid": "5fd315f451e3e612a08b54a8"},
-      "stats" : {
-        "WIS" : 13,
-        "DEX" : 17.8538461538462,
-        "STR" : 18.7538461538462,
-        "HP" : 21,
-        "CHA" : 16,
-        "maxWIS" : 80,
-        "maxDEX" : 80,
-        "maxCHA" : 80,
-        "maxSTR" : 80,
-        "maxHP" : 21,
-        "XP" : 150,
-        "level" : 1
-    },
-    "isLiving" : true,
-    "isAwake" : true,
-    "isOnline" : true,
-    "isNPC" : false,
-    "race" : "Human",
-    "profession" : "Sandwich-maker",
-    "characterName" : "Thimbleberry",
-    "characterNameLowerCase" : "thimbleberry",
-    "password" : "Auth0isHandlingIt",
-    "email" : "herebird@gmail.com",
-    "abilities" : "panic",
-    "inventory" : [ 
-        {
-            "_id" : {"$oid": "5fd315f451e3e612a08b54a9"},
-            "dropTime": [
-            {
-              "$date": "2020-12-13T23:27:31.715Z"
-            }
-          ],
-            "item" : {"$oid": "5fc32531b2009d226ef5b862"},
-            "quantity" : 1
-        }, 
-        {
-            "_id" : {"$oid": "5fd511df7616a0263095d63d"},
-            "dropTime": [
-            {
-              "$date": "2020-12-13T23:27:31.715Z"
-            },
-            {
-              "$date": "2020-12-13T23:27:31.715Z"
-            },
-            {
-              "$date": "2020-12-13T23:27:31.715Z"
-            }
-          ],
-            "item" : {"$oid": "5fd42faec7f92ab615f64794"},
-            "quantity" : 3
-        }, 
-        {
-            "_id" : {"$oid": "5fd51efae4019127002216eb"},
-            "dropTime": [
-            {
-              "$date": "2020-12-13T23:27:31.715Z"
-            },
-            {
-              "$date": "2020-12-13T23:27:31.715Z"
-            },
-            {
-              "$date": "2020-12-13T23:27:31.715Z"
-            },
-            {
-              "$date": "2020-12-13T23:27:31.715Z"
-            },
-            {
-              "$date": "2020-12-13T23:27:31.715Z"
-            }
-          ],
-            "item" : {"$oid": "5fd42fa7c7f92ab615f64792"},
-            "quantity" : 5
-        }, 
-        {
-            "_id" : {"$oid": "5fd5434b2c0ea233505d2987"},
-            "dropTime": [
-            {
-              "$date": "2020-12-13T23:27:31.715Z"
-            }
-          ],
-            "item" : {"$oid": "5fc32531b2009d226ef5b858"},
-            "quantity" : 1
-        }
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b85c"
+        },
+        "quantity": 1
+      }
     ],
-    "lastLocation" : "Inn Laundry Room",
-    "backstory" : "",
-    "description" : "a Human Sandwich-maker",
-    "wornItems" : {
-        "headSlot" : null,
-        "neckSlot" : null,
-        "torsoSlot" : "blue shirt",
-        "rightHandSlot" : null,
-        "leftHandSlot" : null,
-        "legsSlot" : "pair of brown pants",
-        "feetSlot" : "pair of green socks",
-        "fingerSlot" : null,
-        "handsSlot" : null,
-        "twoHands" : null
+    "lastLocation": "Inn Lobby",
+    "backstory": "Boomels is a Fae young adult, out seeking their own way in a harsh world.",
+    "description": "A tan skinned Faerie with curly dark green hair and brown feathered wings",
+    "wornItems": {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "fingerSlot": null,
+      "handsSlot": null,
+      "twoHands": null
     },
-    "day" : true,
-    "__v" : 0
+    "day": true
+  },
+  {
+    "characterName": "Shambles",
+    "characterNameLowerCase": "shambles",
+    "password": "$2a$10$5DQZP072PCTV0seETmkld.iTbp3/PiOh06ymdS3LR6SUk1JDopVUm",
+    "email": "nicholaskonzen@gmail.com",
+    "isLiving": true,
+    "isAwake": true,
+    "isOnline": false,
+    "isNPC": false,
+    "stats": {
+      "WIS": 10,
+      "DEX": 10,
+      "STR": 10,
+      "CHA": 10,
+      "HP": 50,
+      "maxWIS": 50,
+      "maxDEX": 50,
+      "maxSTR": 50,
+      "maxCHA": 50,
+      "maxHP": 50,
+      "XP": 0,
+      "level": 1
+    },
+    "race": "Flamingo",
+    "profession": "Hunter",
+    "abilities": "NULL",
+    "inventory": [],
+    "lastLocation": "Inn Lobby",
+    "backstory": "NULL",
+    "description": "NULL",
+    "wornItems": {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "fingerSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
+    "day": true
+  },
+  {
+    "characterName": "Quill",
+    "characterNameLowerCase": "quill",
+    "password": "$2a$10$O9KNUfK6hA/XtEQESixKg.P.K7U1VmOT8PUs9G.yynLRXG89VROCe",
+    "email": "vazqueztalia@outlook.com",
+    "isLiving": true,
+    "isAwake": true,
+    "isOnline": false,
+    "isNPC": false,
+    "stats": {
+      "WIS": 10,
+      "DEX": 10,
+      "STR": 10,
+      "CHA": 10,
+      "HP": 50,
+      "maxWIS": 50,
+      "maxDEX": 50,
+      "maxSTR": 50,
+      "maxCHA": 50,
+      "maxHP": 50,
+      "XP": 0,
+      "level": 1
+    },
+    "race": "NULL",
+    "abilities": "NULL",
+    "inventory": [],
+    "lastLocation": "Inn Lobby",
+    "backstory": "NULL",
+    "description": "NULL",
+    "wornItems": {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "fingerSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
+    "day": true
+  },
+  {
+    "characterName": "Arthur",
+    "characterNameLowerCase": "arthur",
+    "password": "$2a$10$.O4WcHp4ikibo086ziU12eToEvi2IS.RBSbfRrg633f4HTwcUX1rO",
+    "email": "nlbmakes@gmail.com",
+    "isLiving": true,
+    "isAwake": true,
+    "isOnline": false,
+    "isNPC": false,
+    "stats": {
+      "WIS": 10,
+      "DEX": 10,
+      "STR": 14,
+      "CHA": 9,
+      "HP": 15,
+      "maxWIS": 50,
+      "maxDEX": 50,
+      "maxSTR": 50,
+      "maxCHA": 50,
+      "maxHP": 50,
+      "XP": 0,
+      "level": 1
+    },
+    "race": "human",
+    "abilities": "NULL",
+    "inventory": [],
+    "lastLocation": "Inn Lobby",
+    "backstory": "NULL",
+    "description": "Arthur is a human sandwich-maker",
+    "wornItems": {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "fingerSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
+    "day": false
+  },
+  {
+    "characterName": "Cosmo The Magnificent",
+    "characterNameLowerCase": "cosmo the magnificent",
+    "password": "$2a$10$mQ9dxmH0s13wToMtab1JN.fvRbueGJhz2oFiQx7f7zvRoAf/5IETS",
+    "email": "armydillo007@gmail.com",
+    "isLiving": true,
+    "isAwake": true,
+    "isOnline": false,
+    "isNPC": false,
+    "stats": {
+      "WIS": 14,
+      "DEX": 12,
+      "STR": 8,
+      "CHA": 10,
+      "HP": 11,
+      "maxWIS": 50,
+      "maxDEX": 50,
+      "maxSTR": 50,
+      "maxCHA": 50,
+      "maxHP": 50,
+      "XP": 0,
+      "level": 1
+    },
+    "race": "human",
+    "abilities": "NULL",
+    "inventory": [],
+    "lastLocation": "Inn Lobby",
+    "backstory": "NULL",
+    "description": "Cosmo The Magnificent is a human sandwich-maker",
+    "wornItems": {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "fingerSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
+    "day": true
+  },
+  {
+    "characterName": "Bismuth",
+    "characterNameLowerCase": "bismuth",
+    "password": "$2a$10$WDcH3t4zEufOQvynHGRHoeGvKBMjPk.Tq6j4K6.i7P54xeFwHPbHu",
+    "email": "kiralowrey@gmail.com",
+    "isLiving": true,
+    "isAwake": true,
+    "isOnline": false,
+    "isNPC": false,
+    "stats": {
+      "WIS": 16,
+      "DEX": 20,
+      "STR": 18,
+      "CHA": 9,
+      "HP": 15,
+      "maxWIS": 50,
+      "maxDEX": 50,
+      "maxSTR": 50,
+      "maxCHA": 50,
+      "maxHP": 50,
+      "XP": 0,
+      "level": 1
+    },
+    "race": "human",
+    "abilities": "NULL",
+    "inventory": [],
+    "lastLocation": "Inn Lobby",
+    "backstory": "NULL",
+    "description": "Bismuth is a human sandwich-maker",
+    "wornItems": {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "fingerSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
+    "day": true
+  },
+  {
+    "characterName": "Chordori",
+    "characterNameLowerCase": "chordori",
+    "password": "$2a$10$vjgwkAeLuthYgTObhqKdG.ZttP.29ul6nZLJIviajV9pGKcC4TTya",
+    "isLiving": true,
+    "isAwake": true,
+    "isOnline": false,
+    "isNPC": false,
+    "stats": {
+      "WIS": 16,
+      "DEX": 19.75,
+      "STR": 16,
+      "CHA": 10,
+      "HP": 19,
+      "maxWIS": 50,
+      "maxDEX": 50,
+      "maxSTR": 50,
+      "maxCHA": 50,
+      "maxHP": 50,
+      "XP": 0,
+      "level": 1
+    },
+    "race": "human",
+    "abilities": "NULL",
+    "inventory": [],
+    "lastLocation": "Inn Lobby",
+    "backstory": "NULL",
+    "description": "Chordori is a human sandwich-maker",
+    "wornItems": {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "fingerSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
+    "day": true
+  },
+  {
+    "characterName": "Severian",
+    "characterNameLowerCase": "severian",
+    "password": "$2a$10$l4pWFzh8fkiFbSVjO2EPOOMFXuR42l/DTSRFcP0y2DAyGxiprlaJK",
+    "isLiving": true,
+    "isAwake": true,
+    "isOnline": false,
+    "isNPC": false,
+    "stats": {
+      "WIS": 17,
+      "DEX": 21,
+      "STR": 14,
+      "HP": 14,
+      "CHA": 10,
+      "maxHP": 50,
+      "maxWIS": 50,
+      "maxDEX": 50,
+      "maxSTR": 50,
+      "XP": 0,
+      "maxCHA": 50,
+      "level": 1
+    },
+    "race": "human",
+    "abilities": "NULL",
+    "inventory": [],
+    "lastLocation": "Inn Lobby",
+    "backstory": "NULL",
+    "description": "Severian is a human sandwich-maker",
+    "wornItems": {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": null,
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": null,
+      "feetSlot": null,
+      "fingerSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
+    "day": true
+  },
+  {
+    "_id": {
+      "$oid": "5fd315f451e3e612a08b54a8"
+    },
+    "stats": {
+      "WIS": 13,
+      "DEX": 17.8538461538462,
+      "STR": 18.7538461538462,
+      "HP": 21,
+      "CHA": 16,
+      "maxWIS": 80,
+      "maxDEX": 80,
+      "maxCHA": 80,
+      "maxSTR": 80,
+      "maxHP": 21,
+      "XP": 150,
+      "level": 1
+    },
+    "isLiving": true,
+    "isAwake": true,
+    "isOnline": true,
+    "isNPC": false,
+    "race": "Human",
+    "profession": "Sandwich-maker",
+    "characterName": "Thimbleberry",
+    "characterNameLowerCase": "thimbleberry",
+    "password": "Auth0isHandlingIt",
+    "email": "herebird@gmail.com",
+    "abilities": "panic",
+    "inventory": [
+      {
+        "_id": {
+          "$oid": "5fd315f451e3e612a08b54a9"
+        },
+        "dropTime": [
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          }
+        ],
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b862"
+        },
+        "quantity": 1
+      },
+      {
+        "_id": {
+          "$oid": "5fd511df7616a0263095d63d"
+        },
+        "dropTime": [
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          },
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          },
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          }
+        ],
+        "item": {
+          "$oid": "5fd42faec7f92ab615f64794"
+        },
+        "quantity": 3
+      },
+      {
+        "_id": {
+          "$oid": "5fd51efae4019127002216eb"
+        },
+        "dropTime": [
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          },
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          },
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          },
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          },
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          }
+        ],
+        "item": {
+          "$oid": "5fd42fa7c7f92ab615f64792"
+        },
+        "quantity": 5
+      },
+      {
+        "_id": {
+          "$oid": "5fd5434b2c0ea233505d2987"
+        },
+        "dropTime": [
+          {
+            "$date": "2020-12-13T23:27:31.715Z"
+          }
+        ],
+        "item": {
+          "$oid": "5fc32531b2009d226ef5b858"
+        },
+        "quantity": 1
+      }
+    ],
+    "lastLocation": "Inn Laundry Room",
+    "backstory": "",
+    "description": "a Human Sandwich-maker",
+    "wornItems": {
+      "headSlot": null,
+      "neckSlot": null,
+      "torsoSlot": "blue shirt",
+      "rightHandSlot": null,
+      "leftHandSlot": null,
+      "legsSlot": "pair of brown pants",
+      "feetSlot": "pair of green socks",
+      "fingerSlot": null,
+      "handsSlot": null,
+      "twoHands": null
+    },
+    "day": true,
+    "__v": 0
   }
-  ]
+]
