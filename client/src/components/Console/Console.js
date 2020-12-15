@@ -77,7 +77,7 @@ function Console() {
 
 // ANCHOR new, n helped t set region 
   let region;
-  let level ;
+  // let level ;
 
   //blur and select functions for input - to set min state
   const onSelect = () => {
@@ -235,6 +235,7 @@ function Console() {
       mounted = false;
     }
   }, [])
+  
 //ANCHOR t and p troubleshoot
 useEffect(() => {
   if (!(location.current === undefined)){
