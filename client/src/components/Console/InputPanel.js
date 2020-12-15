@@ -90,6 +90,8 @@ function InputPanel({
                 })
             }
 
+            console.log(user)
+
             ////////////////////////////////
             //                            //
             //        USER ACTIONS        //
@@ -152,7 +154,7 @@ function InputPanel({
 
                 NPCCheck(location.current.NPCs, message)
                     .then(({ NPCName, message }) => {
-                        socket.emit('to NPC', { toNPC: NPCName, message })
+                        socket.emit('to NPC', { toNPC: NPCName, message, user })
                     })
                     .catch(() => {
                         // This runs if the entered character is not an NPC
@@ -401,7 +403,7 @@ function InputPanel({
                 //////////////////////
                 NPCCheck(location.current.NPCs, inConversation.with)
                     .then(({ NPCName, message }) => {
-                        socket.emit('to NPC', { toNPC: inConversation.with, message: input })
+                        socket.emit('to NPC', { user, toNPC: inConversation.with, message: input })
                     })
                     .catch(err => {
                         setConversation(false);
