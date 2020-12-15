@@ -1,331 +1,423 @@
-import React, { useEffect, useState } from "react";
-import ChatPanel from "./ChatPanel";
-import InputPanel from "./InputPanel";
-import logo from "./images/logo.png";
-import { isBrowser } from 'react-device-detect';
-import GamewideInfo from '../../clientUtilities/GamewideInfo';
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import React, { useEffect } from 'react';
 import socket from "../../clientUtilities/socket";
-import "./css/styles.css";
-import { useAuth0 } from "@auth0/auth0-react";
-
-function Console() {
-  //set state for whether to move to min state (because of soft keyboard on mobile)
-  const [minState, setMinState] = useState("max");
-  //set initial state for GamewideInfo provider - gameInfo.actions
-  const initialGameInfo = {
-    actions: [],
-    chatHistory: [],
-    userCommandsHistory: [],
-    theme: "",
-    currentMessage: ""
-  }
-
-  const [location, setLocation] = useState({});
-
-  const [player, setPlayer] = useState({});
-
-  const [gameInfo] = useState(initialGameInfo);
-
-  const [day] = useState(true);
-
-  const [activities, setActivities] = useState({
-    sleeping: false,
-    juggling: false,
-    fighting: false,
-    singing: false
-  })
-
-  const [muted, setMuted] = useState(false);
-
-  const [canReply, setReplyTo] = useState(false)
-
-  const [inConversation, setConversation] = useState(false);
-
-  const [chatHistory, setChatHistory] = useState([]);
-
-  const [input, setInput] = useState('');
-
-  const [inputHistory, setInputHistory] = useState([]);
-
-  const [playerPosition, setPlayerPosition] = useState('standing');
-
-  const [actionCalls] = useState({
-    move: ['move', '/m', 'walk', 'exit', "go"],
-    inventory: ['inventory', '/i', 'check inventory'],
-    speak: ['speak', 'say', '/s'],
-    look: ['look', '/l'],
-    help: ['help', '/h'],
-    get: ['get', '/g', 'pick up'],
-    drop: ['drop', 'discard', '/d'],
-    wear: ['wear', 'put on', 'don', 'equip'],
-    remove: ['remove', 'take off', "doff"],
-    emote: ['emote', '/e', "/me"],
-    juggle: ['juggle'],
-    stats: ['stats'],
-    sleep: ['sleep', 'fall asleep'],
-    wake: ['wake', 'wake up', 'awaken'],
-    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie', 'get up', 'position', 'get position'],
-    give: ['give'],
-    examine: ['examine', 'study', 'inspect', "look at", "look in", "look out"],
-    whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
-    attack: ['attack', 'fight', 'battle', 'kill'],
-    shout: ['shout', 'yell'],
-    reply: ['reply', '/r'],
-    eat: ['eat', 'devour', 'ingest'],
-  });
-// new, n helped t set region 
-  let region;
-
-  //blur and select functions for input - to set min state
-  const onSelect = () => {
-    setMinState("min");
-  }
-  const onBlur = () => {
-    setMinState("max")
-  }
-
-  const { isAuthenticated, isLoading } = useAuth0();
-
-  // Socket log in message
-  socket.off('log in').on('log in', async message => {
-    let type = 'displayed-stat';
-    setPlayer({
-      ...player,
-      characterName: message
-    })
-    setChatHistory(prevState => [...prevState, { type, text: `Welcome, ${message}! You are now logged in.` }]);
-
-  });
-
-  // Socket failed log in message
-  socket.off('logFail').on('logFail', message => {
-    if (message === "new user") {
-      setPlayer({
-        ...player,
-        characterName: "newUser"
-      });
-      setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: 'Please enter a name for your new character!' }]);
-      setChatHistory(prevState => [...prevState, { type: 'displayed-green', text: 'Your name must be no more than three words, and cannot be offensive.' }]);
-
-    } else {
-      let type = 'displayed-error';
-      setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
-    }
-  });
-
-  // Socket log out message
-  socket.off('logout').on('logout', ({ user, message }) => {
-    let type = 'displayed-stat';
-    setChatHistory(prevState => [...prevState, { type, text: message }]);
-    if (user === player.characterName) {
-      setPlayer({});
-      setLocation({});
-    }
-  });
-
-  // Socket initial userData
-  socket.off('playerData').on('playerData', message => {
-    if (!(message === null)) {
-      setPlayer(message);
-    }
-  });
-
-  //Socket updated userData
-  socket.off('playerUpdate').on('playerUpdate', updatedPlayerData => {
-    if (!(updatedPlayerData === null)) {
-      setPlayer(updatedPlayerData);
-    }
-  });
-
-  // Socket player inventory update
-  socket.off('invUpP').on('invUpP', message => {
-    if (!(message === null)) {
-      setPlayer({
-        ...player,
-        inventory: message
-      });
-    }
-  });
+import { insertArticleSingleValue } from "../../clientUtilities/parsers";
+import { clearJuggleTime } from "./js/juggle";
+import { getOneOfTheseOffThat, takeTheseOffThat } from '../../clientUtilities/finders';
 
 
 
-  // Socket location inventory update
-  socket.off('invUpL').on('invUpL', message => {
-    if (!(message === null)) {
-      setLocation({
-        ...location,
-        current: {
-          ...location.current,
-          inventory: message
-        }
-      });
-    }
-  });
+//note if user is scrolled to bottom of div
+let scrolledToBottom = true;
 
-  // Socket location fightables update
-  socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {
-    console.log('GOT FIGHTABLES');
-    console.log(data);
-    if (!(data === undefined) && !(data === null)) {
-      if (targetLocation === location.current.locationName) {
-        setLocation({
-          ...location,
-          current: data
-        });
-      } else {
-        for (const param in location) {
-          if (location[param].locationName === targetLocation) {
-            setLocation({
-              ...location,
-              param: data
-            });
-          }
-        }
-      }
-    }
-  });
+function ChatPanel({
+    // props being handed to the user via the console component
+    chatHistory,
+    setChatHistory,
+    location,
+    setLocation,
+    activities,
+    setActivities,
+    user,
+    day,
+    inConversation,
+    setConversation,
+    setPlayer,
+    setReplyTo
+}) {
+    //prepare variable to hold div reference for scrolling
+    let anchorDiv;
 
-  socket.off('who').on('who', ({ currentUsersOfRoom, userLocation }) => {
-    currentUsersOfRoom = currentUsersOfRoom.map(elem => {
-      return (elem === player.characterName) ? "You" : elem;
-    })
-    //sort to keep "You" in the beginning of the array
-    currentUsersOfRoom = currentUsersOfRoom.sort(function (a, b) {
-      if (a === "You") {
-        return -1;
-      } else if (b === "You") {
-        return 1;
-      } else {
-        return 0;
-      }
+    // This is where most socket client listeners are going to be!
+    socket.off('whisperTo').on('whisperTo', ({ message, userFrom }) => {
+        let type = 'displayed-stat';
+        setReplyTo({ to: userFrom });
+        setChatHistory(prevState => [...prevState, { type, text: `<span className='displayed-dimBlue'>Whisper from ${userFrom}:</span> ${message}` }]);
+        // chat history is mapped down below
     });
-    document.getElementById("location-info").innerHTML = "";
-    document.getElementById("location-info").innerHTML = `${userLocation}: ${currentUsersOfRoom.join(", ")}`;
-  })
 
-  socket.off('data request').on('data request', () => {
-    if (Object.keys(player).length !== 0) {
-      socket.emit('add player', { player })
-    }
-  })
+    socket.off('from NPC').on('from NPC', ({ NPCName, NPCMessage, exampleResponses, leavingConversation }) => {
+        if (leavingConversation) {
+            setConversation(false)
+        } else {
+            setConversation({ with: NPCName })
+        }
 
-  //initialize console with black background, minState="max", and then fetch data for GamewideData
-  useEffect(() => {
-    let mounted = true;
-    document.body.style.backgroundColor = 'black'
-    if (isBrowser) {
-      setMinState("max");
-    }
+        setChatHistory(prevState => [...prevState, { type: 'displayed-npc', text: `${NPCName}: ${NPCMessage}` }]);
+        if (exampleResponses && !leavingConversation) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-commands', text: `Respond with: ${exampleResponses}` }]);
+        }
+    })
 
-    fetch('https://ipapi.co/json/')
-      .then(response => response.json())
-      .then(locationData => {
-        mounted && socket.emit('location', locationData)
-      });
+    //failed user command messages
+    socket.off('failure').on('failure', (message) => {
+        let type = 'displayed-error';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
 
 
-    // sets a default chat history because chat history needs to be iterable to be mapped
-    (isAuthenticated === false) && setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: 'Welcome to the Inn!' }]);
+    //failed user command messages
+    socket.off('genericMessage').on('genericMessage', (message) => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
 
-    //avoid trying to set state after component is unmounted
-    return function cleanup() {
-      mounted = false;
-    }
-  }, [])
-//t and p troubleshoot
-useEffect(() => {
-  if (!(location.current === undefined)){
-    let thisRegion= location.current.region
-    region= 'panel-default ' + thisRegion.toLowerCase().replace(/\s/g,'-')
-    console.log("found region", region)
-  }
 
-}, [location])
-//end
+    //system message to user
+    socket.off('green').on('green', (message) => {
+        let type = 'displayed-green';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
 
-  return (
-    <div>
-      <div className="wrapper">
-        <ErrorBoundary>
-          <GamewideInfo.Provider value={gameInfo}>
-            {(minState === "max") &&
-              <figure>
-                <img src={logo} alt="Inn At The Edge of Copyright Logo" id="logo" />
-              </figure>
+    //view other people's movement
+    socket.off('move').on('move', ({ actor, direction, cardinal, action }) => {
+        let messageDisplay = '';
+        if (actor === user.characterName) {
+            if (action === "leave") {
+                cardinal ? messageDisplay = `You leave to the ${direction}.` : messageDisplay = `You leave by the ${direction}.`;
+            } else {
+                messageDisplay = `You arrive from the ${direction}.`;
             }
-            <div id="panel-border" style={{
-              height: minState === "min" && 50 + "vh",
-              width: minState === "min" && 120 + "vw",
-              marginTop: minState === "min" && 57 + "vh",
-              overflow: minState === "min" && "hidden"
-            }}>
+        } else {
+            if (action === "leave") {
+                cardinal ? messageDisplay = `${actor} leaves to the ${direction}.` : messageDisplay = `${actor} leaves by the ${direction}.`;
+            } else {
+                messageDisplay = `${actor} arrives from the ${direction}.`;
+            }
+        }
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: messageDisplay }]);
+    });
 
-            {/* region variable replacement */}
-              <div className="panel-default" style={{
-                height: minState === "min" && 100 + "%",
-                width: minState === "min" && 100 + "%"
-              }}>
-                <div id="panel-interior">
-                  <div className="panel-heading"></div>
-                  <div id="location-info">
-                    <p
-                      style={{ fontSize: "smaller" }}
-                      className="mb-1">
-                      {isLoading ? "Getting your room key..." : "Please type login to start!"}
-                    </p>
-                  </div>
-                  <ChatPanel
-                    chatHistory={chatHistory}
-                    setChatHistory={setChatHistory}
-                    activities={activities}
-                    setActivities={setActivities}
-                    user={player}
-                    location={location}
-                    setLocation={setLocation}
-                    day={day}
-                    inConversation={inConversation}
-                    setConversation={setConversation}
-                    setPlayer={setPlayer}
-                    setReplyTo={setReplyTo}
-                  />
-                  <InputPanel
-                    actionCalls={actionCalls}
-                    onBlur={onBlur}
-                    onSelect={onSelect}
-                    minState={minState}
-                    input={input}
-                    setInput={setInput}
-                    inputHistory={inputHistory}
-                    setInputHistory={setInputHistory}
-                    setChatHistory={setChatHistory}
-                    playerPosition={playerPosition}
-                    setPlayerPosition={setPlayerPosition}
-                    location={location}
-                    user={player}
-                    activities={activities}
-                    setActivities={setActivities}
-                    inConversation={inConversation}
-                    setConversation={setConversation}
-                    muted={muted}
-                    setMuted={setMuted}
-                    canReply={canReply}
-                  />
-                </div>
-              </div>
-            </div>
-          </GamewideInfo.Provider>
-        </ErrorBoundary>
-      </div>
-      {(minState === "max") &&
-        <div className="push"></div>
-      }
-      {(minState === "max") &&
-        <footer id="about-link"><a style={{ color: "white" }} href="/about">Meet our team!</a></footer>
-      }
-      {/* {isAuthenticated ? <LogoutButton /> : <LoginButton />} */}
-    </div>
-  );
+    //receive your own move
+    socket.off('yourMove').on('yourMove', (direction) => {
+        try {
+            let newDescription = day ? location[direction].dayDescription : location[direction].nightDescription;
+            setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You enter: ${location[direction].locationName}` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
+            let exits = [];
+            for (const param in location[direction].exits) {
+                if (param !== "current") {
+                    exits.push(param);
+                }
+            }
+            const fightables = location[direction].fightables.filter(en => en.isAlive);
+            if (fightables) {
+                console.log(fightables);
+                if (fightables.length > 0) {
+                    setChatHistory(prevState => [...prevState, {
+                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
+                            return en.name;
+                        }).join(", ")}</span>.`
+                    }]);
+
+                }
+            }
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
+        } catch (e) {
+            socket.emit('failure', "Hmmm... it seems like something went wrong.");
+            console.log("error from receive yourMove");
+            console.log(e);
+        }
+
+
+    });
+
+
+
+    // Socket location chunk
+    socket.off('locationChunk').on('locationChunk', message => {
+        if (location.current === undefined) {
+            let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
+            setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
+            let exits = [];
+            for (const param in message) {
+                if (param !== "current") {
+                    exits.push(param);
+                }
+            }
+            const fightables = message.current.fightables.filter(en => en.isAlive);
+            if (fightables) {
+                console.log(fightables);
+                if (fightables.length > 0) {
+                    setChatHistory(prevState => [...prevState, {
+                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
+                            return en.name;
+                        }).join(", ")}</span>.`
+                    }]);
+
+                }
+            }
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
+
+        }
+        if (!(message === null)) {
+            setLocation(message);
+        }
+    });
+
+    // This is where most socket client listeners are going to be!
+    socket.off('whisperFrom').on('whisperFrom', ({ message, userTo }) => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: `<span className='displayed-dimBlue'>Whisper to ${userTo}:</span> ${message}` }]);
+        // chat history is mapped down below
+    });
+
+    //room speech
+    socket.off('speak').on('speak', (message) => {
+        let type = 'displayed-stat';
+        if (!inConversation) {
+            setChatHistory(prevState => [...prevState, { type, text: message }]);
+        }
+    });
+
+    //battle
+    socket.off('battle').on('battle', ({ attacker, defender, action, damage }) => {
+        if (damage) {
+            if (user.characterName === attacker) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You ${action.slice(0, -1)} ${defender} for ${damage} damage!` }]);
+            } else if (user.characterName === defender) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} you for ${damage} damage!` }]);
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} ${defender}!` }]);
+            }
+        } else {
+            if (user.characterName === attacker) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You try to ${action.slice(0, -1)} ${defender}, but miss.` }]);
+            } else if (user.characterName === defender) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action} you, but misses.` }]);
+            } else {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action} ${defender}, but misses.` }]);
+            }
+        }
+    });
+
+    //battleVictory
+    socket.off('battleVictory').on('battleVictory', ({ victor, defeated }) => {
+        if (user.characterName === victor) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You have defeated ${defeated}!` }]);
+        } else if (user.characterName === defeated) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated you! You have died.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated ${defeated}!` }]);
+        }
+    });
+
+    //shout
+    socket.off('shout').on('shout', ({ userMessage, fromUser }) => {
+        if (!inConversation) {
+            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: userMessage }]);
+        }
+    });
+
+    //a get action
+    socket.off('get').on('get', ({ target, actor }) => {
+        let type = 'displayed-stat';
+        if (actor === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `You pick up ${insertArticleSingleValue(target)}.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} picks up ${insertArticleSingleValue(target)}.` }]);
+        }
+    });
+
+    //a drop action
+    socket.off('drop').on('drop', ({ target, actor }) => {
+        let type = 'displayed-indent';
+        if (actor === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `You drop ${insertArticleSingleValue(target)}.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} drops ${insertArticleSingleValue(target)}.` }]);
+        }
+    });
+
+    //a give action
+    socket.off('give').on('give', ({ target, item, actor }) => {
+        let type = 'displayed-stat';
+        if (actor === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `You give ${insertArticleSingleValue(item)} to ${target}.` }]);
+        } else if (target === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} gives ${insertArticleSingleValue(item)} to you.` }]);
+        } else {
+            setChatHistory(prevState => [...prevState, { type, text: `${actor} gives ${insertArticleSingleValue(item)} to ${target}.` }]);
+        }
+    });
+
+    //emote
+    socket.off('emote').on('emote', ({ user, emotion }) => {
+        let type = 'displayed-stat';
+        setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}` }]))
+    })
+
+    //sleep
+    socket.off('sleep').on('sleep', ({ userToSleep }) => {
+        console.log('sleep received')
+        if (userToSleep === user.characterName) {
+            setActivities(prevState => { return { ...prevState, sleeping: true } });
+            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
+        } else {
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} falls asleep.` }]);
+            }
+        }
+    })
+
+    //wake
+    socket.off('wake').on('wake', ({ userToWake }) => {
+        if (userToWake === user.characterName) {
+            setActivities(prevState => { return { ...prevState, sleeping: false } });
+            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
+        } else {
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToWake} wakes up.` }]);
+            }
+        }
+    })
+
+    //juggle
+    socket.off('juggle').on('juggle', ({ user, target, num }) => {
+        if (user === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You begin to juggle ${num} ${target}.` }]);
+            setActivities({
+                ...activities,
+                juggling: true
+            });
+        } else {
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} begins to juggle ${num} ${target}.` }]);
+            }
+        }
+    })
+
+    socket.off('contJuggle').on('contJuggle', ({ user, target, num }) => {
+        if (user === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You juggle ${num} ${target}.` }]);
+        } else {
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${user} juggles ${num} ${target}.` }]);
+            }
+        }
+    })
+
+    socket.off('stop juggle').on('stop juggle', ({ actor, roomMessage, userMessage }) => {
+        if (actor === user.characterName) {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
+            setActivities({
+                ...activities,
+                juggling: false
+            });
+        } else {
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
+            }
+        }
+        console.log('calling clear juggle time');
+        clearJuggleTime();
+    })
+
+    //wear
+    socket.off(wear').on('wear', message => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+    socket.off('remove').on('remove', message => {
+        let type = 'displayed-stat';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+
+    socket.off('dayNight').on('dayNight', day => {
+        const time = day ? "day" : "night"
+        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `It has become ${time}.` }]);
+
+        setPlayer({
+            ...user,
+            day
+        });
+    })
+
+    socket.off('error').on('error', ({ message, action }) => {
+        let type = 'displayed-error';
+        setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
+        console.log('action:', action)
+        if (action) eval(action);
+    });
+
+    socket.off('help').on('help', ({ actionData, type }) => {
+        if (type === "whole") {
+            let newArray = [];
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `HELP` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            actionData.forEach((helpItem) => {
+                newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: newArray }]);
+            });
+        } else {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `----- ${actionData.actionName.toUpperCase()} -----` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: actionData.commandLongDescription }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}` }]);
+
+        }
+
+    });
+
+
+
+    socket.off('stats').on('stats', () => {
+
+    });
+
+
+
+    //where is the user scrolled to?
+    const handleScroll = (e) => {
+        const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+        if (bottom) {
+            scrolledToBottom = true;
+        } else if (e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight > 100) {
+            scrolledToBottom = false;
+        }
+    };
+
+    //effect runs on every update to chatHistory
+    useEffect(() => {
+        //pin to bottom after every render unless user is scrolled up
+        if (scrolledToBottom) {
+            anchorDiv.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [chatHistory, anchorDiv]);
+
+    // used below to create unique keys for the rendered list items
+    let i = 0;
+
+    return (
+        <div className="message-output-box" onScroll={handleScroll}>
+            <ul className="list-group chat-output"></ul>
+            {
+                chatHistory.map(message => {
+                    i++;
+                    let text = message.text;
+                    if (text.includes("<span className=")) {
+                        let spanClass = text.split(`'>`)[0];
+                        spanClass = spanClass.replace(`<span className='`, "");
+                        let spanText = text.slice(text.indexOf(">") + 1);
+                        spanText = spanText.slice(0, spanText.indexOf("<"));
+                        let textAfterSpan = text.split("</span>")[1];
+                        let textBeforeSpan = text.split("<span")[0];
+                        return <p key={i} className={message.type}>{textBeforeSpan}<span className={spanClass}>{spanText}</span>{textAfterSpan}</p>
+                    } else {
+                        return <p key={i} className={message.type}>{text}</p>
+                    }
+                })
+            }
+            <div
+                id="anchor"
+                ref={(el) => anchorDiv = el}></div>
+        </div>
+    );
 }
 
-export default Console;
+export default ChatPanel;
