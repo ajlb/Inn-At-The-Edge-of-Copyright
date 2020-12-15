@@ -74,8 +74,10 @@ function Console() {
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
   });
-// new, n helped t set region 
+
+// ANCHOR new, n helped t set region 
   let region;
+  let level ;
 
   //blur and select functions for input - to set min state
   const onSelect = () => {
@@ -233,15 +235,31 @@ function Console() {
       mounted = false;
     }
   }, [])
-//t and p troubleshoot
+//ANCHOR t and p troubleshoot
 useEffect(() => {
   if (!(location.current === undefined)){
     let thisRegion= location.current.region
     region= 'panel-default ' + thisRegion.toLowerCase().replace(/\s/g,'-')
     console.log("found region", region)
-  }
+  };
+}, [location]);
 
-}, [location])
+
+// useState(() => {
+//   if (!(player.stats === undefined)){
+//     let thisLevel= player.stats.level
+//     level= 'panel-default ' + thisLevel.replace(/\s/g,'0-')
+//     console.log("user lever", level)
+//   };
+// }, [level]);
+
+// useEffect(() => {
+//   if (!(player.stats === undefined)){
+//     let thisLevel= player.stats.level
+//     level= 'panel-default ' + thisLevel.replace(/\s/g,'0-')
+//     console.log("user lever", level)
+//   };
+// }, [level]);
 //end
 
   return (
