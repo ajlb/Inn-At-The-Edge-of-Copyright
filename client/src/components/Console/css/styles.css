@@ -87,7 +87,7 @@ figure {
     background-size: cover;
 }
 
-.clouds {
+.cloud-city {
     background-image: url("../images/the-clouds.png");
     background-repeat: no-repeat;
     background-size: cover;
@@ -110,7 +110,7 @@ figure {
     background-size: cover;
 }
 
-.mountains {
+.mountain {
     background-image: url("../images/the-mountains.png");
     background-repeat: no-repeat;
     background-size: cover;
@@ -121,13 +121,13 @@ figure {
     background-repeat: repeat;
 }
 
-.spaceship {
+.vogon-spaceship {
     background-image: url("../images/the-spaceship.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-.town-crossroads {
+.country-and-town {
     background-image: url("../images/the-town-crossroads.png");
     background-repeat: no-repeat;
     background-size: cover;
