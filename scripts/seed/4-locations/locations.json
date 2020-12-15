@@ -966,7 +966,9 @@
           "book shelf",
           "bookshelf",
           "bookcase",
-          "book case"
+          "book case",
+          "shelf",
+          "case"
         ],
         "description": "an old, mahogany bookcase filled with old history books from which you can nearly hear the whispers of long lost legends, though one leather-bound book seems awfully...",
         "exampleCommand": "inspect book"
