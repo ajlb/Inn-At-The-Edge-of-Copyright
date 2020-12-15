@@ -69,73 +69,62 @@ figure {
 
 /* Backgrounds begin */
 
+.cavern {
+    background-image: url("../images/the-cavern.png");
+    background-repeat: repeat;
+}
+
 .cavern-elevator {
     background-image: url("../images/the-cavern-elevator.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 .cavern-lake {
     background-image: url("../images/the-cavern-lake.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
-.cavern {
-    background-image: url("../images/the-cavern.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.clouds {
+.cloud-city {
     background-image: url("../images/the-clouds.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 .forest {
     background-image: url("../images/the-forest.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
-.inn-welcome-page {
+.the-inn {
     background-image: url("../images/the-inn.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
 .meadow {
     background-image: url("../images/the-meadow.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
-.mountains {
+.mountain {
     background-image: url("../images/the-mountains.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
-.pumpkin-patch {
+.fall {
     background-image: url("../images/the-pumpkin-patch.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
-.spaceship {
+.vogon-spaceship {
     background-image: url("../images/the-spaceship.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
-.town-crossroads {
+.country-and-town {
     background-image: url("../images/the-town-crossroads.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
 }
 
-/* Background ends */
+/* Backgrounds end */
 
 .new-panel {
     /* background-position: center; */
@@ -157,7 +146,8 @@ figure {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 15px solid rgb(180, 180, 180);
+    /* border: 15px solid rgb(180, 180, 180); */
+    border: 4vw solid transparent;
     height: 70vh;
     width: 80vw;
     border-radius: 25px;
@@ -168,7 +158,7 @@ figure {
     background-color: black;
     border: black solid 20px;
     border-radius: 10px;
-    margin: 0px 20px 0px 20px;
+    margin: 0px 0px 0px 0px;
     height: 95%;
     width: 85%;
 }
@@ -221,6 +211,10 @@ figure {
 }
 
 /* message display */
+
+.faded {
+    opacity: .8;
+}
 
 .error-message {
     margin-left: 20px;
@@ -398,9 +392,38 @@ button {
 
 /* media queries */
 
+@media screen and (min-width: 400px) {
+    #panel-interior {
+        margin: 0px;
+        width: 100%;
+        height: 100%;
+    }
+    #input-group {
+        height: 28px;
+        width: 100%;
+        height: 34px;
+        bottom: 16px;
+    }
+    #inputBar {
+        width: 90%;
+        height: 34px;
+        font-size: 12px;
+    }
+    #submit-button {
+        width: 50px;
+        margin-left: 4px;
+    }
+    .inside-border {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
 @media screen and (min-width: 500px) {
     #panel-interior {
         margin: 0px;
+        width: 100%;
+        height: 100%;
     }
     #input-group {
         height: 28px;
@@ -425,12 +448,12 @@ button {
 
 @media screen and (min-width: 700px) {
     #logo {
-        width: 260px;
+        width: 200px;
     }
     .panel-default {
         font-size: 18px;
-        height: 55vh;
-        width: 70vw;
+        height: 65vh;
+        width: 80vw;
     }
     #panel-interior {
         margin: 0px;
@@ -466,7 +489,7 @@ button {
     .panel-default {
         font-size: 18px;
         height: 70vh;
-        width: 50vw;
+        width: 60vw;
     }
     .inside-border {
         margin-left: 100px;

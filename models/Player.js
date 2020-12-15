@@ -105,7 +105,8 @@ const playerSchema = new Schema({
   },
   inventory: [{
     item: {type: Schema.Types.ObjectId, ref: "Item"},
-    quantity: Number
+    quantity: Number,
+    dropTime: Array
   }]
   ,
   lastLocation: {
@@ -140,7 +141,7 @@ const playerSchema = new Schema({
       feetSlot: {
         type: String
       },
-      ringSlot: {
+      fingerSlot: {
         type: String
       },
       handsSlot: {

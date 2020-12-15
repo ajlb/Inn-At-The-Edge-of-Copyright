@@ -3,7 +3,7 @@
     "actionName": "login",
     "commandBriefDescription": "log into the game",
     "commandLongDescription": "When you type a login command, you will open a log in pop up, which will allow you to enter your email and password, or use social login.",
-    "waysToCall": "login, log in",
+    "waysToCall": "login, log in, log on",
     "exampleCall": "log in",
     "exampleResult": "Welcome, [characterName]! You have logged in!"
   },
@@ -19,13 +19,13 @@
     "actionName": "get",
     "commandBriefDescription": "Pick up an item",
     "commandLongDescription": "When you type a get command word followed by an item in your location that is free to pick up, you will add it to your inventory. If the item isn't free to pick up, you will get a result of 'You can't pick that up!'",
-    "waysToCall": "get, /g, pick up, grab",
+    "waysToCall": "get, /g, pick up, grab, take",
     "exampleCall": "get the branch",
     "exampleResult": "You pick up a branch"
   },
   {
     "actionName": "look",
-    "commandBriefDescription": "You look around you.",
+    "commandBriefDescription": "Look around you",
     "commandLongDescription": "When you type a look command word with nothing after it, you will look around your location, seeing the description, possible exits, and items nearby.",
     "waysToCall": "look, /l, look around",
     "exampleCall": "look",
@@ -35,13 +35,13 @@
     "actionName": "drop",
     "commandBriefDescription": "You drop an item",
     "commandLongDescription": "When you type a drop command word followed by an item in your inventory, you will drop it into your location.",
-    "waysToCall": "drop, /d, discard",
+    "waysToCall": "drop, /d, discard, toss out, toss",
     "exampleCall": "drop branch",
     "exampleResult": "You drop a branch"
   },
   {
     "actionName": "inventory",
-    "commandBriefDescription": "You check your inventory",
+    "commandBriefDescription": "Check your inventory",
     "commandLongDescription": "When you type an inventory command, you will recieve a list of all items in your inventory",
     "waysToCall": "inventory, /i, check inventory",
     "exampleCall": "inventory",
@@ -49,9 +49,9 @@
   },
   {
     "actionName": "move",
-    "commandBriefDescription": "You move through an exit",
+    "commandBriefDescription": "Move through an exit",
     "commandLongDescription": "When you type a move command word followed by an available exit from your location, you will move in that direction.",
-    "waysToCall": "move, /m, go, walk",
+    "waysToCall": "move, /m, go, walk, exit",
     "exampleCall": "move north",
     "exampleResult": "You exit."
   },
@@ -65,9 +65,9 @@
   },
   {
     "actionName": "wear",
-    "commandBriefDescription": "You put on a wearable item.",
+    "commandBriefDescription": "Put on a wearable item.",
     "commandLongDescription": "When you type a wear command followed by a valid item in your inventory, you will put it on if you're not already wearing something there.",
-    "waysToCall": "wear, put on, don",
+    "waysToCall": "wear, put on, don, equip",
     "exampleCall": "wear green socks",
     "exampleResult": "You put on green socks."
   },
@@ -75,7 +75,7 @@
     "actionName": "remove",
     "commandBriefDescription": "You take off an item you are wearing.",
     "commandLongDescription": "When you type a remove command followed by an item you are wearing, you will take it off and add it to your inventory.",
-    "waysToCall": "take off, remove, doff",
+    "waysToCall": "take off, remove, doff, unequip",
     "exampleCall": "remove green socks",
     "exampleResult": "You take off green socks."
   },
@@ -107,7 +107,7 @@
     "actionName": "sleep",
     "commandBriefDescription": "You go to sleep",
     "commandLongDescription": "When you type a sleep command while lying down, you will go to sleep and recover HP, but you will not be able to see or hear around you. If you are attacked, you will automatically wake up.",
-    "waysToCall": "go to sleep, sleep",
+    "waysToCall": "go to sleep, sleep, fall asleep",
     "exampleCall": "sleep, fall asleep",
     "exampleResult": "You fall into a deep slumber."
   },
@@ -123,13 +123,13 @@
     "actionName": "position",
     "commandBriefDescription": "You change position.",
     "commandLongDescription": "When you type a position command, you will move from your current position into the new one.",
-    "waysToCall": "stand up, stand, sit down, sit, lay down, lay, lie down, lie",
+    "waysToCall": "stand up, stand, get up, sit down, sit up, sit, lay down, lay, lie down, lie, position, get position",
     "exampleCall": "stand up",
     "exampleResult": "You stand up."
   },
   {
     "actionName": "help",
-    "commandBriefDescription": "check command usage",
+    "commandBriefDescription": "Try entering: help <command>",
     "commandLongDescription": "When you type help, you will get a list of all game commands. When you type help followed by a game command, you will get that command's details.",
     "waysToCall": "/h, help, help [command]",
     "exampleCall": "help",
@@ -137,9 +137,9 @@
   },
   {
     "actionName": "examine",
-    "commandBriefDescription": "Look closely at an item",
+    "commandBriefDescription": "Look closely at something",
     "commandLongDescription": "When you type an examine command word followed by an appropriate item, you will get a detailed description.",
-    "waysToCall": "examine, inspect, study",
+    "waysToCall": "examine, inspect, study, look at, look in, look out",
     "exampleCall": "examine stick",
     "exampleResult": "You look closely at a stick. You see a dry, brown branch."
   },
@@ -150,6 +150,14 @@
     "waysToCall": "give",
     "exampleCall": "give a mushroom to Grizabella",
     "exampleResult": "You give a mushroom to Grizabella"
+  },
+  {
+    "actionName": "attack",
+    "commandBriefDescription": "attack an opponent",
+    "commandLongDescription": "When you type an attack command, you will enter combat with an available opponent.",
+    "waysToCall": "attack, fight, kill, battle",
+    "exampleCall": "attack jello",
+    "exampleResult": "You attack the Christmas Jello for 5 damage!"
   },
   {
     "actionName": "whisper",

@@ -8,7 +8,7 @@ import CreateOnePlayer from "./bodies/Players/CreateOne";
 
 
 function Body({ destinationState }) {
-    console.log(destinationState.collection);
+    // console.log(destinationState.collection);
 
     switch (destinationState.collection) {
         case "Locations":

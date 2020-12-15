@@ -27,16 +27,17 @@ function Console() {
 
   const [gameInfo] = useState(initialGameInfo);
 
-  const [day] = useState(true);
-
   const [activities, setActivities] = useState({
     sleeping: false,
     juggling: false,
     fighting: false,
-    singing: false
+    singing: false,
+    currentlyAttacking: false
   })
 
   const [muted, setMuted] = useState(false);
+
+  const [region, setRegion] = useState('panel-default');
 
   const [canReply, setReplyTo] = useState(false)
 
@@ -51,29 +52,33 @@ function Console() {
   const [playerPosition, setPlayerPosition] = useState('standing');
 
   const [actionCalls] = useState({
-    move: ['move', '/m', 'walk', 'exit'],
+    move: ['move', '/m', 'walk', 'exit', "go"],
     inventory: ['inventory', '/i', 'check inventory'],
     speak: ['speak', 'say', '/s'],
-    look: ['look', '/l'],
+    look: ['look around', 'look', '/l'],
     help: ['help', '/h'],
-    get: ['get', '/g', 'pick up'],
-    drop: ['drop', 'discard', '/d'],
-    wear: ['wear', 'put on', 'don'],
-    remove: ['remove', 'take off', "doff"],
+    get: ['get', '/g', 'pick up', 'grab', 'take', "pickup"],
+    drop: ['drop', 'discard', '/d', 'toss out', 'toss'],
+    wear: ['wear', 'put on', 'don', 'equip'],
+    remove: ['remove', 'take off', "doff", 'unequip'],
     emote: ['emote', '/e', "/me"],
     juggle: ['juggle'],
     stats: ['stats'],
-    sleep: ['sleep', 'fall asleep'],
+    sleep: ['sleep', 'fall asleep', 'go to sleep'],
     wake: ['wake', 'wake up', 'awaken'],
-    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie', 'get up'],
+    position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie', 'get up', 'position', 'get position'],
     give: ['give'],
-    examine: ['examine', 'study', 'inspect'],
+    examine: ['examine', 'study', 'inspect', "look at", "look in", "look out"],
     whisper: ['whisper to', '/w', 'whisper', 'speak to', 'say to', 'tell', 'talk to'],
     attack: ['attack', 'fight', 'battle', 'kill'],
     shout: ['shout', 'yell'],
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
   });
+
+  // ANCHOR new, n helped t set region 
+  // let region = 'panel-default the-inn'
+  // let level ;
 
   //blur and select functions for input - to set min state
   const onSelect = () => {
@@ -146,6 +151,8 @@ function Console() {
     }
   });
 
+
+
   // Socket location inventory update
   socket.off('invUpL').on('invUpL', message => {
     if (!(message === null)) {
@@ -159,19 +166,33 @@ function Console() {
     }
   });
 
+    // Socket location chunk update
+    socket.off('locationChunkUpdate').on('locationChunkUpdate', ({newData, targetLocation}) => {
+      if (!(newData === null) && !(newData === undefined)) {
+        for (const param in location) {
+          if (location[param].locationName === targetLocation) {
+            setLocation({
+              ...location,
+              param: newData
+            });
+          }
+        }
+      }
+    });
+
   // Socket location fightables update
   socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {
-    console.log('GOT FIGHTABLES');
-    console.log(data);
+    // console.log('GOT FIGHTABLES');
+    // console.log(data);
     if (!(data === undefined) && !(data === null)) {
-      if (targetLocation === location.current.locationName){
+      if (targetLocation === location.current.locationName) {
         setLocation({
           ...location,
           current: data
         });
       } else {
-        for (const param in location){
-          if (location[param].locationName === targetLocation){
+        for (const param in location) {
+          if (location[param].locationName === targetLocation) {
             setLocation({
               ...location,
               param: data
@@ -206,6 +227,18 @@ function Console() {
     }
   })
 
+
+  socket.off('locationRequest').on('locationRequest', () => {
+    // console.log('got a location request');
+    fetch('https://ipapi.co/json/')
+      .then(response => response.json())
+      .then(locationData => {
+        // console.log('sending this location data:');
+        // console.log(locationData);
+        socket.emit('location', locationData)
+      });
+  })
+
   //initialize console with black background, minState="max", and then fetch data for GamewideData
   useEffect(() => {
     let mounted = true;
@@ -214,11 +247,6 @@ function Console() {
       setMinState("max");
     }
 
-    fetch('https://ipapi.co/json/')
-      .then(response => response.json())
-      .then(locationData => {
-        mounted && socket.emit('location', locationData)
-      });
 
 
     // sets a default chat history because chat history needs to be iterable to be mapped
@@ -229,6 +257,34 @@ function Console() {
       mounted = false;
     }
   }, [])
+
+  //ANCHOR t and p troubleshoot
+  useEffect(() => {
+    if (!(location.current === undefined)) {
+      let thisRegion = location.current.region
+      setRegion('panel-default ' + thisRegion.toLowerCase().replace(/\s/g, '-'))
+      // region = 'panel-default ' + thisRegion.toLowerCase().replace(/\s/g, '-')
+      // console.log("found region", region)
+    };
+  }, [location]);
+
+
+  // useState(() => {
+  //   if (!(player.stats === undefined)){
+  //     let thisLevel= player.stats.level
+  //     level= 'panel-default ' + thisLevel.replace(/\s/g,'0-')
+  //     console.log("user lever", level)
+  //   };
+  // }, [level]);
+
+  // useEffect(() => {
+  //   if (!(player.stats === undefined)){
+  //     let thisLevel= player.stats.level
+  //     level= 'panel-default ' + thisLevel.replace(/\s/g,'0-')
+  //     console.log("user lever", level)
+  //   };
+  // }, [level]);
+  //end
 
   return (
     <div>
@@ -246,7 +302,9 @@ function Console() {
               marginTop: minState === "min" && 57 + "vh",
               overflow: minState === "min" && "hidden"
             }}>
-              <div className="panel-default" style={{
+
+              {/* region variable replacement */}
+              <div className={region} style={{
                 height: minState === "min" && 100 + "%",
                 width: minState === "min" && 100 + "%"
               }}>
@@ -267,7 +325,7 @@ function Console() {
                     user={player}
                     location={location}
                     setLocation={setLocation}
-                    day={day}
+                    day={player.day}
                     inConversation={inConversation}
                     setConversation={setConversation}
                     setPlayer={setPlayer}
@@ -287,6 +345,8 @@ function Console() {
                     setPlayerPosition={setPlayerPosition}
                     location={location}
                     user={player}
+                    day={player.day}
+                    setPlayer={setPlayer}
                     activities={activities}
                     setActivities={setActivities}
                     inConversation={inConversation}
@@ -294,7 +354,6 @@ function Console() {
                     muted={muted}
                     setMuted={setMuted}
                     canReply={canReply}
-                    setReplyTo={setReplyTo}
                   />
                 </div>
               </div>
@@ -306,7 +365,7 @@ function Console() {
         <div className="push"></div>
       }
       {(minState === "max") &&
-        <footer id="about-link"><a style={{ color: "white" }} href="/about">Meet our team!</a></footer>
+        <footer id="about-link"><a style={{ color: "white" }} href="/about" rel="no-referrer" target="_blank">Meet our team!</a></footer>
       }
       {/* {isAuthenticated ? <LogoutButton /> : <LoginButton />} */}
     </div>

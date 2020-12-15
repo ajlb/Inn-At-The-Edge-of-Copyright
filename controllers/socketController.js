@@ -8,11 +8,13 @@ const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
 const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fighting");
-// const { response } = require("express");
-
 const runNPC = require("./NPCEngine");
+const runDiscoverable = require('./discoverables')
 const { validateName, createCharacter } = require("./userInput/userCreation");
 const { eatItem } = require("./userInput/eat");
+const runSweep = require("./sweeper");
+const { repopMobs } = require("./monsterSweeper");
+const dayNight = require("./dayNight");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -21,6 +23,12 @@ let playernicknames = {};
 //temp things to simulate display while working on server side only
 location = {};
 
+//how often do we sweep the rooms
+let itemSweeperInterval;
+//how often do we repop the mobs
+let monsterSweeperInterval;
+//make sure we only run day/Night once
+let isDayNightRunning = false;
 
 
 
@@ -35,6 +43,8 @@ module.exports = function (io) {
         console.log(`${socket.id} connected!`);
         // possibly do a DB call to state that the use is online?
         io.to(socket.id).emit('data request');
+        io.to(socket.id).emit('locationRequest');
+
 
         /*****************************/
         /*         DISCONNECT        */
@@ -42,9 +52,10 @@ module.exports = function (io) {
         socket.on('disconnect', () => {
             console.log(`${socket.id} disconnected...`);
             players = players.filter(player => !(player === socket.nickname));
+            delete playernicknames[socket.id];
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false, isAwake: true } }, { new: true })
                 .then(returnData => {
-                    console.log("isAwake on disconnect:", returnData.isAwake)
+                    // console.log("isAwake on disconnect:", returnData.isAwake)
                     if (!(returnData === null)) {
                         if (!(returnData.lastLocation === null)) {
                             io.to(returnData.lastLocation).emit('logout', { user: socket.nickname, message: `${socket.nickname} disappears into the ether.` });
@@ -78,8 +89,14 @@ module.exports = function (io) {
                                     //for now I'm just creating user info and putting them in the general game user array (the general user array won't be necessary once Auth is in place)
                                     socket.nickname = userCharacter;
                                     socket.lowerName = userCharacter.toLowerCase();
-                                    playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
+                                    if (!playernicknames[socket.id]){
+                                        playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName };
+                                    } else {
+                                        playernicknames[socket.id].nickname = socket.nickname;
+                                        playernicknames[socket.id].lowerName = socket.lowerName;
+                                    }
 
+                                    io.to(socket.id).emit('locationRequest');
                                     await getUsers(io, userLocation, playernicknames);
 
                                     //find locations, return initial and then chunk
@@ -160,7 +177,7 @@ module.exports = function (io) {
 
                 db.Player.findOneAndUpdate({ characterName: userCharacter }, { $set: { isAwake: player.isAwake, isOnline: true } }, { new: true })
                     .then(playerData => {
-                        console.log("isAwake on reconnect:", playerData.isAwake)
+                        // console.log("isAwake on reconnect:", playerData.isAwake)
                     })
                     .catch(e => {
                         console.log(e)
@@ -192,6 +209,15 @@ module.exports = function (io) {
 
 
         /*****************************/
+        /*        DISCOVERABLE       */
+        /*****************************/
+        socket.on('discoverable', (props) => {
+            props["socket"] = socket;
+            props["io"] = io;
+            runDiscoverable(props);
+        })
+
+        /*****************************/
         /*            MOVE           */
         /*****************************/
         socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
@@ -216,11 +242,11 @@ module.exports = function (io) {
         /*****************************/
         /*            NPC            */
         /*****************************/
-        socket.on('to NPC', ({ toNPC, message }) => {
+        socket.on('to NPC', ({ toNPC, message, user }) => {
             db.Dialog.findOne({ NPC: toNPC })
                 .then((result) => {
                     if (result) {
-                        runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
+                        runNPC(io, { socket, user, NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
                     } else {
                         socket.emit('failure', `Looks like ${toNPC} has nothing to say to you`)
                     }
@@ -479,8 +505,8 @@ module.exports = function (io) {
                 if (userWasAwake) {
                     io.to(location).emit('sleep', { userToSleep });
                 } else {
-                    const action = "setActivities(prevState => {console.log('action running'); return { ...prevState, sleeping: true } })"
-                    io.to(socket.id).emit('error', { message: "You are already sleeping", action });
+                    io.to(socket.id).emit('error', { message: "You are already sleeping" });
+                    io.to(socket.id).emit('sleep', { userToSleep, quiet: true });
                 }
                 socket.leave(location);
             });
@@ -500,13 +526,8 @@ module.exports = function (io) {
                         });
 
                 } else {
-                    const action = `
-                    setActivities(prevState => {
-                        console.log('action running')
-                        return { ...prevState, sleeping: false }
-                    })
-                    `
-                    io.to(socket.id).emit('error', { message: "You are already awake!", action });
+                    io.to(socket.id).emit('error', { message: "You are already awake!" });
+                    io.to(socket.id).emit('wake', { userToWake, quiet: true });
                 }
             });
         });
@@ -526,7 +547,7 @@ module.exports = function (io) {
         })
 
         /*****************************/
-        /*        DAY/NIGHT          */
+        /*   DAY/NIGHT - SEND DATA   */
         /*****************************/
         socket.on('dayNight', ({ day, user }) => {
             io.to(user.toLowerCase()).emit('dayNight', day);
@@ -534,26 +555,44 @@ module.exports = function (io) {
 
 
         /*****************************/
-        /* DAY/NIGHT - DATA REQUEST  */
-        /*****************************/
-        socket.on('dataRequest', () => {
-            io.emit('dataRequest', playernicknames) //changed this from users, have not yet changed day/night to reflect this, since day/night is not currently working.
-        });
-
-
-        /*****************************/
         /* DAY/NIGHT - USER LOCATION */
         /*****************************/
         socket.on('location', (locationData) => {
-            io.to('backEngine').emit('location', { locationData, id: socket.id });
+            // console.log("location:", socket.id);
+            // console.log(locationData);
+            if (!playernicknames[socket.id]){
+                playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName }
+            }
+            playernicknames[socket.id].latitude = locationData.latitude
+            playernicknames[socket.id].longitude = locationData.longitude
+
+            // console.log(playernicknames[socket.id]);
         });
 
 
         /*****************************/
-        /* DAY/NIGHT - USER LOCATION */
+        /* DAY/NIGHT - RUN FUNCTION  */
         /*****************************/
-        socket.on('joinRequest', (message) => {
-            socket.join(message);
-        });
+        if (!isDayNightRunning){
+            dayNight(io, socket, playernicknames);
+            isDayNightRunning = true;
+        }
+
+
+        /*****************************/
+        /*          SWEEPERS         */
+        /*****************************/
+
+        if( itemSweeperInterval === undefined ){
+            itemSweeperInterval = setInterval(function () {
+                runSweep(io, socket);
+            }, 600000)
+        }
+
+        if (monsterSweeperInterval === undefined){
+            monsterSweeperInterval = setInterval(function () {
+                repopMobs(io, socket);
+            }, 120000)
+        }
     })
 }
