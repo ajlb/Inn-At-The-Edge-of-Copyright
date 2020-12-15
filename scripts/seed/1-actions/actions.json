@@ -65,7 +65,7 @@
   },
   {
     "actionName": "wear",
-    "commandBriefDescription": "You put on a wearable item.",
+    "commandBriefDescription": "Put on a wearable item.",
     "commandLongDescription": "When you type a wear command followed by a valid item in your inventory, you will put it on if you're not already wearing something there.",
     "waysToCall": "wear, put on, don, equip",
     "exampleCall": "wear green socks",
