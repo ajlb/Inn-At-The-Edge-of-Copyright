@@ -271,61 +271,73 @@ const discFunctions = {
     },
 
     "Cliff's Edge": {
-        jumpOff: function jumpOff({ setChatHistory, user, playerPosition, socket, location, actionCalls, command }) {
-            let ringIsWorn = false;
-            let ringInPockets = false;
-            user.inventory.forEach(({ item }) => {
-                if (item.itemName === 'dull ring') ringInPockets = true;
-            })
-            if (user.wornItems.fingerSlot === 'dull ring') ringIsWorn = true;
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You leap off the cliff!" }]);
-            setTimeout(() => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Gentle mist brushes your face as you fall through the sparse clouds..." }]);
+        jumpOff: function jumpOff({ setChatHistory, user, playerPosition, socket, location, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                let ringIsWorn = false;
+                let ringInPockets = false;
+                user.inventory.forEach(({ item }) => {
+                    if (item.itemName === 'dull ring') ringInPockets = true;
+                })
+                if (user.wornItems.fingerSlot === 'dull ring') ringIsWorn = true;
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You leap off the cliff!" }]);
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Gentle mist brushes your face as you fall through the sparse clouds..." }]);
+                    setTimeout(() => {
+                        if (ringIsWorn) {
+                            setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Your life flashes before your eyes and... suddenly you hear a beep and a bright flash blinds you!" }]);
+                            setTimeout(() => {
+                                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true)
+                            }, 1500);
+                        } else {
+                            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly a strong gust of wind lifts you up and throws you unceremoniously back onto the cliff edge..." }]);
+                            if (ringInPockets) {
+                                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel the ring in your pocket grow warm" }]);
+                                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wear ring" }]);
+                            }
+                        }
+                    }, 1000);
+                }, 1000);
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
+        }
+    },
+
+    "Sky Cannon": {
+        shootCannon: function shootCannon({ user, setChatHistory, socket, location, playerPosition, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                let ringIsWorn = false;
+                let ringInPockets = false;
+                user.inventory.forEach(({ item }) => {
+                    if (item.itemName === 'dull ring') ringInPockets = true;
+                })
+                if (user.wornItems.fingerSlot === 'dull ring') ringIsWorn = true;
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the cannon first, launching you high into the air!" }]);
                 setTimeout(() => {
                     if (ringIsWorn) {
                         setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Your life flashes before your eyes and... suddenly you hear a beep and a bright flash blinds you!" }]);
                         setTimeout(() => {
-                            processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true)
+                            processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls, command, true)
                         }, 1500);
                     } else {
-                        setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly a strong gust of wind lifts you up and throws you unceremoniously back onto the cliff edge..." }]);
+                        setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "You can barely even let out a scream before you smack back down on the brick path next to the cannon..." }]);
                         if (ringInPockets) {
                             setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel the ring in your pocket grow warm" }]);
                             setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wear ring" }]);
                         }
                     }
                 }, 1000);
-            }, 1000);
-
-            console.log('jumping off cliff')
-        }
-    },
-
-    "Sky Cannon": {
-        shootCannon: function shootCannon({ user, setChatHistory, socket, location, playerPosition, actionCalls, command }) {
-            let ringIsWorn = false;
-            let ringInPockets = false;
-            user.inventory.forEach(({ item }) => {
-                if (item.itemName === 'dull ring') ringInPockets = true;
-            })
-            if (user.wornItems.fingerSlot === 'dull ring') ringIsWorn = true;
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the cannon first, launching you high into the air!" }]);
-            setTimeout(() => {
-                if (ringIsWorn) {
-                    setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Your life flashes before your eyes and... suddenly you hear a beep and a bright flash blinds you!" }]);
-                    setTimeout(() => {
-                        processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls, command, true)
-                    }, 1500);
-                } else {
-                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "You can barely even let out a scream before you smack back down on the brick path next to the cannon..." }]);
-                    if (ringInPockets) {
-                        setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel the ring in your pocket grow warm" }]);
-                        setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wear ring" }]);
-                    }
-                }
-            }, 1000);
-
-            console.log('Firing cannon')
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
         }
     }
 }
