@@ -57,6 +57,7 @@ function ChatPanel({
 
     //failed user command messages
     socket.off('genericMessage').on('genericMessage', (message) => {
+        // console.log("received generic message", message);
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: message }]);
     });

@@ -39,6 +39,8 @@ function Console() {
 
   const [muted, setMuted] = useState(false);
 
+  const [region, setRegion] = useState('panel-default');
+
   const [canReply, setReplyTo] = useState(false)
 
   const [inConversation, setConversation] = useState(false);
@@ -76,7 +78,9 @@ function Console() {
     eat: ['eat', 'devour', 'ingest'],
   });
 
-
+  // ANCHOR new, n helped t set region 
+  // let region = 'panel-default the-inn'
+  // let level ;
 
   //blur and select functions for input - to set min state
   const onSelect = () => {
@@ -235,6 +239,34 @@ function Console() {
     }
   }, [])
 
+  //ANCHOR t and p troubleshoot
+  useEffect(() => {
+    if (!(location.current === undefined)) {
+      let thisRegion = location.current.region
+      setRegion('panel-default ' + thisRegion.toLowerCase().replace(/\s/g, '-'))
+      // region = 'panel-default ' + thisRegion.toLowerCase().replace(/\s/g, '-')
+      // console.log("found region", region)
+    };
+  }, [location]);
+
+
+  // useState(() => {
+  //   if (!(player.stats === undefined)){
+  //     let thisLevel= player.stats.level
+  //     level= 'panel-default ' + thisLevel.replace(/\s/g,'0-')
+  //     console.log("user lever", level)
+  //   };
+  // }, [level]);
+
+  // useEffect(() => {
+  //   if (!(player.stats === undefined)){
+  //     let thisLevel= player.stats.level
+  //     level= 'panel-default ' + thisLevel.replace(/\s/g,'0-')
+  //     console.log("user lever", level)
+  //   };
+  // }, [level]);
+  //end
+
   return (
     <div>
       <div className="wrapper">
@@ -251,7 +283,9 @@ function Console() {
               marginTop: minState === "min" && 57 + "vh",
               overflow: minState === "min" && "hidden"
             }}>
-              <div className="panel-default" style={{
+
+              {/* region variable replacement */}
+              <div className={region} style={{
                 height: minState === "min" && 100 + "%",
                 width: minState === "min" && 100 + "%"
               }}>

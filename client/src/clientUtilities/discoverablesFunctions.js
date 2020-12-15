@@ -207,7 +207,6 @@ const discFunctions = {
             })
             if (input && input.trim() !== '' && playerPosition !== 'lying down' && !isSleeping && isInInventory) {
                 // console.log(`Attempting to ${command} ${input}`)
-                debugger;
                 realWear(input, user, ['wear'])
             } else if (isSleeping) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
