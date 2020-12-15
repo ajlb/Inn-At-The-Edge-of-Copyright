@@ -53,7 +53,7 @@ module.exports = function dayNight(io, socket, objectOfUsers) {
                     }).catch(e => { console.log(e) })
                 }
             }
-        }, 600000)
+        }, 60000)
     } catch (e) {
         console.log("ERROR FROM dayNight:");
         console.log(e);
