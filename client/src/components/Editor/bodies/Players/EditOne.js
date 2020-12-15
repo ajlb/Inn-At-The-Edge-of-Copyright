@@ -15,8 +15,8 @@ function EditOneLocation() {
     useEffect(() => {
         getLocations().then(locationsData => {
             setAllLocations(locationsData.data);
-            console.log("GETTING");
-            console.log(locationsData.data);
+            // console.log("GETTING");
+            // console.log(locationsData.data);
         })
     }, [])
 
@@ -38,15 +38,15 @@ function EditOneLocation() {
     }
 
     function onBackButtonClick() {
-        console.log("back!");
+        // console.log("back!");
         setLocation("");
     }
 
     const handleEditSubmit = event => {
         event.preventDefault();
-        console.log(locationData);
+        // console.log(locationData);
         editLocation("set", locationData.locationName, locationData).then(returnData => {
-            console.log(returnData);
+            // console.log(returnData);
         });
         alert("Your changes have been submitted");
     }

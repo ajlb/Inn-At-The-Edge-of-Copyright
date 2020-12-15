@@ -33,7 +33,8 @@ function Console() {
     sleeping: false,
     juggling: false,
     fighting: false,
-    singing: false
+    singing: false,
+    currentlyAttacking: false
   })
 
   const [muted, setMuted] = useState(false);
@@ -54,16 +55,16 @@ function Console() {
     move: ['move', '/m', 'walk', 'exit', "go"],
     inventory: ['inventory', '/i', 'check inventory'],
     speak: ['speak', 'say', '/s'],
-    look: ['look', '/l'],
+    look: ['look around', 'look', '/l'],
     help: ['help', '/h'],
-    get: ['get', '/g', 'pick up'],
-    drop: ['drop', 'discard', '/d'],
+    get: ['get', '/g', 'pick up', 'grab', 'take'],
+    drop: ['drop', 'discard', '/d', 'toss out', 'toss'],
     wear: ['wear', 'put on', 'don', 'equip'],
-    remove: ['remove', 'take off', "doff"],
+    remove: ['remove', 'take off', "doff", 'unequip'],
     emote: ['emote', '/e', "/me"],
     juggle: ['juggle'],
     stats: ['stats'],
-    sleep: ['sleep', 'fall asleep'],
+    sleep: ['sleep', 'fall asleep', 'go to sleep'],
     wake: ['wake', 'wake up', 'awaken'],
     position: ['lay down', 'lie down', 'stand up', 'sit down', 'sit up', 'sit', 'stand', 'lay', 'lie', 'get up', 'position', 'get position'],
     give: ['give'],
@@ -167,8 +168,8 @@ function Console() {
 
   // Socket location fightables update
   socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {
-    console.log('GOT FIGHTABLES');
-    console.log(data);
+    // console.log('GOT FIGHTABLES');
+    // console.log(data);
     if (!(data === undefined) && !(data === null)) {
       if (targetLocation === location.current.locationName) {
         setLocation({
@@ -322,6 +323,7 @@ useEffect(() => {
                     setPlayerPosition={setPlayerPosition}
                     location={location}
                     user={player}
+                    setPlayer={setPlayer}
                     activities={activities}
                     setActivities={setActivities}
                     inConversation={inConversation}
@@ -340,7 +342,7 @@ useEffect(() => {
         <div className="push"></div>
       }
       {(minState === "max") &&
-        <footer id="about-link"><a style={{ color: "white" }} href="/about">Meet our team!</a></footer>
+        <footer id="about-link"><a style={{ color: "white" }} href="/about" rel="no-referrer" target="_blank">Meet our team!</a></footer>
       }
       {/* {isAuthenticated ? <LogoutButton /> : <LoginButton />} */}
     </div>

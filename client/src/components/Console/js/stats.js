@@ -9,7 +9,7 @@ const paramNames = {
 
 
 function showStats(user, setChatHistory) {
-    console.log(user)
+    // console.log(user)
     const statsArray = [];
     let HPString = "";
 

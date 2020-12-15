@@ -30,7 +30,7 @@ function CreateOneLocation() {
             for (const location of locationsData.data) {
                 locationNames.push(location.locationName);
             }
-            console.log(locationNames);
+            // console.log(locationNames);
         })
     }, [])
 
@@ -44,26 +44,26 @@ function CreateOneLocation() {
 
     const handleCreateSubmit = event => {
         event.preventDefault();
-        console.log(locationData);
-        console.log(locationNames.indexOf(locationData.locationName) === -1);
-        console.log(locationNames);
+        // console.log(locationData);
+        // console.log(locationNames.indexOf(locationData.locationName) === -1);
+        // console.log(locationNames);
         if (locationNames.indexOf(locationData.locationName) === -1) {
             createLocation(locationData).then(returnData => {
-                console.log(returnData);
+                // console.log(returnData);
                 locationNames.push(locationData.locationName)
                 setLocationData(initialLocationData);
                 setAlert({
                     severity: "green",
                     message: "Your location has been submitted!"
                 });
-                console.log(alert);
+                // console.log(alert);
             });
         } else {
             setAlert({
                 severity: "red",
                 message: "This location name has already been used."
             });
-            console.log(alert);
+            // console.log(alert);
 
         }
     }

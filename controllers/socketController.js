@@ -8,12 +8,12 @@ const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
 const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fighting");
-// const { response } = require("express");
-
 const runNPC = require("./NPCEngine");
 const runDiscoverable = require('./discoverables')
 const { validateName, createCharacter } = require("./userInput/userCreation");
 const { eatItem } = require("./userInput/eat");
+const runSweep = require("./sweeper");
+const { repopMobs } = require("./monsterSweeper");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -21,6 +21,11 @@ let playernicknames = {};
 
 //temp things to simulate display while working on server side only
 location = {};
+
+//how often do we sweep the rooms
+let itemSweeperInterval;
+//how often do we repop the mobs
+let monsterSweeperInterval;
 
 
 
@@ -161,7 +166,7 @@ module.exports = function (io) {
 
                 db.Player.findOneAndUpdate({ characterName: userCharacter }, { $set: { isAwake: player.isAwake, isOnline: true } }, { new: true })
                     .then(playerData => {
-                        console.log("isAwake on reconnect:", playerData.isAwake)
+                        // console.log("isAwake on reconnect:", playerData.isAwake)
                     })
                     .catch(e => {
                         console.log(e)
@@ -226,11 +231,11 @@ module.exports = function (io) {
         /*****************************/
         /*            NPC            */
         /*****************************/
-        socket.on('to NPC', ({ toNPC, message }) => {
+        socket.on('to NPC', ({ toNPC, message, user }) => {
             db.Dialog.findOne({ NPC: toNPC })
                 .then((result) => {
                     if (result) {
-                        runNPC(io, { NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
+                        runNPC(io, { socket, user, NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id })
                     } else {
                         socket.emit('failure', `Looks like ${toNPC} has nothing to say to you`)
                     }
@@ -459,8 +464,8 @@ module.exports = function (io) {
                 if (userWasAwake) {
                     io.to(location).emit('sleep', { userToSleep });
                 } else {
-                    const action = "setActivities(prevState => {console.log('action running'); return { ...prevState, sleeping: true } })"
-                    io.to(socket.id).emit('error', { message: "You are already sleeping", action });
+                    io.to(socket.id).emit('error', { message: "You are already sleeping" });
+                    io.to(socket.id).emit('sleep', { userToSleep, quiet: true });
                 }
                 socket.leave(location);
             });
@@ -475,13 +480,8 @@ module.exports = function (io) {
                 if (userWasAsleep) {
                     io.to(location).emit('wake', { userToWake });
                 } else {
-                    const action = `
-                    setActivities(prevState => {
-                        console.log('action running')
-                        return { ...prevState, sleeping: false }
-                    })
-                    `
-                    io.to(socket.id).emit('error', { message: "You are already awake!", action });
+                    io.to(socket.id).emit('error', { message: "You are already awake!" });
+                    io.to(socket.id).emit('wake', { userToWake, quiet: true });
                 }
             });
         });
@@ -530,6 +530,19 @@ module.exports = function (io) {
         socket.on('joinRequest', (message) => {
             socket.join(message);
         });
+
+
+        /*****************************/
+        /*          SWEEPERS         */
+        /*****************************/
+        
+        itemSweeperInterval = setInterval(function() {
+            runSweep(io, socket);
+        }, 600000)
+        
+        monsterSweeperInterval = setInterval(function() {
+            repopMobs(io, socket);
+        }, 120000)
     })
 
 }

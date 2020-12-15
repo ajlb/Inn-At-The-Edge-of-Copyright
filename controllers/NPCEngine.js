@@ -1,3 +1,5 @@
+const npcFunctions = require("./npcactions");
+
 function thisStartsWithOneOfThese(string, array) {
     let itDoes = false;
     array.forEach(value => {
@@ -11,8 +13,10 @@ function thisStartsWithOneOfThese(string, array) {
 let greetingsArray = ['hello', 'hi', 'hey', 'hello?']; // used to default the user to opening NPC message 
 let goodbyeArray = ['goodbye', 'bye', 'adios', 'leave']; // used to trigger if the user is leaving the conversation
 
-module.exports = function (io, { NPCName, NPCObj, messageFromUser, fromClient }) {
+module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser, fromClient }) {
     let route;
+    let action;
+    let socketProp;
     let exampleResponses;
     let NPCMessage;
     let leavingConversation = false;
@@ -34,6 +38,7 @@ module.exports = function (io, { NPCName, NPCObj, messageFromUser, fromClient })
                 if (responseObj.responses.includes(messageFromUser.toLowerCase())) {
                     // sets the proper NPC message route 
                     route = responseObj.route;
+                    action = responseObj.action;
                     // these two use the route to get the proper message and example responses from the NPC
                     NPCMessage = NPCObj.messages[route].message;
                     exampleResponses = NPCObj.messages[route].exampleResponses;
@@ -43,6 +48,12 @@ module.exports = function (io, { NPCName, NPCObj, messageFromUser, fromClient })
     }
 
     if (route !== undefined) {
+        if (action) {
+            if (npcFunctions[NPCName] && npcFunctions[NPCName][action]) {
+                npcFunctions[NPCName][action]({ io, socket, socketProp, user })
+            }
+        }
+        // else console.log('no action')
         // emits all the necessary info to the user
         io.to(fromClient).emit('from NPC', {
             NPCName,

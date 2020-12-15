@@ -1,8 +1,18 @@
 const { incrementItemUpdateOne, pushItemToInventoryReturnData, findPlayerData } = require("./userInput/getDrop");
+function isInUserInventory(itemName, user) {
+    itIs = false;
+    user.inventory.forEach(itemObj => {
+        if (itemObj.item.itemName.includes(itemName)) itIs = true;
+    })
+    Object.keys(user.wornItems).forEach(slotKey => {
+        if (user.wornItems[slotKey] && user.wornItems[slotKey].includes(itemName)) itIs = true;
+    })
+    return itIs;
+}
 
 const discFunctions = {
     discGet: function discGet({ io, socket, itemName, socketProp, itemID, user, quiet }) {
-        if (socket[socketProp]) {
+        if (socket[socketProp] || isInUserInventory(itemName, user)) {
             console.log(`Already have ${itemName}`)
             io.to(socket.id).emit('failure', `You already got the ${itemName}`)
         } else {
@@ -18,7 +28,6 @@ const discFunctions = {
                         io.to(socket.id).emit('invUpP', returnData.inventory);
                     })
                 }
-                io.to(location).emit('get', { target: itemName, actor: user });
             });
             if (!quiet) {
                 io.to(socket.id).emit('genericMessage', `You pick up the ${itemName}`)

@@ -69,6 +69,11 @@ figure {
 
 /* Backgrounds begin */
 
+.cavern {
+    background-image: url("../images/the-cavern.png");
+    background-repeat: repeat;
+}
+
 .cavern-elevator {
     background-image: url("../images/the-cavern-elevator.png");
     background-repeat: repeat;
@@ -79,12 +84,7 @@ figure {
     background-repeat: repeat;
 }
 
-.cavern {
-    background-image: url("../images/the-cavern.png");
-    background-repeat: repeat;
-}
-
-.clouds {
+.cloud-city {
     background-image: url("../images/the-clouds.png");
     background-repeat: repeat;
 }
@@ -94,7 +94,7 @@ figure {
     background-repeat: repeat;
 }
 
-.inn-welcome-page {
+.the-inn {
     background-image: url("../images/the-inn.png");
     background-repeat: repeat;
 } 
@@ -104,22 +104,22 @@ figure {
     background-repeat: repeat;
 }
 
-.mountains {
+.mountain {
     background-image: url("../images/the-mountains.png");
     background-repeat: repeat;
 }
 
-.pumpkin-patch {
+.fall {
     background-image: url("../images/the-pumpkin-patch.png");
     background-repeat: repeat;
 }
 
-.spaceship {
+.vogon-spaceship {
     background-image: url("../images/the-spaceship.png");
     background-repeat: repeat;
 }
 
-.town-crossroads {
+.country-and-town {
     background-image: url("../images/the-town-crossroads.png");
     background-repeat: repeat;
 }

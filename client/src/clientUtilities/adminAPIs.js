@@ -6,7 +6,7 @@ import axios from "axios";
 //retrieve location data
 function getLocations() {
   return new Promise(function (resolve, reject) {
-    console.log("sending getLocations");
+    // console.log("sending getLocations");
     axios.get("/adminAPI/locations").then(data => {
       resolve(data);
     });
@@ -18,7 +18,7 @@ function getLocations() {
 function changeLocations(action = "set", locationObject) {
   locationObject.action = action;
   return new Promise(function (resolve, reject) {
-    console.log("sending addLocationField");
+    // console.log("sending addLocationField");
     axios.put("/adminAPI/locations/", locationObject).then(data => {
       resolve(data);
     });
@@ -28,7 +28,7 @@ function changeLocations(action = "set", locationObject) {
 //retrieve data for one location
 function getOneLocation(locationName) {
   return new Promise(function (resolve, reject) {
-    console.log("sending getOneLocation");
+    // console.log("sending getOneLocation");
     axios.get("/adminAPI/locations/" + locationName).then(data => {
       resolve(data);
     });
@@ -39,7 +39,7 @@ function getOneLocation(locationName) {
 function editLocation(action, locationName, locationObject) {
   locationObject.action = action;
   return new Promise(function (resolve, reject) {
-    console.log("sending editLocation");
+    // console.log("sending editLocation");
     axios.put("/adminAPI/locations/" + locationName, locationObject).then(data => {
       resolve(data);
     });
@@ -49,7 +49,7 @@ function editLocation(action, locationName, locationObject) {
 //create a new location
 function createLocation(locationObject) {
   return new Promise(function (resolve, reject) {
-    console.log("sending createLocation");
+    // console.log("sending createLocation");
     axios.post("/adminAPI/locations/", locationObject).then(data => {
       resolve(data);
     });
@@ -59,7 +59,7 @@ function createLocation(locationObject) {
 //delete location
 function deleteLocation(locationName) {
   return new Promise(function (resolve, reject) {
-    console.log("sending deleteLocation");
+    // console.log("sending deleteLocation");
     axios.delete("/adminAPI/locations/" + locationName).then(data => {
       resolve(data);
     });
@@ -72,7 +72,7 @@ function deleteLocation(locationName) {
 //get all players
 function getPlayers() {
   return new Promise(function (resolve, reject) {
-    console.log("sending getPlayers");
+    // console.log("sending getPlayers");
     axios.get("/adminAPI/players").then(data => {
       resolve(data);
     });

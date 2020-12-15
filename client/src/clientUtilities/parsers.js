@@ -5,7 +5,7 @@ const VOWELS = ["a", "e", "i", "o", "u"];
 
 //only pluralize things that don't start with multiples words
 function pluralizeAppropriateWords(itemName, itemQuantity) {
-  console.log(itemName)
+  // console.log(itemName)
      if (doesThisStartWithOneOfThese(itemName, MULTIPLES)) {
        if (itemQuantity > 1){
          for (const startWord of MULTIPLES){

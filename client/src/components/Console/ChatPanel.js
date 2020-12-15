@@ -57,6 +57,7 @@ function ChatPanel({
 
     //failed user command messages
     socket.off('genericMessage').on('genericMessage', (message) => {
+        // console.log("received generic message", message);
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: message }]);
     });
@@ -102,7 +103,7 @@ function ChatPanel({
             }
             const fightables = location[direction].fightables.filter(en => en.isAlive);
             if (fightables) {
-                console.log(fightables);
+                // console.log(fightables);
                 if (fightables.length > 0) {
                     setChatHistory(prevState => [...prevState, {
                         type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
@@ -116,7 +117,7 @@ function ChatPanel({
         } catch (e) {
             socket.emit('failure', "Hmmm... it seems like something went wrong.");
             console.log("error from receive yourMove");
-            console.log(e);
+            console.log(e.message);
         }
 
 
@@ -126,8 +127,8 @@ function ChatPanel({
 
     // Socket location chunk
     socket.off('locationChunk').on('locationChunk', message => {
-        console.log('received locationChunk');
-        console.log(message);
+        // console.log('received locationChunk');
+        // console.log(message);
         if (location.current === undefined) {
             let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
             setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
@@ -176,46 +177,15 @@ function ChatPanel({
     //eat message
     socket.off('eat').on('eat', ({ actor, eatenItem, actorMessage }) => {
         let type = 'displayed-stat';
-        if (actor.toLowerCase() === user.characterName.toLowerCase()){
-            setChatHistory(prevState => [...prevState, { type, text: `You eat ${insertArticleSingleValue(eatenItem)}. ${actorMessage}`}]);
+        if (actor.toLowerCase() === user.characterName.toLowerCase()) {
+            setChatHistory(prevState => [...prevState, { type, text: `You eat ${insertArticleSingleValue(eatenItem)}. ${actorMessage}` }]);
         } else {
             if (!inConversation) {
-                setChatHistory(prevState => [...prevState, { type, text: `${actor} eats ${insertArticleSingleValue(eatenItem)}.`}]);
+                setChatHistory(prevState => [...prevState, { type, text: `${actor} eats ${insertArticleSingleValue(eatenItem)}.` }]);
             }
         }
     });
 
-    //battle
-    socket.off('battle').on('battle', ({ attacker, defender, action, damage }) => {
-        if (damage) {
-            if (user.characterName === attacker) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You ${action.slice(0, -1)} ${defender} for ${damage} damage!` }]);
-            } else if (user.characterName === defender) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} you for ${damage} damage!` }]);
-            } else {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} ${action} ${defender}!` }]);
-            }
-        } else {
-            if (user.characterName === attacker) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You try to ${action.slice(0, -1)} ${defender}, but miss.` }]);
-            } else if (user.characterName === defender) {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action} you, but misses.` }]);
-            } else {
-                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${attacker} tries to ${action} ${defender}, but misses.` }]);
-            }
-        }
-    });
-
-    //battleVictory
-    socket.off('battleVictory').on('battleVictory', ({ victor, defeated }) => {
-        if (user.characterName === victor) {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You have defeated ${defeated}!` }]);
-        } else if (user.characterName === defeated) {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated you! You have died.` }]);
-        } else {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `${victor} has defeated ${defeated}!` }]);
-        }
-    });
 
     //shout
     socket.off('shout').on('shout', ({ userMessage, fromUser }) => {
@@ -263,11 +233,10 @@ function ChatPanel({
     })
 
     //sleep
-    socket.off('sleep').on('sleep', ({ userToSleep }) => {
-        console.log('sleep received')
+    socket.off('sleep').on('sleep', ({ userToSleep, quiet }) => {
         if (userToSleep === user.characterName) {
             setActivities(prevState => { return { ...prevState, sleeping: true } });
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
+            if (!quiet) setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
         } else {
             if (!inConversation) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} falls asleep.` }]);
@@ -276,10 +245,10 @@ function ChatPanel({
     })
 
     //wake
-    socket.off('wake').on('wake', ({ userToWake }) => {
+    socket.off('wake').on('wake', ({ userToWake, quiet }) => {
         if (userToWake === user.characterName) {
             setActivities(prevState => { return { ...prevState, sleeping: false } });
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
+            if (!quiet) setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
         } else {
             if (!inConversation) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToWake} wakes up.` }]);
@@ -350,11 +319,9 @@ function ChatPanel({
         });
     })
 
-    socket.off('error').on('error', ({ message, action }) => {
+    socket.off('error').on('error', ({ message }) => {
         let type = 'displayed-error';
         setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
-        console.log('action:', action)
-        if (action) eval(action);
     });
 
     socket.off('help').on('help', ({ actionData, type }) => {
