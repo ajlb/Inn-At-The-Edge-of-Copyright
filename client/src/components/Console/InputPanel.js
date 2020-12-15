@@ -56,7 +56,7 @@ function InputPanel({
 
     useEffect(() => {
         isAuthenticated && socket.emit("log in", authUser.email);
-        isAuthenticated && console.log(authUser.email);
+        // isAuthenticated && console.log(authUser.email);
         if (!(authUser === undefined)) {
             (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
         }
@@ -111,14 +111,16 @@ function InputPanel({
                 /////////////////////
                 //    NEW USER     //
                 /////////////////////
-                console.log('Emit newUser')
+                // console.log('Emit newUser')
                 socket.emit('newUser', { input, email: authUser.email });
-            } else if (findIn(input, discoverableCommands) || findIn(input.replace(' the', ''), discoverableCommands)) {
+            } else if (
+                findIn(input, discoverableCommands) ||
+                findIn(input.replace(/( the | a | an | that )/, ' '), discoverableCommands)
+            ) {
                 /////////////////////
                 //  DISCOVERABLES  //
                 /////////////////////
-                console.log(location)
-                input = input.replace(' the', '')
+                input = input.replace(/( the | a | an | that )/, ' ')
                 let command = getOneOfTheseOffThat(discoverableCommands, input);
                 let foundDisc = location.current.discoverables.find(discObj => {
                     if (discObj.commands) {
@@ -150,7 +152,7 @@ function InputPanel({
 
                 NPCCheck(location.current.NPCs, message)
                     .then(({ NPCName, message }) => {
-                        socket.emit('to NPC', { toNPC: NPCName, message })
+                        socket.emit('to NPC', { toNPC: NPCName, message, user })
                     })
                     .catch(() => {
                         // This runs if the entered character is not an NPC
@@ -197,7 +199,7 @@ function InputPanel({
                         setPlayerPosition('standing');
                         setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now standing.` }]);
                     } else if (findIn(command, ['get up'])) {
-                        console.log(playerPosition)
+                        // console.log(playerPosition)
                         if (playerPosition === 'lying down') {
                             setPlayerPosition('sitting')
                             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You are now sitting.` }]);
@@ -336,7 +338,7 @@ function InputPanel({
 
                 } else if (findIn(input, actionCalls.wake)) {
                     /////////////////////
-                    //      WEAR       //
+                    //      WAKE       //
                     /////////////////////
                     if (!activities.sleeping) {
                         setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You are already awake!` }]);
@@ -357,7 +359,7 @@ function InputPanel({
                     /////////////////////
                     //     ATTACK      //
                     /////////////////////
-                    console.log(activities);
+                    // console.log(activities);
                     if (!(playerPosition === 'standing')) {
                         setChatHistory(prevState => [...prevState, { type: 'displayed-error', text: `You should probably stand up to do that.` }]);
                     } else {
@@ -399,7 +401,7 @@ function InputPanel({
                 //////////////////////
                 NPCCheck(location.current.NPCs, inConversation.with)
                     .then(({ NPCName, message }) => {
-                        socket.emit('to NPC', { toNPC: inConversation.with, message: input })
+                        socket.emit('to NPC', { user, toNPC: inConversation.with, message: input })
                     })
                     .catch(err => {
                         setConversation(false);
@@ -418,7 +420,7 @@ function InputPanel({
 
         } catch (e) {
             console.log("ERROR FROM handleMessage(inputPanel.js):");
-            console.log(e);
+            console.log(e.message);
         }
     }
 
@@ -453,7 +455,7 @@ function InputPanel({
     //disable enter key and input button when user needs to just wait a minute
     function disableEnterKey(event) {
         event.preventDefault();
-        console.log(event.key);
+        // console.log(event.key);
         document.getElementById("inputBar").value = "...you are momentarily quite busy";
     }
 

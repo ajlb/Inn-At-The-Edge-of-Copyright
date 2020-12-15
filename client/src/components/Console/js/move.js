@@ -10,7 +10,7 @@ socket.off('moveQueueForeward').on('moveQueueForeward', ({ chunk, characterName 
     !(moveQueue.isEmpty()) && moveQueue.dequeue();
     if (!(moveQueue.isEmpty())) {
         let thisMove = moveQueue.peek();
-        console.log(thisMove);
+        // console.log(thisMove);
         makeMove(socket, chunk, characterName, thisMove.direction);
     }
 })

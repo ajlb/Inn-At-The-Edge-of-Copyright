@@ -13,7 +13,7 @@ function LocationViewAll() {
     useEffect(() => {
         getLocations().then(locationData => {
             setLocationData(locationData.data);
-            console.log(locationData.data);
+            // console.log(locationData.data);
         }
         )
     }, [])

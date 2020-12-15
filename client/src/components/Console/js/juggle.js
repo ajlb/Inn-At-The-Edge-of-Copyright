@@ -14,7 +14,7 @@ let target;
 
 function juggle(value, playerData, location) {
     try {
-        if (!(juggleTime === undefined)){
+        if (!(juggleTime === undefined)) {
             socket.emit('green', "You are already juggling!");
             return false;
         }
@@ -37,7 +37,7 @@ function juggle(value, playerData, location) {
                     let potentialArray = [];
                     for (const item of playerData.inventory) {
                         itemName = item.item.itemName;
-                        console.log(itemName);
+                        // console.log(itemName);
                         if (itemName === pluralize(target.toLowerCase(), 1)) {
                             if (((playerData.stats.DEX * 1.7) / (num ** 2)) < 2) {
                                 socket.emit('green', 'That may be too many objects for you to juggle.')
@@ -62,10 +62,10 @@ function juggle(value, playerData, location) {
                             socket.emit('green', 'That may be too many objects for you to juggle.')
                             return false;
                         } else if (potentialItems >= intNum) {
-                            if (potentialArray.length > 1){
+                            if (potentialArray.length > 1) {
                                 socket.emit('juggle', { target, num, user: playerData, location });
                             } else {
-                                socket.emit('juggle', { target:pluralize(potentialArray[0], 3), num, user: playerData, location });
+                                socket.emit('juggle', { target: pluralize(potentialArray[0], 3), num, user: playerData, location });
                             }
                             return true;
                         } else {
@@ -73,18 +73,18 @@ function juggle(value, playerData, location) {
                             return false;
                         }
                     }
-    
+
                 } else {
                     socket.emit('green', `You have to juggle at least three items.`);
                 }
             }
         }
         socket.emit('green', `How many ${target} are you trying to juggle?`);
-        return false    
+        return false
     } catch (e) {
         socket.emit('failure', "Hmm... something seems to have gone wrong.")
         console.log("error from juggle");
-        console.log(e);
+        console.log(e.message);
     }
 
 }
@@ -94,7 +94,7 @@ function juggle(value, playerData, location) {
 //send stopJuggling to socket
 function stopJuggling(user, intent) {
     // console.log('sending a stop juggle');
-    socket.emit('stop juggle', {user, location:place, target, intent})
+    socket.emit('stop juggle', { user, location: place, target, intent })
 }
 
 
@@ -108,17 +108,17 @@ function chancesOfSuccessJuggling(dex, num) {
         }
     } catch (e) {
         console.log("error from chancesOfSuccessJuggling");
-        console.log(e);
+        console.log(e.message);
     }
 }
 
 
 
-socket.off('continueJuggle').on('continueJuggle', ({target, num, user, location})=>{
+socket.off('continueJuggle').on('continueJuggle', ({ target, num, user, location }) => {
     try {
         // console.log('recieved a continue juggle');
-        juggleTime = setInterval(function(){
-            socket.emit('contJuggle', {target, num, user, location});
+        juggleTime = setInterval(function () {
+            socket.emit('contJuggle', { target, num, user, location });
             chancesOfSuccessJuggling(user.stats.DEX, num);
         }, 5000);
     } catch (e) {
@@ -127,11 +127,11 @@ socket.off('continueJuggle').on('continueJuggle', ({target, num, user, location}
     }
 })
 
-function clearJuggleTime(){
+function clearJuggleTime() {
     // console.log('INSIDE CLEAR INTERVAL');
     clearInterval(juggleTime);
     juggleTime = undefined;
-    
+
 }
 
 
