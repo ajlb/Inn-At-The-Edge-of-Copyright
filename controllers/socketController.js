@@ -423,6 +423,7 @@ module.exports = function (io) {
 
         //stop juggle
         socket.on('stop juggle', ({ user, location, target, intent }) => {
+            user = user.characterName;
             console.log(user, "stops juggling");
             //user stopped on purpose
             if (intent) {
