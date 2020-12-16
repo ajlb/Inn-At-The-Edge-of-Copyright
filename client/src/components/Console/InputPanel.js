@@ -428,6 +428,8 @@ function InputPanel({
         } catch (e) {
             console.log("ERROR FROM handleMessage(inputPanel.js):");
             console.log(e.message);
+            setChatHistory(prevState => [...prevState, { type: "displayed-error", text: "Something went wrong" }]);
+            setInput('');
         }
     }
 
