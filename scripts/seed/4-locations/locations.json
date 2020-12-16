@@ -2166,9 +2166,26 @@
         "exitName": "South Country Lane"
       },
       "east": {
-        "exitName": "Ships Hold"
+        "exitName": "Ships Hold",
+        "hidden": true
       }
     },
+    "discoverables": [
+      {
+        "names": [
+          "cannon",
+          "sky cannon"
+        ],
+        "description": "a sheer drop that must be hundreds if not thousands of feet tall...",
+        "exampleCommand": "climb in the cannon",
+        "commands": [
+          "get in cannon",
+          "climb in cannon",
+          "crawl in cannon"
+        ],
+        "action": "shootCannon"
+      }
+    ],
     "fightables": []
   },
   {
@@ -2369,7 +2386,6 @@
       }
     },
     "fightables": [
-      
       {
         "name": "Christmas Jello",
         "isFighting": false,
@@ -2639,7 +2655,6 @@
       }
     },
     "fightables": [
-
       {
         "name": "Christmas Jello",
         "isFighting": false,
@@ -2760,9 +2775,25 @@
         "exitName": "Mountain Trail South"
       },
       "south": {
-        "exitName": "Ships Hold"
+        "exitName": "Ships Hold",
+        "hidden": true
       }
     },
+    "discoverables": [
+      {
+        "names": [
+          "cliff",
+          "edge"
+        ],
+        "description": "a sheer drop that must be hundreds if not thousands of feet tall...",
+        "exampleCommand": "leap off cliff",
+        "commands": [
+          "jump off",
+          "leap off"
+        ],
+        "action": "jumpOff"
+      }
+    ],
     "fightables": []
   },
   {
@@ -2791,8 +2822,8 @@
       "$oid": "5fd6a35323c222361c1b94c8"
     },
     "locationName": "Ships Hold",
-    "dayDescription": "At the moment you entered the atmosphere you instantly regretted your desicion. Your life flashed before your eyes and ... there was a beep and a flash. Something happened but before you have time to remember a wave of nausea washes over you... worse than any hangover you have ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about you a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… you’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock… this does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
-    "nightDescription": "At the moment you entered the atmosphere you instantly regretted your desicion. Your life flashed before your eyes and ... there was a beep and a flash. Something happened but before you have time to remember a wave of nausea washes over you... worse than any hangover you have ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about you a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… you’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock… this does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
+    "dayDescription": "Something happened but before you have time to remember a wave of nausea washes over you... worse than any hangover you have ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about you a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… you’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock… this does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
+    "nightDescription": "Something happened but before you have time to remember a wave of nausea washes over you... worse than any hangover you have ever had. The dimly lit room spins around you slowly coming into focus. Just as you get your wits about you a hulking Vogon enters the hold and sees you. Shouting in a booming voice that rattles your bones… you’re suddenly surrounded by 4 Vogons and hauld to the nearest airlock… this does not bode well for you. You scream as they toss you in the airlock and you feel the cold void of space surround you as your vision narrows and goes dark.",
     "region": "Vogon Space Ship",
     "indoorOutdoor": "indoor",
     "NPCs": [],
