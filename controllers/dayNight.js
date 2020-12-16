@@ -24,33 +24,33 @@ module.exports = function dayNight(io, socket, objectOfUsers) {
                         let lon = objectOfUsers[user].longitude;
                         // console.log(lat, lon);
 
-                            // weather call to determine user sunrise/sunset time
-                            axios.get("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=a2e2e87c947af1ae1888811705b0441c").then(weatherData => {
-                                let sunrise = weatherData.data.sys.sunrise * 1000;
-                                let sunset = weatherData.data.sys.sunset * 1000;
-                                sunrise = new Date(sunrise);
-                                sunset = new Date(sunset);
+                        // weather call to determine user sunrise/sunset time
+                        axios.get("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=a2e2e87c947af1ae1888811705b0441c").then(weatherData => {
+                            let sunrise = weatherData.data.sys.sunrise * 1000;
+                            let sunset = weatherData.data.sys.sunset * 1000;
+                            sunrise = new Date(sunrise);
+                            sunset = new Date(sunset);
 
-                                if ((now > sunset)) {
-                                    finalDay = false;
+                            if ((now > sunset)) {
+                                finalDay = false;
 
-                                } else if (now > sunrise) {
-                                    finalDay = true;
-                                }
-                                if (!(currentDay === finalDay)) {
-                                    db.Player.updateOne({ characterNameLowerCase: lowerName }, { $set: { day: finalDay } }).then(data => {
-                                        finalDay ? console.log("It has become day") : console.log("It has become night");
-                                        //SEND OUT SOCKET.IO MESSAGE TO TRIGGER SESSION DATA CHANGE
-                                        console.log(lowerName);
-                                        io.to(lowerName).emit('dayNight', { day: finalDay, user: objectOfUsers[user].nickname });
-                                    })
-                                }
+                            } else if (now > sunrise) {
+                                finalDay = true;
+                            }
+                            if (!(currentDay === finalDay)) {
+                                db.Player.updateOne({ characterNameLowerCase: lowerName }, { $set: { day: finalDay } }).then(data => {
+                                    finalDay ? console.log("It has become day") : console.log("It has become night");
+                                    //SEND OUT SOCKET.IO MESSAGE TO TRIGGER SESSION DATA CHANGE
+                                    console.log(lowerName);
+                                    io.to(lowerName).emit('dayNight', { day: finalDay, user: objectOfUsers[user].nickname });
+                                })
+                            }
 
 
-                            }).catch(e => {
-                                console.log("Error from axios get weather call");
-                                console.log(e);
-                            })
+                        }).catch(e => {
+                            console.log("Error from axios get weather call");
+                            console.log(e);
+                        })
 
                     }).catch(e => { console.log(e) })
                 }
