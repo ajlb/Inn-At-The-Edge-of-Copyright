@@ -2181,7 +2181,12 @@
         "commands": [
           "get in cannon",
           "climb in cannon",
-          "crawl in cannon"
+          "crawl in cannon",
+          "use cannon",
+          "use sky cannon",
+          "get in sky cannon",
+          "climb in sky cannon",
+          "crawl in sky cannon"
         ],
         "action": "shootCannon"
       }
