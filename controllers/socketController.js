@@ -514,45 +514,45 @@ module.exports = function (io) {
 
         /*****************************/
         /*   DAY/NIGHT - SEND DATA   */
-        /*****************************/
-        socket.on('dayNight', ({ day, user }) => {
-            io.to(user.toLowerCase()).emit('dayNight', day);
-        });
+        // /*****************************/
+        // socket.on('dayNight', ({ day, user }) => {
+        //     io.to(user.toLowerCase()).emit('dayNight', day);
+        // });
 
 
-        /*****************************/
-        /* DAY/NIGHT - USER LOCATION */
-        /*****************************/
+        // /*****************************/
+        // /* DAY/NIGHT - USER LOCATION */
+        // /*****************************/
 
-        //random in range from sergey metlov
-        function getRandomInRange(from, to, fixed) {
-            return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
-            // .toFixed() returns string, so ' * 1' is a trick to convert to number
-        }
-
-
-        socket.on('location', (locationData) => {
-            // console.log("location:", socket.id);
-            // console.log(locationData);
-            if (!playernicknames[socket.id]) {
-                playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName }
-            }
-            playernicknames[socket.id].latitude = locationData.latitude ? locationData.latitude : getRandomInRange(-80, 80, 3);
-            playernicknames[socket.id].longitude = locationData.longitude ? locationData.longitude : getRandomInRange(-170, 170, 3);
+        // //random in range from sergey metlov
+        // function getRandomInRange(from, to, fixed) {
+        //     return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
+        //     // .toFixed() returns string, so ' * 1' is a trick to convert to number
+        // }
 
 
+        // socket.on('location', (locationData) => {
+        //     // console.log("location:", socket.id);
+        //     // console.log(locationData);
+        //     if (!playernicknames[socket.id]) {
+        //         playernicknames[socket.id] = { nickname: socket.nickname, lowerName: socket.lowerName }
+        //     }
+        //     playernicknames[socket.id].latitude = locationData.latitude ? locationData.latitude : getRandomInRange(-80, 80, 3);
+        //     playernicknames[socket.id].longitude = locationData.longitude ? locationData.longitude : getRandomInRange(-170, 170, 3);
 
-            // console.log(playernicknames[socket.id]);
-        });
+
+
+        //     // console.log(playernicknames[socket.id]);
+        // });
 
 
         /*****************************/
         /* DAY/NIGHT - RUN FUNCTION  */
         /*****************************/
-        if (!isDayNightRunning) {
-            dayNight(io, socket, playernicknames);
-            isDayNightRunning = true;
-        }
+        // if (!isDayNightRunning) {
+        //     dayNight(io, socket, playernicknames);
+        //     isDayNightRunning = true;
+        // }
 
 
         /*****************************/
