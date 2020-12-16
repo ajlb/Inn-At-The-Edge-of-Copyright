@@ -562,13 +562,13 @@ module.exports = function (io) {
         if (itemSweeperInterval === undefined) {
             itemSweeperInterval = setInterval(function () {
                 runSweep(io, socket);
-            }, 600000)
+            }, 125000)
         }
 
         if (monsterSweeperInterval === undefined) {
             monsterSweeperInterval = setInterval(function () {
                 repopMobs(io, socket);
-            }, 120000)
+            }, 100000)
         }
     })
 
