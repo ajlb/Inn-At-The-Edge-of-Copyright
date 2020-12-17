@@ -276,29 +276,44 @@ const discFunctions = {
         /*       Raging River        */
         /*****************************/
 
-        jumpIn: function getLadle({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
-            let timeout = 1000;
-            setTimeout(() => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "The freezing water immediately shocks your system and you begin to frantically swim back" }]);
-            }, timeout);
-            timeout += 1500;
-            setTimeout(() => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel your body start to go numb as your vision fades to black..." }]);
-                let i = 1;
-                let unconsciousTimer = setInterval(() => {
-                    i++;
-                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: ". . ." }]);
-                    if (i >= 3) clearInterval(unconsciousTimer)
-                }, 500);
-            }, timeout);
-            timeout += 2000
-            setTimeout(() => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat my-2", text: "You gasp for air as you cough water out of your lungs" }]);
-            }, timeout);
-            timeout += 500;
-            setTimeout(() => {
-                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
-            }, timeout);
+
+        jumpIn: function getLadle({ socket, location, user, playerPosition, setChatHistory, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You jump into the freezing river and are quickly swept away..." }]);
+
+                let timeout = 1000;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "The freezing water immediately shocks your system and you begin to frantically swim back" }]);
+                }, timeout);
+
+                timeout += 1500;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel your body start to go numb as your vision fades to black..." }]);
+                    let i = 1;
+                    let unconsciousTimer = setInterval(() => {
+                        i++;
+                        setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: ". . ." }]);
+                        if (i >= 3) clearInterval(unconsciousTimer)
+                    }, 500);
+                }, timeout);
+
+                timeout += 2000
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat my-2", text: "You gasp for air as you cough water out of your lungs" }]);
+                }, timeout);
+
+                timeout += 500;
+                setTimeout(() => {
+                    processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
+                }, timeout);
+
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
         }
     },
 
@@ -308,31 +323,48 @@ const discFunctions = {
         /*     Surface Elevator      */
         /*****************************/
 
-        runElevator: function runElevator({ setChatHistory, socket, location, user, playerPosition, actionCalls, command }) {
-            let timeout = 2000;
-            setTimeout(() => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the elevator car lifts violently off the floor and rapidly ascends into the tunnel carved into the cavern ceiling!" }]);
-            }, timeout);
-            timeout += 1000
-            setTimeout(() => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "The wind rushing past your ears gets louder as you ascend higher..." }]);
-                let i = 1;
-                let elevatorTimer = setInterval(() => {
-                    i++;
-                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "and higher..." }]);
-                    if (i >= 3) {
-                        clearInterval(elevatorTimer)
-                        let timeout = 750
-                        setTimeout(() => {
-                            setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "The elevator slows down to a stop and a quick look around reveals that you've entered an old mining equipment storage shack. You cautiously step outside..." }]);
-                        }, timeout);
-                        timeout += 750
-                        setTimeout(() => {
-                            processMove(socket, location, user, "move north", playerPosition, setChatHistory, actionCalls, command, true)
-                        }, timeout);
-                    }
-                }, 1000);
-            }, timeout);
+        runElevator: function runElevator({ setChatHistory, socket, location, user, playerPosition, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You enter the elevator and attempt to start it" }]);
+
+                let timeout = 2000;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the elevator car lifts violently off the floor and rapidly ascends into the tunnel carved into the cavern ceiling!" }]);
+                }, timeout);
+
+                timeout += 1000
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "The wind rushing past your ears gets louder as you ascend higher..." }]);
+
+                    let i = 1;
+                    let elevatorTimer = setInterval(() => {
+                        i++;
+                        setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "and higher..." }]);
+
+                        if (i >= 3) {
+                            clearInterval(elevatorTimer)
+                            let timeout = 750
+                            setTimeout(() => {
+                                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "The elevator slows down to a stop and a quick look around reveals that you've entered an old mining equipment storage shack. You cautiously step outside..." }]);
+                            }, timeout);
+
+                            timeout += 750
+                            setTimeout(() => {
+                                processMove(socket, location, user, "move north", playerPosition, setChatHistory, actionCalls, command, true)
+                            }, timeout);
+
+                        }
+                    }, 1000);
+                }, timeout);
+
+
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
         }
     },
 
@@ -342,38 +374,54 @@ const discFunctions = {
         /*      Haunted Shack        */
         /*****************************/
 
-        enterShack: function enterShack({ setChatHistory, socket, location, user, playerPosition, actionCalls, command }) {
-            let timeout = 1000;
-            setTimeout(() => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "A quick look around reveals several different kind of mining equipment leaning against the walls and scattered around the room" }]);
-            }, timeout);
-            timeout += 1500
-            setTimeout(() => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "The floor groans beneath your feet..." }]);
-            }, timeout);
-            timeout += 1500;
-            setTimeout(() => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the floor beneath your feet drops, taking you with it into a near free-fall down a long dark mineshaft" }]);
-            }, timeout);
-            timeout += 1000;
-            setTimeout(() => {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "You let out a scream as you fall deeper..." }]);
-            }, timeout);
-            timeout += 500;
-            setTimeout(() => {
-                let i = 1;
-                let deepTimer = setInterval(() => {
-                    i++;
-                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "and deeper..." }]);
-                    if (i >= 3) {
-                        clearInterval(deepTimer)
-                        let timeout = 1500;
-                        setTimeout(() => {
-                            processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
-                        }, timeout);
-                    }
-                }, 500);
-            }, timeout);
+        enterShack: function enterShack({ setChatHistory, socket, location, user, playerPosition, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "The door creaks and groans as you open it and take your first step within the dusty old shack..." }]);
+
+                let timeout = 1000;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "A quick look around reveals several different kind of mining equipment leaning against the walls and scattered around the room" }]);
+                }, timeout);
+
+                timeout += 1500
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "The floor groans beneath your feet..." }]);
+                }, timeout);
+
+                timeout += 1500;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the floor beneath your feet drops, taking you with it into a near free-fall down a long dark mineshaft" }]);
+                }, timeout);
+
+                timeout += 1000;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "You let out a scream as you fall deeper..." }]);
+                }, timeout);
+
+                timeout += 500;
+                setTimeout(() => {
+                    let i = 1;
+                    let deepTimer = setInterval(() => {
+                        i++;
+                        setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "and deeper..." }]);
+
+                        if (i >= 3) {
+                            clearInterval(deepTimer)
+                            let timeout = 1500;
+                            setTimeout(() => {
+                                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
+                            }, timeout);
+                        }
+                    }, 500);
+                }, timeout);
+
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
         }
     },
 
@@ -419,6 +467,7 @@ const discFunctions = {
         }
     },
 
+
     "Sky Cannon": {
         /*****************************/
         /*        Sky Cannon         */
@@ -459,3 +508,13 @@ const discFunctions = {
 }
 
 export default discFunctions;
+
+// Pre-built way of handling sleep and standing
+// if (!isSleeping && playerPosition === 'standing') {
+// } else if (isSleeping) {
+//     setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+//     setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+// } else if (playerPosition !== "standing") {
+//     setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+//     setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+// }

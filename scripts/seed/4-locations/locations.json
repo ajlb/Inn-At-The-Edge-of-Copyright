@@ -1647,7 +1647,6 @@
           "get into raging river",
           "go into raging river"
         ],
-        "actionDescription": "You jump into the freezing river and are quickly swept away...",
         "action": "jumpIn"
       }
     ],
@@ -1740,7 +1739,6 @@
           "use elevator",
           "start elevator"
         ],
-        "actionDescription": "You enter the elevator and attempt to start it",
         "action": "runElevator"
       }
     ],
@@ -2578,7 +2576,6 @@
           "go into shack",
           "go into haunted shack"
         ],
-        "actionDescription": "The door creaks and groans as you open it and take your first step within the dusty old shack...",
         "action": "enterShack"
       }
     ],
