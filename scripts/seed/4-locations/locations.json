@@ -1606,15 +1606,16 @@
       "$oid": "5fd6a35323c222361c1b949d"
     },
     "locationName": "Raging River",
-    "dayDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though the slippery rock surrounding the river could lead elsewhere.",
-    "nightDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though the slippery rock surrounding the river could lead elsewhere.",
+    "dayDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though a misstep on the slippery rock may send you careening down the river.",
+    "nightDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though a misstep on the slippery rock may send you careening down the river.",
     "region": "Cavern Lake",
     "indoorOutdoor": "cave",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "west": {
-        "exitName": "Murky Pond"
+        "exitName": "Murky Pond",
+        "hidden": true
       },
       "south": {
         "exitName": "Crystal Cavern"
@@ -1623,6 +1624,33 @@
         "exitName": "Cavern Lake"
       }
     },
+    "discoverables": [
+      {
+        "names": [
+          "river",
+          "raging river",
+          "river edge"
+        ],
+        "description": "a swift, deafening river flowing parallel to the cavern wall. It seems to take a sharp turn down a ways and flows directly into the rock... where could that lead?",
+        "exampleCommand": "jump in the river",
+        "commands": [
+          "jump in river",
+          "get in river",
+          "go in river",
+          "jump in raging river",
+          "get in raging river",
+          "go in raging river",
+          "jump into river",
+          "get into river",
+          "go into river",
+          "jump into raging river",
+          "get into raging river",
+          "go into raging river"
+        ],
+        "actionDescription": "You jump into the freezing river and are quickly swept away...",
+        "action": "jumpIn"
+      }
+    ],
     "fightables": []
   },
   {

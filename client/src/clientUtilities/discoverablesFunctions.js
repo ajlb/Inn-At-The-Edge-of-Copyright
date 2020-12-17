@@ -271,6 +271,38 @@ const discFunctions = {
     },
 
 
+    "Raging River": {
+        /*****************************/
+        /*       Raging River        */
+        /*****************************/
+
+        jumpIn: function getLadle({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
+            let timeout = 1000;
+            setTimeout(() => {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "The freezing water immediately shocks your system and you begin to frantically swim back" }]);
+            }, timeout);
+            timeout += 1500;
+            setTimeout(() => {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel your body start to go numb as your vision fades to black..." }]);
+                let i = 1;
+                let unconsciousTimer = setInterval(() => {
+                    i++;
+                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: ". . ." }]);
+                    if (i >= 3) clearInterval(unconsciousTimer)
+                }, 500);
+            }, timeout);
+            timeout += 2000
+            setTimeout(() => {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat my-2", text: "You gasp for air as you cough water out of your lungs" }]);
+            }, timeout);
+            timeout += 500;
+            setTimeout(() => {
+                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
+            }, timeout);
+        }
+    },
+
+
     "Surface Elevator": {
         /*****************************/
         /*     Surface Elevator      */
