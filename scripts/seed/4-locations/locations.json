@@ -1679,15 +1679,16 @@
       "$oid": "5fd6a35323c222361c1b949f"
     },
     "locationName": "Surface Elevator",
-    "dayDescription": "A rickety wooden elevator sits along the north wall seemlingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.",
-    "nightDescription": "A rickety wooden elevator sits along the north wall seemlingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.",
+    "dayDescription": "A rickety wooden elevator sits along the north wall seemingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.",
+    "nightDescription": "A rickety wooden elevator sits along the north wall seemingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.",
     "region": "Cavern Elevator",
     "indoorOutdoor": "cave",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "north": {
-        "exitName": "Haunted Shack"
+        "exitName": "Haunted Shack",
+        "hidden": true
       },
       "west": {
         "exitName": "Cavern Lake"
@@ -1696,6 +1697,25 @@
         "exitName": "East Tunnel"
       }
     },
+    "discoverables": [
+      {
+        "names": [
+          "elevator",
+          "wooden elevator"
+        ],
+        "description": "an abandoned mineshaft elevator that descends from the cavern ceiling above. Though it seems old, it may still be functional",
+        "exampleCommand": "get on the elevator",
+        "commands": [
+          "take elevator",
+          "get on elevator",
+          "get in elevator",
+          "use elevator",
+          "start elevator"
+        ],
+        "actionDescription": "You enter the elevator and attempt to start it",
+        "action": "runElevator"
+      }
+    ],
     "fightables": []
   },
   {

@@ -270,7 +270,45 @@ const discFunctions = {
         }
     },
 
+
+    "Surface Elevator": {
+        /*****************************/
+        /*     Surface Elevator      */
+        /*****************************/
+
+        runElevator: function runElevator({ setChatHistory, socket, location, user, playerPosition, actionCalls, command }) {
+            let timeout = 2000;
+            setTimeout(() => {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the elevator car lifts violently off the floor and rapidly ascends into the tunnel carved into the cavern ceiling!" }]);
+            }, timeout);
+            timeout += 1000
+            setTimeout(() => {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "The wind rushing past your ears gets louder as you ascend higher..." }]);
+                let i = 1;
+                let elevatorTimer = setInterval(() => {
+                    i++;
+                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "and higher..." }]);
+                    if (i >= 3) {
+                        clearInterval(elevatorTimer)
+                        let timeout = 750
+                        setTimeout(() => {
+                            setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "The elevator slows down to a stop and a quick look around reveals that you've entered an old mining equipment storage shack. You cautiously step outside..." }]);
+                        }, timeout);
+                        timeout += 750
+                        setTimeout(() => {
+                            processMove(socket, location, user, "move north", playerPosition, setChatHistory, actionCalls, command, true)
+                        }, timeout);
+                    }
+                }, 1000);
+            }, timeout);
+        }
+    },
+
     "Cliff's Edge": {
+        /*****************************/
+        /*       Cliff's Edge        */
+        /*****************************/
+
         jumpOff: function jumpOff({ setChatHistory, user, playerPosition, socket, location, actionCalls, command, isSleeping }) {
             if (!isSleeping && playerPosition === 'standing') {
                 let ringIsWorn = false;
@@ -308,6 +346,10 @@ const discFunctions = {
     },
 
     "Sky Cannon": {
+        /*****************************/
+        /*        Sky Cannon         */
+        /*****************************/
+
         shootCannon: function shootCannon({ user, setChatHistory, socket, location, playerPosition, actionCalls, command, isSleeping }) {
             if (!isSleeping && playerPosition === 'standing') {
                 let ringIsWorn = false;
