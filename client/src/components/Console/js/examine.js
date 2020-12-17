@@ -37,7 +37,7 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
         })
         if (foundItem) {
             setChatHistory(prevState => {
-                return [...prevState, { type: 'displayed-stat mt-1', text: `In your inventory you see ${foundItem.item.description}` }]
+                return [...prevState, { type: 'displayed-stat mt-3', text: `In your inventory you see ${foundItem.item.description}` }]
             })
         } else {
             setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
