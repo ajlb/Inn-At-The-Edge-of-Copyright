@@ -2502,20 +2502,58 @@
       "$oid": "5fd6a35323c222361c1b94ba"
     },
     "locationName": "Haunted Shack",
-    "dayDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Enter the door to the west if you dare... or move back to the wishing well to the east.",
-    "nightDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Shadows feel extra long and like they are looming over you here. Enter the door to the west if you dare... or move back to the wishing well to the east.",
+    "dayDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. A faded sign hanging near the front door reads 'Enter if you deer'... did someone make a typo?",
+    "nightDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Shadows feel extra long and like they are looming over you here. A gas lamp hanging from the awning faintly illuminates a sign that reads 'Enter if you deer'... must be a trick of the light",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "west": {
-        "exitName": "Surface Elevator"
+        "exitName": "Surface Elevator",
+        "hidden": true
       },
       "east": {
         "exitName": "Wishing Well"
       }
     },
+    "discoverables": [
+      {
+        "names": [
+          "sign",
+          "faded sign"
+        ],
+        "description": "a sign made of white oak with the words 'Enter if you deer' scrawled onto the front in some kind of dark substance... is that blood??",
+        "exampleCommand": "inspect the  dark substance"
+      },
+      {
+        "names": [
+          "substance",
+          "writing",
+          "dark substance",
+          "blood"
+        ],
+        "description": "that the letters are not in fact painted with blood, but with old machine oil"
+      },
+      {
+        "names": [
+          "shack",
+          "haunted shack"
+        ],
+        "description": "a run down shack with broken and boarded-up windows. A sign near the front door reads 'Enter if you deer'",
+        "exampleCommand": "enter the shack",
+        "commands": [
+          "enter shack",
+          "enter haunted shack",
+          "go in shack",
+          "go in haunted shack",
+          "go into shack",
+          "go into haunted shack"
+        ],
+        "actionDescription": "The door creaks and groans as you open it and take your first step within the dusty old shack...",
+        "action": "enterShack"
+      }
+    ],
     "fightables": []
   },
   {

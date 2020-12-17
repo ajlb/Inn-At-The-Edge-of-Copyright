@@ -304,6 +304,48 @@ const discFunctions = {
         }
     },
 
+
+    "Haunted Shack": {
+        /*****************************/
+        /*      Haunted Shack        */
+        /*****************************/
+
+        enterShack: function enterShack({ setChatHistory, socket, location, user, playerPosition, actionCalls, command }) {
+            let timeout = 1000;
+            setTimeout(() => {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "A quick look around reveals several different kind of mining equipment leaning against the walls and scattered around the room" }]);
+            }, timeout);
+            timeout += 1500
+            setTimeout(() => {
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "The floor groans beneath your feet..." }]);
+            }, timeout);
+            timeout += 1500;
+            setTimeout(() => {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the floor beneath your feet drops, taking you with it into a near free-fall down a long dark mineshaft" }]);
+            }, timeout);
+            timeout += 1000;
+            setTimeout(() => {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "You let out a scream as you fall deeper..." }]);
+            }, timeout);
+            timeout += 500;
+            setTimeout(() => {
+                let i = 1;
+                let deepTimer = setInterval(() => {
+                    i++;
+                    setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "and deeper..." }]);
+                    if (i >= 3) {
+                        clearInterval(deepTimer)
+                        let timeout = 1500;
+                        setTimeout(() => {
+                            processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
+                        }, timeout);
+                    }
+                }, 500);
+            }, timeout);
+        }
+    },
+
+
     "Cliff's Edge": {
         /*****************************/
         /*       Cliff's Edge        */
