@@ -41,9 +41,9 @@ function Console() {
   const [muted, setMuted] = useState(false);
 
   const [region, setRegion] = useState('panel-default');
-//state, intial state 
+  //state, intial state 
   const [logo, setLogo] = useState({
-    cssid: 'logo', 
+    cssid: 'logo',
     img: logostart
   });
 
@@ -174,19 +174,19 @@ function Console() {
     }
   });
 
-    // Socket location chunk update
-    socket.off('locationChunkUpdate').on('locationChunkUpdate', ({newData, targetLocation}) => {
-      if (!(newData === null) && !(newData === undefined)) {
-        for (const param in location) {
-          if (location[param].locationName === targetLocation) {
-            setLocation({
-              ...location,
-              param: newData
-            });
-          }
+  // Socket location chunk update
+  socket.off('locationChunkUpdate').on('locationChunkUpdate', ({ newData, targetLocation }) => {
+    if (!(newData === null) && !(newData === undefined)) {
+      for (const param in location) {
+        if (location[param].locationName === targetLocation) {
+          setLocation({
+            ...location,
+            param: newData
+          });
         }
       }
-    });
+    }
+  });
 
   // Socket location fightables update
   socket.off('updateFightables').on('updateFightables', ({ data, targetLocation }) => {
@@ -278,32 +278,32 @@ function Console() {
 
 
   useEffect(() => {
-    if (!(player.stats === undefined)){
-      let thisLevel= player.stats.level
-      let cssid= 'logo-' + thisLevel
-//if this level is =1
+    if (!(player.stats === undefined)) {
+      let thisLevel = player.stats.level
+      let cssid = 'logo-' + thisLevel
+      //if this level is =1
       if (thisLevel === 1) {
         // function
         setLogo({
-          cssid: cssid, 
+          cssid: cssid,
           img: logostart
-        }) 
+        })
       }
       else if (thisLevel === 2) {
         // function
         setLogo({
-          cssid: cssid, 
+          cssid: cssid,
           img: logo2
-        }) 
+        })
       }
       else if (thisLevel === 3) {
         // function
         setLogo({
-          cssid: cssid, 
+          cssid: cssid,
           img: logo3
-        }) 
+        })
       }
-      console.log("user level", thisLevel, cssid)
+      // console.log("user level", thisLevel, cssid)
     };
   }, [player]);
   // end
