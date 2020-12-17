@@ -15,7 +15,7 @@ socket.off('moveQueueForeward').on('moveQueueForeward', ({ chunk, characterName 
     }
 })
 
-function makeMove(socket, location, characterName, direction, allowed) {
+function makeMove(socket, location, characterName, direction, allowed, quiet) {
     let moved = false;
     for (const param in location) {
         if ((param === direction && !location[param].hidden) || param === direction && allowed) {
@@ -24,7 +24,7 @@ function makeMove(socket, location, characterName, direction, allowed) {
                 moveQueue.dequeue();
                 moved = true;
             } else {
-                socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user: characterName });
+                socket.emit('move', { previousLocation: location.current.locationName, newLocation: location[param].locationName, direction, user: characterName, quiet });
                 moved = true;
             }
         }
@@ -35,7 +35,7 @@ function makeMove(socket, location, characterName, direction, allowed) {
     }
 }
 
-function processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls, command, allowed) {
+function processMove(socket, location, user, input, playerPosition, setChatHistory, actionCalls, command, allowed, quiet) {
     if (playerPosition === "standing") {
         let direction = takeTheseOffThat(actionCalls.move, input);
         if (direction !== '') {
@@ -46,7 +46,7 @@ function processMove(socket, location, user, input, playerPosition, setChatHisto
             }
             moveQueue.enqueue({ location: location.current.locationName, direction });
             if (moveQueue.length() === 1) {
-                makeMove(socket, location, user.characterName, direction, allowed);
+                makeMove(socket, location, user.characterName, direction, allowed, quiet);
             }
         } else {
             setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: `You didn't enter anywhere to ${command}! Try entering: ${command} <direction>` }] })

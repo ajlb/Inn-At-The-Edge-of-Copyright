@@ -19,7 +19,9 @@ const discFunctions = {
 
         pullBook: function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
             setTimeout(() => {
-                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true)
+                socket.emit('emote', { user: user.characterName, emotion: `disappears behind a bookshelf`, location: "Library", muteEmoter: true });
+                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true, true)
+                socket.emit('emote', { user: user.characterName, emotion: `crawls out of the mousehole`, location: "Inn Laundry Room", muteEmoter: true });
             }, 1000)
         }
 
@@ -33,7 +35,9 @@ const discFunctions = {
 
         mousehole: function mousehole({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
             setTimeout(() => {
-                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
+                socket.emit('emote', { user: user.characterName, emotion: `crawls into the mousehole`, location: "Inn Laundry Room", muteEmoter: true });
+                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true, true)
+                socket.emit('emote', { user: user.characterName, emotion: `appears from behind a bookshelf`, location: "Library", muteEmoter: true });
             }, 1000)
         }
 
@@ -279,7 +283,8 @@ const discFunctions = {
 
         jumpIn: function getLadle({ socket, location, user, playerPosition, setChatHistory, actionCalls, command, isSleeping }) {
             if (!isSleeping && playerPosition === 'standing') {
-                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You jump into the freezing river and are quickly swept away..." }]);
+                socket.emit('emote', { user: user.characterName, emotion: `jumps into the river and is swept away`, location: "Raging River", muteEmoter: true });
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You jump into the freezing river and are swept away..." }]);
 
                 let timeout = 1000;
                 setTimeout(() => {
@@ -304,7 +309,8 @@ const discFunctions = {
 
                 timeout += 500;
                 setTimeout(() => {
-                    processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
+                    socket.emit('emote', { user: user.characterName, emotion: `washes up on the shore`, location: "Murky Pond", muteEmoter: true });
+                    processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true, true)
                 }, timeout);
 
             } else if (isSleeping) {
@@ -325,6 +331,7 @@ const discFunctions = {
 
         runElevator: function runElevator({ setChatHistory, socket, location, user, playerPosition, actionCalls, command, isSleeping }) {
             if (!isSleeping && playerPosition === 'standing') {
+                socket.emit('emote', { user: user.characterName, emotion: `enters the abandoned elevator`, location: "Surface Elevator", muteEmoter: true });
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You enter the elevator and attempt to start it" }]);
 
                 let timeout = 2000;
@@ -350,13 +357,13 @@ const discFunctions = {
 
                             timeout += 750
                             setTimeout(() => {
-                                processMove(socket, location, user, "move north", playerPosition, setChatHistory, actionCalls, command, true)
+                                socket.emit('emote', { user: user.characterName, emotion: `exits the shack`, location: "Haunted Shack", muteEmoter: true });
+                                processMove(socket, location, user, "move north", playerPosition, setChatHistory, actionCalls, command, true, true)
                             }, timeout);
 
                         }
                     }, 1000);
                 }, timeout);
-
 
             } else if (isSleeping) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
@@ -376,6 +383,7 @@ const discFunctions = {
 
         enterShack: function enterShack({ setChatHistory, socket, location, user, playerPosition, actionCalls, command, isSleeping }) {
             if (!isSleeping && playerPosition === 'standing') {
+                socket.emit('emote', { user: user.characterName, emotion: `enters the haunted shack`, location: "Haunted Shack", muteEmoter: true });
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "The door creaks and groans as you open it and take your first step within the dusty old shack..." }]);
 
                 let timeout = 1000;
@@ -409,7 +417,8 @@ const discFunctions = {
                             clearInterval(deepTimer)
                             let timeout = 1500;
                             setTimeout(() => {
-                                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
+                                socket.emit('emote', { user: user.characterName, emotion: `falls out of the mine shaft`, location: "Surface Elevator", muteEmoter: true });
+                                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true, true)
                             }, timeout);
                         }
                     }, 500);
@@ -433,6 +442,7 @@ const discFunctions = {
 
         jumpOff: function jumpOff({ setChatHistory, user, playerPosition, socket, location, actionCalls, command, isSleeping }) {
             if (!isSleeping && playerPosition === 'standing') {
+                socket.emit('emote', { user: user.characterName, emotion: `jumps off the cliff`, location: "Cliff's Edge", muteEmoter: true });
                 let ringIsWorn = false;
                 let ringInPockets = false;
                 user.inventory.forEach(({ item }) => {
@@ -446,10 +456,12 @@ const discFunctions = {
                         if (ringIsWorn) {
                             setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Your life flashes before your eyes and... suddenly you hear a beep and a bright flash blinds you!" }]);
                             setTimeout(() => {
-                                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true)
+                                socket.emit('emote', { user: user.characterName, emotion: `enters the ship's hold`, location: "Ships Hold", muteEmoter: true });
+                                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true, true)
                             }, 1500);
                         } else {
                             setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly a strong gust of wind lifts you up and throws you unceremoniously back onto the cliff edge..." }]);
+                            socket.emit('emote', { user: user.characterName, emotion: `is lifted by a strong gust of wind back onto the cliff edge`, location: "Cliff's Edge", muteEmoter: true });
                             if (ringInPockets) {
                                 setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel the ring in your pocket grow warm" }]);
                                 setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wear ring" }]);
@@ -475,6 +487,7 @@ const discFunctions = {
 
         shootCannon: function shootCannon({ user, setChatHistory, socket, location, playerPosition, actionCalls, command, isSleeping }) {
             if (!isSleeping && playerPosition === 'standing') {
+                socket.emit('emote', { user: user.characterName, emotion: `is fired out of the cannon`, location: "Sky Cannon", muteEmoter: true });
                 let ringIsWorn = false;
                 let ringInPockets = false;
                 user.inventory.forEach(({ item }) => {
@@ -486,9 +499,11 @@ const discFunctions = {
                     if (ringIsWorn) {
                         setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Your life flashes before your eyes and... suddenly you hear a beep and a bright flash blinds you!" }]);
                         setTimeout(() => {
-                            processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls, command, true)
+                            socket.emit('emote', { user: user.characterName, emotion: `enters the ship's hold`, location: "Ships Hold", muteEmoter: true });
+                            processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls, command, true, true)
                         }, 1500);
                     } else {
+                        socket.emit('emote', { user: user.characterName, emotion: `falls out of the sky`, location: "Sky Cannon", muteEmoter: true });
                         setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "You can barely even let out a scream before you smack back down on the brick path next to the cannon..." }]);
                         if (ringInPockets) {
                             setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel the ring in your pocket grow warm" }]);

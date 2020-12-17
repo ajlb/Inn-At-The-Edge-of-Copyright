@@ -220,8 +220,8 @@ module.exports = function (io) {
         /*****************************/
         /*            MOVE           */
         /*****************************/
-        socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
-            move(socket, io, previousLocation, newLocation, direction, user);
+        socket.on('move', ({ previousLocation, newLocation, direction, user, quiet }) => {
+            move(socket, io, previousLocation, newLocation, direction, user, quiet);
             //leave and enter rooms
             socket.leave(previousLocation);
             getUsers(io, previousLocation, playernicknames);
@@ -401,8 +401,8 @@ module.exports = function (io) {
             removeItem(io, socket, user, item, targetSlot);
         });
 
-        socket.on('emote', ({ user, emotion, location }) => {
-            io.to(location).emit('emote', { user, emotion });
+        socket.on('emote', ({ user, emotion, location, muteEmoter }) => {
+            io.to(location).emit('emote', { username: user, emotion, muteEmoter });
         });
 
 
