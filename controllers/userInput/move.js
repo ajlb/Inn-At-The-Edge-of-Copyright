@@ -57,11 +57,11 @@ const findLocationData = (locationName) => {
 }
 
 
-const move = (socket, io, previousLocation, newLocation, direction, user) => {
+const move = (socket, io, previousLocation, newLocation, direction, user, quiet) => {
     if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
-        io.to(previousLocation).emit('move', { actor: user, direction, cardinal: true, action: "leave" });
+        if (!quiet) io.to(previousLocation).emit('move', { actor: user, direction, cardinal: true, action: "leave" });
     } else {
-        io.to(previousLocation).emit('move', { actor: user, direction, cardinal: false, action: "leave" });
+        if (!quiet) io.to(previousLocation).emit('move', { actor: user, direction, cardinal: false, action: "leave" });
     }
 
     io.to(socket.id).emit('yourMove', direction);
@@ -69,9 +69,9 @@ const move = (socket, io, previousLocation, newLocation, direction, user) => {
     if (["north", "east", "south", "west"].indexOf(direction) !== -1) {
         const switchDirections = { north: "south", east: "west", south: "north", west: "east" };
         direction = switchDirections[direction];
-        io.to(newLocation).emit('move', { actor: user, direction, cardinal: true, action: "arrive" });
+        if (!quiet) io.to(newLocation).emit('move', { actor: user, direction, cardinal: true, action: "arrive" });
     } else {
-        io.to(newLocation).emit('move', { actor: user, direction, cardinal: false, action: "arrive" });
+        if (!quiet) io.to(newLocation).emit('move', { actor: user, direction, cardinal: false, action: "arrive" });
     }
     rememberLocation(user, newLocation).then((user) => {
         io.to(socket.id).emit("playerUpdate", user)

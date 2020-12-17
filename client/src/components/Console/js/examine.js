@@ -37,7 +37,7 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
         })
         if (foundItem) {
             setChatHistory(prevState => {
-                return [...prevState, { type: 'displayed-stat', text: `In your inventory you see ${foundItem.item.description}` }]
+                return [...prevState, { type: 'displayed-stat mt-3', text: `In your inventory you see ${foundItem.item.description}` }]
             })
         } else {
             setChatHistory(prevState => { return [...prevState, { type: "displayed-error", text: "There's nothing to discover by that name" }] })
@@ -59,7 +59,7 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
         })
         if (foundItem) {
             setChatHistory(prevState => {
-                return [...prevState, { type: 'displayed-stat', text: `Nearby you see ${foundItem.item.description}` }]
+                return [...prevState, { type: 'displayed-stat mt-3', text: `Nearby you see ${foundItem.item.description}` }]
             })
         }
     }
@@ -79,7 +79,7 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
         })
         if (foundItem) {
             setChatHistory(prevState => {
-                return [...prevState, { type: 'displayed-stat', text: foundItem.description }]
+                return [...prevState, { type: 'displayed-stat mt-3', text: foundItem.description }]
             })
         }
     }
@@ -108,7 +108,7 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
                             { type: 'displayed-stat mt-3', text: `You see ${description}` },
                             { type: 'displayed-commands', text: `Try entering: ${exampleCommand}` }]
                         } else {
-                            return [...prevState, { type: 'displayed-stat', text: `Out the window you see ${description}` }]
+                            return [...prevState, { type: 'displayed-stat mt-3', text: `Out the window you see ${description}` }]
                         }
                     })
                 }
@@ -123,7 +123,7 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
                     { type: 'displayed-stat mt-3', text: `You see ${description}` },
                     { type: 'displayed-commands', text: `Try entering: ${exampleCommand}` }]
                 } else {
-                    return [...prevState, { type: 'displayed-stat', text: `You see ${description}` }]
+                    return [...prevState, { type: 'displayed-stat mt-3', text: `You see ${description}` }]
                 }
             })
         } else if (isInInventory(toExamine)) {
