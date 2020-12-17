@@ -114,7 +114,7 @@ figure {
     background-repeat: repeat;
 }
 
-.vogon-spaceship {
+.vogon-space-ship {
     background-image: url("../images/the-spaceship.png");
     background-repeat: repeat;
 }
@@ -168,7 +168,8 @@ figure {
     border-bottom-style: groove;
 }
 
-#logo {
+/* level 1-3 */
+#logo, #logo-1, #logo-2, #logo-3  {
     width: 160px;
     margin-left: 20%;
     margin-bottom: -20px;
