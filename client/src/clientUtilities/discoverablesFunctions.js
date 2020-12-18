@@ -17,10 +17,20 @@ const discFunctions = {
         /*         Library           */
         /*****************************/
 
-        pullBook: function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
-            setTimeout(() => {
-                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true)
-            }, 1000)
+        pullBook: function pullBook({ socket, location, user, playerPosition, setChatHistory, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                setTimeout(() => {
+                    socket.emit('emote', { user: user.characterName, emotion: `disappears behind a bookshelf`, location: "Library", muteEmoter: true });
+                    processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true, true)
+                    socket.emit('emote', { user: user.characterName, emotion: `crawls out of the mousehole`, location: "Inn Laundry Room", muteEmoter: true });
+                }, 1000)
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
         }
 
     },
@@ -31,10 +41,20 @@ const discFunctions = {
         /*      Inn Laundry Room     */
         /*****************************/
 
-        mousehole: function mousehole({ socket, location, user, playerPosition, setChatHistory, actionCalls, command }) {
-            setTimeout(() => {
-                processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true)
-            }, 1000)
+        mousehole: function mousehole({ socket, location, user, playerPosition, setChatHistory, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                setTimeout(() => {
+                    socket.emit('emote', { user: user.characterName, emotion: `crawls into the mousehole`, location: "Inn Laundry Room", muteEmoter: true });
+                    processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true, true)
+                    socket.emit('emote', { user: user.characterName, emotion: `appears from behind a bookshelf`, location: "Library", muteEmoter: true });
+                }, 1000)
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
         }
 
     },
@@ -268,7 +288,229 @@ const discFunctions = {
         getLadle: function getLadle({ socket, location, user, playerPosition, setChatHistory, actionCalls }) {
             socket.emit('discoverable', { itemName: "silver ladle", socketProp: 'hasLadle', discFunction: 'discGet', itemID: "5fd69bff4c88070749b5ba11", user })
         }
+    },
+
+
+    "Raging River": {
+        /*****************************/
+        /*       Raging River        */
+        /*****************************/
+
+
+        jumpIn: function getLadle({ socket, location, user, playerPosition, setChatHistory, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                socket.emit('emote', { user: user.characterName, emotion: `jumps into the river and is swept away`, location: "Raging River", muteEmoter: true });
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You jump into the freezing river and are swept away..." }]);
+
+                let timeout = 1000;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "The freezing water immediately shocks your system and you begin to frantically swim back. You feel your body start to go numb as your vision fades to black..." }]);
+                }, timeout);
+
+                timeout += 500;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "" }]);
+                    let i = 1;
+                    let unconsciousTimer = setInterval(() => {
+                        i++;
+                        setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: ". . ." }]);
+                        if (i >= 3) clearInterval(unconsciousTimer)
+                    }, 500);
+                }, timeout);
+
+                timeout += 2000
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat my-2", text: "You gasp for air as you cough water out of your lungs" }]);
+                }, timeout);
+
+                timeout += 500;
+                setTimeout(() => {
+                    socket.emit('emote', { user: user.characterName, emotion: `washes up on the shore`, location: "Murky Pond", muteEmoter: true });
+                    processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true, true)
+                }, timeout);
+
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
+        }
+    },
+
+
+    "Surface Elevator": {
+        /*****************************/
+        /*     Surface Elevator      */
+        /*****************************/
+
+        runElevator: function runElevator({ setChatHistory, socket, location, user, playerPosition, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                socket.emit('emote', { user: user.characterName, emotion: `enters the abandoned elevator`, location: "Surface Elevator", muteEmoter: true });
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded mt-2", text: "You enter the elevator and attempt to start it" }]);
+
+                let timeout = 1500;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the elevator car lifts violently off the floor and rapidly ascends into the tunnel carved into the cavern ceiling!" }]);
+                }, timeout);
+
+                timeout += 1000
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "The elevator slows down to a stop and a quick look around reveals that you've entered an old mining equipment storage shack. You cautiously step outside..." }]);
+                }, timeout);
+
+                timeout += 1000
+                setTimeout(() => {
+                    socket.emit('emote', { user: user.characterName, emotion: `exits the shack`, location: "Haunted Shack", muteEmoter: true });
+                    processMove(socket, location, user, "move north", playerPosition, setChatHistory, actionCalls, command, true, true)
+                }, timeout);
+
+
+
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
+        }
+    },
+
+
+    "Haunted Shack": {
+        /*****************************/
+        /*      Haunted Shack        */
+        /*****************************/
+
+        enterShack: function enterShack({ setChatHistory, socket, location, user, playerPosition, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                socket.emit('emote', { user: user.characterName, emotion: `enters the haunted shack`, location: "Haunted Shack", muteEmoter: true });
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "The door creaks and groans as you open it and take your first step within the dusty old shack..." }]);
+
+                let timeout = 1000;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "A quick look around reveals several different kind of mining equipment leaning against the walls and scattered around the room. The floor groans beneath your feet..." }]);
+                }, timeout);
+
+                timeout += 1000;
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "You let out a scream as the floor beneath your feet drops, taking you with it into a near free-fall down a long dark mineshaft..." }]);
+                }, timeout);
+
+                timeout += 1500;
+                setTimeout(() => {
+                    socket.emit('emote', { user: user.characterName, emotion: `falls out of the mine shaft`, location: "Surface Elevator", muteEmoter: true });
+                    processMove(socket, location, user, "move west", playerPosition, setChatHistory, actionCalls, command, true, true)
+                }, timeout);
+
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
+        }
+    },
+
+
+    "Cliff's Edge": {
+        /*****************************/
+        /*       Cliff's Edge        */
+        /*****************************/
+
+        jumpOff: function jumpOff({ setChatHistory, user, playerPosition, socket, location, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                socket.emit('emote', { user: user.characterName, emotion: `jumps off the cliff`, location: "Cliff's Edge", muteEmoter: true });
+                let ringIsWorn = false;
+                let ringInPockets = false;
+                user.inventory.forEach(({ item }) => {
+                    if (item.itemName === 'dull ring') ringInPockets = true;
+                })
+                if (user.wornItems.fingerSlot === 'dull ring') ringIsWorn = true;
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You leap off the cliff!" }]);
+                setTimeout(() => {
+                    setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Gentle mist brushes your face as you fall through the sparse clouds..." }]);
+                    setTimeout(() => {
+                        if (ringIsWorn) {
+                            setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Your life flashes before your eyes and... suddenly you hear a beep and a bright flash blinds you!" }]);
+                            setTimeout(() => {
+                                socket.emit('emote', { user: user.characterName, emotion: `enters the ship's hold`, location: "Ships Hold", muteEmoter: true });
+                                processMove(socket, location, user, "move south", playerPosition, setChatHistory, actionCalls, command, true, true)
+                            }, 1500);
+                        } else {
+                            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly a strong gust of wind lifts you up and throws you unceremoniously back onto the cliff edge..." }]);
+                            socket.emit('emote', { user: user.characterName, emotion: `is lifted by a strong gust of wind back onto the cliff edge`, location: "Cliff's Edge", muteEmoter: true });
+                            if (ringInPockets) {
+                                setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel the ring in your pocket grow warm" }]);
+                                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wear ring" }]);
+                            }
+                        }
+                    }, 1000);
+                }, 1000);
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
+        }
+    },
+
+
+    "Sky Cannon": {
+        /*****************************/
+        /*        Sky Cannon         */
+        /*****************************/
+
+        shootCannon: function shootCannon({ user, setChatHistory, socket, location, playerPosition, actionCalls, command, isSleeping }) {
+            if (!isSleeping && playerPosition === 'standing') {
+                socket.emit('emote', { user: user.characterName, emotion: `is fired out of the cannon`, location: "Sky Cannon", muteEmoter: true });
+                let ringIsWorn = false;
+                let ringInPockets = false;
+                user.inventory.forEach(({ item }) => {
+                    if (item.itemName === 'dull ring') ringInPockets = true;
+                })
+                if (user.wornItems.fingerSlot === 'dull ring') ringIsWorn = true;
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "Suddenly the cannon first, launching you high into the air!" }]);
+                setTimeout(() => {
+                    if (ringIsWorn) {
+                        setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "Your life flashes before your eyes and... suddenly you hear a beep and a bright flash blinds you!" }]);
+                        setTimeout(() => {
+                            socket.emit('emote', { user: user.characterName, emotion: `enters the ship's hold`, location: "Ships Hold", muteEmoter: true });
+                            processMove(socket, location, user, "move east", playerPosition, setChatHistory, actionCalls, command, true, true)
+                        }, 1500);
+                    } else {
+                        socket.emit('emote', { user: user.characterName, emotion: `falls out of the sky`, location: "Sky Cannon", muteEmoter: true });
+                        setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: "You can barely even let out a scream before you smack back down on the brick path next to the cannon..." }]);
+                        if (ringInPockets) {
+                            setChatHistory(prevState => [...prevState, { type: "displayed-stat faded", text: "You feel the ring in your pocket grow warm" }]);
+                            setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wear ring" }]);
+                        }
+                    }
+                }, 1000);
+            } else if (isSleeping) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+            } else if (playerPosition !== "standing") {
+                setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+                setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+            }
+        }
     }
 }
 
 export default discFunctions;
+
+// Pre-built way of handling sleep and standing
+// if (!isSleeping && playerPosition === 'standing') {
+// } else if (isSleeping) {
+//     setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to wake up to do that!" }]);
+//     setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: wake up" }]);
+// } else if (playerPosition !== "standing") {
+//     setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
+//     setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
+// }

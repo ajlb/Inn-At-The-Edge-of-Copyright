@@ -231,9 +231,11 @@ function ChatPanel({
     });
 
     //emote
-    socket.off('emote').on('emote', ({ user, emotion }) => {
+    socket.off('emote').on('emote', ({ username, emotion, muteEmoter }) => {
         let type = 'displayed-stat';
-        setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}` }]))
+        if ((!muteEmoter) || (muteEmoter && username !== user.characterName)) {
+            setChatHistory((prevState => [...prevState, { type, text: `${username} ${emotion}` }]))
+        }
     })
 
     //sleep

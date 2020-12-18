@@ -1671,15 +1671,16 @@
       "$oid": "5fd6a35323c222361c1b949d"
     },
     "locationName": "Raging River",
-    "dayDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though the slippery rock surrounding the river could lead elsewhere.",
-    "nightDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though the slippery rock surrounding the river could lead elsewhere.",
+    "dayDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though a misstep on the slippery rock may send you careening down the river.",
+    "nightDescription": "A raging river rushes past you filling the cave with the deafening roar of water. The tunnel continues to the east and to the south, though a misstep on the slippery rock may send you careening down the river.",
     "region": "Cavern Lake",
     "indoorOutdoor": "cave",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "west": {
-        "exitName": "Murky Pond"
+        "exitName": "Murky Pond",
+        "hidden": true
       },
       "south": {
         "exitName": "Crystal Cavern"
@@ -1688,8 +1689,33 @@
         "exitName": "Cavern Lake"
       }
     },
-    "fightables": [],
-    "weather": "clear sky"
+    "discoverables": [
+      {
+        "names": [
+          "river",
+          "raging river",
+          "river edge"
+        ],
+        "description": "a swift, deafening river flowing parallel to the cavern wall. It seems to take a sharp turn down a ways and flows directly into the rock... where could that lead?",
+        "exampleCommand": "jump in the river",
+        "commands": [
+          "jump in river",
+          "get in river",
+          "go in river",
+          "jump in raging river",
+          "get in raging river",
+          "go in raging river",
+          "jump into river",
+          "get into river",
+          "go into river",
+          "jump into raging river",
+          "get into raging river",
+          "go into raging river"
+        ],
+        "action": "jumpIn"
+      }
+    ],
+    "fightables": []
   },
   {
     "_id": {
@@ -1746,15 +1772,16 @@
       "$oid": "5fd6a35323c222361c1b949f"
     },
     "locationName": "Surface Elevator",
-    "dayDescription": "A rickety wooden elevator sits along the north wall seemlingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.",
-    "nightDescription": "A rickety wooden elevator sits along the north wall seemlingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.",
+    "dayDescription": "A rickety wooden elevator sits along the north wall seemingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.",
+    "nightDescription": "A rickety wooden elevator sits along the north wall seemingly abandoned, begging someone to start it back up. The tunnel continues to the west and the south.",
     "region": "Cavern Elevator",
     "indoorOutdoor": "cave",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "north": {
-        "exitName": "Haunted Shack"
+        "exitName": "Haunted Shack",
+        "hidden": true
       },
       "west": {
         "exitName": "Cavern Lake"
@@ -1763,8 +1790,25 @@
         "exitName": "East Tunnel"
       }
     },
-    "fightables": [],
-    "weather": "clear sky"
+    "discoverables": [
+      {
+        "names": [
+          "elevator",
+          "wooden elevator"
+        ],
+        "description": "an abandoned mineshaft elevator that descends from the cavern ceiling above. Though it seems old, it may still be functional",
+        "exampleCommand": "get on the elevator",
+        "commands": [
+          "take elevator",
+          "get on elevator",
+          "get in elevator",
+          "use elevator",
+          "start elevator"
+        ],
+        "action": "runElevator"
+      }
+    ],
+    "fightables": []
   },
   {
     "_id": {
@@ -2264,13 +2308,17 @@
         "commands": [
           "get in cannon",
           "climb in cannon",
-          "crawl in cannon"
+          "crawl in cannon",
+          "use cannon",
+          "use sky cannon",
+          "get in sky cannon",
+          "climb in sky cannon",
+          "crawl in sky cannon"
         ],
         "action": "shootCannon"
       }
     ],
-    "fightables": [],
-    "weather": "clear sky"
+    "fightables": []
   },
   {
     "_id": {
@@ -2571,22 +2619,58 @@
       "$oid": "5fd6a35323c222361c1b94ba"
     },
     "locationName": "Haunted Shack",
-    "dayDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Enter the door to the west if you dare... or move back to the wishing well to the east.",
-    "nightDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Shadows feel extra long and like they are looming over you here. Enter the door to the west if you dare... or move back to the wishing well to the east.",
+    "dayDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. A faded sign hanging near the front door reads 'Enter if you deer'... did someone make a typo?",
+    "nightDescription": "You've come upon a strange shack from which you can hear the rattling of chains and low moans. Shadows feel extra long and like they are looming over you here. A gas lamp hanging from the awning faintly illuminates a sign that reads 'Enter if you deer'... must be a trick of the light",
     "region": "Country and Town",
     "indoorOutdoor": "outdoor",
     "NPCs": [],
     "inventory": [],
     "exits": {
       "west": {
-        "exitName": "Surface Elevator"
+        "exitName": "Surface Elevator",
+        "hidden": true
       },
       "east": {
         "exitName": "Wishing Well"
       }
     },
-    "fightables": [],
-    "weather": "clear sky"
+    "discoverables": [
+      {
+        "names": [
+          "sign",
+          "faded sign"
+        ],
+        "description": "a sign made of white oak with the words 'Enter if you deer' scrawled onto the front in some kind of dark substance... is that blood??",
+        "exampleCommand": "inspect the  dark substance"
+      },
+      {
+        "names": [
+          "substance",
+          "writing",
+          "dark substance",
+          "blood"
+        ],
+        "description": "that the letters are not in fact painted with blood, but with old machine oil"
+      },
+      {
+        "names": [
+          "shack",
+          "haunted shack"
+        ],
+        "description": "a run down shack with broken and boarded-up windows. A sign near the front door reads 'Enter if you deer'",
+        "exampleCommand": "enter the shack",
+        "commands": [
+          "enter shack",
+          "enter haunted shack",
+          "go in shack",
+          "go in haunted shack",
+          "go into shack",
+          "go into haunted shack"
+        ],
+        "action": "enterShack"
+      }
+    ],
+    "fightables": []
   },
   {
     "_id": {
@@ -2900,8 +2984,7 @@
         "action": "jumpOff"
       }
     ],
-    "fightables": [],
-    "weather": "clear sky"
+    "fightables": []
   },
   {
     "_id": {

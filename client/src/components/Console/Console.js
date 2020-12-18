@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ChatPanel from "./ChatPanel";
 import InputPanel from "./InputPanel";
-import logo from "./images/logo.png";
+import logostart from "./images/logo.png";
+// import logo1 from "./images/logo-1.png";
+import logo2 from "./images/logo-2.png";
+import logo3 from "./images/logo-3.png";
 import { isBrowser } from 'react-device-detect';
 import GamewideInfo from '../../clientUtilities/GamewideInfo';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
@@ -38,6 +41,11 @@ function Console() {
   const [muted, setMuted] = useState(false);
 
   const [region, setRegion] = useState('panel-default');
+  //state, intial state 
+  const [logo, setLogo] = useState({
+    cssid: 'logo',
+    img: logostart
+  });
 
   const [canReply, setReplyTo] = useState(false)
 
@@ -270,22 +278,36 @@ function Console() {
   }, [location]);
 
 
-  // useState(() => {
-  //   if (!(player.stats === undefined)){
-  //     let thisLevel= player.stats.level
-  //     level= 'panel-default ' + thisLevel.replace(/\s/g,'0-')
-  //     console.log("user lever", level)
-  //   };
-  // }, [level]);
-
-  // useEffect(() => {
-  //   if (!(player.stats === undefined)){
-  //     let thisLevel= player.stats.level
-  //     level= 'panel-default ' + thisLevel.replace(/\s/g,'0-')
-  //     console.log("user lever", level)
-  //   };
-  // }, [level]);
-  //end
+  useEffect(() => {
+    if (!(player.stats === undefined)) {
+      let thisLevel = player.stats.level
+      let cssid = 'logo-' + thisLevel
+      //if this level is =1
+      if (thisLevel === 1) {
+        // function
+        setLogo({
+          cssid: cssid,
+          img: logostart
+        })
+      }
+      else if (thisLevel === 2) {
+        // function
+        setLogo({
+          cssid: cssid,
+          img: logo2
+        })
+      }
+      else if (thisLevel === 3) {
+        // function
+        setLogo({
+          cssid: cssid,
+          img: logo3
+        })
+      }
+      // console.log("user level", thisLevel, cssid)
+    };
+  }, [player]);
+  // end
 
   return (
     <div>
@@ -294,7 +316,8 @@ function Console() {
           <GamewideInfo.Provider value={gameInfo}>
             {(minState === "max") &&
               <figure>
-                <img src={logo} alt="Inn At The Edge of Copyright Logo" id="logo" />
+                {/*pulling from state */}
+                <img src={logo.img} alt="Inn At The Edge of Copyright Logo" id={logo.cssid} />
               </figure>
             }
             <div id="panel-border" style={{
