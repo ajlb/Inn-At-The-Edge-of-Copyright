@@ -7,12 +7,15 @@ const { incrementDex } = require("./userInput/statINC");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
-const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fighting");
-// const { response } = require("express");
-
-const runNPC = require("./NPCEngine");
+const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fighting"); /const runNPC = require("./NPCEngine");
+const runDiscoverable = require('./discoverables')
 const { validateName, createCharacter } = require("./userInput/userCreation");
 const { eatItem } = require("./userInput/eat");
+const runSweep = require("./sweeper");
+const { repopMobs } = require("./monsterSweeper");
+const dayNight = require("./dayNight");
+const runWeather = require("./weatherController");
+// const { response } = require("express");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -20,7 +23,7 @@ let playernicknames = {};
 
 //temp things to simulate display while working on server side only
 location = {};
-
+let weatherIsRunning;
 
 
 
@@ -192,6 +195,16 @@ module.exports = function (io) {
 
 
         /*****************************/
+        /*        DISCOVERABLE       */
+        /*****************************/
+        socket.on('discoverable', (props) => {
+            props["socket"] = socket;
+            props["io"] = io;
+            runDiscoverable(props);
+        })
+
+
+        /*****************************/
         /*            MOVE           */
         /*****************************/
         socket.on('move', ({ previousLocation, newLocation, direction, user }) => {
@@ -265,32 +278,25 @@ module.exports = function (io) {
 
         socket.on('weatherData', ({ location, region, message }) => {
             console.log(`${message} to ${region}`);
-            db.Weather.find({})
-                .then(weatherData => {
-                    const shuffleWeather = weatherData.map((weather) => ({ sort: Math.random(), value: weather.weatherCondition }))
-                        .sort((weather, element) => weather.sort - element.sort)
-                        .map((weather) => weather.value);
-                    const weatherCondition = shuffleWeather.pop()
-                    db.Location.find({ region: region })
-                        .then(locationData => {
-                            console.log(locationData);
-                            console.log(weatherCondition);
+
+            // db.Weather.find({})
+            //     .then(weatherData => {
+            //         const shuffleWeather = weatherData.map((weather) => ({ sort: Math.random(), value: weather.weatherCondition }))
+            //             .sort((weather, element) => weather.sort - element.sort)
+            //             .map((weather) => weather.value);
+            //         const weatherCondition = shuffleWeather.pop()
+            //         db.Location.find({ region: region })
+            //             .then(locationData => {
+            //                 console.log(locationData);
+            //                 console.log(weatherCondition);
 
 
 
-                            io.to(socket.id).emit('weatherData', { weatherCondition });
-                            //create weather variable for locations
+            //io.to(socket.id).emit('weatherData', { weatherCondition });
 
-
-                            //  //   if (locationData && locationData !== {}) {
-                            //         db.Location.find({ region: locationData.region })
-                            //             .then(locationsArray => {
-                            // if (locationsArray && locationsArray.length > 0) {
-                            //     locationsArray.forEach(locationObject => {
-                            //         let weatherM
-                            // }
-                        })
-                })
+            //             // }
+            //         })
+            // })
         })
         // });
 
@@ -557,8 +563,37 @@ module.exports = function (io) {
         /*****************************/
         /* DAY/NIGHT - USER LOCATION */
         /*****************************/
+
         socket.on('joinRequest', (message) => {
             socket.join(message);
         });
+
+        /*****************************/
+        /* DAY/NIGHT - USER LOCATION */
+        /*****************************/
+
+        if (!weatherIsRunning) {
+            runWeather();
+            weatherIsRunning = true;
+        }
+
+
+
+        /*****************************/
+        /*          SWEEPERS         */
+        /*****************************/
+
+        if (itemSweeperInterval === undefined) {
+            itemSweeperInterval = setInterval(function () {
+                runSweep(io, socket);
+            }, 125000)
+        }
+
+        if (monsterSweeperInterval === undefined) {
+            monsterSweeperInterval = setInterval(function () {
+                repopMobs(io, socket);
+            }, 100000)
+        }
     })
+
 }
