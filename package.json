@@ -11,11 +11,7 @@
     "client": "cd client && npm run start",
     "server": "nodemon --ignore 'client/*'",
     "install": "cd client && npm install",
-<<<<<<< HEAD
-    "seed": "DROP_DATABASE=true seed --db-name innattheedge ./scripts/seed",
-=======
     "seed": "seed --drop-database --db-name  innattheedge ./scripts/seed",
->>>>>>> V2
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build"
   },
