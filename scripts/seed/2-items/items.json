@@ -1,0 +1,742 @@
+[
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b855"
+    },
+    "itemName": "branch",
+    "description": "a dry, brown branch",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b856"
+    },
+    "itemName": "mushroom",
+    "description": "a small, white mushroom with a round top",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b857"
+    },
+    "itemName": "sock",
+    "description": "a lone argyle sock, blue and yellow",
+    "category": "household",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "feetSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b858"
+    },
+    "itemName": "pumpkin pie",
+    "description": "a whole pumpkin pie! It smells like autumn",
+    "category": "food",
+    "inventorySize": 0,
+    "edible": true,
+    "HPeffect": 1,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b859"
+    },
+    "itemName": "collar",
+    "description": "A red collar with a silver buckle. It has pictures of fish on it",
+    "category": "clothing",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "neckSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b85a"
+    },
+    "itemName": "leather gloves",
+    "description": "nice leather gloves. They look protective.",
+    "category": "armor",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b85b"
+    },
+    "itemName": "collar",
+    "description": "A red collar with a silver buckle. It has pictures of fish on it",
+    "category": "clothing",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b85c"
+    },
+    "itemName": "blue shirt",
+    "description": "a simple blue linen shirt, good for warm weather",
+    "category": "clothing",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "torsoSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b85d"
+    },
+    "itemName": "fancy shirt",
+    "description": "a fancy white linen shirt with detail in many colors along all the edges",
+    "category": "clothing",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "torsoSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b85e"
+    },
+    "itemName": "pair of brown pants",
+    "description": "a pair of simple brown linen pants, excellent for warm weather",
+    "category": "clothing",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "legsSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b85f"
+    },
+    "itemName": "pair of fancy slacks",
+    "description": "a pair of fancy pressed black slacks, made of fine wool",
+    "category": "clothing",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "legsSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b860"
+    },
+    "itemName": "pair of green socks",
+    "description": "a pair of green cotton socks",
+    "category": "clothing",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "feetSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b861"
+    },
+    "itemName": "ball",
+    "description": "a simple cloth ball filled with sand",
+    "category": "tools",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b862"
+    },
+    "itemName": "dull ring",
+    "description": "a dull metal ring with signs of many years of wear",
+    "category": "tools",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": ["fingerSlot"],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b863"
+    },
+    "itemName": "flower",
+    "description": "a a pretty little wildflower",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b864"
+    },
+    "itemName": "acorn",
+    "description": "a small brown nut with a jaunty cap",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b865"
+    },
+    "itemName": "toadstool",
+    "description": "an alarmingly bright red mushroom with white spots",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b866"
+    },
+    "itemName": "mushroom patch",
+    "description": "a smallish patch of white, round mushrooms",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b867"
+    },
+    "itemName": "strawberry patch",
+    "description": "a little patch of green leaves with red berries peeking out from underneath",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b868"
+    },
+    "itemName": "hazelnut bush",
+    "description": "a group of strong shoots with fuzzy, pointed leaves, and sets of prickly hazelnuts",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b869"
+    },
+    "itemName": "huckleberry bush",
+    "description": "a delicate bush with neat little leaves and tiny, round, red berries",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b86a"
+    },
+    "itemName": "blackberry bush",
+    "description": "a wicked looking bush with razor sharp thorns glinting evilly at you. Oh, and some berries",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b86b"
+    },
+    "itemName": "button",
+    "description": "a small, round button with two hole",
+    "category": "household",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b86c"
+    },
+    "itemName": "vein of iron",
+    "description": "an outcropping of rock with a bit of iron ore showing through",
+    "category": "mountains",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b86d"
+    },
+    "itemName": "vein of tin",
+    "description": "an outcropping of rock with a bit of tin ore showing through",
+    "category": "mountains",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b86e"
+    },
+    "itemName": "vein of copper",
+    "description": "an outcropping of rock with a bit of copper ore showing through",
+    "category": "mountains",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b86f"
+    },
+    "itemName": "vein of zinc",
+    "description": "an outcropping of rock with a bit of zinc ore showing through",
+    "category": "mountains",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b870"
+    },
+    "itemName": "plum tree",
+    "description": "a medium sized tree with ripe, purple plums hanging off of it",
+    "category": "mountains",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b871"
+    },
+    "itemName": "apple tree",
+    "description": "a medium sized tree with round, shiny, red and yellow apples glinting from the branches",
+    "category": "nature",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fc32531b2009d226ef5b872"
+    },
+    "itemName": "dagger",
+    "description": "a small steel dagger with a leather wrapped handle",
+    "category": "weapon",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "rightHandSlot",
+      "leftHandSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 1,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fd69bff4c88070749b5ba11"
+    },
+    "itemName": "silver ladle",
+    "description": "a silver ladle with a heavy, rounded scoop. It seems to have a bit of weight to it",
+    "category": "weapon",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "rightHandSlot",
+      "leftHandSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 1,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fd704e94c88070749b5ba12"
+    },
+    "itemName": "shiny key",
+    "description": "a shiny metal key... maybe it could be used to unlock something...",
+    "category": "tools",
+    "inventorySize": 0.0,
+    "edible": false,
+    "HPeffect": 0.0,
+    "equipable": [],
+    "DEXeffect": 0.0,
+    "STReffect": 0.0,
+    "WISeffect": 0.0,
+    "CHAeffect": 0.0,
+    "XPeffect": 0.0
+  },
+  {
+    "_id": {
+      "$oid": "5fd42fa7c7f92ab615f64792"
+    },
+    "itemName": "square of strawberry jello",
+    "description": "a bite sized square of red, jiggly jello",
+    "category": "food",
+    "inventorySize": 0,
+    "edible": true,
+    "HPeffect": 1,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fd42fabc7f92ab615f64793"
+    },
+    "itemName": "square of lime jello",
+    "description": "a bite sized square of green, jiggly jello",
+    "category": "food",
+    "inventorySize": 0,
+    "edible": true,
+    "HPeffect": 1,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fd42faec7f92ab615f64794"
+    },
+    "itemName": "square of coconut jello",
+    "description": "a bite sized square of white, jiggly jello. The locals seem to have a strong prejudice against it.",
+    "category": "food",
+    "inventorySize": 0,
+    "edible": true,
+    "HPeffect": 1,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fcbe6eef2a755c42f073628"
+    },
+    "itemName": "glasses",
+    "description": "a pair of plain wireframe glasses",
+    "category": "tools",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "headSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 1,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fcbe6f8f2a755c42f073629"
+    },
+    "itemName": "gloves",
+    "description": "leather gloves",
+    "category": "tools",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [
+      "handsSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fcbe709f2a755c42f07362a"
+    },
+    "itemName": "face mask",
+    "description": "a plain cloth face mask, designed to cover the mouth and nose",
+    "category": "tools",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 1,
+    "equippable": [
+      "headSlot"
+    ],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fcbe712f2a755c42f07362b"
+    },
+    "itemName": "blue ball",
+    "description": "a small, blue wooden ball",
+    "category": "tools",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fcbe716f2a755c42f07362c"
+    },
+    "itemName": "red ball",
+    "description": "a small, red wooden ball",
+    "category": "tools",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fcbe719f2a755c42f07362d"
+    },
+    "itemName": "yellow ball",
+    "description": "a small, yellow wooden ball",
+    "category": "tools",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fcbe72cf2a755c42f07362e"
+    },
+    "itemName": "jar of jam",
+    "description": "a jar filled with tasty, homemade preserves. Yum!",
+    "category": "tools",
+    "inventorySize": 0,
+    "edible": true,
+    "HPeffect": 2,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  }
+]

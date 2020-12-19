@@ -21,7 +21,8 @@ function ChatPanel({
     day,
     inConversation,
     setConversation,
-    setPlayer
+    setPlayer,
+    setReplyTo
 }) {
     //prepare variable to hold div reference for scrolling
     let anchorDiv;
@@ -29,7 +30,8 @@ function ChatPanel({
     // This is where most socket client listeners are going to be!
     socket.off('whisperTo').on('whisperTo', ({ message, userFrom }) => {
         let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: `Whisper from ${userFrom}: ${message}` }]);
+        setReplyTo({ to: userFrom });
+        setChatHistory(prevState => [...prevState, { type, text: `<span className='displayed-dimBlue'>Whisper from ${userFrom}:</span> ${message}` }]);
         // chat history is mapped down below
     });
 
@@ -49,6 +51,14 @@ function ChatPanel({
     //failed user command messages
     socket.off('failure').on('failure', (message) => {
         let type = 'displayed-error';
+        setChatHistory(prevState => [...prevState, { type, text: message }]);
+    });
+
+
+    //failed user command messages
+    socket.off('genericMessage').on('genericMessage', (message) => {
+        // console.log("received generic message", message);
+        let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: message }]);
     });
 
@@ -81,16 +91,35 @@ function ChatPanel({
 
     //receive your own move
     socket.off('yourMove').on('yourMove', (direction) => {
-        let newDescription = day ? location[direction].dayDescription : location[direction].nightDescription;
-        setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You enter: ${location[direction].locationName}` }]);
-        setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
-        let exits = [];
-        for (const param in location[direction].exits) {
-            if (param !== "current") {
-                exits.push(param);
+        try {
+            let newDescription = day ? location[direction].dayDescription : location[direction].nightDescription;
+            setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You enter: ${location[direction].locationName}` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
+            let exits = [];
+            for (const param in location[direction].exits) {
+                // console.log(param)
+                if (param !== "current" && !location[direction].exits[param].hidden) {
+                    exits.push(param);
+                }
             }
+            const fightables = location[direction].fightables.filter(en => en.isAlive);
+            if (fightables) {
+                // console.log(fightables);
+                if (fightables.length > 0) {
+                    setChatHistory(prevState => [...prevState, {
+                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
+                            return en.name;
+                        }).join(", ")}</span>.`
+                    }]);
+
+                }
+            }
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
+        } catch (e) {
+            socket.emit('failure', "Hmmm... it seems like something went wrong.");
+            console.log("error from receive yourMove");
+            console.log(e.message);
         }
-        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
 
 
     });
@@ -99,16 +128,28 @@ function ChatPanel({
 
     // Socket location chunk
     socket.off('locationChunk').on('locationChunk', message => {
-        console.log("recieved locationChunk");
-        console.log(message);
+        // console.log('received locationChunk');
+        // console.log(message);
         if (location.current === undefined) {
             let newDescription = day ? message.current.dayDescription : message.current.nightDescription;
             setChatHistory(prevState => [...prevState, { type: 'displayed-intro', text: `You are in: ${message.current.locationName}` }]);
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: newDescription }]);
             let exits = [];
             for (const param in message) {
-                if (param !== "current") {
+                if (param !== "current" && !message[param].hidden) {
                     exits.push(param);
+                }
+            }
+            const fightables = message.current.fightables.filter(en => en.isAlive);
+            if (fightables) {
+                // console.log(fightables);
+                if (fightables.length > 0) {
+                    setChatHistory(prevState => [...prevState, {
+                        type: 'displayed-stat', text: `You see some creatures prowling around this area: <span className='text-warning'>${fightables.map(en => {
+                            return en.name;
+                        }).join(", ")}</span>.`
+                    }]);
+
                 }
             }
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Exits: ${exits.join(", ")}` }]);
@@ -122,16 +163,35 @@ function ChatPanel({
     // This is where most socket client listeners are going to be!
     socket.off('whisperFrom').on('whisperFrom', ({ message, userTo }) => {
         let type = 'displayed-stat';
-        setChatHistory(prevState => [...prevState, { type, text: `Whisper to ${userTo}: ${message}` }]);
+        setChatHistory(prevState => [...prevState, { type, text: `<span className='displayed-dimBlue'>Whisper to ${userTo}:</span> ${message}` }]);
         // chat history is mapped down below
     });
 
     //room speech
     socket.off('speak').on('speak', (message) => {
         let type = 'displayed-stat';
-        console.log(inConversation)
         if (!inConversation) {
             setChatHistory(prevState => [...prevState, { type, text: message }]);
+        }
+    });
+
+    //eat message
+    socket.off('eat').on('eat', ({ actor, eatenItem, actorMessage }) => {
+        let type = 'displayed-stat';
+        if (actor.toLowerCase() === user.characterName.toLowerCase()) {
+            setChatHistory(prevState => [...prevState, { type, text: `You eat ${insertArticleSingleValue(eatenItem)}. ${actorMessage}` }]);
+        } else {
+            if (!inConversation) {
+                setChatHistory(prevState => [...prevState, { type, text: `${actor} eats ${insertArticleSingleValue(eatenItem)}.` }]);
+            }
+        }
+    });
+
+
+    //shout
+    socket.off('shout').on('shout', ({ userMessage, fromUser }) => {
+        if (!inConversation) {
+            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: userMessage }]);
         }
     });
 
@@ -157,7 +217,6 @@ function ChatPanel({
 
     //a give action
     socket.off('give').on('give', ({ target, item, actor }) => {
-        console.log("give received");
         let type = 'displayed-stat';
         if (actor === user.characterName) {
             setChatHistory(prevState => [...prevState, { type, text: `You give ${insertArticleSingleValue(item)} to ${target}.` }]);
@@ -169,16 +228,18 @@ function ChatPanel({
     });
 
     //emote
-    socket.off('emote').on('emote', ({ user, emotion }) => {
-        console.log(`${user} emotes ${emotion}`);
+    socket.off('emote').on('emote', ({ username, emotion, muteEmoter }) => {
         let type = 'displayed-stat';
-        setChatHistory((prevState => [...prevState, { type, text: `${user} ${emotion}` }]))
+        if ((!muteEmoter) || (muteEmoter && username !== user.characterName)) {
+            setChatHistory((prevState => [...prevState, { type, text: `${username} ${emotion}` }]))
+        }
     })
 
     //sleep
-    socket.off('sleep').on('sleep', ({ userToSleep }) => {
+    socket.off('sleep').on('sleep', ({ userToSleep, quiet }) => {
         if (userToSleep === user.characterName) {
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
+            setActivities(prevState => { return { ...prevState, sleeping: true } });
+            if (!quiet) setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You fall asleep.` }]);
         } else {
             if (!inConversation) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToSleep} falls asleep.` }]);
@@ -187,9 +248,10 @@ function ChatPanel({
     })
 
     //wake
-    socket.off('wake').on('wake', ({ userToWake }) => {
+    socket.off('wake').on('wake', ({ userToWake, quiet }) => {
         if (userToWake === user.characterName) {
-            setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
+            setActivities(prevState => { return { ...prevState, sleeping: false } });
+            if (!quiet) setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `You wake up.` }]);
         } else {
             if (!inConversation) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: `${userToWake} wakes up.` }]);
@@ -197,7 +259,7 @@ function ChatPanel({
         }
     })
 
-
+    //juggle
     socket.off('juggle').on('juggle', ({ user, target, num }) => {
         if (user === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You begin to juggle ${num} ${target}.` }]);
@@ -222,8 +284,8 @@ function ChatPanel({
         }
     })
 
-    socket.off('stop juggle').on('stop juggle', ({ user, roomMessage, userMessage }) => {
-        if (user === user.characterName) {
+    socket.off('stop juggle').on('stop juggle', ({ actor, roomMessage, userMessage }) => {
+        if (actor === user.characterName) {
             setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: userMessage }]);
             setActivities({
                 ...activities,
@@ -234,9 +296,11 @@ function ChatPanel({
                 setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: roomMessage }]);
             }
         }
+        // console.log('calling clear juggle time');
         clearJuggleTime();
     })
 
+    //wear
     socket.off('wear').on('wear', message => {
         let type = 'displayed-stat';
         setChatHistory(prevState => [...prevState, { type, text: message }]);
@@ -258,45 +322,30 @@ function ChatPanel({
         });
     })
 
-    socket.off('error').on('error', ({ status, message }) => {
+    socket.off('error').on('error', ({ message }) => {
         let type = 'displayed-error';
-        setChatHistory(prevState => [...prevState, { type, text: `${status} Error: ${message}` }]);
+        setChatHistory(prevState => [...prevState, { type, text: `${message}` }]);
     });
 
-    socket.off('help').on('help', ({ actionData }) => {
-        let type = 'displayed-indent';
-        // let currentString = ``;
-        let newArray = [];
-        actionData.map((helpItem) => {
-            newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
-            setChatHistory(prevState => [...prevState, { type, text: newArray }]);
-            // console.log(newArray);
-        });
+    socket.off('help').on('help', ({ actionData, type }) => {
+        if (type === "whole") {
+            let newArray = [];
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `HELP` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            actionData.forEach((helpItem) => {
+                newArray = (`(${helpItem.actionName}) -  ${helpItem.commandBriefDescription}.`);
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: newArray }]);
+            });
+        } else {
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `----- ${actionData.actionName.toUpperCase()} -----` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: actionData.commandLongDescription }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}` }]);
 
-        //     let exampleArray = [];
+        }
 
-        //     actionData.map((helpItem) => {
-        //         exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
-        //         setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
-        //     });
-
-
-        //     let commandLongArray = [];
-
-        //     actionData.map((helpItem) => {
-        //         commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
-        //         setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
-        //     });
-        // });
-
-
-        //newArray.forEach((help) => {
-
-        //               actionData.map((helpItem) => {
-        //                  currentString += `
-        // ${helpItem.actionName}:  ${helpItem.commandBriefDescription}`
-        //${helpItem.commandLongDescription}    ${helpItem.waysToCall}
-        // ${helpItem.exampleCall}     ${helpItem.exampleResult}
     });
 
 
@@ -304,8 +353,6 @@ function ChatPanel({
     socket.off('stats').on('stats', () => {
 
     });
-
-
 
     //where is the user scrolled to?
     const handleScroll = (e) => {
@@ -334,7 +381,18 @@ function ChatPanel({
             {
                 chatHistory.map(message => {
                     i++;
-                    return <p key={i} className={message.type}>{message.text}</p>
+                    let text = message.text;
+                    if (text.includes("<span className=")) {
+                        let spanClass = text.split(`'>`)[0];
+                        spanClass = spanClass.replace(`<span className='`, "");
+                        let spanText = text.slice(text.indexOf(">") + 1);
+                        spanText = spanText.slice(0, spanText.indexOf("<"));
+                        let textAfterSpan = text.split("</span>")[1];
+                        let textBeforeSpan = text.split("<span")[0];
+                        return <p key={i} className={message.type}>{textBeforeSpan}<span className={spanClass}>{spanText}</span>{textAfterSpan}</p>
+                    } else {
+                        return <p key={i} className={message.type}>{text}</p>
+                    }
                 })
             }
             <div

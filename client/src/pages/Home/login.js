@@ -34,7 +34,7 @@ function userLogin() {
 //assign value to characterEntered or start character creation
 function getCharacterName(value) {
     if (value.toLowerCase() === "sign up") {
-        console.log("ok!");
+        // console.log("ok!");
         location.href = "/newPlayer";
     } else {
         characterEntered = value;
@@ -48,7 +48,7 @@ $("#submit-button").click(function (event) {
 
     //log, then clear input value
     let value = $(".chat-input").val();
-    console.log(value);
+    // console.log(value);
     $(".chat-input").val("");
     userRecentCommands.push(value);
 

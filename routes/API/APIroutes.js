@@ -11,8 +11,25 @@ router.route("/getData")
       } else {
         res.send(result);
       }
+    })
+    .catch(e=>{
+        console.log('ERROR IN DB CALL');
+        console.log(e);
     });
   });
+
+router.route("/checkCharacterName/:name")
+  .get(function(req, res){
+    db.Player.find({characterNameLowerCase: req.params.name})
+    .select("characterName")
+    .then(data => {
+      res.send(data);
+    })
+    .catch(e=>{
+        console.log('ERROR IN DB CALL');
+        console.log(e);
+    });
+  })
 
 
 

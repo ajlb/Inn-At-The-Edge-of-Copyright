@@ -26,7 +26,8 @@ let locationSchema = new Schema({
   inventory: 
     [{
     item: {type: Schema.Types.ObjectId, ref: "Item"},
-    quantity: Number
+    quantity: Number,
+    dropTime: Array
     } ]
   ,
   discoverables: {
@@ -35,6 +36,9 @@ let locationSchema = new Schema({
   },
   indoorOutdoor: {
     type: String
+  },
+  fightables: {
+    type: Array
   }
 });
 const Location = mongoose.model("Location", locationSchema);

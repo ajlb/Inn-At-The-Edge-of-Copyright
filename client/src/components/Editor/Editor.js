@@ -17,7 +17,7 @@ function Editor() {
     });
 
     function onBackButtonClick() {
-        console.log("back!");
+        // console.log("back!");
     }
 
     const initialAdminInfo = {
@@ -44,7 +44,7 @@ function Editor() {
         let targetData = event.target.getAttribute("href").slice(1).split("-");
         const collection = targetData[0];
         const action = targetData[1];
-        console.log(collection, action);
+        // console.log(collection, action);
         //set destination for what to show in body
         setDestinationState({
             collection,

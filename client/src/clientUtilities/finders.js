@@ -3,12 +3,13 @@
 
 //determine if a string begins with any of an array of other strings
 function doesThisStartWithOneOfThese(givenString, givenArray) {
+  if (givenArray === undefined) {
+    return false;
+  }
   // console.log("givenString: ", givenString)
   // console.log("givenArray: ", givenArray)
   for (let value of givenArray) {
-    if (givenString.toLowerCase().startsWith(value) && (value.length > 1)) {
-      return true
-    } else if (givenString.split(" ")[0].toLowerCase() === value.toLowerCase()) {
+    if (givenString.toLowerCase().startsWith(value + ' ') && (value.length > 1) || givenString.toLowerCase() === value) {
       return true
     }
   }
@@ -55,6 +56,12 @@ function doesThisEqualThat(thisThing, thatStuff) {
   return false;
 }
 
+//see if all the items in an array are the same
+function allTheSame(arrayy){
+  const distinctSet = new Set(arrayy);
+  return (distinctSet.size === 1) ? true : false;
+}
+
 export default doesThisStartWithOneOfThese;
 
 export {
@@ -62,5 +69,6 @@ export {
   startsWithOrIs,
   takeTheseOffThat,
   doesThisEqualThat,
-  getOneOfTheseOffThat
+  getOneOfTheseOffThat,
+  allTheSame
 }
