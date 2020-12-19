@@ -35,16 +35,16 @@ function ChatPanel({
         // chat history is mapped down below
     });
 
-    socket.off('from NPC').on('from NPC', ({ NPCName, NPCMessage, exampleResponses, leavingConversation }) => {
+    socket.off('from NPC').on('from NPC', ({ NPCName, NPCMessage, exampleResponses, leavingConversation, route }) => {
         if (leavingConversation) {
             setConversation(false)
         } else {
-            setConversation({ with: NPCName })
+            setConversation({ with: NPCName, route })
         }
 
-        setChatHistory(prevState => [...prevState, { type: 'displayed-npc', text: `${NPCName}: ${NPCMessage}` }]);
+        setChatHistory(prevState => [...prevState, { type: 'displayed-npc mt-3', text: `${NPCName}: ${NPCMessage}` }]);
         if (exampleResponses && !leavingConversation) {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-commands', text: `Respond with: ${exampleResponses}` }]);
+            setChatHistory(prevState => [...prevState, { type: 'displayed-commands', text: `Respond with: ${exampleResponses.join(', ')}` }]);
         }
     })
 
