@@ -28,7 +28,8 @@
                         {
                             "responses": [
                                 "goodbye",
-                                "bye"
+                                "bye",
+                                "adios"
                             ],
                             "route": 5
                         }
@@ -53,7 +54,8 @@
                         {
                             "responses": [
                                 "goodbye",
-                                "bye"
+                                "bye",
+                                "adios"
                             ],
                             "route": 5
                         },
@@ -84,7 +86,8 @@
                         {
                             "responses": [
                                 "goodbye",
-                                "bye"
+                                "bye",
+                                "adios"
                             ],
                             "route": 5
                         },
@@ -141,7 +144,8 @@
                         {
                             "responses": [
                                 "goodbye",
-                                "bye"
+                                "bye",
+                                "adios"
                             ],
                             "route": 5
                         },
@@ -189,7 +193,8 @@
                         {
                             "responses": [
                                 "goodbye",
-                                "bye"
+                                "bye",
+                                "adios"
                             ],
                             "route": 5
                         }
@@ -197,45 +202,30 @@
                 },
                 {
                     "message": "Before you leave, be sure to check your pockets.  The Infinite Improbability Drive from the Heart-of-Gold does strange things and you may have a helpful item in there, or just pocket lint.",
-                    "exampleResponses": [
-                        "Where am I?",
-                        "Who are you?"
-                    ],
-                    "allowedResponses": [
-                        {
-                            "responses": [
-                                "where am i",
-                                "where am i?"
-                            ],
-                            "route": 1
-                        },
-                        {
-                            "responses": [
-                                "who are you",
-                                "who are you?"
-                            ],
-                            "route": 2
-                        }
-                    ]
+                    "leavingConversation": true,
+                    "action": "giveRing",
+                    "socketProp": "hasDullRing"
                 },
                 {
                     "message": "I dare not mention more, it brings back too many troubling memories…. Some fond ones sure, like Arthur and that magnificent invention called a sandwich… oh hey you’re a sandwich-maker. Can you make me a sandwich?",
                     "exampleResponses": [
-                        "Here's your sandwich!",
+                        "Yeah sure!",
                         "No thanks"
                     ],
                     "allowedResponses": [
                         {
                             "responses": [
-                                "here's your sandwich!",
-                                "heres your sandwich",
-                                "sandwich"
+                                "yeah",
+                                "yeah sure",
+                                "okay",
+                                "yes"
                             ],
                             "route": 7
                         },
                         {
                             "responses": [
-                                "no thanks"
+                                "no thanks",
+                                "no"
                             ],
                             "route": 8
                         }
@@ -266,7 +256,8 @@
                         {
                             "responses": [
                                 "goodbye",
-                                "bye"
+                                "bye",
+                                "adios"
                             ],
                             "route": 5
                         }
@@ -297,13 +288,191 @@
                         {
                             "responses": [
                                 "goodbye",
-                                "bye"
+                                "bye",
+                                "adios"
                             ],
-                            "route": 5,
-                            "action": "giveRing",
-                            "socketProp": "hasDullRing"
+                            "route": 5
                         }
                     ]
+                }
+            ]
+        }
+    },
+    {
+        "NPC": "Great Tree",
+        "dialogObj": {
+            "messages": [
+                {
+                    "message": "Hello there little one... what do you approach me for?",
+                    "exampleResponses": [
+                        "Where am I?",
+                        "Who are you?",
+                        "Goodbye"
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "where am i"
+                            ],
+                            "route": 1
+                        },
+                        {
+                            "responses": [
+                                "who are you"
+                            ],
+                            "route": 4
+                        },
+                        {
+                            "responses": [
+                                "goodbye",
+                                "bye",
+                                "adios"
+                            ],
+                            "route": 6
+                        }
+                    ]
+                },
+                {
+                    "message": "This grove we find ourselves in has been my home for thousands of years. Most refer to this area as the Haunted Forest, though the spirits residing here left long ago.",
+                    "exampleResponses": [
+                        "Spirits?",
+                        "Who are you?",
+                        "Goodbye"
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "spirits"
+                            ],
+                            "route": 2
+                        },
+                        {
+                            "responses": [
+                                "who are you"
+                            ],
+                            "route": 4
+                        },
+                        {
+                            "responses": [
+                                "goodbye",
+                                "bye",
+                                "adios"
+                            ],
+                            "route": 6
+                        }
+                    ]
+                },
+                {
+                    "message": "Oh yes, long ago, when I was just a baby sapling, these woods were teeming with friendly spirits. I quite enjoyed their company. Such a shame what happened to them...",
+                    "exampleResponses": [
+                        "What happened?",
+                        "Who are you?",
+                        "Goodbye"
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "what happened",
+                                "what happened to them",
+                                "what happened to the spirits"
+                            ],
+                            "route": 3
+                        },
+                        {
+                            "responses": [
+                                "who are you"
+                            ],
+                            "route": 4
+                        },
+                        {
+                            "responses": [
+                                "goodbye",
+                                "bye",
+                                "adios"
+                            ],
+                            "route": 6
+                        }
+                    ]
+                },
+                {
+                    "message": "Ahh... I'm not sure my stories would put those famously celebrated \"Heroes of Old\" in a very good light... perhaps a story for another time.",
+                    "exampleResponses": [
+                        "Who are you?",
+                        "Goodbye"
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "who are you"
+                            ],
+                            "route": 4
+                        },
+                        {
+                            "responses": [
+                                "goodbye",
+                                "bye",
+                                "adios"
+                            ],
+                            "route": 6
+                        }
+                    ]
+                },
+                {
+                    "message": "I have gone by many names: Craobh mhòr, Dara Mezin, Babban Itace... though recently I have been referred to as The Great Tree. My children and I have filled this forest with life for far longer than your kind has been around.",
+                    "exampleResponses": [
+                        "Your children?",
+                        "Where am I?",
+                        "Goodbye"
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "your children"
+                            ],
+                            "route": 5
+                        },
+                        {
+                            "responses": [
+                                "where am i"
+                            ],
+                            "route": 1
+                        },
+                        {
+                            "responses": [
+                                "goodbye",
+                                "bye",
+                                "adios"
+                            ],
+                            "route": 6
+                        }
+                    ]
+                },
+                {
+                    "message": "Most now refer to my children as The Elder Trees, though I still remember when they first broke through the soft soil of the forest floor. Most of them reside just down the path to the west.",
+                    "exampleResponses": [
+                        "Where am I?",
+                        "Goodbye"
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "where am i"
+                            ],
+                            "route": 1
+                        },
+                        {
+                            "responses": [
+                                "goodbye",
+                                "bye",
+                                "adios"
+                            ],
+                            "route": 6
+                        }
+                    ]
+                },
+                {
+                    "message": "Goodbye little one... don't believe everything they tell you...",
+                    "leavingConversation": true
                 }
             ]
         }
