@@ -287,27 +287,7 @@ module.exports = function (io) {
         socket.on('weatherData', ({ location, region, message }) => {
             console.log(`${message} to ${region}`);
 
-            // db.Weather.find({})
-            //     .then(weatherData => {
-            //         const shuffleWeather = weatherData.map((weather) => ({ sort: Math.random(), value: weather.weatherCondition }))
-            //             .sort((weather, element) => weather.sort - element.sort)
-            //             .map((weather) => weather.value);
-            //         const weatherCondition = shuffleWeather.pop()
-            //         db.Location.find({ region: region })
-            //             .then(locationData => {
-            //                 console.log(locationData);
-            //                 console.log(weatherCondition);
-
-
-
-            //io.to(socket.id).emit('weatherData', { weatherCondition });
-
-            //             // }
-            //         })
-            // })
         })
-        // });
-
 
         /*****************************/
         /*           SHOUT           */
