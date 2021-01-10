@@ -57,7 +57,9 @@ function checkLocale(index, allLocations) {
                 })
                 // console.log("HERE'S SOMETHING THAT DOESN'T GO.");
                 // console.log(timesToRemove.length);
-                diffObject[realItem.item] = -timesToRemove.length;
+                if (timesToRemove.length > 0){
+                    diffObject[realItem.item] = -timesToRemove.length;
+                }
                 // console.log("quantity to remove of unmatched item:", timesToRemove.length, realItem.item);
             }
 

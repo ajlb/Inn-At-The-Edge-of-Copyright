@@ -34,7 +34,7 @@ function incrementItemUpdateOne({itemId, targetName, type, quantity=1}) {
     return new Promise(function (resolve, reject) {
         if (type === "location") {
             db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": quantity }, $push: {"inventory.$[item].dropTime": new Date()} }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
-                data.nModified === quantity ? resolve(true) : resolve(false);
+                data.nModified === 1 ? resolve(true) : resolve(false);
             })
                 .catch(e => {
                     console.log('ERROR increment location IN DB CALL');
@@ -44,7 +44,7 @@ function incrementItemUpdateOne({itemId, targetName, type, quantity=1}) {
             targetName = targetName.toLowerCase()
             console.log("in increment player, trying to increment", targetName);
             db.Player.updateOne({ characterNameLowerCase: targetName }, { $inc: { "inventory.$[item].quantity": quantity }, $push: {"inventory.$[item].dropTime": new Date()} }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
-                data.nModified === quantity ? resolve(true) : resolve(false);
+                data.nModified === 1 ? resolve(true) : resolve(false);
             })
                 .catch(e => {
                     console.log('ERROR IN increment player DB CALL');
