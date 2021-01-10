@@ -97,9 +97,9 @@ async function runSweep(io, socket) {
                         console.log(changeDetected);
                         for (const itemId in changeDetected) {
                             if (changeDetected[itemId] > 0) {
-                                incrementItemUpdateOne(itemId, changeDetected.locationName, "location").then(updateData => {
+                                incrementItemUpdateOne({itemId, targetName:changeDetected.locationName, type:"location", quantity:changeDetected[itemId]}).then(updateData => {
                                     if (!updateData) {
-                                        pushItemToInventoryReturnData(itemId, changeDetected.locationName, "location").then(locationData => {
+                                        pushItemToInventoryReturnData({itemId, targetName:changeDetected.locationName, type:"location", quantity:changeDetected[itemId]}).then(locationData => {
                                             io.to(locationData.locationName).emit('invUpL', locationData.inventory);
                                             for (const param in locationData.exits){
                                                 io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetLocation:locationData.locationName})
@@ -116,7 +116,7 @@ async function runSweep(io, socket) {
                                 })
                             } else if (changeDetected[itemId] < 0) {
                                 console.log('WE SHOULD BE DECREMENTING THIS');
-                                decrementItemUpdateOne(itemId, changeDetected.locationName, "location").then(() => {
+                                decrementItemUpdateOne({itemId, targetName:changeDetected.locationName, type:"location", quantity:changeDetected[itemId]}).then(() => {
                                     scrubInventoryReturnData(changeDetected.locationName, "location").then(locationData => {
                                         io.to(locationData.locationName).emit('invUpL', locationData.inventory);
                                         for (const param in locationData.exits){
