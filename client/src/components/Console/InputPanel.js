@@ -22,6 +22,7 @@ import processMove from './js/move';
 import runExamine from './js/examine';
 import eatItem from './js/eat';
 
+
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
 //constant variables for parsing
@@ -174,9 +175,15 @@ function InputPanel({
                 juggle(input, user, location.current.locationName);
             } else if (input.toLowerCase() === "stop juggling") {
                 stopJuggling(user.characterName, true);
+                //////////////////////
+                //      WEATHER     //
+                //////////////////////
+
             } else if (findIn(input, actionCalls.weather)) {
-                console.log(location.current.weather);
-                // socket.emit('weatherData', { region: location.current.region });
+                // let weather = takeTheseOffThat(actionCalls.weather, input);
+                console.log({ region: location.current.region }, "weather input");
+                // socket.emit('weatherData', { message: weather });
+                socket.emit('weatherData', { region: location.current.region });
             } else if (findIn(input, actionCalls.stats)) {
                 /////////////////////
                 //      STATS      //

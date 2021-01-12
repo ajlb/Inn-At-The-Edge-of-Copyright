@@ -1,10 +1,9 @@
 const axios = require("axios");
 const db = require("../models");
+const { findLocationData } = require("./userInput/move");
 
 module.exports = function weatherTimer(io, socket) {
     try {
-
-
         const weatherInterval = setInterval(() => {
             console.log('tick');
             db.Location.find({})
@@ -19,15 +18,17 @@ module.exports = function weatherTimer(io, socket) {
                     regionArray.forEach(regionName => {
                         db.Weather.find({})
                             .then(weatherData => {
-                                const shuffleWeather = weatherData.map((weather) => ({ sort: Math.random(), value: weather.weatherCondition }))
+                                //  let weatherArray = [];
+                                let shuffleWeather = weatherData.map((weather) => ({ sort: Math.random(), value: weather.weatherCondition }))
                                     .sort((weather, element) => weather.sort - element.sort)
                                     .map((weather) => weather.value);
-                                let weather = shuffleWeather.pop();
-                                db.Location.updateMany({ region: regionName }, { $set: { weather } })
+                                // console.log(shuffleWeather);
+                                let weather = shuffleWeather.shift();
+
+                                db.Location.updateMany({ region: regionName }, { $set: { weather: weather } })
                                     .then(updateData => {
                                         console.log(updateData);
                                     })
-
                             })
                     })
                 })

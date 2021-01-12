@@ -364,15 +364,18 @@ function ChatPanel({
     //         });
     //     });
 
-    //Weather being displayed
-    socket.off('weatherData').on('weatherData', ({ weatherCondition }) => {
-        console.log(weatherCondition);
+    //    Weather being displayed
 
+    // socket.off('weatherData').on('weatherData', ({ location, weatherDisplay }) => {
+    //     console.log(location);
 
+    //     if ( user === location) {
 
-        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: weatherCondition }]);
-        console.log();
-    });
+    //     }
+
+    //     setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: location }]);
+    //     // console.log(user);
+    // });
 
 
     socket.off('stats').on('stats', () => {

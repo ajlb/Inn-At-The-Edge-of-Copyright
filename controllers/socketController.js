@@ -14,7 +14,7 @@ const { eatItem } = require("./userInput/eat");
 const runSweep = require("./sweeper");
 const { repopMobs } = require("./monsterSweeper");
 const dayNight = require("./dayNight");
-const runWeather = require("./weatherController");
+const weatherTimer = require("./weatherController");
 const runNPC = require("./NPCEngine");
 
 // const { response } = require("express");
@@ -26,6 +26,17 @@ let playernicknames = {};
 //temp things to simulate display while working on server side only
 location = {};
 let weatherIsRunning;
+
+
+
+//how often do we sweep the rooms
+let itemSweeperInterval;
+//how often do we repop the mobs
+let monsterSweeperInterval;
+//make sure we only run day/Night once
+let isDayNightRunning = false;
+
+
 
 
 
@@ -280,14 +291,20 @@ module.exports = function (io) {
             io.to(location).emit('speak', `${user}: ${message}`);
         });
 
+
         /****************************/
         /*          WEATHER         */
         /****************************/
-
-        socket.on('weatherData', ({ location, region, message }) => {
-            console.log(`${message} to ${region}`);
-
+        socket.on('weatherData', ({ location, user }) => {
+            //  console.log(`${message} to ${region}`);
+            if (!weatherIsRunning) {
+                weatherTimer(io, socket, location, user);
+                weatherIsRunning = true;
+            }
+            io.to(socket.id).emit('weatherData', { location, user })
+            console.log(weatherIsRunning);
         })
+
 
         /*****************************/
         /*           SHOUT           */
@@ -494,11 +511,6 @@ module.exports = function (io) {
                 socket.join(location);
                 if (userWasAsleep) {
                     io.to(location).emit('wake', { userToWake });
-                    // db.Weather.find({})
-                    //     .then((weatherData) => {
-                    //         io.to(location).emit('weatherData', { weatherData });
-                    //     });
-
                 } else {
                     const action = `
                     setActivities(prevState => {
