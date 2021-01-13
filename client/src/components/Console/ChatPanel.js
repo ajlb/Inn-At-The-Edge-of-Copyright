@@ -369,10 +369,10 @@ function ChatPanel({
     socket.off('weatherData').on('weatherData', ({ regionWeather, regionName }) => {
         console.log(regionWeather);
 
-        // if (regionName === location.region) {
+        if (regionName === location.region) {
 
-        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: regionWeather }]);
-        //  }
+            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: regionWeather }]);
+        }
 
 
         // console.log(user);
