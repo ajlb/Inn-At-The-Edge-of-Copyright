@@ -180,10 +180,10 @@ function InputPanel({
                 //////////////////////
 
             } else if (findIn(input, actionCalls.weather)) {
-                // let weather = takeTheseOffThat(actionCalls.weather, input);
-                console.log({ region: location.current.region }, "weather input");
+                //  let weather = takeTheseOffThat(actionCalls.weather, input);
+                socket.emit('weatherData', { region: location.current.weather });
+                console.log({ region: location.current.weather }, "weather input");
                 // socket.emit('weatherData', { message: weather });
-                socket.emit('weatherData', { region: location.current.region });
             } else if (findIn(input, actionCalls.stats)) {
                 /////////////////////
                 //      STATS      //

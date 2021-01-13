@@ -25,7 +25,6 @@ let playernicknames = {};
 
 //temp things to simulate display while working on server side only
 location = {};
-let weatherIsRunning;
 
 
 
@@ -35,7 +34,8 @@ let itemSweeperInterval;
 let monsterSweeperInterval;
 //make sure we only run day/Night once
 let isDayNightRunning = false;
-
+// to see if weather is running/updating
+let weatherIsRunning;
 
 
 
@@ -296,13 +296,19 @@ module.exports = function (io) {
         /*          WEATHER         */
         /****************************/
         socket.on('weatherData', ({ location, user }) => {
-            //  console.log(`${message} to ${region}`);
-            if (!weatherIsRunning) {
-                weatherTimer(io, socket, location, user);
-                weatherIsRunning = true;
-            }
-            io.to(socket.id).emit('weatherData', { location, user })
-            console.log(weatherIsRunning);
+            //  weatherTimer(io, socket, location, user)
+
+            //  io.to(location).emit('weatherData', { location, user });
+
+            db.Weather.find({})
+                .then(weatherData => {
+                    weatherData.map(weather => {
+                        const weatherCondition = weather.weatherCondition;
+                        console.log(weatherCondition)
+                        //   io.to(socket.id).emit('weatherData', { location, user, weatherCondition })
+                        console.log("weather is working");
+                    })
+                })
         })
 
 

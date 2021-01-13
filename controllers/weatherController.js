@@ -2,7 +2,7 @@ const axios = require("axios");
 const db = require("../models");
 const { findLocationData } = require("./userInput/move");
 
-module.exports = function weatherTimer(io, socket) {
+module.exports = function weatherTimer(io, socket, user) {
     try {
         const weatherInterval = setInterval(() => {
             console.log('tick');
@@ -24,10 +24,15 @@ module.exports = function weatherTimer(io, socket) {
                                     .map((weather) => weather.value);
                                 // console.log(shuffleWeather);
                                 let weather = shuffleWeather.shift();
-
                                 db.Location.updateMany({ region: regionName }, { $set: { weather: weather } })
                                     .then(updateData => {
                                         console.log(updateData);
+                                        db.Location.findOne({ region: regionName })
+                                            .then(singleRegion => {
+                                                regionWeather = singleRegion.weather;
+                                                console.log(regionWeather);
+                                                io.emit("weatherData", { regionWeather, regionName })
+                                            })
                                     })
                             })
                     })

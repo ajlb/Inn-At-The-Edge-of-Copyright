@@ -366,16 +366,17 @@ function ChatPanel({
 
     //    Weather being displayed
 
-    // socket.off('weatherData').on('weatherData', ({ location, weatherDisplay }) => {
-    //     console.log(location);
+    socket.off('weatherData').on('weatherData', ({ regionWeather, regionName }) => {
+        console.log(regionWeather);
 
-    //     if ( user === location) {
+        // if (regionName === location.region) {
 
-    //     }
+        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: regionWeather }]);
+        //  }
 
-    //     setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: location }]);
-    //     // console.log(user);
-    // });
+
+        // console.log(user);
+    });
 
 
     socket.off('stats').on('stats', () => {
