@@ -304,7 +304,7 @@ module.exports = function (io) {
                 .then(weatherData => {
                     weatherData.map(weather => {
                         const weatherCondition = weather.weatherCondition;
-                        console.log(weatherCondition)
+                        //console.log(weatherCondition)
                         //   io.to(socket.id).emit('weatherData', { location, user, weatherCondition })
                         console.log("weather is working");
                     })
