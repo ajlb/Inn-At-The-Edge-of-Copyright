@@ -367,11 +367,25 @@ function ChatPanel({
     //    Weather being displayed
 
     socket.off('weatherData').on('weatherData', ({ regionWeather, regionName }) => {
-        console.log(regionName);
-
-        if (regionName === location.current.region) {
-            console.log("---- WE MATCHED WEATHER ----");
-            setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: regionWeather }]);
+        try {
+            console.log(regionName);
+    
+            if (regionName === location.current.region) {
+                console.log("---- WE MATCHED WEATHER ----");
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: regionWeather }]);
+            }
+    
+            console.log(location);
+            for (const param in location){
+                if (location[param].region === regionName){
+                    const editedLocation = location;
+                    editedLocation[param].weather = regionWeather;
+                    setLocation(editedLocation);
+                }
+            }        
+        } catch (e) {
+            console.log("ERROR FROM weatherData(ChatPanel.js)");
+            console.log(e);
         }
         //             for (const param in location)
         //  {

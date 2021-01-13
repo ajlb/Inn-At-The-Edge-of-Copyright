@@ -181,8 +181,7 @@ function InputPanel({
 
             } else if (findIn(input, actionCalls.weather)) {
                 //  let weather = takeTheseOffThat(actionCalls.weather, input);
-                socket.emit('weatherData', { region: location.current.weather });
-                console.log({ region: location.current.weather }, "weather input");
+                setChatHistory(prevState => [...prevState, { type: 'displayed-stat', text: `You look up at the sky and see: ${location.current.weather}.`}])
                 // socket.emit('weatherData', { message: weather });
             } else if (findIn(input, actionCalls.stats)) {
                 /////////////////////
