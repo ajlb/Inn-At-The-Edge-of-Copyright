@@ -292,24 +292,24 @@ module.exports = function (io) {
         });
 
 
-        /****************************/
-        /*          WEATHER         */
-        /****************************/
-        socket.on('weatherData', ({ location, user }) => {
+        // /****************************/
+        // /*          WEATHER         */
+        // /****************************/
+        // socket.on('weatherData', ({ location, user }) => {
 
 
-            //  io.to(location).emit('weatherData', { location, user });
-            console.log("INSIDE WEATHER DATA")
-            // db.Weather.find({})
-            //     .then(weatherData => {
-            //         weatherData.map(weather => {
-            //             const weatherCondition = weather.weatherCondition;
-            //             console.log(weatherCondition)
-            //             //   io.to(socket.id).emit('weatherData', { location, user, weatherCondition })
-            //             console.log("weather is working");
-            //         })
-            //     })
-        })
+        //     //  io.to(location).emit('weatherData', { location, user });
+        //     console.log("INSIDE WEATHER DATA")
+        //     // db.Weather.find({})
+        //     //     .then(weatherData => {
+        //     //         weatherData.map(weather => {
+        //     //             const weatherCondition = weather.weatherCondition;
+        //     //             console.log(weatherCondition)
+        //     //             //   io.to(socket.id).emit('weatherData', { location, user, weatherCondition })
+        //     //             console.log("weather is working");
+        //     //         })
+        //     //     })
+        // })
 
 
         /*****************************/

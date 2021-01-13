@@ -373,10 +373,15 @@ function ChatPanel({
             console.log("---- WE MATCHED WEATHER ----");
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: regionWeather }]);
         }
-
-
-        // console.log(user);
+        //             for (const param in location)
+        //  {
+        //         if (location[param].region ====regionName) {
+        //             const editedLocation = location;
+        //             editedLocation[param].weather = regionWeather
+        //             setLocation(editedLocation);
+        //         }
     });
+    // console.log(user);
 
 
     socket.off('stats').on('stats', () => {
