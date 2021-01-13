@@ -367,10 +367,10 @@ function ChatPanel({
     //    Weather being displayed
 
     socket.off('weatherData').on('weatherData', ({ regionWeather, regionName }) => {
-        console.log(regionWeather);
+        console.log(regionName);
 
-        if (regionName === location.region) {
-
+        if (regionName === location.current.region) {
+            console.log("---- WE MATCHED WEATHER ----");
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: regionWeather }]);
         }
 

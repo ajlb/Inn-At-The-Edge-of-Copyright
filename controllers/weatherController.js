@@ -2,7 +2,7 @@ const axios = require("axios");
 const db = require("../models");
 const { findLocationData } = require("./userInput/move");
 
-module.exports = function weatherTimer(io, socket, user) {
+module.exports = function weatherTimer(io, socket) {
     try {
         const weatherInterval = setInterval(() => {
             console.log('tick');

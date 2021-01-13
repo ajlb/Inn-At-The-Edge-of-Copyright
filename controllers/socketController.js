@@ -296,19 +296,19 @@ module.exports = function (io) {
         /*          WEATHER         */
         /****************************/
         socket.on('weatherData', ({ location, user }) => {
-            //  weatherTimer(io, socket, location, user)
+
 
             //  io.to(location).emit('weatherData', { location, user });
-
-            db.Weather.find({})
-                .then(weatherData => {
-                    weatherData.map(weather => {
-                        const weatherCondition = weather.weatherCondition;
-                        //console.log(weatherCondition)
-                        //   io.to(socket.id).emit('weatherData', { location, user, weatherCondition })
-                        console.log("weather is working");
-                    })
-                })
+            console.log("INSIDE WEATHER DATA")
+            // db.Weather.find({})
+            //     .then(weatherData => {
+            //         weatherData.map(weather => {
+            //             const weatherCondition = weather.weatherCondition;
+            //             console.log(weatherCondition)
+            //             //   io.to(socket.id).emit('weatherData', { location, user, weatherCondition })
+            //             console.log("weather is working");
+            //         })
+            //     })
         })
 
 
@@ -585,6 +585,15 @@ module.exports = function (io) {
         //     isDayNightRunning = true;
         // }
 
+
+        /*****************************/
+        /*          WEATHER TIMER    */
+        /*****************************/
+
+        if (weatherIsRunning === undefined) {
+            weatherIsRunning = true;
+            weatherTimer(io, socket);
+        }
 
 
         /*****************************/
