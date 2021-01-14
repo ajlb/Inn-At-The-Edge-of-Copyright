@@ -2,30 +2,37 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const questSchema = new Schema({
-    questTitle: {
+const objectiveSchema = new Schema({
+    reference: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
-    dialog: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Dialog"
-        }
-    ],
-    hints: {
-        type: String
+    description: {
+        type: String,
+        required: true
     },
     rewardXP: {
         type: Number,
-        default: 0
+        default: 0,
+        required: true
     },
-    rewardItem: {
+    token: {
         type: String
     },
-    questToken: {
-        type: String
+    last: {
+        type: Boolean,
+        default: false
+    }
+})
+
+const questSchema = new Schema({
+    title: {
+        type: String,
+        unique: true,
+        required: true
     },
+    objectives: [objectiveSchema],
     completionItem: {
         type: String
     }
