@@ -600,6 +600,38 @@
         ],
         "actionDescription": "You crawl into the dark, narrow mouse hole...",
         "action": "mousehole"
+      },
+      {
+        "names": [
+          "dryer",
+          "dryers"
+        ],
+        "description": "a mid-century white dryer with nothing inside!"
+      },
+      {
+        "names": [
+          "washer",
+          "washers"
+        ],
+        "description": "a mid-century washing machine with flaking white paint. There seems to be a lone wet sock at the bottom of the tub...",
+        "exampleCommand": "inspect wet sock"
+      },
+      {
+        "names": [
+          "wet sock",
+          "wet socks"
+        ],
+        "description": "a soaking wet grey sock... why has no one run it through the dryer?",
+        "exampleCommand": "take the wet sock",
+        "commands": [
+          "take wet sock",
+          "get wet sock",
+          "/g wet sock",
+          "pick up wet sock",
+          "pickup wet sock",
+          "grab wet sock"
+        ],
+        "action": "wet sock"
       }
     ],
     "exits": {
@@ -908,9 +940,14 @@
           "/g ladle",
           "pick up ladle",
           "get silver ladle",
+          "take silver ladle",
+          "grab silver ladle",
           "/g silver ladle",
           "pickup silver ladle",
-          "pickup ladle"
+          "pick up silver ladle",
+          "pickup ladle",
+          "take ladle",
+          "grab ladle"
         ],
         "action": "getLadle"
       }
