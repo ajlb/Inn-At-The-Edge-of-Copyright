@@ -54,6 +54,23 @@
   },
   {
     "_id": {
+      "$oid": "5fffbdcbb9c6310f01b12822"
+    },
+    "itemName": "wet sock",
+    "description": "a soaking wet, grey sock... why has no one run it through the dryer?",
+    "category": "household",
+    "inventorySize": 0,
+    "edible": false,
+    "HPeffect": 0,
+    "equippable": [],
+    "DEXeffect": 0,
+    "STReffect": 0,
+    "WISeffect": 0,
+    "CHAeffect": 0,
+    "XPeffect": 0
+  },
+  {
+    "_id": {
       "$oid": "5fc32531b2009d226ef5b858"
     },
     "itemName": "pumpkin pie",
@@ -244,7 +261,9 @@
     "inventorySize": 0,
     "edible": false,
     "HPeffect": 0,
-    "equippable": ["fingerSlot"],
+    "equippable": [
+      "fingerSlot"
+    ],
     "DEXeffect": 0,
     "STReffect": 0,
     "WISeffect": 0,

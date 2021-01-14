@@ -47,7 +47,10 @@ function ChatPanel({
 
         setChatHistory(prevState => [...prevState, { type: 'displayed-npc mt-3', text: `${NPCName}: ${NPCMessage}` }]);
         if (exampleResponses && !leavingConversation) {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-commands', text: `Respond with: ${exampleResponses.join(', ')}` }]);
+            setChatHistory(prevState => [...prevState, {
+                type: 'displayed-commands',
+                text: `Respond with: ${exampleResponses.map(o => { return o.text }).join(', ')}`
+            }]);
         }
     })
 
