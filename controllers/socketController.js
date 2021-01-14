@@ -7,14 +7,17 @@ const { incrementDex } = require("./userInput/statINC");
 const { wakeUp, goToSleep } = require("./userInput/wakeSleep");
 const { login, getUsers } = require("./userInput/loginLogout");
 const { whisper } = require("./userInput/whisper");
-const { receiveAttack, wakeMonstersOnMove, sleepMonstersOnMove } = require("./fighting");
-const runNPC = require("./NPCEngine");
+const { receiveAttack, wakeMonstersOnMove } = require("./fighting");
 const runDiscoverable = require('./discoverables')
 const { validateName, createCharacter } = require("./userInput/userCreation");
 const { eatItem } = require("./userInput/eat");
 const runSweep = require("./sweeper");
 const { repopMobs } = require("./monsterSweeper");
 const dayNight = require("./dayNight");
+const weatherTimer = require("./weatherController");
+const runNPC = require("./NPCEngine");
+
+// const { response } = require("express");
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -23,12 +26,17 @@ let playernicknames = {};
 //temp things to simulate display while working on server side only
 location = {};
 
+
+
 //how often do we sweep the rooms
 let itemSweeperInterval;
 //how often do we repop the mobs
 let monsterSweeperInterval;
 //make sure we only run day/Night once
 let isDayNightRunning = false;
+// to see if weather is running/updating
+let weatherIsRunning;
+
 
 
 
@@ -43,8 +51,6 @@ module.exports = function (io) {
         console.log(`${socket.id} connected!`);
         // possibly do a DB call to state that the use is online?
         io.to(socket.id).emit('data request');
-        io.to(socket.id).emit('locationRequest');
-
 
         /*****************************/
         /*         DISCONNECT        */
@@ -52,10 +58,9 @@ module.exports = function (io) {
         socket.on('disconnect', () => {
             console.log(`${socket.id} disconnected...`);
             players = players.filter(player => !(player === socket.nickname));
-            delete playernicknames[socket.id];
             db.Player.findOneAndUpdate({ characterName: socket.nickname }, { $set: { isOnline: false, isAwake: true } }, { new: true })
                 .then(returnData => {
-                    // console.log("isAwake on disconnect:", returnData.isAwake)
+                    console.log("isAwake on disconnect:", returnData.isAwake)
                     if (!(returnData === null)) {
                         if (!(returnData.lastLocation === null)) {
                             io.to(returnData.lastLocation).emit('logout', { user: socket.nickname, message: `${socket.nickname} disappears into the ether.` });
@@ -177,7 +182,7 @@ module.exports = function (io) {
 
                 db.Player.findOneAndUpdate({ characterName: userCharacter }, { $set: { isAwake: player.isAwake, isOnline: true } }, { new: true })
                     .then(playerData => {
-                        // console.log("isAwake on reconnect:", playerData.isAwake)
+                        console.log("isAwake on reconnect:", playerData.isAwake)
                     })
                     .catch(e => {
                         console.log(e)
@@ -216,6 +221,7 @@ module.exports = function (io) {
             props["io"] = io;
             runDiscoverable(props);
         })
+
 
         /*****************************/
         /*            MOVE           */
@@ -284,6 +290,7 @@ module.exports = function (io) {
         socket.on('speak', ({ message, user, location }) => {
             io.to(location).emit('speak', `${user}: ${message}`);
         });
+
 
 
         /*****************************/
@@ -476,8 +483,8 @@ module.exports = function (io) {
                 if (userWasAwake) {
                     io.to(location).emit('sleep', { userToSleep });
                 } else {
-                    io.to(socket.id).emit('error', { message: "You are already sleeping" });
-                    io.to(socket.id).emit('sleep', { userToSleep, quiet: true });
+                    const action = "setActivities(prevState => {console.log('action running'); return { ...prevState, sleeping: true } })"
+                    io.to(socket.id).emit('error', { message: "You are already sleeping", action });
                 }
                 socket.leave(location);
             });
@@ -486,14 +493,19 @@ module.exports = function (io) {
         /*****************************/
         /*             WAKE          */
         /*****************************/
-        socket.on('wake', ({ userToWake, location }) => {
+        socket.on('wake', ({ userToWake }) => {
             wakeUp(io, socket, userToWake).then(userWasAsleep => {
                 socket.join(location);
                 if (userWasAsleep) {
                     io.to(location).emit('wake', { userToWake });
                 } else {
-                    io.to(socket.id).emit('error', { message: "You are already awake!" });
-                    io.to(socket.id).emit('wake', { userToWake, quiet: true });
+                    const action = `
+                    setActivities(prevState => {
+                        console.log('action running')
+                        return { ...prevState, sleeping: false }
+                    })
+                    `
+                    io.to(socket.id).emit('error', { message: "You are already awake!", action });
                 }
             });
         });
@@ -547,12 +559,22 @@ module.exports = function (io) {
 
 
         /*****************************/
-        /* DAY/NIGHT - RUN FUNCTION  */
+        /* DAY/NIGHT - USER LOCATION */
         /*****************************/
         // if (!isDayNightRunning) {
         //     dayNight(io, socket, playernicknames);
         //     isDayNightRunning = true;
         // }
+
+
+        /*****************************/
+        /*          WEATHER TIMER    */
+        /*****************************/
+
+        if (weatherIsRunning === undefined) {
+            weatherIsRunning = true;
+            weatherTimer(io, socket);
+        }
 
 
         /*****************************/

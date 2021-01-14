@@ -16,6 +16,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdc0"
+        },
         "item": {
           "$oid": "5fc32531b2009d226ef5b85e"
         },
@@ -27,6 +30,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdc1"
+        },
         "item": {
           "$oid": "5fd704e94c88070749b5ba12"
         },
@@ -201,7 +207,8 @@
         "actionDescription": "You can't do that right now"
       }
     ],
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -219,7 +226,8 @@
         "exitName": "Inn Lobby"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -382,6 +390,9 @@
             "$date": "2020-12-13T23:27:32.858Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdc2"
+        },
         "item": {
           "$oid": "5fc32531b2009d226ef5b858"
         },
@@ -402,7 +413,8 @@
         "exitName": "Front Yard"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -448,6 +460,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdc3"
+        },
         "item": {
           "$oid": "5fc32531b2009d226ef5b85e"
         },
@@ -465,6 +480,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdc4"
+        },
         "item": {
           "$oid": "5fc32531b2009d226ef5b85d"
         },
@@ -503,6 +521,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdc5"
+        },
         "item": {
           "$oid": "5fc32531b2009d226ef5b85c"
         },
@@ -520,6 +541,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdc6"
+        },
         "item": {
           "$oid": "5fc32531b2009d226ef5b85f"
         },
@@ -567,6 +591,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdc7"
+        },
         "item": {
           "$oid": "5fc32531b2009d226ef5b860"
         },
@@ -646,7 +673,8 @@
         "exitName": "Front Yard"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -698,6 +726,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdc8"
+        },
         "item": {
           "$oid": "5fcbe712f2a755c42f07362b"
         },
@@ -742,6 +773,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdc9"
+        },
         "item": {
           "$oid": "5fcbe716f2a755c42f07362c"
         },
@@ -786,6 +820,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdca"
+        },
         "item": {
           "$oid": "5fcbe719f2a755c42f07362d"
         },
@@ -806,7 +843,8 @@
         "exitName": "Crossroads"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -840,6 +878,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdcb"
+        },
         "item": {
           "$oid": "5fcbe6f8f2a755c42f073629"
         },
@@ -866,6 +907,9 @@
             "$date": "2020-12-13T23:27:31.715Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd9407d6176b0768575cdcc"
+        },
         "item": {
           "$oid": "5fc32531b2009d226ef5b872"
         },
@@ -877,7 +921,8 @@
         "exitName": "Front Yard"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -891,9 +936,6 @@
     "NPCs": [],
     "inventory": [
       {
-        "_id": {
-          "$oid": "5fd6a36346078734884af089"
-        },
         "dropTime": [
           {
             "$date": "2020-12-13T23:27:31.715Z"
@@ -902,6 +944,9 @@
             "$date": "2020-12-13T23:27:32.858Z"
           }
         ],
+        "_id": {
+          "$oid": "5fd6a36346078734884af089"
+        },
         "item": {
           "$oid": "5fcbe72cf2a755c42f07362e"
         },
@@ -952,7 +997,8 @@
         "action": "getLadle"
       }
     ],
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1010,7 +1056,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1034,7 +1081,8 @@
         "exitName": "Backyard"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1084,7 +1132,8 @@
         "exitName": "Inn Lobby"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1115,7 +1164,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1170,7 +1220,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1216,7 +1267,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1286,7 +1338,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1320,7 +1373,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1354,7 +1408,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1394,7 +1449,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1418,7 +1474,8 @@
         "exitName": "Pumpkin Patch North"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1476,7 +1533,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1510,7 +1568,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1531,7 +1590,8 @@
         "exitName": "South Tunnel"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1552,7 +1612,8 @@
         "exitName": "Rabbit Hole"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1573,7 +1634,8 @@
         "exitName": "Pumpkin Patch Northwest"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1597,7 +1659,8 @@
         "exitName": "East Tunnel"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1615,7 +1678,8 @@
         "exitName": "West Tunnel"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1636,7 +1700,8 @@
         "exitName": "West Tunnel"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1736,7 +1801,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1861,7 +1927,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1882,7 +1949,8 @@
         "exitName": "Large Clearing"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1909,7 +1977,8 @@
         "exitName": "The Seven Stones"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1930,7 +1999,8 @@
         "exitName": "Tree Tunnel South"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1951,7 +2021,8 @@
         "exitName": "Path to Haunted Forest"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1972,7 +2043,8 @@
         "exitName": "The Great Tree"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -1998,7 +2070,8 @@
         "exitName": "The Elder Trees"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2016,7 +2089,8 @@
         "exitName": "Large Clearing"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2040,7 +2114,8 @@
         "exitName": "South Tunnel"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2067,7 +2142,8 @@
         "exitName": "Meadow Path"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2088,7 +2164,8 @@
         "exitName": "Sky Cannon"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2109,7 +2186,8 @@
         "exitName": "Crossroads"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2130,7 +2208,8 @@
         "exitName": "Creek Bridge"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2173,7 +2252,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2231,7 +2311,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2298,7 +2379,8 @@
         "exitName": "Town Southeast"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2319,7 +2401,8 @@
         "exitName": "Town Southwest"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2340,7 +2423,8 @@
         "exitName": "Garden"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2364,7 +2448,8 @@
         "exitName": "Town Southeast"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2404,7 +2489,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2428,7 +2514,8 @@
         "exitName": "Town Northeast"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2455,7 +2542,8 @@
         "exitName": "River's Edge"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2519,7 +2607,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2537,7 +2626,8 @@
         "exitName": "Town West"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2558,7 +2648,8 @@
         "exitName": "Town Northeast"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2647,7 +2738,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2671,7 +2763,8 @@
         "exitName": "Item Store"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2692,7 +2785,8 @@
         "exitName": "Steep Hike East"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2713,7 +2807,8 @@
         "exitName": "Gentle Slope East"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2737,7 +2832,8 @@
         "exitName": "Mountain Trail North"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2761,7 +2857,8 @@
         "exitName": "Mountain Trail Center"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2798,7 +2895,8 @@
         "description": "This christmas jello is tri-color, with red on top, white in the middle, and green on bottom. You have heard the red is strawberry and the green is lime, but no one is willing to talk about the white part...",
         "race": "Holiday Dessert"
       }
-    ]
+    ],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2816,7 +2914,8 @@
         "exitName": "Steep Hike East"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2840,7 +2939,8 @@
         "exitName": "Crater's Rim"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2858,7 +2958,8 @@
         "exitName": "Mountain Trail Center"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2882,7 +2983,8 @@
         "exitName": "Cliff's Edge"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2940,7 +3042,8 @@
         "exitName": "Mountain Trail South"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2958,7 +3061,8 @@
         "exitName": "Inn Lobby"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2979,7 +3083,8 @@
         "exitName": "Ships Hold"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -2997,7 +3102,8 @@
         "exitName": "Captain's Quarters"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -3015,7 +3121,8 @@
         "exitName": "Mystery Button"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -3036,7 +3143,8 @@
         "exitName": "Sky Fishing Hole"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -3057,7 +3165,8 @@
         "exitName": "Fairy Godfather's Sky Hut"
       }
     },
-    "fightables": []
+    "fightables": [],
+    "weather": "clear sky"
   },
   {
     "_id": {
@@ -3074,6 +3183,8 @@
       "west": {
         "exitName": "Sky Fishing Hole"
       }
-    }
+    },
+    "fightables": [],
+    "weather": "clear sky"
   }
 ]

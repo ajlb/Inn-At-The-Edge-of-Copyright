@@ -28,7 +28,7 @@ function getItem(socket, user, inputString, locationData) {
         socket.emit('get', { target: potentialArray[0], itemId, user: user.characterName, location: locationData.current.locationName });
         return true;
     } else {
-        socket.emit('green', `There doesn't seem to ${insertArticleSingleValue(inputString)} to get here.`);
+        socket.emit('green', `There doesn't seem to be ${insertArticleSingleValue(inputString)} to get here.`);
         return false;
     }
 }

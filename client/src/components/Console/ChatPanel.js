@@ -3,6 +3,9 @@ import socket from "../../clientUtilities/socket";
 import { insertArticleSingleValue } from "../../clientUtilities/parsers";
 import { clearJuggleTime } from "./js/juggle";
 import { getOneOfTheseOffThat, takeTheseOffThat } from '../../clientUtilities/finders';
+import { ConnectionStates } from 'mongoose';
+//import {updateHourly} from './js/weather';
+
 
 
 
@@ -346,11 +349,27 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: actionData.commandLongDescription }]);
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `\xa0\xa0\xa0\xa0` }]);
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}` }]);
-
         }
-
     });
 
+    socket.off('weatherData').on('weatherData', ({ regionWeather, regionName }) => {
+        try {
+            if (regionName === location.current.region) {
+                setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: regionWeather }]);
+            }
+            console.log(location);
+            for (const param in location) {
+                if (location[param].region === regionName) {
+                    const editedLocation = location;
+                    editedLocation[param].weather = regionWeather;
+                    setLocation(editedLocation);
+                }
+            }
+        } catch (e) {
+            console.log("ERROR FROM weatherData(ChatPanel.js)");
+            console.log(e);
+        }
+    });
 
 
     socket.off('stats').on('stats', () => {

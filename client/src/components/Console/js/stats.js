@@ -42,23 +42,15 @@ function showStats(user, setChatHistory) {
         }
     }
 
-    // const deletedItems = statsArray.slice(0, 4);
-    // const newDeletedItems = statsArray.slice(8, 10);
-
-    // const newArray = deletedItems.concat(newDeletedItems)
-
     statsArray.forEach((user) => {
 
-        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${user}` }]);
-        // console.log(newArray);
-
+        setChatHistory(prevState => [...prevState, { type: 'display-stat', text: `${user}`}]);
+    
 
     });
     setChatHistory(prevState => [...prevState, {type: 'displayed-indent', text: HPString}]);
     
 }
-
-
 
 export {
     showStats
