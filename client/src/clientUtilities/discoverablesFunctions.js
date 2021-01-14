@@ -55,6 +55,10 @@ const discFunctions = {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
                 setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
             }
+        },
+
+        "wet sock": function wetSock({ socket, user }) {
+            socket.emit('discoverable', { itemName: "wet sock", socketProp: 'hasWetSock', discFunction: 'discGet', itemID: "5fffbdcbb9c6310f01b12822", user })
         }
 
     },
