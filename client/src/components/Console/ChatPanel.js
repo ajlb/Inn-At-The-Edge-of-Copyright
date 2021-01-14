@@ -351,6 +351,29 @@ function ChatPanel({
 
     });
 
+    socket.off('displayQuest').on('displayQuest', ({ title, location, description }) => {
+        console.log(title)
+        console.log(location)
+        console.log(description)
+        let toDisplay = [
+            '\xa0\xa0\xa0\xa0',
+            '------------------------------',
+            "\xa0\xa0" + title,
+            '------------------------------',
+            '\xa0\xa0\xa0\xa0',
+            description
+        ]
+
+        if (location) {
+            toDisplay.push('\xa0\xa0\xa0\xa0')
+            toDisplay.push(`Head to: ${location}`)
+        }
+
+        toDisplay = toDisplay.map(str => { return { type: "displayed-indent", text: str } })
+
+        setChatHistory(prevState => [...prevState].concat(toDisplay));
+    })
+
 
 
     socket.off('stats').on('stats', () => {
