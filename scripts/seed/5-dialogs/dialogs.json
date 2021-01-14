@@ -6,9 +6,24 @@
                 {
                     "message": "Hi welcome to the Inn... what can I do for you I guess...",
                     "exampleResponses": [
-                        "Where am I?",
-                        "Who are you?",
-                        "Goodbye"
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "I got your sock!",
+                            "conditionals": [
+                                {
+                                    "condition": "HAS",
+                                    "toHave": "wet sock"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -27,6 +42,29 @@
                         },
                         {
                             "responses": [
+                                "i got the sock",
+                                "i got your sock",
+                                "i have the sock",
+                                "i have your sock",
+                                "i have a sock",
+                                "i got a sock",
+                                "i got the wet sock",
+                                "i got your wet sock",
+                                "i have the wet sock",
+                                "i have your wet sock",
+                                "i have a wet sock",
+                                "i got a wet sock"
+                            ],
+                            "route": 1,
+                            "conditionals": [
+                                {
+                                    "condition": "HAS",
+                                    "toHave": "wet sock"
+                                }
+                            ]
+                        },
+                        {
+                            "responses": [
                                 "goodbye",
                                 "bye",
                                 "adios"
@@ -38,9 +76,15 @@
                 {
                     "message": "Didn't I just tell you? You're in the Inn! It's just down the road from the Town and east of the Pumpkin Patch...",
                     "exampleResponses": [
-                        "The Inn?",
-                        "Who are you?",
-                        "Goodbye"
+                        {
+                            "text": "The Inn?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -71,9 +115,15 @@
                 {
                     "message": "The name's Ford and despite my appearance, I'm actually just an intricately folded towel... don't ask",
                     "exampleResponses": [
-                        "Where am I?",
-                        "You're a towel?",
-                        "Goodbye"
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "You're a towel?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -112,10 +162,18 @@
                 {
                     "message": "You know, the Inn at the Edge of Copyright! The infinitely infamous pit stop where various travellers from around the universe take rest. Most of you I see only once and then you disappear beyond the crossroads. In fact, I’m the only one to have ever returned, as a towel no less!",
                     "exampleResponses": [
-                        "You're a towel?",
-                        "Disappearances?",
-                        "Who are you?",
-                        "Goodbye"
+                        {
+                            "text": "You're a towel?"
+                        },
+                        {
+                            "text": "Disappearances?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -171,9 +229,15 @@
                 {
                     "message": "Most of you don’t ask me that question thinking it rather rude… but between you and me I can not shake the experience of turning into this form. It happened just up there you know... *points to the sky and shudders*",
                     "exampleResponses": [
-                        "Where am I?",
-                        "Who are you?",
-                        "Goodbye"
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -209,8 +273,12 @@
                 {
                     "message": "I dare not mention more, it brings back too many troubling memories…. Some fond ones sure, like Arthur and that magnificent invention called a sandwich… oh hey you’re a sandwich-maker. Can you make me a sandwich?",
                     "exampleResponses": [
-                        "Yeah sure!",
-                        "No thanks"
+                        {
+                            "text": "Yeah sure!"
+                        },
+                        {
+                            "text": "No thanks"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -234,9 +302,15 @@
                 {
                     "message": "Such a Hoopy Frood you are!",
                     "exampleResponses": [
-                        "Where am I?",
-                        "Who are you?",
-                        "Goodbye"
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -266,9 +340,15 @@
                 {
                     "message": "Oh well, maybe I can find Arthur and get one",
                     "exampleResponses": [
-                        "Where am I?",
-                        "Who are you?",
-                        "Goodbye"
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -305,9 +385,15 @@
                 {
                     "message": "Hello there little one... what do you approach me for?",
                     "exampleResponses": [
-                        "Where am I?",
-                        "Who are you?",
-                        "Goodbye"
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -335,9 +421,15 @@
                 {
                     "message": "This grove we find ourselves in has been my home for thousands of years. Most refer to this area as the Haunted Forest, though the spirits residing here left long ago.",
                     "exampleResponses": [
-                        "Spirits?",
-                        "Who are you?",
-                        "Goodbye"
+                        {
+                            "text": "Spirits?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -365,9 +457,15 @@
                 {
                     "message": "Oh yes, long ago, when I was just a baby sapling, these woods were teeming with friendly spirits. I quite enjoyed their company. Such a shame what happened to them...",
                     "exampleResponses": [
-                        "What happened?",
-                        "Who are you?",
-                        "Goodbye"
+                        {
+                            "text": "What happened?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -397,8 +495,12 @@
                 {
                     "message": "Ahh... I'm not sure my stories would put those famously celebrated \"Heroes of Old\" in a very good light... perhaps a story for another time.",
                     "exampleResponses": [
-                        "Who are you?",
-                        "Goodbye"
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -420,9 +522,15 @@
                 {
                     "message": "I have gone by many names: Craobh mhòr, Dara Mezin, Babban Itace... though recently I have been referred to as The Great Tree. My children and I have filled this forest with life for far longer than your kind has been around.",
                     "exampleResponses": [
-                        "Your children?",
-                        "Where am I?",
-                        "Goodbye"
+                        {
+                            "text": "Your children?"
+                        },
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
@@ -450,8 +558,12 @@
                 {
                     "message": "Most now refer to my children as The Elder Trees, though I still remember when they first broke through the soft soil of the forest floor. Most of them reside just down the path to the west.",
                     "exampleResponses": [
-                        "Where am I?",
-                        "Goodbye"
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
                     ],
                     "allowedResponses": [
                         {
