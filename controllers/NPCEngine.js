@@ -1,4 +1,5 @@
 const npcFunctions = require("./npcactions");
+const { NPCConditionals, runConditionals } = require("./NPCConditionals");
 
 function thisStartsWithOneOfThese(string, array) {
     let itDoes = false;
@@ -25,11 +26,15 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
     if (messageFromUser.trim() === '' || !messageFromUser || (!route && route !== 0)) {
         // if the message doesn't exist, is an empty string, or begins with a greeting, this will run
         route = 0;
-        NPCMessage = NPCObj.messages[0].message;
-        exampleResponses = NPCObj.messages[0].exampleResponses;
+        let messageObj = NPCObj.messages[0];
+        NPCMessage = messageObj.message;
+        exampleResponses = messageObj.exampleResponses;
     } else {
         NPCObj.messages[route].allowedResponses.forEach(responseObj => {
-            if (responseObj.responses.includes(messageFromUser.toLowerCase())) {
+            if (
+                (responseObj.responses.includes(messageFromUser.toLowerCase()) && !responseObj.conditionals) ||
+                (responseObj.conditionals && runConditionals(responseObj.conditionals, { user }))
+            ) {
                 // sets the proper NPC message route 
                 route = responseObj.route;
                 // these two use the route to get the proper message and example responses from the NPC
@@ -37,11 +42,21 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
                 action = newMessageObj.action;
                 socketProp = newMessageObj.socketProp;
                 NPCMessage = newMessageObj.message;
-                exampleResponses = newMessageObj.exampleResponses;
                 leavingConversation = newMessageObj.leavingConversation;
+                exampleResponses = newMessageObj.exampleResponses;
             }
         })
     }
+
+    if (exampleResponses) exampleResponses = exampleResponses.map(response => {
+        if (response.conditionals) {
+            if (runConditionals(response.conditionals, { user })) {
+                return response;
+            }
+        } else {
+            return response;
+        }
+    }).filter(response => { if (response) return response })
 
     if (NPCMessage !== undefined) {
         if (action) {
@@ -58,10 +73,20 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
             route
         });
     } else {
+        if (!exampleResponses) exampleResponses = NPCObj.messages[route].exampleResponses.map(response => {
+            if (response.conditionals) {
+                if (runConditionals(response.conditionals, { user })) {
+                    return response;
+                }
+            } else {
+                return response;
+            }
+        }).filter(response => { if (response) return response })
+
         io.to(fromClient).emit('from NPC', {
             NPCName,
             NPCMessage: "Hm... I didn't understand that",
-            exampleResponses: NPCObj.messages[route].exampleResponses,
+            exampleResponses,
             leavingConversation,
             route
         })
