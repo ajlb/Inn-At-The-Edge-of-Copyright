@@ -82,6 +82,7 @@ function Console() {
     shout: ['shout', 'yell'],
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
+    quests: ['quests', 'quest', 'check quests', 'check quest', 'get quests', 'get quest']
   });
 
   // ANCHOR new, n helped t set region 
