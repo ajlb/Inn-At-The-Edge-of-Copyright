@@ -5,13 +5,14 @@
       {
         "description": "The desk clerk in the Inn Lobby, who goes by Ford, has asked you to retrieve his lost sock! He says he last saw it in when he was doing his laundry in the Inn Laundry Room.",
         "reference": "look for wet sock",
-        "location": "Inn Laundry Room"
+        "location": "Inn Laundry Room",
+        "giveToken": "a wet sock"
       },
       {
         "description": "You've found Ford's sock! You should go return that to Ford!",
         "reference": "got wet sock",
         "location": "Inn Lobby",
-        "token": "a wet sock",
+        "takeToken": "a wet sock",
         "last": true
       }
     ]

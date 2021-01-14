@@ -93,6 +93,16 @@
     "profession": "Hunter",
     "abilities": "NULL",
     "inventory": [],
+    "quests": [
+      {
+        "title": "The Missing Stocking",
+        "objectiveReference": "look for wet sock",
+        "complete": false
+      }
+    ],
+    "tokens": [
+      "a wet sock"
+    ],
     "lastLocation": "Inn Lobby",
     "backstory": "NULL",
     "description": "NULL",

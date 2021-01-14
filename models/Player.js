@@ -104,11 +104,18 @@ const playerSchema = new Schema({
     type: String
   },
   inventory: [{
-    item: {type: Schema.Types.ObjectId, ref: "Item"},
+    item: { type: Schema.Types.ObjectId, ref: "Item" },
     quantity: Number,
     dropTime: Array
-  }]
-  ,
+  }],
+  quests: {
+    type: Array,
+    default: []
+  },
+  tokens: {
+    type: Array,
+    default: []
+  },
   lastLocation: {
     type: String
   },
@@ -119,38 +126,38 @@ const playerSchema = new Schema({
     type: String
   },
   wornItems:
-    {
-      headSlot: {
-        type: String
-      },
-      neckSlot: {
-        type: String
-      },
-      torsoSlot: {
-        type: String
-      },
-      rightHandSlot: {
-        type: String
-      },
-      leftHandSlot: {
-        type: String
-      },
-      legsSlot: {
-        type: String
-      },
-      feetSlot: {
-        type: String
-      },
-      fingerSlot: {
-        type: String
-      },
-      handsSlot: {
-        type: String
-      },
-      twoHands: {
-        type: String
-      }
+  {
+    headSlot: {
+      type: String
     },
+    neckSlot: {
+      type: String
+    },
+    torsoSlot: {
+      type: String
+    },
+    rightHandSlot: {
+      type: String
+    },
+    leftHandSlot: {
+      type: String
+    },
+    legsSlot: {
+      type: String
+    },
+    feetSlot: {
+      type: String
+    },
+    fingerSlot: {
+      type: String
+    },
+    handsSlot: {
+      type: String
+    },
+    twoHands: {
+      type: String
+    }
+  },
   day: {
     type: Boolean
   }
