@@ -348,54 +348,25 @@ function ChatPanel({
             setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Ways to call it: ${actionData.waysToCall} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 Example: ${actionData.exampleCall}` }]);
         }
     });
-    //         let exampleArray = [];
-
-    //         actionData.map((helpItem) => {
-    //             exampleArray = (`(${helpItem.exampleCall}) - ${helpItem.exampleResult}`);
-    //             setChatHistory(prevState => [...prevState, { type, text: exampleArray }]);
-    //         });
-    //    // });
-
-    //         let commandLongArray = [];
-
-    //         actionData.map((helpItem) => {
-    //             commandLongArray = (`(${helpItem.actionName}) - ${helpItem.commandLongDescription}`);
-    //             setChatHistory(prevState => [...prevState, { type, text: commandLongArray }]);
-    //         });
-    //     });
-
-    //    Weather being displayed
 
     socket.off('weatherData').on('weatherData', ({ regionWeather, regionName }) => {
         try {
-            console.log(regionName);
-    
             if (regionName === location.current.region) {
-                console.log("---- WE MATCHED WEATHER ----");
                 setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: regionWeather }]);
             }
-    
             console.log(location);
-            for (const param in location){
-                if (location[param].region === regionName){
+            for (const param in location) {
+                if (location[param].region === regionName) {
                     const editedLocation = location;
                     editedLocation[param].weather = regionWeather;
                     setLocation(editedLocation);
                 }
-            }        
+            }
         } catch (e) {
             console.log("ERROR FROM weatherData(ChatPanel.js)");
             console.log(e);
         }
-        //             for (const param in location)
-        //  {
-        //         if (location[param].region ====regionName) {
-        //             const editedLocation = location;
-        //             editedLocation[param].weather = regionWeather
-        //             setLocation(editedLocation);
-        //         }
     });
-    // console.log(user);
 
 
     socket.off('stats').on('stats', () => {

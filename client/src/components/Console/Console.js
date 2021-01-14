@@ -82,7 +82,7 @@ function Console() {
     shout: ['shout', 'yell'],
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
-    weather: ['get weather']
+    weather: ['check weather']
   });
 
   // ANCHOR new, n helped t set region 

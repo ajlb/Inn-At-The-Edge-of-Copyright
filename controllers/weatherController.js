@@ -1,11 +1,10 @@
-const axios = require("axios");
+
 const db = require("../models");
-const { findLocationData } = require("./userInput/move");
 
 module.exports = function weatherTimer(io, socket) {
     try {
         const weatherInterval = setInterval(() => {
-            console.log('tick');
+            // console.log('tick');
             db.Location.find({})
                 .then(locationArray => {
                     let regionArray = [];
@@ -14,7 +13,7 @@ module.exports = function weatherTimer(io, socket) {
                             regionArray.push(locationData.region);
                         }
                     })
-                    console.log(regionArray);
+                    // console.log(regionArray);
                     regionArray.forEach(regionName => {
                         db.Weather.find({})
                             .then(weatherData => {
@@ -30,7 +29,7 @@ module.exports = function weatherTimer(io, socket) {
                                         db.Location.findOne({ region: regionName })
                                             .then(singleRegion => {
                                                 regionWeather = singleRegion.weather;
-                                                console.log(regionWeather);
+                                                //  console.log(regionWeather);
                                                 io.emit("weatherData", { regionWeather, regionName })
                                             })
                                     })
@@ -38,7 +37,7 @@ module.exports = function weatherTimer(io, socket) {
                     })
                 })
 
-        }, 10000)
+        }, 60 * 60 * 1000)
     } catch (e) {
         console.log("ERROR FROM weather controller");
         console.log(e);
