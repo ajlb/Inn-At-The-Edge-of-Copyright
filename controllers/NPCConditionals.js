@@ -2,7 +2,7 @@ const NPCConditionals = {
     HAS: function ({ toHave }, { user: { inventory } }) {
         let hasItem = false;
         inventory.forEach(({ item: { itemName } }) => {
-            if (itemName.includes(toHave)) hasItem = true
+            if (itemName === toHave) hasItem = true
         })
         return hasItem;
     }

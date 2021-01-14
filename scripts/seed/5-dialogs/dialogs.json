@@ -17,7 +17,7 @@
                             "conditionals": [
                                 {
                                     "condition": "HAS",
-                                    "toHave": "sock"
+                                    "toHave": "wet sock"
                                 }
                             ]
                         },
@@ -47,13 +47,19 @@
                                 "i have the sock",
                                 "i have your sock",
                                 "i have a sock",
-                                "i got a sock"
+                                "i got a sock",
+                                "i got the wet sock",
+                                "i got your wet sock",
+                                "i have the wet sock",
+                                "i have your wet sock",
+                                "i have a wet sock",
+                                "i got a wet sock"
                             ],
                             "route": 1,
                             "conditionals": [
                                 {
                                     "condition": "HAS",
-                                    "toHave": "sock"
+                                    "toHave": "wet sock"
                                 }
                             ]
                         },
