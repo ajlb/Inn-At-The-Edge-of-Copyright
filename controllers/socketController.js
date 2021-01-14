@@ -257,6 +257,14 @@ module.exports = function (io) {
                 })
         })
 
+        socket.on('getQuest', ({ questToGet: { title, objectiveReference } }) => {
+            db.Quest.findOne({ title }).then((data) => {
+                let { objectives, title } = data.toJSON();
+                let { description, location } = objectives.find(obj => { return obj.reference === objectiveReference })
+                io.emit('displayQuest', { title, description, location })
+            })
+        })
+
         /*****************************/
         /*   RED - INFO TO USER      */
         /*****************************/

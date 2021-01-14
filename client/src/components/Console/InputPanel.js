@@ -175,7 +175,7 @@ function InputPanel({
 
                 let inputtedQuest = takeTheseOffThat(actionCalls.quests, input).trim().toLowerCase()
 
-                runQuests({ user, input: inputtedQuest, setChatHistory })
+                runQuests({ user, input: inputtedQuest, setChatHistory, socket })
             } else if (findIn(input, actionCalls.juggle)) {
                 /////////////////////
                 //     JUGGLE      //

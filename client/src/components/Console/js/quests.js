@@ -1,4 +1,4 @@
-function runQuests({ user, input, setChatHistory }) {
+function runQuests({ user, input, setChatHistory, socket }) {
     if (!input || input == '') {
         let toDisplay = [
             "\xa0\xa0\xa0\xa0",
@@ -28,6 +28,7 @@ function runQuests({ user, input, setChatHistory }) {
             if (user.quests[input - 1]) {
                 let questToGet = user.quests[input - 1]
                 console.log(questToGet)
+                socket.emit('getQuest', { questToGet })
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `Quest #${input} not found` }])
             }
@@ -35,6 +36,7 @@ function runQuests({ user, input, setChatHistory }) {
             let questToGet = user.quests.find(quest => quest.title.toLowerCase().replace(/(the |a |an )/, '').split(' ').includes(input));
             if (questToGet) {
                 console.log(questToGet)
+                socket.emit('getQuest', { questToGet })
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: "You haven't unlocked any quests by that name" }]);
             }
