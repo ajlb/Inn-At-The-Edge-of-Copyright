@@ -19,6 +19,20 @@ const NPCConditionals = {
             if (name === tokenToHave && quantity > 0) hasToken = true;
         });
         return hasToken;
+    },
+    notStartedQuest: function ({ questTitle }, { user: { quests } }) {
+        let hasStarted = false;
+        quests.forEach(({ title }) => {
+            if (title === questTitle) hasStarted = true
+        })
+        return !hasStarted
+    },
+    hasQuestObjective: function ({ questTitle, hasReference }, { user: { quests } }) {
+        let hasObjective = false;
+        console.log("questTitle:", questTitle)
+        console.log("hasReference", hasReference)
+        console.log("quests", quests)
+        return hasObjective;
     }
 }
 

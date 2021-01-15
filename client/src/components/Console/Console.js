@@ -175,6 +175,10 @@ function Console() {
     }
   });
 
+  socket.off('questsUpdate').on('questsUpdate', ({ quests }) => {
+    setPlayer(prevState => { return { ...prevState, quests } })
+  })
+
   // Socket location chunk update
   socket.off('locationChunkUpdate').on('locationChunkUpdate', ({ newData, targetLocation }) => {
     if (!(newData === null) && !(newData === undefined)) {

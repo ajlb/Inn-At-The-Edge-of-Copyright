@@ -41,6 +41,7 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
                 let newMessageObj = NPCObj.messages[route]
                 action = newMessageObj.action;
                 socketProp = newMessageObj.socketProp;
+                questTitle = newMessageObj.questTitle;
                 NPCMessage = newMessageObj.message;
                 leavingConversation = newMessageObj.leavingConversation;
                 exampleResponses = newMessageObj.exampleResponses;
@@ -61,7 +62,7 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
     if (NPCMessage !== undefined) {
         if (action) {
             if (npcFunctions[NPCName] && npcFunctions[NPCName][action]) {
-                npcFunctions[NPCName][action]({ io, socket, socketProp, user })
+                npcFunctions[NPCName][action]({ io, socket, socketProp, user, questTitle })
             }
         }
         // emits all the necessary info to the user

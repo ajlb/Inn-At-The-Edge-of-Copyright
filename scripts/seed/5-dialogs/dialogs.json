@@ -19,6 +19,10 @@
                                 {
                                     "condition": "notHasToken",
                                     "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -153,6 +157,10 @@
                                 {
                                     "condition": "notHasToken",
                                     "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -324,6 +332,10 @@
                                 {
                                     "condition": "notHasToken",
                                     "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -455,6 +467,10 @@
                                 {
                                     "condition": "notHasToken",
                                     "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -549,6 +565,10 @@
                                 {
                                     "condition": "notHasToken",
                                     "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -698,7 +718,9 @@
                             ],
                             "route": 5
                         }
-                    ]
+                    ],
+                    "action": "assignQuest",
+                    "questTitle": "The Missing Stocking"
                 },
                 {
                     "routeNumber": 11,
@@ -716,6 +738,10 @@
                                 {
                                     "condition": "notHasToken",
                                     "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -843,6 +869,10 @@
                                 {
                                     "condition": "notHasToken",
                                     "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },

@@ -1,4 +1,5 @@
 const { incrementItemUpdateOne, pushItemToInventoryReturnData, findPlayerData } = require("./userInput/getDrop");
+const db = require("../models")
 function isInUserInventory(itemName, user) {
     itIs = false;
     user.inventory.forEach(itemObj => {
@@ -31,6 +32,22 @@ const npcFunctions = {
                         }
                     });
                 }
+            }
+        },
+        assignQuest: function ({ io, socket, user, questTitle }) {
+            let alreadyAssigned = false;
+            user.quests.forEach(({ title }) => {
+                if (title === questTitle) alreadyAssigned = true
+            })
+            if (!alreadyAssigned) {
+                db.Quest.findOne({ title: questTitle }).then(data => {
+                    let { title, objectives } = data.toJSON();
+                    user.quests.push({ title, objectiveReference: objectives[0].reference, finished: false })
+                    db.Player.findOneAndUpdate({ characterName: user.characterName }, { quests: user.quests }, { new: true })
+                        .then(data => {
+                            io.to(socket.id).emit('questsUpdate', { quests: data.quests })
+                        })
+                })
             }
         }
     }
