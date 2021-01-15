@@ -1,10 +1,24 @@
 const NPCConditionals = {
-    HAS: function ({ toHave }, { user: { inventory } }) {
+    hasItem: function ({ toHave }, { user: { inventory } }) {
         let hasItem = false;
         inventory.forEach(({ item: { itemName } }) => {
             if (itemName === toHave) hasItem = true
         })
         return hasItem;
+    },
+    notHasToken: function ({ tokenNotHad }, { user: { tokens } }) {
+        let hasToken = false;
+        tokens.forEach(({ name, quantity }) => {
+            if (name === tokenNotHad && quantity > 0) hasToken = true;
+        });
+        return !hasToken;
+    },
+    hasToken: function ({ tokenToHave }, { user: { tokens } }) {
+        let hasToken = false;
+        tokens.forEach(({ name, quantity }) => {
+            if (name === tokenToHave && quantity > 0) hasToken = true;
+        });
+        return hasToken;
     }
 }
 

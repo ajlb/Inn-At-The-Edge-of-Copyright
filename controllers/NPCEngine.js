@@ -32,8 +32,8 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
     } else {
         NPCObj.messages[route].allowedResponses.forEach(responseObj => {
             if (
-                (responseObj.responses.includes(messageFromUser.toLowerCase()) && !responseObj.conditionals) ||
-                (responseObj.conditionals && runConditionals(responseObj.conditionals, { user }))
+                (responseObj.responses.includes(messageFromUser.toLowerCase())) &&
+                (!responseObj.conditionals || (responseObj.conditionals && runConditionals(responseObj.conditionals, { user })))
             ) {
                 // sets the proper NPC message route 
                 route = responseObj.route;

@@ -101,7 +101,10 @@
       }
     ],
     "tokens": [
-      "a wet sock"
+      {
+        "name": "wet sock",
+        "quantity": 1
+      }
     ],
     "lastLocation": "Inn Lobby",
     "backstory": "NULL",
