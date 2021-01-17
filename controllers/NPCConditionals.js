@@ -1,8 +1,6 @@
 const NPCConditionals = {
     hasItem: function ({ toHave }, { user: { inventory } }) {
-        let foundItem = inventory.find(({ item: { itemName }, quantity }) => {
-            return itemName === toHave && quantity > 0
-        });
+        let foundItem = inventory.find(({ item: { itemName }, quantity }) => itemName === toHave && quantity > 0);
         return foundItem ? true : false;
     },
     notHasToken: function ({ tokenNotHad }, { user: { tokens } }) {
