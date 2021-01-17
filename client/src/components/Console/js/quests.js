@@ -1,3 +1,12 @@
+function filterAndFindQuest(user, input) {
+    let foundQuest = user.quests.find(quest => quest.title.toLowerCase() === input)
+        || user.quests.find(quest => quest.title.toLowerCase().startsWith(input) && /\w\s\w/.test(input))
+        || user.quests.find(quest => quest.title.toLowerCase().replace(/(the |a |an )/, '') === input)
+        || user.quests.find(quest => quest.title.toLowerCase().replace(/(the |a |an )/, '').split(' ').includes(input))
+
+    return foundQuest
+}
+
 function runQuests({ user, input, setChatHistory, socket }) {
     if (!input || input === '') {
         let toDisplay = [
@@ -52,7 +61,7 @@ function runQuests({ user, input, setChatHistory, socket }) {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `Quest #${input} not found` }])
             }
         } else {
-            let questToGet = user.quests.find(quest => quest.title.toLowerCase().replace(/(the |a |an )/, '').split(' ').includes(input));
+            let questToGet = filterAndFindQuest(user, input);
             if (questToGet) {
                 console.log(questToGet)
                 socket.emit('getQuest', { questToGet })
