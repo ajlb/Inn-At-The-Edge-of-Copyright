@@ -169,7 +169,8 @@ figure {
 }
 
 /* level 1-3 */
-#logo, #logo-1, #logo-2, #logo-3  {
+
+#logo, #logo-1, #logo-2, #logo-3 {
     width: 160px;
     margin-left: 20%;
     margin-bottom: -20px;
@@ -215,6 +216,10 @@ figure {
 
 .faded {
     opacity: .8;
+}
+
+.sky-blue {
+    color: #42d3ff;
 }
 
 .error-message {

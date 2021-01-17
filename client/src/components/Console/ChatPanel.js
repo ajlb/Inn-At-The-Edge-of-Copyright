@@ -355,7 +355,7 @@ function ChatPanel({
         let toDisplay = [
             '\xa0\xa0\xa0\xa0',
             '------------------------------' + (completed ? "-------------" : ""),
-            "\xa0\xa0" + title + (completed ? ": Completed" : ""),
+            { type: "displayed-indent sky-blue font-weight-bold", text: "\xa0\xa0" + title + (completed ? ": Completed" : "") },
             '------------------------------' + (completed ? "-------------" : ""),
             '\xa0\xa0\xa0\xa0',
             description
@@ -366,13 +366,19 @@ function ChatPanel({
             toDisplay.push(`Head to: ${location}`)
         }
 
-        toDisplay = toDisplay.map(str => { return { type: "displayed-indent", text: str } })
+        toDisplay = toDisplay.map(val => {
+            if (typeof val === "object") {
+                return val
+            } else {
+                return { type: "displayed-indent", text: val }
+            }
+        })
 
         setChatHistory(prevState => [...prevState].concat(toDisplay));
     })
 
     socket.off('questNotif').on('questNotif', message => {
-        setChatHistory(prevState => [...prevState, { type: "displayed-stat text-primary", text: message }]);
+        setChatHistory(prevState => [...prevState, { type: "displayed-stat font-weight-bold sky-blue", text: message }]);
     })
 
 
