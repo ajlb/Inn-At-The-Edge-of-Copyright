@@ -1,5 +1,5 @@
 function runQuests({ user, input, setChatHistory, socket }) {
-    if (!input || input == '') {
+    if (!input || input === '') {
         let toDisplay = [
             "\xa0\xa0\xa0\xa0",
             "QUESTS",
@@ -15,7 +15,7 @@ function runQuests({ user, input, setChatHistory, socket }) {
 
         toDisplay = toDisplay.map(str => { return { type: "displayed-indent", text: str } })
 
-        if (user.quests.length <= 3) {
+        if (user.quests.length <= 3 && user.quests.length > 0) {
             toDisplay.push({ type: "displayed-commands", text: '\xa0\xa0\xa0\xa0' })
             toDisplay.push({ type: "displayed-commands faded", text: `Try entering: check quest 1` })
         }
