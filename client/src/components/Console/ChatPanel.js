@@ -351,15 +351,12 @@ function ChatPanel({
 
     });
 
-    socket.off('displayQuest').on('displayQuest', ({ title, location, description }) => {
-        console.log(title)
-        console.log(location)
-        console.log(description)
+    socket.off('displayQuest').on('displayQuest', ({ title, location, description, completed }) => {
         let toDisplay = [
             '\xa0\xa0\xa0\xa0',
-            '------------------------------',
-            "\xa0\xa0" + title,
-            '------------------------------',
+            '------------------------------' + (completed ? "-------------" : ""),
+            "\xa0\xa0" + title + (completed ? ": Completed" : ""),
+            '------------------------------' + (completed ? "-------------" : ""),
             '\xa0\xa0\xa0\xa0',
             description
         ]

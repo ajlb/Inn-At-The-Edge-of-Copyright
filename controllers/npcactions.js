@@ -1,5 +1,8 @@
 const { incrementItemUpdateOne, pushItemToInventoryReturnData, findPlayerData } = require("./userInput/getDrop");
+const { updatePlayerQuest, assignAndUpdatePlayerQuest } = require('./questsController');
 const db = require("../models")
+
+
 function isInUserInventory(itemName, user) {
     itIs = false;
     user.inventory.forEach(itemObj => {
@@ -49,6 +52,10 @@ const npcFunctions = {
                         })
                 })
             }
+        },
+        takeSock: function ({ io, socket, user }) {
+            console.log('running takeSock')
+            updatePlayerQuest(io, socket, { user, questTitle: "The Missing Stocking", newObjectiveRef: "completed" })
         }
     }
 }

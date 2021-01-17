@@ -175,9 +175,15 @@ function Console() {
     }
   });
 
-  socket.off('questsUpdate').on('questsUpdate', ({ quests }) => {
-    setPlayer(prevState => { return { ...prevState, quests } })
-  })
+  socket.off('questsUpdate').on('questsUpdate', ({ quests, tokens }) => {
+    console.log('quests updated')
+    console.log(tokens)
+    setPlayer(prevState => { return { ...prevState, quests, tokens } })
+  });
+
+  socket.off('tokensUpdate').on('tokensUpdate', ({ tokens }) => {
+    setPlayer(prevState => { return { ...prevState, tokens } })
+  });
 
   // Socket location chunk update
   socket.off('locationChunkUpdate').on('locationChunkUpdate', ({ newData, targetLocation }) => {

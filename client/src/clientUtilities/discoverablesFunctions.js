@@ -57,8 +57,27 @@ const discFunctions = {
             }
         },
 
-        "wet sock": function wetSock({ socket, user }) {
-            socket.emit('discoverable', { itemName: "wet sock", socketProp: 'hasWetSock', discFunction: 'discGet', itemID: "5fffbdcbb9c6310f01b12822", user })
+        "wet sock": function wetSock({ socket, user, setChatHistory }) {
+            let alreadyHasSock = false;
+            user.tokens.forEach(({ name, quantity }) => {
+                if (name === 'wet sock' && quantity > 0) alreadyHasSock = true;
+            })
+            let beganSockQuest = false;
+            let sockQuestCompleted = false
+            user.quests.forEach(({ title, completed }) => {
+                if (title === 'The Missing Stocking') {
+                    beganSockQuest = true
+                    sockQuestCompleted = completed
+                }
+            })
+
+            if (!alreadyHasSock && beganSockQuest && !sockQuestCompleted) {
+                socket.emit('updatePlayerQuest', { user, questTitle: "The Missing Stocking", newObjectiveRef: 'got wet sock' })
+            } else if (alreadyHasSock | sockQuestCompleted) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: "You already picked up the sock!" }]);
+            } else if (!beganSockQuest) {
+                socket.emit('assignAndUpdatePlayerQuest', { user, questTitle: "The Missing Stocking", newObjectiveRef: "got wet sock" });
+            }
         }
 
     },

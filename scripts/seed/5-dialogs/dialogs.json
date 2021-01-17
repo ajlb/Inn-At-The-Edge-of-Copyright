@@ -864,28 +864,6 @@
                             "text": "Who are you?"
                         },
                         {
-                            "text": "What are you doing?",
-                            "conditionals": [
-                                {
-                                    "condition": "notHasToken",
-                                    "tokenNotHad": "wet sock"
-                                },
-                                {
-                                    "condition": "notStartedQuest",
-                                    "questTitle": "The Missing Stocking"
-                                }
-                            ]
-                        },
-                        {
-                            "text": "I got your sock!",
-                            "conditionals": [
-                                {
-                                    "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
-                                }
-                            ]
-                        },
-                        {
                             "text": "Goodbye"
                         }
                     ],
@@ -906,50 +884,14 @@
                         },
                         {
                             "responses": [
-                                "what are you doing",
-                                "whatre you doing",
-                                "what you doing"
-                            ],
-                            "route": 9,
-                            "conditionals": [
-                                {
-                                    "condition": "notHasToken",
-                                    "tokenNotHad": "wet sock"
-                                }
-                            ]
-                        },
-                        {
-                            "responses": [
-                                "i got the sock",
-                                "i got your sock",
-                                "i have the sock",
-                                "i have your sock",
-                                "i have a sock",
-                                "i got a sock",
-                                "i got the wet sock",
-                                "i got your wet sock",
-                                "i have the wet sock",
-                                "i have your wet sock",
-                                "i have a wet sock",
-                                "i got a wet sock"
-                            ],
-                            "route": 12,
-                            "conditionals": [
-                                {
-                                    "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
-                                }
-                            ]
-                        },
-                        {
-                            "responses": [
                                 "goodbye",
                                 "bye",
                                 "adios"
                             ],
                             "route": 5
                         }
-                    ]
+                    ],
+                    "action": "takeSock"
                 },
                 {
                     "routeNumber": 14,
