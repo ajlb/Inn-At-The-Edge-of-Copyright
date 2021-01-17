@@ -17,12 +17,11 @@ const objectiveSchema = new Schema({
         default: 0,
         required: true
     },
-    token: {
+    giveToken: {
         type: String
     },
-    last: {
-        type: Boolean,
-        default: false
+    takeToken: {
+        type: String
     }
 })
 
