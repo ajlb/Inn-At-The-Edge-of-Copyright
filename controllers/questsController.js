@@ -54,11 +54,13 @@ function assignAndUpdatePlayerQuest(io, socket, { user: { characterName, tokens,
                         let foundToken = tokens.find(({ name }) => name === newObjective.giveToken);
                         if (!foundToken) tokens.push({ name: newObjective.giveToken, quantity: 1 });
                         if (foundToken) tokens[tokens.indexOf(foundToken)].quantity++;
+                        io.to(socket.id).emit('genericMessage', `You collect a ${newObjective.giveToken}`)
                     }
 
                     if (newObjective.takeToken) {
                         let foundToken = tokens.find(({ name, quantity }) => name === newObjective.takeToken && quantity > 0);
                         if (foundToken) tokens.splice(tokens.indexOf(newObjective.takeToken), 1)
+                        io.to(socket.id).emit('genericMessage', `You lose a ${newObjective.takeToken}`)
                     }
 
                     db.Player.findOneAndUpdate({ characterName }, { quests, tokens }, { new: true })
@@ -118,11 +120,13 @@ function updatePlayerQuest(io, socket, { user: { quests, tokens, characterName }
                         let foundToken = tokens.find(({ name }) => name === newObjective.giveToken);
                         if (!foundToken) tokens.push({ name: newObjective.giveToken, quantity: 1 });
                         if (foundToken) tokens[tokens.indexOf(foundToken)].quantity++;
+                        io.to(socket.id).emit('genericMessage', `You collect a ${newObjective.giveToken}`)
                     }
 
                     if (newObjective.takeToken) {
                         let foundToken = tokens.find(({ name, quantity }) => name === newObjective.takeToken && quantity > 0);
                         if (foundToken) tokens.splice(tokens.indexOf(newObjective.takeToken), 1)
+                        io.to(socket.id).emit('genericMessage', `You lose a ${newObjective.takeToken}`)
                     }
 
                     db.Player.findOneAndUpdate({ characterName }, { quests, tokens }, { new: true })
