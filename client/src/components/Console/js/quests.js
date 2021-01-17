@@ -63,7 +63,6 @@ function runQuests({ user, input, setChatHistory, socket }) {
         } else {
             let questToGet = filterAndFindQuest(user, input);
             if (questToGet) {
-                console.log(questToGet)
                 socket.emit('getQuest', { questToGet })
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: "You haven't unlocked any quests by that name" }]);
