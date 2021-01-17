@@ -502,7 +502,7 @@ module.exports = function (io) {
                     if (statsData !== null) {
                         io.to(socket.id).emit('stats', { statsData });
                     } else {
-                        io.emit('error', { status: 500, message: "Something went wrong" })
+                        io.to(socket.id).emit('error', { status: 500, message: "Something went wrong" })
                     }
                 })
                 .catch(e => {
