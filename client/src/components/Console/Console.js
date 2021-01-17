@@ -176,8 +176,6 @@ function Console() {
   });
 
   socket.off('questsUpdate').on('questsUpdate', ({ quests, tokens }) => {
-    console.log('quests updated')
-    console.log(tokens)
     setPlayer(prevState => { return { ...prevState, quests, tokens } })
   });
 

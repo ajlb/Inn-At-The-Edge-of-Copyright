@@ -47,7 +47,6 @@ function runQuests({ user, input, setChatHistory, socket }) {
             input = parseInt(input)
             if (user.quests[input - 1]) {
                 let questToGet = user.quests[input - 1]
-                console.log(questToGet)
                 socket.emit('getQuest', { questToGet })
             } else {
                 setChatHistory(prevState => [...prevState, { type: "displayed-error", text: `Quest #${input} not found` }])
