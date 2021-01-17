@@ -30,8 +30,12 @@
                             "text": "I got your sock!",
                             "conditionals": [
                                 {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                },
+                                {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
                                 }
                             ]
                         },
@@ -87,7 +91,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -169,7 +177,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -242,7 +254,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         }
@@ -344,7 +360,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -400,7 +420,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -479,7 +503,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -535,7 +563,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -577,7 +609,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -633,7 +669,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -750,7 +790,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -806,7 +850,11 @@
                             "conditionals": [
                                 {
                                     "condition": "hasToken",
-                                    "tokenToHave": "wet sock"
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },

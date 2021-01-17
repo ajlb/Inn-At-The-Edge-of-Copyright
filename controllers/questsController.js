@@ -17,7 +17,7 @@ function assignQuest(io, socket, { user, questTitle }) {
                     user.quests.push({ title, objectiveReference: objectives[0].reference, finished: false })
                     db.Player.findOneAndUpdate({ characterName: user.characterName }, { quests: user.quests }, { new: true })
                         .then(data => {
-                            io.to(socket.id).emit('questsUpdate', { quests: data.quests })
+                            io.to(socket.id).emit('questsUpdate', { quests: data.quests, tokens: data.tokens })
                             io.to(socket.id).emit('questNotif', `New Quest: ${questTitle}`)
                             res()
                         })
