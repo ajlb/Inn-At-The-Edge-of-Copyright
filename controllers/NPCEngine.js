@@ -60,19 +60,28 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
     }).filter(response => { if (response) return response })
 
     if (NPCMessage !== undefined) {
-        if (action) {
-            if (npcFunctions[NPCName] && npcFunctions[NPCName][action]) {
-                npcFunctions[NPCName][action]({ io, socket, socketProp, user, questTitle })
-            }
+        if (action && npcFunctions[NPCName] && npcFunctions[NPCName][action]) {
+            npcFunctions[NPCName][action]({ io, socket, socketProp, user, questTitle })
+                .then(() => {
+                    // emits all the necessary info to the user
+                    io.to(fromClient).emit('from NPC', {
+                        NPCName,
+                        NPCMessage,
+                        exampleResponses: exampleResponses,
+                        leavingConversation,
+                        route
+                    });
+                })
+        } else {
+            // emits all the necessary info to the user
+            io.to(fromClient).emit('from NPC', {
+                NPCName,
+                NPCMessage,
+                exampleResponses: exampleResponses,
+                leavingConversation,
+                route
+            });
         }
-        // emits all the necessary info to the user
-        io.to(fromClient).emit('from NPC', {
-            NPCName,
-            NPCMessage,
-            exampleResponses: exampleResponses,
-            leavingConversation,
-            route
-        });
     } else {
         if (!exampleResponses) exampleResponses = NPCObj.messages[route].exampleResponses.map(response => {
             if (response.conditionals) {

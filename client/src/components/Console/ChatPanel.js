@@ -371,6 +371,10 @@ function ChatPanel({
         setChatHistory(prevState => [...prevState].concat(toDisplay));
     })
 
+    socket.off('questNotif').on('questNotif', message => {
+        setChatHistory(prevState => [...prevState, { type: "displayed-stat", text: message }]);
+    })
+
 
 
     socket.off('stats').on('stats', () => {
