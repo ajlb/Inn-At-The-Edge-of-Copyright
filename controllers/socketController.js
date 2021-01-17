@@ -15,7 +15,7 @@ const { eatItem } = require("./userInput/eat");
 const runSweep = require("./sweeper");
 const { repopMobs } = require("./monsterSweeper");
 const dayNight = require("./dayNight");
-const { assignAndUpdatePlayerQuest, updatePlayerQuest } = require('./questsController')
+const { assignAndUpdatePlayerQuest, updatePlayerQuest, incrementPlayerQuest } = require('./questsController')
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -285,51 +285,19 @@ module.exports = function (io) {
             updatePlayerQuest(io, socket, obj)
         })
 
-        socket.on('incrementPlayerQuest', ({ questToUpdate: { title, objectiveReference, completed }, user: { characterName, quests, tokens } }) => {
-            try {
-                !completed && db.Quest.findOne({ title }).then(data => {
-                    data = data.toJSON();
-                    let oldIndex = data.objectives.findIndex(objective => objective.reference === objectiveReference);
-                    let oldObjective = data.objectives[oldIndex];
-                    let newIndex = oldIndex + 1;
-                    let newObjective = data.objectives[newIndex];
-                    let completed = data.objectives.length - 1 === newIndex
-                    let updatedPlayerQuest = {
-                        title,
-                        objectiveReference: newObjective.reference,
-                        completed
-                    }
-                    quests = quests.map(quest => {
-                        if (quest.title === title) {
-                            return updatedPlayerQuest
-                        } else {
-                            return quest
-                        }
-                    })
-                    db.Player.findOneAndUpdate({ characterName }, { quests }, { new: true })
-                        .then(({ quests }) => {
-                            io.to(socket.id).emit('questsUpdate', { quests })
-                            if (completed) {
-                                io.to(socket.id).emit('completedQuest')
-                            } else {
-                                io.to(socket.id).emit('updatedQuest')
-                            }
-                        })
-                        .catch(e => {
-                            console.log("ERROR IN DB CALL", e)
-                            io.to(socket.id).emit('failure', 'Something went wrong')
-                        })
-                })
-            } catch (e) {
-                console.log("ERROR IN incremenetPlayerQuest", e)
-                io.to(socket.id).emit('failure', 'Something went wrong')
-            }
+        socket.on('incrementPlayerQuest', (obj) => {
+            incrementPlayerQuest(io, socket, obj)
         })
 
         socket.on('updateTokens', ({ characterName, tokens }) => {
-            db.Player.findOneAndUpdate({ characterName }, { tokens }, { new: true }).then(({ tokens }) => {
-                io.to(socket.id).emit('tokensUpdate', { tokens })
-            })
+            db.Player.findOneAndUpdate({ characterName }, { tokens }, { new: true })
+                .then(({ tokens }) => {
+                    io.to(socket.id).emit('tokensUpdate', { tokens })
+                })
+                .catch(e => {
+                    console.log("ERROR IN DB CALL", e)
+                    io.to(socket.id).emit('failure', "Something went wrong")
+                })
         })
 
         /*****************************/
