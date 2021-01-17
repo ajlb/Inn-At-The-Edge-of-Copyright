@@ -1,18 +1,5 @@
 const npcFunctions = require("./npcactions");
-const { NPCConditionals, runConditionals } = require("./NPCConditionals");
-
-function thisStartsWithOneOfThese(string, array) {
-    let itDoes = false;
-    array.forEach(value => {
-        if (string.startsWith(value)) {
-            itDoes = true;
-        }
-    })
-    return itDoes;
-}
-
-let greetingsArray = ['hello', 'hi', 'hey', 'hello?']; // used to default the user to opening NPC message 
-let goodbyeArray = ['goodbye', 'bye', 'adios', 'leave']; // used to trigger if the user is leaving the conversation
+const runConditionals = require("./NPCConditionals");
 
 module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser, fromClient, route }) {
     let action;

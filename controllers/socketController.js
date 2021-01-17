@@ -15,7 +15,7 @@ const { eatItem } = require("./userInput/eat");
 const runSweep = require("./sweeper");
 const { repopMobs } = require("./monsterSweeper");
 const dayNight = require("./dayNight");
-const { assignAndUpdatePlayerQuest, updatePlayerQuest, incrementPlayerQuest } = require('./questsController')
+const { assignQuest, assignAndUpdatePlayerQuest, updatePlayerQuest, incrementPlayerQuest } = require('./questsController')
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -265,28 +265,46 @@ module.exports = function (io) {
             db.Quest.findOne({ title })
                 .then((data) => {
                     let { objectives, title } = data.toJSON();
-                    let foundObjective = objectives.find(obj => { return obj.reference === objectiveReference })
+                    let foundObjective = objectives.find(obj => obj.reference === objectiveReference)
                     if (foundObjective) {
                         var { description, location } = foundObjective
+                        io.to(socket.id).emit('displayQuest', { title, description, location, completed })
+                    } else {
+                        io.to(socket.id).emit('failure', 'Quest not found')
                     }
-                    io.to(socket.id).emit('displayQuest', { title, description, location, completed })
                 })
                 .catch(e => {
                     console.log("ERROR IN DB CALL", e)
                     io.to(socket.id).emit('failure', 'Something went wrong')
                 })
+        });
+
+        socket.on('assignQuest', (obj) => {
+            assignQuest(io, socket, obj)
+                .catch(e => {
+                    console.log('ERROR IN assignQuest', e)
+                });
         })
 
         socket.on('assignAndUpdatePlayerQuest', (obj) => {
             assignAndUpdatePlayerQuest(io, socket, obj)
-        })
+                .catch(e => {
+                    console.log('ERROR IN assignAndUpdatePlayerQuest', e)
+                });
+        });
 
         socket.on('updatePlayerQuest', (obj) => {
             updatePlayerQuest(io, socket, obj)
+                .catch(e => {
+                    console.log('ERROR IN updatePlayerQuest', e)
+                })
         })
 
         socket.on('incrementPlayerQuest', (obj) => {
             incrementPlayerQuest(io, socket, obj)
+                .catch(e => {
+                    console.log('ERROR IN incrementPlayerQuest', e)
+                })
         })
 
         socket.on('updateTokens', ({ characterName, tokens }) => {
