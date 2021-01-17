@@ -5,15 +5,35 @@ function runQuests({ user, input, setChatHistory, socket }) {
             "QUESTS",
             "\xa0\xa0\xa0\xa0"
         ]
-        user.quests.forEach(({ title }, index) => {
-            toDisplay.push(`${index + 1}. ${title}`)
+
+        user.quests.sort((a, b) => {
+            if (a.completed && b.completed) {
+                return 0
+            } else if (a.completed) {
+                return 1
+            } else if (b.completed) {
+                return -1
+            }
+        })
+
+        user.quests.forEach(({ title, completed }, index) => {
+            toDisplay.push({
+                type: "displayed-indent" + (completed ? " faded" : " font-weight-bold"),
+                text: `${index + 1}. ${title}`
+            })
         })
         if (user.quests.length === 0) {
             toDisplay.push("You have not unlocked any quests")
         }
         toDisplay.push('\xa0\xa0\xa0\xa0')
 
-        toDisplay = toDisplay.map(str => { return { type: "displayed-indent", text: str } })
+        toDisplay = toDisplay.map(val => {
+            if (typeof val === 'object') {
+                return val
+            } else {
+                return { type: "displayed-indent", text: val }
+            }
+        })
 
         if (user.quests.length <= 3 && user.quests.length > 0) {
             toDisplay.push({ type: "displayed-commands", text: '\xa0\xa0\xa0\xa0' })
