@@ -1,5 +1,5 @@
 const { incrementItemUpdateOne, pushItemToInventoryReturnData, findPlayerData } = require("./userInput/getDrop");
-const { updatePlayerQuest, assignAndUpdatePlayerQuest } = require('./questsController');
+const { updatePlayerQuest, assignAndUpdatePlayerQuest, assignQuest } = require('./questsController');
 const db = require("../models")
 
 // 
@@ -41,32 +41,24 @@ const npcFunctions = {
                                 })
                             }
                         });
+                    } else {
+                        res()
                     }
+                } else {
+                    res()
                 }
             })
         },
         assignQuest: function ({ io, socket, user, questTitle }) {
             return new Promise((res, rej) => {
-                let alreadyAssigned = false;
-                user.quests.forEach(({ title }) => {
-                    if (title === questTitle) alreadyAssigned = true
-                })
-                if (!alreadyAssigned) {
-                    db.Quest.findOne({ title: questTitle }).then(data => {
-                        let { title, objectives } = data.toJSON();
-                        user.quests.push({ title, objectiveReference: objectives[0].reference, finished: false })
-                        db.Player.findOneAndUpdate({ characterName: user.characterName }, { quests: user.quests }, { new: true })
-                            .then(data => {
-                                io.to(socket.id).emit('questsUpdate', { quests: data.quests })
-                                res()
-                            })
-                            .catch(e => {
-                                console.log('ERROR IN assignQuest', e)
-                                io.to(socket.id).emit('failure', "Something went wrong")
-                                rej(e)
-                            })
+                assignQuest(io, socket, { user, questTitle })
+                    .then(() => {
+                        res()
                     })
-                }
+                    .catch((e) => {
+                        console.log("ERROR IN assignQuest", e)
+                        rej(e)
+                    });
             })
         },
         takeSock: function ({ io, socket, user }) {

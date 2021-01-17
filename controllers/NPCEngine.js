@@ -72,6 +72,10 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
                         route
                     });
                 })
+                .catch(e => {
+                    console.log("ERROR IN NPC FUNCTION", e)
+                    io.to(socket.id).emit('failure', "Something went wrong")
+                })
         } else {
             // emits all the necessary info to the user
             io.to(fromClient).emit('from NPC', {

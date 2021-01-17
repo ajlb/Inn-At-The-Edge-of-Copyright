@@ -2,7 +2,38 @@ const db = require('../models')
 
 // 
 // ALL QUEST FUNCTIONS MUST RETURN A PROMISE
-// 
+//
+
+function assignQuest(io, socket, { user, questTitle }) {
+    return new Promise((res, rej) => {
+        let alreadyAssigned = false;
+        user.quests.forEach(({ title }) => {
+            if (title === questTitle) alreadyAssigned = true
+        })
+        if (!alreadyAssigned) {
+            db.Quest.findOne({ title: questTitle })
+                .then(data => {
+                    let { title, objectives } = data.toJSON();
+                    user.quests.push({ title, objectiveReference: objectives[0].reference, finished: false })
+                    db.Player.findOneAndUpdate({ characterName: user.characterName }, { quests: user.quests }, { new: true })
+                        .then(data => {
+                            io.to(socket.id).emit('questsUpdate', { quests: data.quests })
+                            io.to(socket.id).emit('questNotif', `New Quest: ${questTitle}`)
+                            res()
+                        })
+                        .catch(e => {
+                            console.log('ERROR IN assignQuest', e)
+                            io.to(socket.id).emit('failure', "Something went wrong")
+                            rej(e)
+                        })
+                })
+                .catch(e => {
+                    console.log("EROR IN DB CALL", e)
+                    rej(e)
+                })
+        }
+    })
+}
 
 function assignAndUpdatePlayerQuest(io, socket, { user, questTitle, newObjectiveRef }) {
     return new Promise((res, rej) => {
@@ -13,7 +44,7 @@ function assignAndUpdatePlayerQuest(io, socket, { user, questTitle, newObjective
                     let newObjective = data.objectives.find(obj => obj.reference === newObjectiveRef);
                     let newObjectiveIndex = data.objectives.indexOf(newObjective);
                     let completed = data.objectives.length - 1 === newObjectiveIndex
-                    user.quests.push({ title: questTitle, newObjectiveRef, completed })
+                    user.quests.push({ title: questTitle, objectiveReference: newObjectiveRef, completed })
 
                     if (newObjective.giveToken) {
                         let hasToken = false;
@@ -207,4 +238,4 @@ function incrementPlayerQuest(io, socket, { questToUpdate: { title, objectiveRef
     })
 }
 
-module.exports = { assignAndUpdatePlayerQuest, updatePlayerQuest, incrementPlayerQuest }
+module.exports = { assignAndUpdatePlayerQuest, updatePlayerQuest, incrementPlayerQuest, assignQuest }
