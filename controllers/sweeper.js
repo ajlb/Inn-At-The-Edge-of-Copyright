@@ -35,7 +35,7 @@ function checkLocale(index, allLocations) {
                     quantityToTrash = realItem.quantity - matchedInSeedArray[0].quantity;
                     let timesToRemove = realItem.dropTime.filter(time => {
                         // console.log(((new Date() - new Date(time)) * (1000 * 60)) > 2);
-                        if (((new Date() - new Date(time)) * (1000 * 60)) > 2) {
+                        if (((new Date() - new Date(time)) * (1000 * 60)) > 30) {
                             return time
                         }
                     })
@@ -51,7 +51,7 @@ function checkLocale(index, allLocations) {
                 // console.log("UNWANTED ITEM:", realItem.quantity);
                 let timesToRemove = realItem.dropTime.filter(time => {
                     // console.log(((new Date() - new Date(time)) * (1000 * 60)) > 2);
-                    if (((new Date() - new Date(time)) * (1000 * 60)) > 2) {
+                    if (((new Date() - new Date(time)) * (1000 * 60)) > 30) {
                         return time
                     }
                 })
