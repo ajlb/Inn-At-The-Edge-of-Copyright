@@ -12,13 +12,17 @@
         "description": "You've found Ford's sock! You should go return that to Ford!",
         "reference": "got wet sock",
         "location": "Inn Lobby",
-        "giveToken": "wet sock",
+        "giveToken": {
+          "name": "wet sock"
+        },
         "rewardXP": 0
       },
       {
         "description": "You found Ford's sock in the Inn Laundry Room and successfully returned it to him!",
         "reference": "completed",
-        "takeToken": "wet sock",
+        "takeToken": {
+          "name": "wet sock"
+        },
         "rewardXP": 0
       }
     ]

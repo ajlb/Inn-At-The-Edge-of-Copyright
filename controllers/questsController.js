@@ -1,10 +1,45 @@
 const db = require('../models')
 
+function handleTokens({ tokens, newObjective, io, socket }) {
+    let { giveToken, takeToken } = newObjective;
+
+    if (giveToken) {
+        let foundToken = tokens.find(({ name }) => name === giveToken.name);
+        let { name: toGive, quantity: numberGiven = 1 } = giveToken;
+        if (!foundToken) tokens.push({ name: toGive, quantity: numberGiven });
+        if (foundToken) tokens[tokens.indexOf(foundToken)].quantity += numberGiven;
+        io.to(socket.id).emit(
+            'genericMessage',
+            `You collect ${numberGiven > 1 ? numberGiven : 'a'} ${toGive}${numberGiven > 1 ? 's' : ''}`
+        );
+    }
+
+    if (takeToken) {
+        let { quantity } = (foundToken = tokens.find(({ name }) => name === takeToken.name)) || { undefined };
+        let { name: toTake, quantity: numberTaken = quantity } = takeToken;
+        let index = tokens.indexOf(foundToken)
+        if (quantity <= 0 | quantity == undefined) {
+            tokens.splice(index, 1);
+            io.to(socket.id).emit('failure', `You do not have any ${toTake}s`);
+        }
+        else if (foundToken && quantity >= numberTaken) {
+            (tokens[index].quantity -= numberTaken) <= 0 ? tokens.splice(index, 1) : '';
+            io.to(socket.id).emit(
+                'genericMessage',
+                `You lose ${numberTaken > 1 ? numberTaken : 'a'} ${toTake}${numberTaken > 1 ? 's' : ''}`
+            )
+        }
+        else if (foundToken && quantity < numberTaken) io.to(socket.id).emit('failure', `You do not have enough ${toTake}s`);
+    }
+
+    return tokens;
+}
+
 // 
 // ALL QUEST FUNCTIONS MUST RETURN A PROMISE
 //
 
-function assignQuest(io, socket, { user: { quests, characterName }, questTitle }) {
+function assignQuest(io, socket, { user: { quests, tokens, characterName }, questTitle }) {
     return new Promise((res, rej) => {
         try {
             let alreadyAssigned = quests.find(({ title }) => title === questTitle) ? true : false;
@@ -13,9 +48,12 @@ function assignQuest(io, socket, { user: { quests, characterName }, questTitle }
             !alreadyAssigned && db.Quest.findOne({ title: questTitle })
                 .then(data => {
                     let { title, objectives } = data.toJSON();
+                    let newObjective = objectives[0];
                     quests.push({ title, objectiveReference: objectives[0].reference, completed: false });
 
-                    db.Player.findOneAndUpdate({ characterName }, { quests }, { new: true })
+                    tokens = handleTokens({ tokens, newObjective, io, socket })
+
+                    db.Player.findOneAndUpdate({ characterName }, { quests, tokens }, { new: true })
                         .then(data => {
                             let { quests, tokens } = data.toJSON()
                             io.to(socket.id).emit('questsUpdate', { quests, tokens })
@@ -50,18 +88,7 @@ function assignAndUpdatePlayerQuest(io, socket, { user: { characterName, tokens,
 
                     quests.push({ title: questTitle, objectiveReference: newObjectiveRef, completed });
 
-                    if (newObjective.giveToken) {
-                        let foundToken = tokens.find(({ name }) => name === newObjective.giveToken);
-                        if (!foundToken) tokens.push({ name: newObjective.giveToken, quantity: 1 });
-                        if (foundToken) tokens[tokens.indexOf(foundToken)].quantity++;
-                        io.to(socket.id).emit('genericMessage', `You collect a ${newObjective.giveToken}`)
-                    }
-
-                    if (newObjective.takeToken) {
-                        let foundToken = tokens.find(({ name, quantity }) => name === newObjective.takeToken && quantity > 0);
-                        if (foundToken) tokens.splice(tokens.indexOf(newObjective.takeToken), 1)
-                        io.to(socket.id).emit('genericMessage', `You lose a ${newObjective.takeToken}`)
-                    }
+                    tokens = handleTokens({ tokens, newObjective, socket, io })
 
                     db.Player.findOneAndUpdate({ characterName }, { quests, tokens }, { new: true })
                         .then(({ quests, tokens }) => {
@@ -102,10 +129,10 @@ function updatePlayerQuest(io, socket, { user: { quests, tokens, characterName }
 
             !hasAlreadyAchieved && db.Quest.findOne({ title: questTitle })
                 .then((questObj) => {
-                    questObj = questObj.toJSON();
-                    let newObjective = questObj.objectives.find(obj => obj.reference === newObjectiveRef);
-                    let newObjIndex = questObj.objectives.indexOf(newObjective);
-                    let completed = newObjIndex >= questObj.objectives.length - 1;
+                    let { objectives } = questObj.toJSON();
+                    let newObjective = objectives.find(obj => obj.reference === newObjectiveRef);
+                    let newObjIndex = objectives.indexOf(newObjective);
+                    let completed = newObjIndex >= objectives.length - 1;
                     let updatedPlayerQuest = {
                         title: questTitle,
                         objectiveReference: newObjective.reference,
@@ -116,18 +143,7 @@ function updatePlayerQuest(io, socket, { user: { quests, tokens, characterName }
                         else return quest
                     })
 
-                    if (newObjective.giveToken) {
-                        let foundToken = tokens.find(({ name }) => name === newObjective.giveToken);
-                        if (!foundToken) tokens.push({ name: newObjective.giveToken, quantity: 1 });
-                        if (foundToken) tokens[tokens.indexOf(foundToken)].quantity++;
-                        io.to(socket.id).emit('genericMessage', `You collect a ${newObjective.giveToken}`)
-                    }
-
-                    if (newObjective.takeToken) {
-                        let foundToken = tokens.find(({ name, quantity }) => name === newObjective.takeToken && quantity > 0);
-                        if (foundToken) tokens.splice(tokens.indexOf(newObjective.takeToken), 1)
-                        io.to(socket.id).emit('genericMessage', `You lose a ${newObjective.takeToken}`)
-                    }
+                    tokens = handleTokens({ tokens, newObjective, socket, io })
 
                     db.Player.findOneAndUpdate({ characterName }, { quests, tokens }, { new: true })
                         .then(({ quests, tokens }) => {

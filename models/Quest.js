@@ -18,10 +18,10 @@ const objectiveSchema = new Schema({
         required: true
     },
     giveToken: {
-        type: String
+        type: Object
     },
     takeToken: {
-        type: String
+        type: Object
     }
 })
 
