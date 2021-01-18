@@ -7,8 +7,8 @@ let dialogSchema = new Schema({
     NPC: {
         type: String
     },
-    dialogObj: {
-        type: Object
+    messages: {
+        type: Array
     }
 });
 
