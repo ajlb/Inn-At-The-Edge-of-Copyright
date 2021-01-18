@@ -13,7 +13,8 @@
     "install": "cd client && npm install",
     "seed": "seed --drop-database --db-name  innattheedge ./scripts/seed",
     "build": "cd client && npm run build",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "test": "node node_modules/mocha/bin/mocha"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +24,9 @@
     "jasmine": "^3.6.3",
     "mocha": "^8.2.1",
     "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
+    "request": "^2.88.2",
+    "should": "^13.2.3",
     "socket.io-client": "^3.0.5"
   },
   "dependencies": {
