@@ -4,6 +4,7 @@
         "dialogObj": {
             "messages": [
                 {
+                    "routeNumber": 0,
                     "message": "Hi welcome to the Inn... what can I do for you I guess...",
                     "exampleResponses": [
                         {
@@ -13,11 +14,28 @@
                             "text": "Who are you?"
                         },
                         {
+                            "text": "What are you doing?",
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
                             "text": "I got your sock!",
                             "conditionals": [
                                 {
-                                    "condition": "HAS",
-                                    "toHave": "wet sock"
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                },
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
                                 }
                             ]
                         },
@@ -42,6 +60,20 @@
                         },
                         {
                             "responses": [
+                                "what are you doing",
+                                "whatre you doing",
+                                "what you doing"
+                            ],
+                            "route": 9,
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                }
+                            ]
+                        },
+                        {
+                            "responses": [
                                 "i got the sock",
                                 "i got your sock",
                                 "i have the sock",
@@ -55,11 +87,15 @@
                                 "i have a wet sock",
                                 "i got a wet sock"
                             ],
-                            "route": 1,
+                            "route": 12,
                             "conditionals": [
                                 {
-                                    "condition": "HAS",
-                                    "toHave": "wet sock"
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
                                 }
                             ]
                         },
@@ -74,6 +110,7 @@
                     ]
                 },
                 {
+                    "routeNumber": 1,
                     "message": "Didn't I just tell you? You're in the Inn! It's just down the road from the Town and east of the Pumpkin Patch...",
                     "exampleResponses": [
                         {
@@ -113,13 +150,40 @@
                     ]
                 },
                 {
-                    "message": "The name's Ford and despite my appearance, I'm actually just an intricately folded towel... don't ask",
+                    "routeNumber": 2,
+                    "message": "The name's Ford and, despite my appearance, I'm actually just an intricately folded towel... don't ask",
                     "exampleResponses": [
                         {
                             "text": "Where am I?"
                         },
                         {
                             "text": "You're a towel?"
+                        },
+                        {
+                            "text": "What are you doing?",
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "I got your sock!",
+                            "conditionals": [
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
                         },
                         {
                             "text": "Goodbye"
@@ -156,10 +220,52 @@
                                 "as a towel"
                             ],
                             "route": 4
+                        },
+                        {
+                            "responses": [
+                                "what are you doing",
+                                "whatre you doing",
+                                "what you doing"
+                            ],
+                            "route": 9,
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                }
+                            ]
+                        },
+                        {
+                            "responses": [
+                                "i got the sock",
+                                "i got your sock",
+                                "i have the sock",
+                                "i have your sock",
+                                "i have a sock",
+                                "i got a sock",
+                                "i got the wet sock",
+                                "i got your wet sock",
+                                "i have the wet sock",
+                                "i have your wet sock",
+                                "i have a wet sock",
+                                "i got a wet sock"
+                            ],
+                            "route": 12,
+                            "conditionals": [
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
                         }
                     ]
                 },
                 {
+                    "routeNumber": 3,
                     "message": "You know, the Inn at the Edge of Copyright! The infinitely infamous pit stop where various travellers from around the universe take rest. Most of you I see only once and then you disappear beyond the crossroads. In fact, I’m the only one to have ever returned, as a towel no less!",
                     "exampleResponses": [
                         {
@@ -227,6 +333,7 @@
                     ]
                 },
                 {
+                    "routeNumber": 4,
                     "message": "Most of you don’t ask me that question thinking it rather rude… but between you and me I can not shake the experience of turning into this form. It happened just up there you know... *points to the sky and shudders*",
                     "exampleResponses": [
                         {
@@ -234,6 +341,32 @@
                         },
                         {
                             "text": "Who are you?"
+                        },
+                        {
+                            "text": "What are you doing?",
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "I got your sock!",
+                            "conditionals": [
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
                         },
                         {
                             "text": "Goodbye"
@@ -256,6 +389,47 @@
                         },
                         {
                             "responses": [
+                                "what are you doing",
+                                "whatre you doing",
+                                "what you doing"
+                            ],
+                            "route": 9,
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                }
+                            ]
+                        },
+                        {
+                            "responses": [
+                                "i got the sock",
+                                "i got your sock",
+                                "i have the sock",
+                                "i have your sock",
+                                "i have a sock",
+                                "i got a sock",
+                                "i got the wet sock",
+                                "i got your wet sock",
+                                "i have the wet sock",
+                                "i have your wet sock",
+                                "i have a wet sock",
+                                "i got a wet sock"
+                            ],
+                            "route": 12,
+                            "conditionals": [
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
+                            "responses": [
                                 "goodbye",
                                 "bye",
                                 "adios"
@@ -265,12 +439,14 @@
                     ]
                 },
                 {
+                    "routeNumber": 5,
                     "message": "Before you leave, be sure to check your pockets.  The Infinite Improbability Drive from the Heart-of-Gold does strange things and you may have a helpful item in there, or just pocket lint.",
                     "leavingConversation": true,
                     "action": "giveRing",
                     "socketProp": "hasDullRing"
                 },
                 {
+                    "routeNumber": 6,
                     "message": "I dare not mention more, it brings back too many troubling memories…. Some fond ones sure, like Arthur and that magnificent invention called a sandwich… oh hey you’re a sandwich-maker. Can you make me a sandwich?",
                     "exampleResponses": [
                         {
@@ -300,6 +476,7 @@
                     ]
                 },
                 {
+                    "routeNumber": 7,
                     "message": "Such a Hoopy Frood you are!",
                     "exampleResponses": [
                         {
@@ -307,6 +484,32 @@
                         },
                         {
                             "text": "Who are you?"
+                        },
+                        {
+                            "text": "What are you doing?",
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "I got your sock!",
+                            "conditionals": [
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
                         },
                         {
                             "text": "Goodbye"
@@ -326,6 +529,47 @@
                                 "who are you?"
                             ],
                             "route": 2
+                        },
+                        {
+                            "responses": [
+                                "what are you doing",
+                                "whatre you doing",
+                                "what you doing"
+                            ],
+                            "route": 9,
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                }
+                            ]
+                        },
+                        {
+                            "responses": [
+                                "i got the sock",
+                                "i got your sock",
+                                "i have the sock",
+                                "i have your sock",
+                                "i have a sock",
+                                "i got a sock",
+                                "i got the wet sock",
+                                "i got your wet sock",
+                                "i have the wet sock",
+                                "i have your wet sock",
+                                "i have a wet sock",
+                                "i got a wet sock"
+                            ],
+                            "route": 12,
+                            "conditionals": [
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
                         },
                         {
                             "responses": [
@@ -338,7 +582,328 @@
                     ]
                 },
                 {
+                    "routeNumber": 8,
                     "message": "Oh well, maybe I can find Arthur and get one",
+                    "exampleResponses": [
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "What are you doing?",
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "I got your sock!",
+                            "conditionals": [
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "where am i",
+                                "where am i?"
+                            ],
+                            "route": 1
+                        },
+                        {
+                            "responses": [
+                                "who are you",
+                                "who are you?"
+                            ],
+                            "route": 2
+                        },
+                        {
+                            "responses": [
+                                "what are you doing",
+                                "whatre you doing",
+                                "what you doing"
+                            ],
+                            "route": 9,
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                }
+                            ]
+                        },
+                        {
+                            "responses": [
+                                "i got the sock",
+                                "i got your sock",
+                                "i have the sock",
+                                "i have your sock",
+                                "i have a sock",
+                                "i got a sock",
+                                "i got the wet sock",
+                                "i got your wet sock",
+                                "i have the wet sock",
+                                "i have your wet sock",
+                                "i have a wet sock",
+                                "i got a wet sock"
+                            ],
+                            "route": 12,
+                            "conditionals": [
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
+                            "responses": [
+                                "goodbye",
+                                "bye",
+                                "adios"
+                            ],
+                            "route": 5
+                        }
+                    ]
+                },
+                {
+                    "routeNumber": 9,
+                    "message": "Oh you know... just pondering the loss of my sock. I lost it while doing my laundry earlier... actually, while you're here, would you mind helping me find it?",
+                    "exampleResponses": [
+                        {
+                            "text": "Sure"
+                        },
+                        {
+                            "text": "No thanks"
+                        }
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "yes",
+                                "sure",
+                                "okay",
+                                "yeah",
+                                "ok"
+                            ],
+                            "route": 10
+                        },
+                        {
+                            "responses": [
+                                "no",
+                                "no thanks",
+                                "nah",
+                                "nope",
+                                "not today"
+                            ],
+                            "route": 11
+                        }
+                    ]
+                },
+                {
+                    "routeNumber": 10,
+                    "message": "Thank you so much! I last saw my sock when I was washing my laundry in the Inn Laundry Room!",
+                    "exampleResponses": [
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "where am i",
+                                "where am i?"
+                            ],
+                            "route": 1
+                        },
+                        {
+                            "responses": [
+                                "who are you",
+                                "who are you?"
+                            ],
+                            "route": 2
+                        },
+                        {
+                            "responses": [
+                                "goodbye",
+                                "bye",
+                                "adios"
+                            ],
+                            "route": 5
+                        }
+                    ],
+                    "action": "assignQuest",
+                    "questTitle": "The Missing Stocking"
+                },
+                {
+                    "routeNumber": 11,
+                    "message": "Oh well, I'll just sit here missing a sock until the heat death of the universe I suppose...",
+                    "exampleResponses": [
+                        {
+                            "text": "Where am I?"
+                        },
+                        {
+                            "text": "Who are you?"
+                        },
+                        {
+                            "text": "What are you doing?",
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                },
+                                {
+                                    "condition": "notStartedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "I got your sock!",
+                            "conditionals": [
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "Goodbye"
+                        }
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "where am i",
+                                "where am i?"
+                            ],
+                            "route": 1
+                        },
+                        {
+                            "responses": [
+                                "who are you",
+                                "who are you?"
+                            ],
+                            "route": 2
+                        },
+                        {
+                            "responses": [
+                                "what are you doing",
+                                "whatre you doing",
+                                "what you doing"
+                            ],
+                            "route": 9,
+                            "conditionals": [
+                                {
+                                    "condition": "notHasToken",
+                                    "tokenNotHad": "wet sock"
+                                }
+                            ]
+                        },
+                        {
+                            "responses": [
+                                "i got the sock",
+                                "i got your sock",
+                                "i have the sock",
+                                "i have your sock",
+                                "i have a sock",
+                                "i got a sock",
+                                "i got the wet sock",
+                                "i got your wet sock",
+                                "i have the wet sock",
+                                "i have your wet sock",
+                                "i have a wet sock",
+                                "i got a wet sock"
+                            ],
+                            "route": 12,
+                            "conditionals": [
+                                {
+                                    "condition": "hasToken",
+                                    "token": "wet sock"
+                                },
+                                {
+                                    "condition": "notCompletedQuest",
+                                    "questTitle": "The Missing Stocking"
+                                }
+                            ]
+                        },
+                        {
+                            "responses": [
+                                "goodbye",
+                                "bye",
+                                "adios"
+                            ],
+                            "route": 5
+                        }
+                    ]
+                },
+                {
+                    "routeNumber": 12,
+                    "message": "I can't believe you found it! Those machines are always thieving me of my spare footwear. May I have it back?",
+                    "exampleResponses": [
+                        {
+                            "text": "Here you go!"
+                        },
+                        {
+                            "text": "No"
+                        }
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "here",
+                                "here you go",
+                                "yes",
+                                "yeah",
+                                "okay",
+                                "ok"
+                            ],
+                            "route": 13
+                        },
+                        {
+                            "responses": [
+                                "no",
+                                "nope",
+                                "nah"
+                            ],
+                            "route": 14
+                        }
+                    ]
+                },
+                {
+                    "routeNumber": 13,
+                    "message": "I can't thank you enough! Let me know if you need anything else!",
                     "exampleResponses": [
                         {
                             "text": "Where am I?"
@@ -372,6 +937,40 @@
                                 "adios"
                             ],
                             "route": 5
+                        }
+                    ],
+                    "action": "takeSock"
+                },
+                {
+                    "routeNumber": 14,
+                    "message": "Well that's quite rude. I would like it back now",
+                    "exampleResponses": [
+                        {
+                            "text": "Here you go!"
+                        },
+                        {
+                            "text": "No"
+                        }
+                    ],
+                    "allowedResponses": [
+                        {
+                            "responses": [
+                                "here",
+                                "here you go",
+                                "yes",
+                                "yeah",
+                                "okay",
+                                "ok"
+                            ],
+                            "route": 13
+                        },
+                        {
+                            "responses": [
+                                "no",
+                                "nope",
+                                "nah"
+                            ],
+                            "route": 14
                         }
                     ]
                 }

@@ -21,6 +21,7 @@ import { attackCreature } from "./js/monsters";
 import processMove from './js/move';
 import runExamine from './js/examine';
 import eatItem from './js/eat';
+import runQuests from "./js/quests";
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -167,6 +168,13 @@ function InputPanel({
                 /////////////////////
                 // let inventory = takeTheseOffThat(actionCalls.inventory, input)
                 showInventory(user, setChatHistory);
+            } else if (findIn(input, actionCalls.quests)) {
+                /////////////////////
+                //     QUESTS      //
+                /////////////////////
+                let inputtedQuest = takeTheseOffThat(actionCalls.quests, input).trim().toLowerCase();
+                runQuests({ user, input: inputtedQuest, setChatHistory, socket });
+
             } else if (findIn(input, actionCalls.juggle)) {
                 /////////////////////
                 //     JUGGLE      //

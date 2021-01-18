@@ -82,6 +82,7 @@ function Console() {
     shout: ['shout', 'yell'],
     reply: ['reply', '/r'],
     eat: ['eat', 'devour', 'ingest'],
+    quests: ['quests', 'quest', 'check quests', 'check quest', 'get quests', 'get quest']
   });
 
   // ANCHOR new, n helped t set region 
@@ -172,6 +173,14 @@ function Console() {
         }
       });
     }
+  });
+
+  socket.off('questsUpdate').on('questsUpdate', ({ quests, tokens }) => {
+    setPlayer(prevState => { return { ...prevState, quests, tokens } })
+  });
+
+  socket.off('tokensUpdate').on('tokensUpdate', ({ tokens }) => {
+    setPlayer(prevState => { return { ...prevState, tokens } })
   });
 
   // Socket location chunk update

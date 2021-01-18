@@ -25,7 +25,7 @@ function pluralizeAppropriateWords(itemName, itemQuantity) {
 
 function showInventory(user, setChatHistory) {
   try {
-    const inventoryArray = [];
+    let inventoryArray = [];
     const wearingArray = [];
     const userInventory = user.inventory;
     //const wornItems = user.wornItems;
@@ -36,14 +36,25 @@ function showInventory(user, setChatHistory) {
     userInventory.forEach(param => {
       inventoryArray.push(`${param.quantity} ${pluralizeAppropriateWords(param.item.itemName, param.quantity)}`);
     })
+
+    if (user.tokens && user.tokens.length > 0) {
+      user.tokens.forEach((token) => {
+        let { name, quantity } = token;
+        if (quantity > 0) inventoryArray.push({
+          type: 'displayed-indent sky-blue',
+          text: `${quantity} ${pluralizeAppropriateWords(name, quantity)}`
+        });
+      });
+    }
+
     inventoryArray.push(`\xa0\xa0`);
+
+    inventoryArray = inventoryArray.map(val => typeof val === "object" ? val : { type: 'displayed-indent', text: val })
 
     if (inventoryArray.length === 0) {
       setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `Your inventory is empty!` }]);
     } else {
-      inventoryArray.forEach((item) => {
-        setChatHistory(prevState => [...prevState, { type: 'displayed-indent', text: `${item}` }]);
-      });
+      setChatHistory(prevState => [...prevState].concat(inventoryArray))
     }
 
     /*

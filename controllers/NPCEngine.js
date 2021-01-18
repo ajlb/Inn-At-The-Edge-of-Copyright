@@ -1,18 +1,5 @@
 const npcFunctions = require("./npcactions");
-const { NPCConditionals, runConditionals } = require("./NPCConditionals");
-
-function thisStartsWithOneOfThese(string, array) {
-    let itDoes = false;
-    array.forEach(value => {
-        if (string.startsWith(value)) {
-            itDoes = true;
-        }
-    })
-    return itDoes;
-}
-
-let greetingsArray = ['hello', 'hi', 'hey', 'hello?']; // used to default the user to opening NPC message 
-let goodbyeArray = ['goodbye', 'bye', 'adios', 'leave']; // used to trigger if the user is leaving the conversation
+const runConditionals = require("./NPCConditionals");
 
 module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser, fromClient, route }) {
     let action;
@@ -32,8 +19,8 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
     } else {
         NPCObj.messages[route].allowedResponses.forEach(responseObj => {
             if (
-                (responseObj.responses.includes(messageFromUser.toLowerCase()) && !responseObj.conditionals) ||
-                (responseObj.conditionals && runConditionals(responseObj.conditionals, { user }))
+                (responseObj.responses.includes(messageFromUser.toLowerCase())) &&
+                (!responseObj.conditionals || (responseObj.conditionals && runConditionals(responseObj.conditionals, { user })))
             ) {
                 // sets the proper NPC message route 
                 route = responseObj.route;
@@ -41,6 +28,7 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
                 let newMessageObj = NPCObj.messages[route]
                 action = newMessageObj.action;
                 socketProp = newMessageObj.socketProp;
+                questTitle = newMessageObj.questTitle;
                 NPCMessage = newMessageObj.message;
                 leavingConversation = newMessageObj.leavingConversation;
                 exampleResponses = newMessageObj.exampleResponses;
@@ -59,19 +47,32 @@ module.exports = function (io, { socket, user, NPCName, NPCObj, messageFromUser,
     }).filter(response => { if (response) return response })
 
     if (NPCMessage !== undefined) {
-        if (action) {
-            if (npcFunctions[NPCName] && npcFunctions[NPCName][action]) {
-                npcFunctions[NPCName][action]({ io, socket, socketProp, user })
-            }
+        if (action && npcFunctions[NPCName] && npcFunctions[NPCName][action]) {
+            npcFunctions[NPCName][action]({ io, socket, socketProp, user, questTitle })
+                .then(() => {
+                    // emits all the necessary info to the user
+                    io.to(fromClient).emit('from NPC', {
+                        NPCName,
+                        NPCMessage,
+                        exampleResponses: exampleResponses,
+                        leavingConversation,
+                        route
+                    });
+                })
+                .catch(e => {
+                    console.log("ERROR IN NPC FUNCTION", e)
+                    io.to(socket.id).emit('failure', "Something went wrong")
+                })
+        } else {
+            // emits all the necessary info to the user
+            io.to(fromClient).emit('from NPC', {
+                NPCName,
+                NPCMessage,
+                exampleResponses: exampleResponses,
+                leavingConversation,
+                route
+            });
         }
-        // emits all the necessary info to the user
-        io.to(fromClient).emit('from NPC', {
-            NPCName,
-            NPCMessage,
-            exampleResponses: exampleResponses,
-            leavingConversation,
-            route
-        });
     } else {
         if (!exampleResponses) exampleResponses = NPCObj.messages[route].exampleResponses.map(response => {
             if (response.conditionals) {
