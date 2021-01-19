@@ -5,22 +5,39 @@ const ObjectId = require('mongoose').Types.ObjectId;
 
 function decrementItemUpdateOne({itemId, targetName, type, quantity=1}) {
     type = type ? type.toLowerCase() : undefined;
+    quantity;
     return new Promise(function (resolve, reject) {
         if (type === "location") {
-            db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": -quantity }, $pop: { "inventory.$[item].dropTime": -quantity } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] })
-                .then(data => {
-                    resolve(data);
-                })
-                .catch(e => {
-                    console.log('ERROR IN decrement location DB CALL');
-                    reject(e);
-                });
+            findLocationData(targetName).then(locationData => {
+                for (invItem of locationData.inventory){
+                    if (invItem.item["_id"] == itemId) {
+                        console.log("FOUND ITEM");
+                        const dropTimeLength = invItem.dropTime.length;
+                        //for loop for dropTimeLength - 1 (1 will happen in main Location update)
+                        for (let i = quantity; i < dropTimeLength; i++){
+                            db.Location.updateOne({ locationName: targetName }, { $pop: { "inventory.$[item].dropTime": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).catch(e => {
+                                console.log('ERROR IN decrement additional quantity popper(getDrop.js)');
+                                reject(e);
+                            })
+                        }
+                        //DETERMINE LENGTH OF ARRAY, fix MONGODB call, then fix it for incrementItem and push
+                    }
+                }
+                db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": -quantity }, $pop: { "inventory.$[item].dropTime": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] })
+                    .then(data => {
+                        resolve(data);
+                    })
+                    .catch(e => {
+                        console.log('ERROR IN decrement location DB CALL(getDrop.js)');
+                        reject(e);
+                    });
+            })
         } else if (type === "player") {
             db.Player.updateOne({ characterName: targetName }, { $inc: { "inventory.$[item].quantity": -quantity }, $pop: {"inventory.$[item].dropTime": -quantity} }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).then(data => {
                 resolve(data);
             })
                 .catch(e => {
-                    console.log('ERROR IN decrement player DB CALL');
+                    console.log('ERROR IN decrement player DB CALL(getDrop.js)');
                     reject(e);
                 });
         } else {
