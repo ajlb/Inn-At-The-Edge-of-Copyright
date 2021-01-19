@@ -76,16 +76,7 @@ module.exports = function (io, { socket, user, NPCName, NPCMessages, messageFrom
             });
         }
     } else {
-        if (!exampleResponses) exampleResponses = NPCMessages[route].exampleResponses.map(response => {
-            if (response.conditionals) {
-                if (runConditionals(response.conditionals, { user })) {
-                    return response;
-                }
-            } else {
-                return response;
-            }
-        }).filter(response => { if (response) return response })
-
+        exampleResponses = parseExampleResponses(NPCMessages[route].responses, user);
         io.to(fromClient).emit('from NPC', {
             NPCName,
             messageFromNPC: "Hm... I didn't understand that",
