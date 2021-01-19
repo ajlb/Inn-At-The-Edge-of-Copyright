@@ -232,7 +232,7 @@ function ChatPanel({
 
     //emote
     socket.off('emote').on('emote', ({ username, emotion, muteEmoter }) => {
-        let type = 'displayed-stat';
+        let type = 'displayed-emote';
         if ((!muteEmoter) || (muteEmoter && username !== user.characterName)) {
             setChatHistory((prevState => [...prevState, { type, text: `${username} ${emotion}` }]))
         }

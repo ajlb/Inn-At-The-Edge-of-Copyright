@@ -249,7 +249,7 @@ figure {
     color: rgb(245, 252, 181);
 }
 
-.displayed-stat, .displayed-intro, .displayed-error, .displayed-indent, .displayed-green, .displayed-commands, .displayed-npc {
+.displayed-stat, .displayed-intro, .displayed-error, .displayed-indent, .displayed-green, .displayed-commands, .displayed-npc, .displayed-emote {
     margin-top: 1px;
     margin-bottom: 1px;
     font-size: 13px;
@@ -293,6 +293,11 @@ figure {
 .displayed-commands {
     margin-left: 20px;
     font-style: italic;
+}
+
+.displayed-emote {
+    font-style: italic;
+    opacity: 0.8;
 }
 
 #anchor {
