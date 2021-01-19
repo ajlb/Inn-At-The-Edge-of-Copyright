@@ -195,9 +195,22 @@ figure {
     width: 110%;
 }
 
-#inputBar {
+#inputBar, #suggestionBar {
     border-radius: 6px;
     height: 34px;
+    z-index: 11;
+}
+
+#inputBar {
+    position: absolute;
+    left: 10px;
+    border-color: transparent;
+    background-color: transparent;
+}
+
+#suggestionBar {
+    z-index: 10;
+    color: rgba(0, 0, 0, 0.214);
 }
 
 #submit-button {
@@ -410,7 +423,7 @@ button {
         height: 34px;
         bottom: 16px;
     }
-    #inputBar {
+    #inputBar, #suggestionBar {
         width: 90%;
         height: 34px;
         font-size: 12px;
@@ -437,7 +450,7 @@ button {
         height: 34px;
         bottom: 16px;
     }
-    #inputBar {
+    #inputBar, #suggestionBar {
         width: 90%;
         height: 34px;
         font-size: 12px;
@@ -469,7 +482,7 @@ button {
         height: 50px;
         bottom: 30px;
     }
-    #inputBar {
+    #inputBar, #suggestionBar {
         width: 90%;
         height: 34px;
         font-size: 18px;

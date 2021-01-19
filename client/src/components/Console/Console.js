@@ -47,13 +47,15 @@ function Console() {
     img: logostart
   });
 
-  const [canReply, setReplyTo] = useState(false)
+  const [canReply, setReplyTo] = useState(false);
 
   const [inConversation, setConversation] = useState(false);
 
   const [chatHistory, setChatHistory] = useState([]);
 
   const [input, setInput] = useState('');
+
+  const [suggestion, setSuggestion] = useState('');
 
   const [inputHistory, setInputHistory] = useState([]);
 
@@ -386,6 +388,8 @@ function Console() {
                     muted={muted}
                     setMuted={setMuted}
                     canReply={canReply}
+                    suggestion={suggestion}
+                    setSuggestion={setSuggestion}
                   />
                 </div>
               </div>
