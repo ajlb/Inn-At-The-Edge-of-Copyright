@@ -70,7 +70,7 @@ function InputPanel({
     //update currentMessage in gameinfo based on input bar change
     const onInputBarChange = (e) => {
         setInput(e.target.value)
-        if (user.lastLocation !== "Start Room") {
+        if (user.lastLocation !== "Start Room" && user.characterName && user.characterName !== 'newUser') {
             setSuggestion(parseSuggestion(e.target.value, actionCalls));
         }
     }
@@ -452,7 +452,7 @@ function InputPanel({
     //display previous commands on key up, key down
     const keyDownResults = (event) => {
 
-        if (event.which === 9) {
+        if (event.which === 9 && user.characterName && user.characterName !== 'newUser') {
             event.preventDefault();
             if (suggestion) {
                 setInput(suggestion)
