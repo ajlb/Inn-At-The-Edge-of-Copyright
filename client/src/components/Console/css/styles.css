@@ -195,9 +195,22 @@ figure {
     width: 110%;
 }
 
-#inputBar {
+#inputBar, #suggestionBar {
     border-radius: 6px;
     height: 34px;
+    z-index: 11;
+}
+
+#inputBar {
+    position: absolute;
+    left: 10px;
+    border-color: transparent;
+    background-color: transparent;
+}
+
+#suggestionBar {
+    z-index: 10;
+    color: rgba(0, 0, 0, 0.214);
 }
 
 #submit-button {
@@ -236,7 +249,7 @@ figure {
     color: rgb(245, 252, 181);
 }
 
-.displayed-stat, .displayed-intro, .displayed-error, .displayed-indent, .displayed-green, .displayed-commands, .displayed-npc {
+.displayed-stat, .displayed-intro, .displayed-error, .displayed-indent, .displayed-green, .displayed-commands, .displayed-npc, .displayed-emote {
     margin-top: 1px;
     margin-bottom: 1px;
     font-size: 13px;
@@ -280,6 +293,11 @@ figure {
 .displayed-commands {
     margin-left: 20px;
     font-style: italic;
+}
+
+.displayed-emote {
+    font-style: italic;
+    opacity: 0.8;
 }
 
 #anchor {
@@ -410,7 +428,7 @@ button {
         height: 34px;
         bottom: 16px;
     }
-    #inputBar {
+    #inputBar, #suggestionBar {
         width: 90%;
         height: 34px;
         font-size: 12px;
@@ -437,7 +455,7 @@ button {
         height: 34px;
         bottom: 16px;
     }
-    #inputBar {
+    #inputBar, #suggestionBar {
         width: 90%;
         height: 34px;
         font-size: 12px;
@@ -469,7 +487,7 @@ button {
         height: 50px;
         bottom: 30px;
     }
-    #inputBar {
+    #inputBar, #suggestionBar {
         width: 90%;
         height: 34px;
         font-size: 18px;

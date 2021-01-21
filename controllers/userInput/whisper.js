@@ -14,9 +14,9 @@ function whisper(socket, io, message, players, userData) {
     for (let i = 2; i >= 0; i--) {
         const messageString = message.toLowerCase().split(' ').slice(0, i + 1).join(' ');
         players.forEach(player => {
-            if (player.toLowerCase() === messageString.toLowerCase()) {
+            if (player.toLowerCase() === messageString || player.toLowerCase().startsWith(messageString)) {
                 console.log(`${socket.nickname}'s whisper found ${messageString}`);
-                playerTo = messageString;
+                playerTo = player;
                 message = message.split(' ').slice(i + 1).join(' ');
             }
         })
@@ -24,15 +24,17 @@ function whisper(socket, io, message, players, userData) {
     if (playerTo === undefined) {
         console.log('there was no matching player');
         io.to(socket.id).emit('failure', "There is nobody here by that name.");
+    } else if (playerTo === userData.characterName) {
+        io.to(socket.id).emit('failure', "You can't whisper to yourself!")
     } else {
         console.log("I'm sending a whisper");
-        db.Player.find({ characterNameLowerCase: { $in: [playerTo, userData.characterNameLowerCase] } })
+        db.Player.find({ characterName: { $in: [playerTo, userData.characterName] } })
             .then(data => {
                 if (!(data === null)) {
                     // console.log(data);
                     data.forEach(playerObj => {
                         // console.log(playerObj)
-                        if (playerObj.characterNameLowerCase === playerTo) {
+                        if (playerObj.characterName === playerTo) {
                             playerTo = playerObj
                         }
                         // return playerObj.characterName === playerTo
