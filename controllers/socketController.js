@@ -247,7 +247,12 @@ module.exports = function (io) {
             db.Dialog.findOne({ NPC: toNPC })
                 .then((result) => {
                     if (result) {
-                        runNPC(io, { socket, user, NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id, route })
+                        runNPC(io, {
+                            socket, user,
+                            NPCName: toNPC, NPCMessages: result.messages,
+                            messageFromUser: message, fromClient: socket.id,
+                            route
+                        })
                     } else {
                         socket.emit('failure', `Looks like ${toNPC} has nothing to say to you`)
                     }
