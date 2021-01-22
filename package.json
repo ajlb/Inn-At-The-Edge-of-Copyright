@@ -13,16 +13,21 @@
     "install": "cd client && npm install",
     "seed": "seed --drop-database --db-name  innattheedge ./scripts/seed",
     "build": "cd client && npm run build",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "test": "node node_modules/mocha/bin/mocha"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^4.1.2",
-    "nodemon": "^2.0.6"
+    "mocha": "^8.2.1",
+    "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
+    "should": "^13.2.3",
+    "socket.io-client": "^3.0.5"
   },
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.16.3",
@@ -32,8 +37,7 @@
     "inn": "file:client",
     "mongo-seeding-cli": "^3.5.0",
     "mongodb": "^3.6.3",
-    "mongoose": "^5.10.14",
-    "socket.io": "^3.0.4",
-    "socket.io-client": "^3.0.3"
+    "mongoose": "^5.11.11",
+    "socket.io": "^3.0.4"
   }
 }
