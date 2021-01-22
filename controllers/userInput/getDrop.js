@@ -16,7 +16,7 @@ function decrementItemUpdateOne({ itemId, targetName, type, quantity = 1 }) {
                         reject(e);
                     })
                 }
-    
+
                 db.Location.updateOne({ locationName: targetName }, { $inc: { "inventory.$[item].quantity": -quantity }, $pop: { "inventory.$[item].dropTime": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] })
                     .then(data => {
                         resolve(data);
@@ -26,7 +26,7 @@ function decrementItemUpdateOne({ itemId, targetName, type, quantity = 1 }) {
                         reject(e);
                     });
             } else if (type === "player") {
-    
+
                 //for loop for dropTimeLength - 1 (1 will happen in main Location update)
                 for (let i = 1; i < quantity; i++) {
                     console.log("i:", i);
@@ -105,37 +105,55 @@ function incrementItemUpdateOne({ itemId, targetName, type, quantity = 1 }) {
 }
 
 function pushItemToInventoryReturnData({ itemId, targetName, type, quantity = 1 }) {
+    console.log("in pushItem");
     try {
         type = type ? type.toLowerCase() : undefined;
         return new Promise(function (resolve, reject) {
             console.log(`pushing ${itemId} to ${targetName}`);
             if (type === "location") {
-                //for loop for dropTimeLength - 1 (1 will happen in main Location update)
-                for (let i = 1; i < quantity; i++) {
-                    console.log("i:", i);
-                    db.Location.updateOne({ locationName: targetName }, { $push: { "inventory.$[item].dropTime": new Date() } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).catch(e => {
-                        console.log('ERROR IN location push additional quantity popper(getDrop.js)');
-                        reject(e);
-                    })
-                }
-                db.Location.findOneAndUpdate({ locationName: targetName }, { $push: { inventory: { item: itemId, quantity, dropTime: [new Date()] } } }, { new: true })
-                    .populate('inventory.item').then(data => {
-                        resolve(data);
-                    })
-                    .catch(e => {
-                        console.log('ERROR IN pushItemTo location DB CALL');
-                        reject(e);
-                    });
+                db.Location.findOne({ locationName: targetName })
+                .then(initialLocationData => {
+                    let thisLocation = initialLocationData;
+                    let newItem = {
+                        item:itemId,
+                        quantity,
+                        dropTime: []
+                    }
+                    for (i = 0; i < quantity; i++){
+                        newItem.dropTime.push(new Date());
+                    }
+                    thisLocation.inventory.push(newItem);
+                    db.Location.findOneAndUpdate({ locationName: targetName }, { $set: { inventory: thisLocation.inventory } }, { new: true })
+                        .populate('inventory.item').then(data => {
+                            resolve(data);
+                        })
+                        .catch(e => {
+                            console.log('ERROR IN pushItemTo location DB CALL');
+                            reject(e);
+                        });
+                })
             } else if (type === "player") {
                 targetName = targetName.toLowerCase();
-                db.Player.findOneAndUpdate({ characterNameLowerCase: targetName }, { $push: { inventory: { item: itemId, quantity, dropTime: [new Date()] } } }, { new: true })
-                    .populate('inventory.item').then(data => {
-                        resolve(data);
-                    })
-                    .catch(e => {
-                        console.log('ERROR IN pushItemTo player DB CALL');
-                        reject(e);
-                    });
+                db.Player.findOne({ characterNameLowerCase: targetName }).then(initialPlayerData => {
+                    let thisPlayer = initialPlayerData;
+                    let newItem = {
+                        item:itemId,
+                        quantity,
+                        dropTime: []
+                    };
+                    for (i = 0; i < quantity; i++){
+                        newItem.dropTime.push(new Date());
+                    }
+                    thisPlayer.inventory.push(newItem);
+                    db.Player.findOneAndUpdate({ characterNameLowerCase: targetName }, { $set: { inventory: thisPlayer.inventory } }, { new: true })
+                        .populate('inventory.item').then(data => {
+                            resolve(data);
+                        })
+                        .catch(e => {
+                            console.log('ERROR IN pushItemTo player DB CALL');
+                            reject(e);
+                        });
+                })
             } else {
                 reject("You must put in location or player for type.");
             }
