@@ -22,11 +22,11 @@ function ViewAll({
                                 return (
                                     <li id={NPC + routeNumber} key={message} className={darkListItem}>
                                         <h5>Message:</h5>
-                                        <p>{message}</p>
-                                        <h5>Responses:</h5>
-                                        <ul className="list-group">
-                                            {responses ?
-                                                responses.map(({ example, allowed, conditionals, route }) => {
+                                        <p className="bg-white border rounded p-2">{message}</p>
+                                        {responses && <h5>Responses:</h5>}
+                                        {responses ?
+                                            <ul className="list-group">
+                                                {responses.map(({ example, allowed, conditionals, route }) => {
                                                     return (<li key={JSON.stringify(allowed)} className={lightListItem}>
                                                         <p>Example: {example}</p>
                                                         <p>Allowed:</p>
@@ -46,11 +46,11 @@ function ViewAll({
                                                             <span></span>}
                                                         <p>Route: <a href={`#${NPC}${route}`}>{route}</a></p>
                                                     </li>)
-                                                })
-                                                :
-                                                "No Responses"
-                                            }
-                                        </ul>
+                                                })}
+                                            </ul>
+                                            :
+                                            <span />
+                                        }
                                     </li>
                                 )
                             })}
