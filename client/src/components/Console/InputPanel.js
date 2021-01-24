@@ -402,7 +402,9 @@ function InputPanel({
                     /////////////////////
                     //       EAT       //
                     /////////////////////
-                    const eatMessage = takeTheseOffThat(actionCalls.eat, input);
+                    let eatMessage = takeTheseOffThat(actionCalls.eat, input);
+                    eatMessage = takeTheseOffThat(["a", "an", "my", "the"], eatMessage);
+
                     eatItem(socket, eatMessage, user, location.current.locationName);
 
                 } else {
