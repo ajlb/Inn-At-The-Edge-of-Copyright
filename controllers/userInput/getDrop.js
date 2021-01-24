@@ -10,7 +10,7 @@ function decrementItemUpdateOne({ itemId, targetName, type, quantity = 1 }) {
             if (type === "location") {
                 for (let i = 1; i < quantity; i++) {
                     //for loop for quantity - 1 (1 will happen in main Location update)
-                    console.log("i:", i);
+                    // console.log("i:", i);
                     db.Location.updateOne({ locationName: targetName }, { $pop: { "inventory.$[item].dropTime": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).catch(e => {
                         console.log('ERROR IN location decrement additional quantity popper(getDrop.js)');
                         reject(e);
@@ -29,7 +29,7 @@ function decrementItemUpdateOne({ itemId, targetName, type, quantity = 1 }) {
 
                 //for loop for dropTimeLength - 1 (1 will happen in main Location update)
                 for (let i = 1; i < quantity; i++) {
-                    console.log("i:", i);
+                    // console.log("i:", i);
                     db.Player.updateOne({ characterName: targetName }, { $pop: { "inventory.$[item].dropTime": -1 } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).catch(e => {
                         console.log('ERROR IN player decrement additional quantity popper(getDrop.js)');
                         reject(e);
@@ -59,7 +59,7 @@ function incrementItemUpdateOne({ itemId, targetName, type, quantity = 1 }) {
             if (type === "location") {
                 //for loop for dropTimeLength - 1 (1 will happen in main Location update)
                 for (let i = 1; i < quantity; i++) {
-                    console.log("i:", i);
+                    // console.log("i:", i);
                     db.Location.updateOne({ locationName: targetName }, { $push: { "inventory.$[item].dropTime": new Date() } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).catch(e => {
                         console.log('ERROR IN location increment additional quantity popper(getDrop.js)');
                         reject(e);
@@ -81,7 +81,7 @@ function incrementItemUpdateOne({ itemId, targetName, type, quantity = 1 }) {
                 console.log("in increment player, trying to increment", targetName);
                 //for loop for dropTimeLength - 1 (1 will happen in main Location update)
                 for (let i = 1; i < quantity; i++) {
-                    console.log("i:", i);
+                    // console.log("i:", i);
                     db.Player.updateOne({ characterNameLowerCase: targetName }, { $push: { "inventory.$[item].dropTime": new Date() } }, { upsert: true, arrayFilters: [{ "item.item": ObjectId(itemId) }] }).catch(e => {
                         console.log('ERROR IN player increment additional quantity popper(getDrop.js)');
                         reject(e);
@@ -105,11 +105,11 @@ function incrementItemUpdateOne({ itemId, targetName, type, quantity = 1 }) {
 }
 
 function pushItemToInventoryReturnData({ itemId, targetName, type, quantity = 1 }) {
-    console.log("in pushItem");
+    // console.log("in pushItem");
     try {
         type = type ? type.toLowerCase() : undefined;
         return new Promise(function (resolve, reject) {
-            console.log(`pushing ${itemId} to ${targetName}`);
+            // console.log(`pushing ${itemId} to ${targetName}`);
             if (type === "location") {
                 db.Location.findOne({ locationName: targetName })
                 .then(initialLocationData => {
@@ -211,18 +211,17 @@ function scrubInventoryReturnData(target, type) {
 
 
 function getItem(socket, io, target, itemId, user, location, quantity = 1) {
-    quantity = 3;
     findLocationData(location).then(locationData => {
         for (const invItem of locationData.inventory) {
             if (invItem.item["_id"] == itemId) {
-                console.log("FOUND ITEM");
-                console.log("dropTimes:", invItem.dropTime.length);
-                console.log("quantity:", quantity);
+                // console.log("FOUND ITEM");
+                // console.log("dropTimes:", invItem.dropTime.length);
+                // console.log("quantity:", quantity);
                 if (!(invItem.dropTime.length >= quantity)) {
                     quantity = invItem.dropTime.length;
                     io.to(socket.id).emit('green', `There ${quantity > 1 ? 'are' : 'is'} only ${quantity} of those to pick up.`);
                 }
-                console.log("quantity:", quantity);
+                // console.log("quantity:", quantity);
 
                 //remove item from location
                 decrementItemUpdateOne({ itemId, targetName: location, type: "location", quantity }).then(returnData => {
@@ -257,11 +256,10 @@ function getItem(socket, io, target, itemId, user, location, quantity = 1) {
 }
 
 function dropItem(socket, io, target, itemId, user, location, quantity = 1) {
-    quantity = 3;
     findPlayerData(user).then(playerData => {
         for (const invItem of playerData.inventory) {
             if (invItem.item["_id"] == itemId) {
-                console.log("FOUND ITEM");
+                // console.log("FOUND ITEM");
                 if (!(invItem.dropTime.length >= quantity)) {
                     quantity = invItem.dropTime.length;
                     io.to(socket.id).emit('green', `You only have ${quantity} of those to drop.`);
@@ -314,17 +312,17 @@ function giveItem(socket, io, target, item, itemId, user, location, quantity = 1
         });
     });
     //add item to target's inventory
-    console.log(target);
+    // console.log(target);
     //give item to player
     incrementItemUpdateOne({ itemId, targetName: target, type: "player", quantity }).then(returnData => {
         if (!returnData) { //increment was not successful
             pushItemToInventoryReturnData({ itemId, targetName: target, type: "player", quantity }).then(returnData => {
-                console.log(returnData.inventory);
+                // console.log(returnData.inventory);
                 io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
             });
         } else { //increment was successful
             findPlayerData(target).then(returnData => {
-                console.log(returnData);
+                // console.log(returnData);
                 io.to(target.toLowerCase()).emit('invUpP', returnData.inventory);
             })
         }
