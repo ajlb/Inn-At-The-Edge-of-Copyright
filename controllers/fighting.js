@@ -199,15 +199,15 @@ function doesThisStartWithOneOfThese(givenString, givenArray) {
   }
 
 
-async function dropItemFromMonster(io, monsterObject, locationName) {
+async function dropItemFromMonster(io, monsterObject, locationName, quantity=1) {
     try {
         // console.log(monsterObject.drop);
         for (const item of monsterObject.drop) {
             getItemIdFromName(item).then(itemId => {
                 console.log(`${monsterObject.name} drops ${item}, id ${itemId}`);
-                incrementItemUpdateOne(itemId, locationName, "location").then(incData => {
+                incrementItemUpdateOne({itemId, targetName:locationName, type:"location", quantity}).then(incData => {
                     if (!incData) {
-                        pushItemToInventoryReturnData(itemId, locationName, "location").then(pushData => {
+                        pushItemToInventoryReturnData({itemId, targetName:locationName, type:"location", quantity}).then(pushData => {
                             if (pushData === null) {
                                 console.log("couldn't push drop item to location inventory");
                                 return false;
