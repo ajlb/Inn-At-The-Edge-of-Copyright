@@ -2,6 +2,8 @@ import {
     MobileView,
     BrowserView
 } from 'react-device-detect';
+import { useAuth0 } from "@auth0/auth0-react";
+
 import findIn, { takeTheseOffThat, getOneOfTheseOffThat } from "../../clientUtilities/finders";
 import { useEffect } from 'react';
 import socket from "../../clientUtilities/socket";
@@ -13,14 +15,14 @@ import { wear, remove } from "./js/wearRemove";
 import { showStats } from "./js/stats";
 import { showInventory } from "./js/inventory";
 import NPCCheck from "../../clientUtilities/NPCChecks";
-import { useAuth0 } from "@auth0/auth0-react";
-// import DiscoverableCalls from "../../clientUtilities/discoverablesCalls";
 import discoverableFunctions from "../../clientUtilities/discoverablesFunctions";
 import { lookAbout } from './js/look';
 import { attackCreature } from "./js/monsters";
 import processMove from './js/move';
 import runExamine from './js/examine';
 import eatItem from './js/eat';
+import runQuests from "./js/quests";
+import { parseSuggestion } from "../../clientUtilities/parsers"
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -49,7 +51,9 @@ function InputPanel({
     muted,
     setMuted,
     canReply,
-    day
+    day,
+    suggestion,
+    setSuggestion
 }) {
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -61,10 +65,14 @@ function InputPanel({
         if (!(authUser === undefined)) {
             (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
         }
+        // es-lint-ignore-next-line
     }, [isAuthenticated])
     //update currentMessage in gameinfo based on input bar change
     const onInputBarChange = (e) => {
         setInput(e.target.value)
+        if (user.lastLocation !== "Start Room" && user.characterName && user.characterName !== 'newUser') {
+            setSuggestion(parseSuggestion(e.target.value, actionCalls));
+        }
     }
 
     // console.log(user);
@@ -167,6 +175,13 @@ function InputPanel({
                 /////////////////////
                 // let inventory = takeTheseOffThat(actionCalls.inventory, input)
                 showInventory(user, setChatHistory);
+            } else if (findIn(input, actionCalls.quests)) {
+                /////////////////////
+                //     QUESTS      //
+                /////////////////////
+                let inputtedQuest = takeTheseOffThat(actionCalls.quests, input).trim().toLowerCase();
+                runQuests({ user, input: inputtedQuest, setChatHistory, socket });
+
             } else if (findIn(input, actionCalls.juggle)) {
                 /////////////////////
                 //     JUGGLE      //
@@ -437,6 +452,14 @@ function InputPanel({
     //display previous commands on key up, key down
     const keyDownResults = (event) => {
 
+        if (event.which === 9 && user.characterName && user.characterName !== 'newUser') {
+            event.preventDefault();
+            if (suggestion) {
+                setInput(suggestion)
+                setSuggestion(parseSuggestion(suggestion, actionCalls))
+            }
+        }
+
         // only runs if the user has an inputHistory
         if (inputHistory.length > 0) {
             if (event.which === 38) { // up arrow
@@ -526,11 +549,6 @@ function InputPanel({
     });
 
 
-
-
-
-
-
     return (
         <div>
             <BrowserView>
@@ -548,6 +566,13 @@ function InputPanel({
                                 className="form-control chat-input" autoFocus="autofocus"
                                 autoComplete="off"
                                 onKeyDown={keyDownResults}
+                            />
+                            <input
+                                value={suggestion}
+                                type="text"
+                                id="suggestionBar"
+                                className="form-control chat-input"
+                                autoComplete="off"
                             />
                             <span className="input-group-btn">
                                 <button type="submit" id="submit-button" className="btn btn-default fa fa-arrow-right"></button>

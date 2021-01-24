@@ -15,6 +15,7 @@ const { eatItem } = require("./userInput/eat");
 const runSweep = require("./sweeper");
 const { repopMobs } = require("./monsterSweeper");
 const dayNight = require("./dayNight");
+const { assignQuest, assignAndUpdatePlayerQuest, updatePlayerQuest, incrementPlayerQuest } = require('./questsController')
 
 // this array is fully temporary and is only here in place of the database until that is set up
 let players = [];
@@ -246,14 +247,79 @@ module.exports = function (io) {
             db.Dialog.findOne({ NPC: toNPC })
                 .then((result) => {
                     if (result) {
-                        runNPC(io, { socket, user, NPCName: toNPC, NPCObj: result.dialogObj, messageFromUser: message, fromClient: socket.id, route })
+                        runNPC(io, {
+                            socket, user,
+                            NPCName: toNPC, NPCMessages: result.messages,
+                            messageFromUser: message, fromClient: socket.id,
+                            route
+                        })
                     } else {
                         socket.emit('failure', `Looks like ${toNPC} has nothing to say to you`)
                     }
                 })
                 .catch(e => {
-                    socket.emit('errror', { status: 500, message: `Something went wrong` });
+                    socket.emit('error', { status: 500, message: `Something went wrong` });
                     console.log(`Error in 'to NPC' listener: `, e)
+                })
+        })
+
+        /*****************************/
+        /*          QUESTS           */
+        /*****************************/
+        socket.on('getQuest', ({ questToGet: { title, objectiveReference, completed } }) => {
+            db.Quest.findOne({ title })
+                .then((data) => {
+                    let { objectives, title } = data.toJSON();
+                    let foundObjective = objectives.find(obj => obj.reference === objectiveReference)
+                    if (foundObjective) {
+                        var { description, location } = foundObjective
+                        io.to(socket.id).emit('displayQuest', { title, description, location, completed })
+                    } else {
+                        io.to(socket.id).emit('failure', 'Quest not found')
+                    }
+                })
+                .catch(e => {
+                    console.log("ERROR IN DB CALL", e)
+                    io.to(socket.id).emit('failure', 'Something went wrong')
+                })
+        });
+
+        socket.on('assignQuest', (obj) => {
+            assignQuest(io, socket, obj)
+                .catch(e => {
+                    console.log('ERROR IN assignQuest', e)
+                });
+        })
+
+        socket.on('assignAndUpdatePlayerQuest', (obj) => {
+            assignAndUpdatePlayerQuest(io, socket, obj)
+                .catch(e => {
+                    console.log('ERROR IN assignAndUpdatePlayerQuest', e)
+                });
+        });
+
+        socket.on('updatePlayerQuest', (obj) => {
+            updatePlayerQuest(io, socket, obj)
+                .catch(e => {
+                    console.log('ERROR IN updatePlayerQuest', e)
+                })
+        })
+
+        socket.on('incrementPlayerQuest', (obj) => {
+            incrementPlayerQuest(io, socket, obj)
+                .catch(e => {
+                    console.log('ERROR IN incrementPlayerQuest', e)
+                })
+        })
+
+        socket.on('updateTokens', ({ characterName, tokens }) => {
+            db.Player.findOneAndUpdate({ characterName }, { tokens }, { new: true })
+                .then(({ tokens }) => {
+                    io.to(socket.id).emit('tokensUpdate', { tokens })
+                })
+                .catch(e => {
+                    console.log("ERROR IN DB CALL", e)
+                    io.to(socket.id).emit('failure', "Something went wrong")
                 })
         })
 
@@ -459,7 +525,7 @@ module.exports = function (io) {
                     if (statsData !== null) {
                         io.to(socket.id).emit('stats', { statsData });
                     } else {
-                        io.emit('error', { status: 500, message: "Something went wrong" })
+                        io.to(socket.id).emit('error', { status: 500, message: "Something went wrong" })
                     }
                 })
                 .catch(e => {

@@ -182,5 +182,13 @@
     "waysToCall": "reply, /r",
     "exampleCall": "reply Stop bothering me!",
     "exampleResult": "Whisper to Shambles: Stop bothering me!"
+  },
+  {
+    "actionName": "quests",
+    "commandBriefDescription": "view your quests!",
+    "commandLongDescription": "When you enter a quest command, if nothing is entered following the command, all your unlocked quests will be displayed. Follow the quest command with it's currently assigned number or the name of the quest to view details about the quest.",
+    "waysToCall": "quest, get quests, check quests",
+    "exampleCall": "check quests OR check quest 1",
+    "exampleResult": "--LIST OF UNLOCKED QUESTS-- OR --QUEST DETAILS AND/OR INSTRUCTION--"
   }
 ]

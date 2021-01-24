@@ -35,16 +35,19 @@ function ChatPanel({
         // chat history is mapped down below
     });
 
-    socket.off('from NPC').on('from NPC', ({ NPCName, NPCMessage, exampleResponses, leavingConversation, route }) => {
+    socket.off('from NPC').on('from NPC', ({ NPCName, messageFromNPC, exampleResponses, leavingConversation, route }) => {
         if (leavingConversation) {
             setConversation(false)
         } else {
             setConversation({ with: NPCName, route })
         }
 
-        setChatHistory(prevState => [...prevState, { type: 'displayed-npc mt-3', text: `${NPCName}: ${NPCMessage}` }]);
+        setChatHistory(prevState => [...prevState, { type: 'displayed-npc mt-3', text: `${NPCName}: ${messageFromNPC}` }]);
         if (exampleResponses && !leavingConversation) {
-            setChatHistory(prevState => [...prevState, { type: 'displayed-commands', text: `Respond with: ${exampleResponses.join(', ')}` }]);
+            setChatHistory(prevState => [...prevState, {
+                type: 'displayed-commands',
+                text: `Respond with: ${exampleResponses.join(', ')}`
+            }]);
         }
     })
 
@@ -229,7 +232,7 @@ function ChatPanel({
 
     //emote
     socket.off('emote').on('emote', ({ username, emotion, muteEmoter }) => {
-        let type = 'displayed-stat';
+        let type = 'displayed-emote';
         if ((!muteEmoter) || (muteEmoter && username !== user.characterName)) {
             setChatHistory((prevState => [...prevState, { type, text: `${username} ${emotion}` }]))
         }
@@ -347,6 +350,36 @@ function ChatPanel({
         }
 
     });
+
+    socket.off('displayQuest').on('displayQuest', ({ title, location, description, completed }) => {
+        let toDisplay = [
+            '\xa0\xa0\xa0\xa0',
+            '------------------------------' + (completed ? "-------------" : ""),
+            { type: "displayed-indent sky-blue font-weight-bold", text: "\xa0\xa0" + title + (completed ? ": Completed" : "") },
+            '------------------------------' + (completed ? "-------------" : ""),
+            '\xa0\xa0\xa0\xa0',
+            description
+        ]
+
+        if (location) {
+            toDisplay.push('\xa0\xa0\xa0\xa0')
+            toDisplay.push(`Head to: ${location}`)
+        }
+
+        toDisplay = toDisplay.map(val => {
+            if (typeof val === "object") {
+                return val
+            } else {
+                return { type: "displayed-indent", text: val }
+            }
+        })
+
+        setChatHistory(prevState => [...prevState].concat(toDisplay));
+    })
+
+    socket.off('questNotif').on('questNotif', message => {
+        setChatHistory(prevState => [...prevState, { type: "displayed-stat font-weight-bold sky-blue", text: message }]);
+    })
 
 
 

@@ -55,6 +55,20 @@ const discFunctions = {
                 setChatHistory(prevState => [...prevState, { type: "displayed-stat text-red", text: "You need to stand up to do that!" }]);
                 setChatHistory(prevState => [...prevState, { type: "displayed-commands faded", text: "Try entering: stand up" }]);
             }
+        },
+
+        "wet sock": function wetSock({ socket, user, user: { tokens, quests }, setChatHistory }) {
+            let alreadyHasSock = tokens.find(({ name: n, quantity: q }) => n === 'wet sock' && q > 0) ? true : false;
+            let beganSockQuest = quests.find(({ title: t }) => t === 'The Missing Stocking') ? true : false;
+            let sockQuestCompleted = quests.find(({ title: t, completed: c }) => t === 'The Missing Stocking' && c) ? true : false;
+
+            if (!alreadyHasSock && beganSockQuest && !sockQuestCompleted) {
+                socket.emit('updatePlayerQuest', { user, questTitle: "The Missing Stocking", newObjectiveRef: 'got wet sock' });
+            } else if (alreadyHasSock | sockQuestCompleted) {
+                setChatHistory(prevState => [...prevState, { type: "displayed-error", text: "You already picked up the wet sock!" }]);
+            } else if (!beganSockQuest) {
+                socket.emit('assignAndUpdatePlayerQuest', { user, questTitle: "The Missing Stocking", newObjectiveRef: "got wet sock" });
+            }
         }
 
     },
