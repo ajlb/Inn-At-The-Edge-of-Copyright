@@ -47,11 +47,11 @@ function effectMessage(stat, increaseValue) {
     }
 }
 
-function deleteItemFromInventory(itemId, playerOrLocationName, playerOrLocationType) {
+function deleteItemFromInventory(itemId, playerOrLocationName, playerOrLocationType, quantity=1) {
     return new Promise(function (resolve, reject) {
         try {
             //remove item from giver's inventory
-            decrementItemUpdateOne(itemId, playerOrLocationName, playerOrLocationType).then(returnData => {
+            decrementItemUpdateOne({itemId, targetName:playerOrLocationName, type:playerOrLocationType, quantity}).then(returnData => {
                 scrubInventoryReturnData(playerOrLocationName, playerOrLocationType).then(returnData => {
                     if (returnData) {
                         resolve(returnData);

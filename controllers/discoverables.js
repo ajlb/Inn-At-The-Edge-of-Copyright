@@ -18,9 +18,9 @@ const discFunctions = {
         } else {
             // Run Function Here!!
             socket[socketProp] = true
-            incrementItemUpdateOne(itemID, user.characterName, "player").then(returnData => {
+            incrementItemUpdateOne({itemId:itemID, targetName:user.characterName, type:"player", quantity:1}).then(returnData => {
                 if (!returnData) { //increment was not successful
-                    pushItemToInventoryReturnData(itemID, user.characterName, "player").then(returnData => {
+                    pushItemToInventoryReturnData({itemId:itemID, targetName:user.characterName, type:"player", quantity:1}).then(returnData => {
                         io.to(socket.id).emit('invUpP', returnData.inventory);
                     });
                 } else { //increment was successful

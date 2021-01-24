@@ -34,30 +34,33 @@ function checkLocale(index, allLocations) {
                 } else if (realItem.quantity > matchedInSeedArray[0].quantity) {
                     quantityToTrash = realItem.quantity - matchedInSeedArray[0].quantity;
                     let timesToRemove = realItem.dropTime.filter(time => {
-                        // console.log(((new Date() - new Date(time)) * (1000 * 60)) > 2);
-                        if (((new Date() - new Date(time)) * (1000 * 60)) > 2) {
+                        // console.log(((new Date() - new Date(time)) / (1000 * 60)));
+                        if (((new Date() - new Date(time)) / (1000 * 60)) > 30) {
                             return time
                         }
                     })
-                    if (timesToRemove.length < quantityToTrash) {
-                        quantityToTrash = timesToRemove.length;
+                    if ((timesToRemove.length < quantityToTrash)) {
+                        quantityToTrash = timesToRemove.length - matchedInSeedArray[0].quantity;
                     }
                     // console.log("number to remove", quantityToTrash, realItem.item);
-                    if (quantityToTrash > 0) {
+                    if ((quantityToTrash > 0) && (timesToRemove.length > matchedInSeedArray[0].quantity)) {
+                        console.log("Extras:", timesToRemove.length, "Seed:", matchedInSeedArray[0].quantity);
                         diffObject[realItem.item] = -quantityToTrash;
                     }
                 }
             } else {
                 // console.log("UNWANTED ITEM:", realItem.quantity);
                 let timesToRemove = realItem.dropTime.filter(time => {
-                    // console.log(((new Date() - new Date(time)) * (1000 * 60)) > 2);
-                    if (((new Date() - new Date(time)) * (1000 * 60)) > 2) {
+                    // console.log(((new Date() - new Date(time)) / (1000 * 60)));
+                    if (((new Date() - new Date(time)) / (1000 * 60)) > 30) {
                         return time
                     }
                 })
                 // console.log("HERE'S SOMETHING THAT DOESN'T GO.");
                 // console.log(timesToRemove.length);
-                diffObject[realItem.item] = -timesToRemove.length;
+                if (timesToRemove.length > 0){
+                    diffObject[realItem.item] = -timesToRemove.length;
+                }
                 // console.log("quantity to remove of unmatched item:", timesToRemove.length, realItem.item);
             }
 
@@ -97,9 +100,12 @@ async function runSweep(io, socket) {
                         console.log(changeDetected);
                         for (const itemId in changeDetected) {
                             if (changeDetected[itemId] > 0) {
-                                incrementItemUpdateOne(itemId, changeDetected.locationName, "location").then(updateData => {
+                                console.log('WE SHOULD BE INCREMENTING');
+                                console.log('Number to increment:', changeDetected[itemId]);
+                                incrementItemUpdateOne({itemId, targetName:changeDetected.locationName, type:"location", quantity:changeDetected[itemId]}).then(updateData => {
                                     if (!updateData) {
-                                        pushItemToInventoryReturnData(itemId, changeDetected.locationName, "location").then(locationData => {
+                                        console.log('Item did not exist. Adding it to inventory.');
+                                        pushItemToInventoryReturnData({itemId, targetName:changeDetected.locationName, type:"location", quantity:changeDetected[itemId]}).then(locationData => {
                                             io.to(locationData.locationName).emit('invUpL', locationData.inventory);
                                             for (const param in locationData.exits){
                                                 io.to(locationData.exits[param]).emit('locationChunkUpdate', {newData:locationData, targetLocation:locationData.locationName})
@@ -116,7 +122,8 @@ async function runSweep(io, socket) {
                                 })
                             } else if (changeDetected[itemId] < 0) {
                                 console.log('WE SHOULD BE DECREMENTING THIS');
-                                decrementItemUpdateOne(itemId, changeDetected.locationName, "location").then(() => {
+                                console.log('Quantity to remove:', changeDetected[itemId]);
+                                decrementItemUpdateOne({itemId, targetName:changeDetected.locationName, type:"location", quantity:-changeDetected[itemId]}).then(() => {
                                     scrubInventoryReturnData(changeDetected.locationName, "location").then(locationData => {
                                         io.to(locationData.locationName).emit('invUpL', locationData.inventory);
                                         for (const param in locationData.exits){
