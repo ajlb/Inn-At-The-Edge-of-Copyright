@@ -9,6 +9,9 @@ let dialogSchema = new Schema({
     },
     messages: {
         type: Array
+    },
+    routeNumber: {
+        type: Number
     }
 });
 
