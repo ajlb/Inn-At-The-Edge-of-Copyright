@@ -77,6 +77,10 @@ function getPlayers() {
       resolve(data);
     });
   });
+};
+
+function getAllDialogs() {
+  return axios.get("/api/admin/dialogs")
 }
 
 
@@ -87,6 +91,7 @@ export {
   createLocation,
   changeLocations,
   deleteLocation,
-  getPlayers
+  getPlayers,
+  getAllDialogs
 };
 

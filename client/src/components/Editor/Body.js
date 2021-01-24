@@ -5,10 +5,9 @@ import CreateOneLocation from "./bodies/Locations/CreateOne";
 import PlayerViewAll from "./bodies/Players/ViewAll";
 import EditOnePlayer from "./bodies/Players/EditOne";
 import CreateOnePlayer from "./bodies/Players/CreateOne";
-
+import Dialogs from "./bodies/Dialogs/index";
 
 function Body({ destinationState }) {
-    // console.log(destinationState.collection);
 
     switch (destinationState.collection) {
         case "Locations":
@@ -33,6 +32,8 @@ function Body({ destinationState }) {
                 default:
                     return null;
             }
+        case "Dialogs":
+            return <Dialogs action={destinationState.action} />;
 
         default:
             return null;

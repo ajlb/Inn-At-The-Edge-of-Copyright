@@ -9,8 +9,8 @@ import DropDownItem from "./DropDownItem";
 
 
 function Nav({ onSubmenuItemClick }) {
-        //array of collections for creating list of menus
-        const typesOfCollections = ["Players", "Locations", "Items", "Quests", "Actions", "Races", "Professions", "Weather"];
+    //array of collections for creating list of menus
+    const typesOfCollections = ["Players", "Locations", "Items", "Quests", "Actions", "Races", "Professions", "Weather", "Dialogs"];
 
 
 
@@ -20,8 +20,8 @@ function Nav({ onSubmenuItemClick }) {
                 <div className="sidebar-header">
                     <div className="sidebar-brand">
                         <a href="#admin">Inn Staff</a></div></div>
-                {typesOfCollections.map(thing => {
-                    return <DropDownItem title={thing} onClick={onSubmenuItemClick} />
+                {typesOfCollections.map(collectionName => {
+                    return <DropDownItem title={collectionName} onClick={onSubmenuItemClick} key={collectionName} />
                 })}
                 <li key="Game"><a href="#game">The Game</a></li>
             </ul>
