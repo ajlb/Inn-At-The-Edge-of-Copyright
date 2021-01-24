@@ -7,7 +7,7 @@ import axios from "axios";
 function getLocations() {
   return new Promise(function (resolve, reject) {
     // console.log("sending getLocations");
-    axios.get("/adminAPI/locations").then(data => {
+    axios.get("/api/admin/locations").then(data => {
       resolve(data);
     });
   });
@@ -19,7 +19,7 @@ function changeLocations(action = "set", locationObject) {
   locationObject.action = action;
   return new Promise(function (resolve, reject) {
     // console.log("sending addLocationField");
-    axios.put("/adminAPI/locations/", locationObject).then(data => {
+    axios.put("/api/admin/locations/", locationObject).then(data => {
       resolve(data);
     });
   });
@@ -29,7 +29,7 @@ function changeLocations(action = "set", locationObject) {
 function getOneLocation(locationName) {
   return new Promise(function (resolve, reject) {
     // console.log("sending getOneLocation");
-    axios.get("/adminAPI/locations/" + locationName).then(data => {
+    axios.get("/api/admin/locations/" + locationName).then(data => {
       resolve(data);
     });
   });
@@ -40,7 +40,7 @@ function editLocation(action, locationName, locationObject) {
   locationObject.action = action;
   return new Promise(function (resolve, reject) {
     // console.log("sending editLocation");
-    axios.put("/adminAPI/locations/" + locationName, locationObject).then(data => {
+    axios.put("/api/admin/locations/" + locationName, locationObject).then(data => {
       resolve(data);
     });
   });
@@ -50,7 +50,7 @@ function editLocation(action, locationName, locationObject) {
 function createLocation(locationObject) {
   return new Promise(function (resolve, reject) {
     // console.log("sending createLocation");
-    axios.post("/adminAPI/locations/", locationObject).then(data => {
+    axios.post("/api/admin/locations/", locationObject).then(data => {
       resolve(data);
     });
   });
@@ -60,7 +60,7 @@ function createLocation(locationObject) {
 function deleteLocation(locationName) {
   return new Promise(function (resolve, reject) {
     // console.log("sending deleteLocation");
-    axios.delete("/adminAPI/locations/" + locationName).then(data => {
+    axios.delete("/api/admin/locations/" + locationName).then(data => {
       resolve(data);
     });
   });
@@ -73,7 +73,7 @@ function deleteLocation(locationName) {
 function getPlayers() {
   return new Promise(function (resolve, reject) {
     // console.log("sending getPlayers");
-    axios.get("/adminAPI/players").then(data => {
+    axios.get("/api/admin/players").then(data => {
       resolve(data);
     });
   });
@@ -82,6 +82,16 @@ function getPlayers() {
 function getAllDialogs() {
   return axios.get("/api/admin/dialogs")
 }
+
+// NICKS BLOCK HERE VV
+
+
+// //
+
+// PLOVER'S BLOCK HERE VV
+
+
+// //
 
 
 export {
@@ -92,6 +102,12 @@ export {
   changeLocations,
   deleteLocation,
   getPlayers,
-  getAllDialogs
+  getAllDialogs,
+  // NICKS EXPORTS
+
+  // 
+  // PLOVER'S EXPORTS
+
+  // 
 };
 
