@@ -299,7 +299,7 @@ function dropItem(socket, io, target, itemId, user, location, quantity = 1) {
     });//end find player data
 }
 
-function giveItem(socket, io, target, item, itemId, user, location, quantity = 1, players) {
+function giveItem(socket, io, target, item, itemId, user, location, players, quantity = 1) {
         // How this works:
     //   This for loop is going to see if the message received from the user starts with a player name
     //   Because player names are only allowed to be three words max(two spaces),
