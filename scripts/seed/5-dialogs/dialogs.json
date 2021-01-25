@@ -89,12 +89,20 @@
                 "responses": [
                     {
                         "allowed": [
+                            "the inn?",
+                            "the inn"
+                        ],
+                        "route": 3,
+                        "example": "The Inn?"
+                    },
+                    {
+                        "allowed": [
                             "who are you",
                             "who are you?",
                             "who"
                         ],
                         "route": 2,
-                        "example": "The Inn?"
+                        "example": "Who are you?"
                     },
                     {
                         "allowed": [
@@ -103,14 +111,6 @@
                             "adios"
                         ],
                         "route": 5,
-                        "example": "Who are you?"
-                    },
-                    {
-                        "allowed": [
-                            "the inn?",
-                            "the inn"
-                        ],
-                        "route": 3,
                         "example": "Goodbye"
                     }
                 ]
@@ -119,23 +119,6 @@
                 "routeNumber": 2,
                 "message": "The name's Ford and, despite my appearance, I'm actually just an intricately folded towel... don't ask",
                 "responses": [
-                    {
-                        "allowed": [
-                            "where am i",
-                            "where am i?"
-                        ],
-                        "route": 1,
-                        "example": "Where am I?"
-                    },
-                    {
-                        "allowed": [
-                            "goodbye",
-                            "bye",
-                            "adios"
-                        ],
-                        "route": 5,
-                        "example": "You're a towel?"
-                    },
                     {
                         "allowed": [
                             "you're a towel?",
@@ -151,7 +134,15 @@
                             "as a towel"
                         ],
                         "route": 4,
-                        "example": "What are you doing?"
+                        "example": "You're a towel?"
+                    },
+                    {
+                        "allowed": [
+                            "where am i",
+                            "where am i?"
+                        ],
+                        "route": 1,
+                        "example": "Where am I?"
                     },
                     {
                         "allowed": [
@@ -159,7 +150,6 @@
                             "whatre you doing",
                             "what you doing"
                         ],
-                        "route": 9,
                         "conditionals": [
                             {
                                 "condition": "notHasToken",
@@ -170,7 +160,8 @@
                                 "questTitle": "The Missing Stocking"
                             }
                         ],
-                        "example": "I got your sock!"
+                        "route": 9,
+                        "example": "What are you doing?"
                     },
                     {
                         "allowed": [
@@ -198,6 +189,15 @@
                                 "questTitle": "The Missing Stocking"
                             }
                         ],
+                        "example": "I got your sock!"
+                    },
+                    {
+                        "allowed": [
+                            "goodbye",
+                            "bye",
+                            "adios"
+                        ],
+                        "route": 5,
                         "example": "Goodbye"
                     }
                 ]
@@ -225,23 +225,6 @@
                     },
                     {
                         "allowed": [
-                            "who are you",
-                            "who are you?"
-                        ],
-                        "route": 2,
-                        "example": "Disappearances?"
-                    },
-                    {
-                        "allowed": [
-                            "goodbye",
-                            "bye",
-                            "adios"
-                        ],
-                        "route": 5,
-                        "example": "Who are you?"
-                    },
-                    {
-                        "allowed": [
                             "disappearances",
                             "disappearances?",
                             "disappear",
@@ -256,6 +239,23 @@
                             "dissappear?"
                         ],
                         "route": 6,
+                        "example": "Disappearances?"
+                    },
+                    {
+                        "allowed": [
+                            "who are you",
+                            "who are you?"
+                        ],
+                        "route": 2,
+                        "example": "Who are you?"
+                    },
+                    {
+                        "allowed": [
+                            "goodbye",
+                            "bye",
+                            "adios"
+                        ],
+                        "route": 5,
                         "example": "Goodbye"
                     }
                 ]
@@ -565,7 +565,7 @@
                             "where am i?"
                         ],
                         "route": 1,
-                        "example": "Who are you?"
+                        "example": "Where am I?"
                     },
                     {
                         "allowed": [
@@ -573,7 +573,7 @@
                             "who are you?"
                         ],
                         "route": 2,
-                        "example": "Where am I?"
+                        "example": "Who are you?"
                     },
                     {
                         "allowed": [
@@ -824,7 +824,7 @@
                         "allowed": [
                             "what happened",
                             "what happened to them",
-                            "what happened to the spirits"
+                            "what happened to spirits"
                         ],
                         "route": 3,
                         "example": "What happened?"
