@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { getAllDialogs } from "../../../../clientUtilities/adminAPIs";
 
 import ViewAll from "./ViewAll";
-import EditOne from "./EditOne";
-import CreateOne from "./CreateOne";
+// import EditOne from "./EditOne";
+// import CreateOne from "./CreateOne";
 import "./style.css";
 
 function Dialogs({ action }) {

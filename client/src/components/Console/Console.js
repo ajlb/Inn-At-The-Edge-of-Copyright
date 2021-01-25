@@ -275,6 +275,7 @@ function Console() {
     return function cleanup() {
       mounted = false;
     }
+    // eslint-disable-next-line
   }, [])
 
   //ANCHOR t and p troubleshoot

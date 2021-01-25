@@ -16,7 +16,7 @@ function runQuests({ user, input, setChatHistory, socket }) {
         ]
 
         user.quests
-            .sort((a, b) => {
+            .sort((a, b) => { // eslint-disable-line
                 if (a.completed && b.completed) return 0
                 else if (a.completed) return 1
                 else if (b.completed) return -1

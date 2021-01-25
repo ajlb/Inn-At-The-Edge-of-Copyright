@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import "./css/navStyles.css";
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/js/dist/dropdown';

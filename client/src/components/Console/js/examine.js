@@ -4,14 +4,10 @@ function runExamine({ location, command, toExamine, user, setChatHistory }) {
         let itIs = false;
         if (location.current.discoverables) {
             let discoverables = location.current.discoverables;
-            let description;
-            let exampleCommand;
             discoverables.forEach(discoverable => {
                 discoverable.names.forEach(name => {
                     if (name.startsWith(toExamine.toLowerCase()) && toExamine.trim() !== '') {
                         itIs = true;
-                        description = discoverable.description;
-                        exampleCommand = discoverable.exampleCommand;
                     }
                 })
             })

@@ -9,7 +9,7 @@ function doesThisStartWithOneOfThese(givenString, givenArray) {
   // console.log("givenString: ", givenString)
   // console.log("givenArray: ", givenArray)
   for (let value of givenArray) {
-    if (givenString.toLowerCase().startsWith(value + ' ') && (value.length > 1) || givenString.toLowerCase() === value) {
+    if ((givenString.toLowerCase().startsWith(value + ' ') && (value.length > 1)) || givenString.toLowerCase() === value) {
       return true
     }
   }
@@ -57,7 +57,7 @@ function doesThisEqualThat(thisThing, thatStuff) {
 }
 
 //see if all the items in an array are the same
-function allTheSame(arrayy){
+function allTheSame(arrayy) {
   const distinctSet = new Set(arrayy);
   return (distinctSet.size === 1) ? true : false;
 }

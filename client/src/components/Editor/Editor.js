@@ -16,9 +16,9 @@ function Editor() {
         action: ""
     });
 
-    function onBackButtonClick() {
-        // console.log("back!");
-    }
+    // function onBackButtonClick() {
+    //     // console.log("back!");
+    // }
 
     const initialAdminInfo = {
         isClosed: isClosed,
