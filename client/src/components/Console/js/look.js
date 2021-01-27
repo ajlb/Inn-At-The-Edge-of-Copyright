@@ -14,7 +14,7 @@ function lookAbout(location, setChatHistory, day) {
         const fightables = location.current.fightables.filter(en => en.isAlive);
 
         location.current.inventory.forEach(param => {
-            if (param.quantity > 0){
+            if (param.quantity > 0) {
                 inventoryArray.push(`${param.quantity} ${pluralizeAppropriateWords(param.item.itemName, param.quantity)}`);
             }
         })
@@ -26,7 +26,7 @@ function lookAbout(location, setChatHistory, day) {
         const exitDescriptors = [];
 
         for (const exitPath in location.current.exits) {
-            exitDescriptors.push(`${exitPath}`);
+            !location.current.exits[exitPath].hidden && exitDescriptors.push(`${exitPath}`);
         }
 
         lookArray.push(day ? `${location.current.dayDescription}` : `${location.current.nightDescription}`);
