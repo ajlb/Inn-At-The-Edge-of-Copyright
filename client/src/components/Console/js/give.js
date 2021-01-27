@@ -3,6 +3,15 @@ import { insertArticleSingleValue } from "../../../clientUtilities/parsers";
 
 function giveItem(socket, inputString, target, playerData, location) {
     inputString = takeTheseOffThat(["a", "an", "my", "the"], inputString);
+    if (inputString.length === 0){
+        socket.emit('failure', "To use 'give,' type 'give [item] to [player]'");
+        return false;
+    }
+    console.log(target);
+    if (!target){
+        socket.emit('failure', "To use 'give,' you must specify a player to give your item to.'");
+        return false;
+    }
     let itemName;
     let itemId;
     let potentialArray = [];
@@ -12,7 +21,7 @@ function giveItem(socket, inputString, target, playerData, location) {
             itemId = item.item._id;
             socket.emit('give', { target, item:itemName, itemId, user: playerData.characterName, location: location.current.locationName });
             return true;
-        } else if ((itemName.endsWith(inputString)) || (itemName.startsWith(inputString))) {
+        } else if (((itemName.endsWith(inputString)) && inputString.length > 2) || ((itemName.startsWith(inputString)) && inputString.length > 2)) {
             if (item.quantity > 0) {
                 itemId = item.item._id;
                 potentialArray.push(itemName);

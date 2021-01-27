@@ -369,7 +369,8 @@ function InputPanel({
                     /////////////////////
                     let inputString = takeTheseOffThat(actionCalls.give, input);
                     let item = inputString.split(" to ")[0];
-                    let target = takeTheseOffThat([item + " to "], inputString);
+                    let target = takeTheseOffThat([item], inputString);
+                    target = takeTheseOffThat(["to"], target);
                     giveItem(socket, item, target, user, location);
 
                 } else if (findIn(input, actionCalls.attack)) {
@@ -402,7 +403,9 @@ function InputPanel({
                     /////////////////////
                     //       EAT       //
                     /////////////////////
-                    const eatMessage = takeTheseOffThat(actionCalls.eat, input);
+                    let eatMessage = takeTheseOffThat(actionCalls.eat, input);
+                    eatMessage = takeTheseOffThat(["a", "an", "my", "the"], eatMessage);
+
                     eatItem(socket, eatMessage, user, location.current.locationName);
 
                 } else {

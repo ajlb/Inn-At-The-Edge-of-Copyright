@@ -509,7 +509,7 @@ module.exports = function (io) {
         /*            GIVE           */
         /*****************************/
         socket.on('give', ({ target, item, itemId, user, location }) => {
-            giveItem(socket, io, target, item, itemId, user, location);
+            giveItem(socket, io, target, item, itemId, user, location, players);
         });
 
 
