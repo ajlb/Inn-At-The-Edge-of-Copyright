@@ -1,0 +1,24 @@
+[
+    {
+        "role" : "admin",
+        "description" : "admin can create, delete, and edit game data",
+        "users" : [ 
+            "google-oauth2|117840220867132402645", 
+            "google-oauth2|108976029396520197717", 
+            "google-oauth2|109769750849043457865", 
+            "auth0|5fcaef3dbb1052007582816e", 
+            "google-oauth2|115079413707846809845"
+        ]
+    },
+    {
+        "role" : "superAdmin",
+        "description" : "superAdmin can add and delete admins.",
+        "users" : [ 
+            "google-oauth2|117840220867132402645", 
+            "google-oauth2|108976029396520197717", 
+            "google-oauth2|109769750849043457865", 
+            "auth0|5fcaef3dbb1052007582816e", 
+            "google-oauth2|115079413707846809845"
+        ]
+    }
+]
