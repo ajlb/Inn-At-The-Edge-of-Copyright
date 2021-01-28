@@ -14,13 +14,7 @@ const playerSchema = new Schema({
     trim: true,
     required: "Character name lower case is Required"
   },
-  password: {
-    type: String,
-    trim: true,
-    required: "Password is Required",
-    validate: [({ length }) => length >= 6, "Password should be longer."]
-  },
-  email: {
+  authString: {
     type: String,
     // unique: true,
     match: [/.+@.+\..+/, "Please enter a valid e-mail address"]

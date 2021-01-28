@@ -58,9 +58,10 @@ function InputPanel({
     const authUser = useAuth0().user;
 
     useEffect(() => {
-        isAuthenticated && socket.emit("log in", authUser.email);
+        isAuthenticated && socket.emit("log in", authUser.sub);
         // isAuthenticated && console.log(authUser.email);
         if (!(authUser === undefined)) {
+            console.log(authUser.sub);
             (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
         }
         // es-lint-ignore-next-line
