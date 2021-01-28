@@ -145,7 +145,7 @@ function stopJuggling(user, intent) {
 function chancesOfSuccessJuggling(dex, num) {
     try {
         if (Math.floor(Math.random() * 10) > ((dex * 2) / (num ** 2))) {
-            stopJuggling(player, false);
+            stopJuggling(player.characterName, false);
         }
     } catch (e) {
         console.log("error from chancesOfSuccessJuggling");

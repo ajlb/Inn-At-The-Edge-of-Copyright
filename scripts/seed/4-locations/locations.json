@@ -1509,7 +1509,7 @@
         "exitName": "Pumpkin Patch South"
       },
       "south": {
-        "exitName": "Inn Garden"
+        "exitName": "Path to Pumpkin Patch"
       }
     },
     "fightables": [

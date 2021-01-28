@@ -77,7 +77,7 @@
     "isNPC": false,
     "stats": {
       "WIS": 10,
-      "DEX": 10,
+      "DEX": 100,
       "STR": 10,
       "CHA": 10,
       "HP": 50,

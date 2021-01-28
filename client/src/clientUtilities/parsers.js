@@ -50,7 +50,7 @@ function parseSuggestion(input, actionCalls) {
         return true;
       }
     })
-    suggestion = newSuggestion ? newSuggestion : '';
+    suggestion = newSuggestion || '';
     return newSuggestion;
   })
 
