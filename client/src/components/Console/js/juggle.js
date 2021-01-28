@@ -1,82 +1,123 @@
 import socket from "../../../clientUtilities/socket";
 import { takeTheseOffThat } from "../../../clientUtilities/finders"
-import pluralize from "pluralize";
+import { pluralizeAppropriateWords } from "./inventory";
+import e from "cors";
 
 //this is the juggling interval
 let juggleTime;
 
-let numbers = { 0: ["zero", "0"], 1: ["one", "1"], 2: ["two", "2"], 3: ["three", "3"], 4: ["four", "4"], 5: ["five", "5"], 6: ["six", "6"], 7: ["seven", "7"], 8: ["eight", "8"], 9: ["nine", "9"], 10: ["ten", "10"], 11: ["eleven", "11"], 12: ["twelve", "12"], 13: ["thirteen", 13], 14: ["fourteen", "14"], 15: ["fifteen", "15"], 16: ["sixteen", "16"], 17: ["seventeen", "17"], 18: ["eighteen", "18"], 19: ["nineteen", "19"], 20: ["twenty", "20"], 50: ["fifty", "50"], 100: ["one hundred", "100"] }
+const numberWords = "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty-one twenty-two twenty-three twenty-four twenty-five twenty-six twenty-seven twenty-eight twenty-nine thirty thirty-one thirty-two thirty-three thirty-four thirty-five thirty-six thirty-seven thirty-eight thirty-nine fourty fourty-one fourty-two fourty-three fourty-four fourty-five fourty-six fourty-seven fourty-eight fourty-nine fifty fifty-one fifty-two fifty-three fifty-four fifty-five fifty-six fifty-seven fifty-eight fifty-nine sixty sixty-one sixty-two sixty-three sixty-four sixty-five sixty-six sixty-seven sixty-eight sixty-nine seventy seventy-one seventy-two seventy-three seventy-four seventy-five seventy-six seventy-seven seventy-eight seventy-nine eighty eighty-one eighty-two eighty-three eighty-four eighty-five eighty-six eighty-seven eighty-eight eighty-nine ninety ninety-one ninety-two ninety-three ninety-four ninety-five ninety-six ninety-seven ninety-eight ninety-nine one-hundred".split(" ").reverse();
 
 let player;
 let place;
 let num;
 let target;
 
+function GetNumberOffOfStart(givenArray, givenString) {
+
+    const reversedArray = numberWords.slice().reverse();
+
+    if (parseInt(givenString.split(" ")[0]).toString() !== "NaN") {
+        return [parseInt(givenString.split(" ")[0]), givenString.slice(givenString.split(" ")[0].length)];
+    }
+    let numberWord;
+
+    for (let value of givenArray) {
+        if (givenString.toLowerCase().startsWith(value) && (value.length > 1)) {
+            numberWord = value
+            givenString = givenString.slice(value.length)
+        } else if (givenString.toLowerCase().startsWith(value.replace("-", " ")) && (value.length > 1)) {
+            numberWord = value
+            givenString = givenString.slice(value.length)
+        } else if (givenString.toLowerCase().startsWith(value.replace(" ", "-")) && (value.length > 1)) {
+            numberWord = value
+            givenString = givenString.slice(value.length)
+        } else if (givenString.split(" ")[0].toLowerCase() === value.toLowerCase()) {
+            numberWord = value
+            givenString = givenString.slice(value.length)
+        }
+    }
+
+    if (numberWord) {
+        numberWord = reversedArray.indexOf(numberWord) + 1
+    }
+    return [numberWord, givenString.trim()]
+}
+
 function juggle(value, playerData, location) {
     try {
-        if (!(juggleTime === undefined)) {
-            socket.emit('green', "You are already juggling!");
-            return false;
-        }
-        if (value.split(" ").length < 3) {
-            socket.emit('green', "How many, and what, are you trying to juggle?");
-        }
         value = takeTheseOffThat(["juggle"], value).toLowerCase();
         player = playerData;
         place = location;
-        num = value.split(" ")[0];
-        target = value.replace(`${num} `, "");
+        [num, target] = GetNumberOffOfStart(numberWords, value)
+        
+        //edge cases
+        if (!(juggleTime === undefined)) {
+            socket.emit('green', "You are already juggling!");
+            return false;
+        } else if (value.toLowerCase() === "nothing") {
+            socket.emit('emote', { user: player.characterName, emotion: "goofs around, pretending to juggle imaginary items.", location });
+            return false;
+        } else if (value.split(" ").length < 2 || num === undefined) {
+            socket.emit('green', "How many, and what, are you trying to juggle?");
+            return false;
+        } else if (num < 1){
+            socket.emit('green', "...you have to at LEAST try with one.");
+            return false;
+        }
+        
         let itemName;
-        //turn typed number into int
-        for (const property in numbers) {
-            if (numbers[property].includes(num.toLowerCase())) {
-                const intNum = parseInt(property);
-                if (typeof intNum === "number" && intNum > 2) {
-                    //search for item in user inventory, determine if there are enough to juggle
-                    let potentialItems = 0;
-                    let potentialArray = [];
-                    for (const item of playerData.inventory) {
-                        itemName = item.item.itemName;
-                        // console.log(itemName);
-                        if (itemName === pluralize(target.toLowerCase(), 1)) {
-                            if (((playerData.stats.DEX * 1.7) / (num ** 2)) < 2) {
-                                socket.emit('green', 'That may be too many objects for you to juggle.')
-                                return false;
-                            } else if (item.quantity >= num) {
-                                socket.emit('juggle', { target, num, user: playerData, location })
-                                return true;
-                            } else {
-                                socket.emit('green', `You don't have ${num} ${target} to juggle!`);
-                                return false;
-                            }
-                        } else if ((itemName.startsWith(pluralize(target, 1))) || (itemName.endsWith(pluralize(target, 1)))) {
-                            potentialItems += item.quantity;
-                            potentialArray.push(itemName);
-                        }
+        //search for item in user inventory, determine if there are enough to juggle
+        let potentialItems = 0;
+        let potentialArray = [];
+        for (const item of playerData.inventory) {
+            itemName = item.item.itemName;
+            // console.log(itemName);
+            console.log(itemName, pluralizeAppropriateWords(target.toLowerCase(), 1).trim());
+            console.log(itemName === pluralizeAppropriateWords(target.toLowerCase(), 1).trim());
+            if (itemName === pluralizeAppropriateWords(target.toLowerCase().trim(), 1)) {
+                if (((playerData.stats.DEX * 1.7) / (num ** 2)) < 2) {
+                    console.log("DEX:", playerData.stats.DEX, "NUM:", num);
+                    console.log(((playerData.stats.DEX * 1.7) / (num ** 2)))
+                    if (item.quantity < num) {
+                        socket.emit('green', `That may be too many objects for you to juggle. Besides... you only have ${item.quantity} of those.`);
+                    } else {
+                        socket.emit('green', 'That may be too many objects for you to juggle.');
                     }
-                    if (potentialItems === 0) {
-                        socket.emit('green', `You don't seem to have any ${target} to juggle!`)
-                        return false;
-                    } else if (potentialItems > 0) {
-                        if (((playerData.stats.DEX * 1.7) / (num ** 2)) < 2) {
-                            socket.emit('green', 'That may be too many objects for you to juggle.')
-                            return false;
-                        } else if (potentialItems >= intNum) {
-                            if (potentialArray.length > 1) {
-                                socket.emit('juggle', { target, num, user: playerData, location });
-                            } else {
-                                socket.emit('juggle', { target: pluralize(potentialArray[0], 3), num, user: playerData, location });
-                            }
-                            return true;
-                        } else {
-                            socket.emit('green', `You don't have ${num} ${target} to juggle!`);
-                            return false;
-                        }
-                    }
-
+                    return false;
+                } else if (item.quantity >= num) {
+                    socket.emit('juggle', { target: pluralizeAppropriateWords(target, num), num, user: playerData, location })
+                    return true;
                 } else {
-                    socket.emit('green', `You have to juggle at least three items.`);
+                    socket.emit('green', `You don't have ${num} ${target} to juggle!`);
+                    return false;
                 }
+            } else if ((itemName.startsWith(pluralizeAppropriateWords(target, 1))) || (itemName.endsWith(pluralizeAppropriateWords(target, 1)))) {
+                potentialItems += item.quantity;
+                potentialArray.push(itemName);
+            }
+        }
+        if (potentialItems === 0) {
+            socket.emit('green', `You don't seem to have any ${target} to juggle!`)
+            return false;
+        } else if (potentialItems > 0) {
+            if (((playerData.stats.DEX * 1.7) / (num ** 2)) < 2) {
+                if (potentialItems < num) {
+                    socket.emit('green', `That may be too many objects for you to juggle. Besides... you only have ${potentialItems} of those.`);
+                } else {
+                    socket.emit('green', 'That may be too many objects for you to juggle.');
+                }
+                return false;
+            } else if (potentialItems >= num) {
+                if (potentialArray.length > 1) {
+                    socket.emit('juggle', { target: pluralizeAppropriateWords(target, num), num, user: playerData, location });
+                } else {
+                    socket.emit('juggle', { target: pluralizeAppropriateWords(potentialArray[0], num), num, user: playerData, location });
+                }
+                return true;
+            } else {
+                socket.emit('green', `You don't have ${num} ${target} to juggle!`);
+                return false;
             }
         }
         socket.emit('green', `How many ${target} are you trying to juggle?`);
