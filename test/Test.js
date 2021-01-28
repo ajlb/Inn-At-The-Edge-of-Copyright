@@ -8,9 +8,9 @@ const options = {
   'force new connection': true
 };
 
-let chatUser1 = { 'email': 'test1@gmail.com' };
-let chatUser2 = { 'email': 'test2@gmail.com' };
-let chatUser3 = { 'email': 'test3@gmail.com' };
+let chatUser1 = { 'authString': 'auth0|6005dc94b13e57007686f051' };
+let chatUser2 = { 'authString': 'auth0|6005dd65bf5750007034b135' };
+let chatUser3 = { 'authString': 'auth0|6005dcfc1309e30069c4b987' };
 
 describe("Chat Server", function () {
   it('Should broadcast entrance to all users (40 millisecond padding added)', function (done) {
@@ -28,7 +28,7 @@ describe("Chat Server", function () {
     }
 
     client1.on('connect', function (data) {
-      client1.emit('log in', chatUser1.email);
+      client1.emit('log in', chatUser1.authString);
       client1.on('playerData', (message) => {
         chatUser1.data = message;
       })
@@ -40,7 +40,7 @@ describe("Chat Server", function () {
 
 
       client2.on('connect', function (data) {
-        client2.emit('log in', chatUser2.email);
+        client2.emit('log in', chatUser2.authString);
         client2.on('playerData', (message) => {
           chatUser2.data = message;
           setTimeout(endTest, 40);
@@ -84,15 +84,15 @@ describe("Chat Server", function () {
     checkMessage(client1);
 
     client1.on('connect', function (data) {
-      client1.emit('log in', chatUser1.email);
+      client1.emit('log in', chatUser1.authString);
       checkMessage(client2);
 
       client2.on('connect', function (data) {
-        client2.emit('log in', chatUser2.email);
+        client2.emit('log in', chatUser2.authString);
         checkMessage(client3);
 
         client3.on('connect', function (data) {
-          client3.emit('log in', chatUser3.email);
+          client3.emit('log in', chatUser3.authString);
           client3.on('playerData', (message) => {
             chatUser3.data = message;
             client3.emit('speak', { message:newMessage, user: chatUser3.data.characterName, location: chatUser3.data.lastLocation });
@@ -119,7 +119,7 @@ describe("Chat Server", function () {
     const client1 = io.connect(socketURL, options);
 
     client1.on('connect', function (data) {
-      client1.emit('log in', chatUser1.email);
+      client1.emit('log in', chatUser1.authString);
     });
     client1.on('playerData', (message) => {
       should(message).be.a.Object();
@@ -129,11 +129,11 @@ describe("Chat Server", function () {
     })
   })
 
-  it('Should send a user with an invalid email to character creation', done => {
+  it('Should send a user with an invalid authString to character creation', done => {
     const client1 = io.connect(socketURL, options);
 
     client1.on('connect', data => {
-      client1.emit('log in', "invalidEmail@noplace.edu");
+      client1.emit('log in', "invalidauthString@noplace.edu");
     });
     client1.on('logFail', failMessage => {
       failMessage.should.equal('new user');
@@ -179,7 +179,7 @@ describe("Chat Server", function () {
     checkPrivateMessage(client1);
 
     client1.on('connect', function (data) {
-      client1.emit('log in', chatUser1.email);
+      client1.emit('log in', chatUser1.authString);
 
       client1.on('playerData', (message) => {
         should(message).be.a.Object();
@@ -191,7 +191,7 @@ describe("Chat Server", function () {
       checkPrivateMessage(client2);
 
       client2.on('connect', function (data) {
-        client2.emit('log in', chatUser2.email);
+        client2.emit('log in', chatUser2.authString);
 
         client2.on('playerData', (message) => {
           should(message).be.a.Object();
@@ -203,7 +203,7 @@ describe("Chat Server", function () {
         checkPrivateMessage(client3);
 
         client3.on('connect', function (data) {
-          client3.emit('log in', chatUser3.email);
+          client3.emit('log in', chatUser3.authString);
 
           client3.on('playerData', (message) => {
             should(message).be.a.Object();
