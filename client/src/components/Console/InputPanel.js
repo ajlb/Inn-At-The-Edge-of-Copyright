@@ -569,6 +569,7 @@ function InputPanel({
                                 id="suggestionBar"
                                 className="form-control chat-input"
                                 autoComplete="off"
+                                readOnly={true}
                             />
                             <span className="input-group-btn">
                                 <button type="submit" id="submit-button" className="btn btn-default fa fa-arrow-right"></button>
