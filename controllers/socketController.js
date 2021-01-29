@@ -15,6 +15,7 @@ const { eatItem } = require("./userInput/eat");
 const runSweep = require("./sweeper");
 const { repopMobs } = require("./monsterSweeper");
 const dayNight = require("./dayNight");
+const processAdminAccess = require("./roleAuthentication");
 const { assignQuest, assignAndUpdatePlayerQuest, updatePlayerQuest, incrementPlayerQuest } = require('./questsController')
 
 // this array is fully temporary and is only here in place of the database until that is set up
@@ -576,6 +577,16 @@ module.exports = function (io) {
             console.log(`${target.name} is being attacked by ${user.characterName} in the ${location.locationName}.`);
             receiveAttack(io, socket, target, user, location);
         })
+
+
+        /*****************************/
+        /*        ADMIN AUTH         */
+        /*****************************/
+        socket.on('roleAuthentication', (authUser) => {
+            console.log(`Receiving a request for admin access.`);
+            processAdminAccess({io, socket, authUser});
+        })
+
 
         /*****************************/
         /*   DAY/NIGHT - SEND DATA   */
