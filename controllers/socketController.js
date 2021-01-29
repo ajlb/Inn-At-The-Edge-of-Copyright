@@ -73,11 +73,11 @@ module.exports = function (io) {
         /*****************************/
         /*           LOG IN          */
         /*****************************/
-        socket.on('log in', email => {
-            if (email === "You must log in first! Type 'log in [username]'") {
-                io.to(socket.id).emit('logFail', email);
+        socket.on('log in', authString => {
+            if (authString === "You must log in first! Type 'log in [username]'") {
+                io.to(socket.id).emit('logFail', authString);
             } else {
-                db.Player.findOne({ email })
+                db.Player.findOne({ authString })
                     .then(returnData => {
                         if (returnData === null) {
                             socket.emit('logFail', `new user`)
@@ -489,7 +489,6 @@ module.exports = function (io) {
 
         //stop juggle
         socket.on('stop juggle', ({ user, location, target, intent }) => {
-            user = user.characterName;
             console.log(user, "stops juggling");
             //user stopped on purpose
             if (intent) {
@@ -509,7 +508,7 @@ module.exports = function (io) {
         /*            GIVE           */
         /*****************************/
         socket.on('give', ({ target, item, itemId, user, location }) => {
-            giveItem(socket, io, target, item, itemId, user, location);
+            giveItem(socket, io, target, item, itemId, user, location, players);
         });
 
 

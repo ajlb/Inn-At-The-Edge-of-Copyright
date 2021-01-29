@@ -11,6 +11,7 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import socket from "../../clientUtilities/socket";
 import "./css/styles.css";
 import { useAuth0 } from "@auth0/auth0-react";
+import { parseSuggestion } from "../../clientUtilities/parsers";
 
 function Console() {
   //set state for whether to move to min state (because of soft keyboard on mobile)
@@ -275,8 +276,15 @@ function Console() {
     return function cleanup() {
       mounted = false;
     }
-    // eslint-disable-next-line
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (input && player.characterName && player.characterName !== 'newUser' && player.lastLocation !== 'Start Room') {
+      setSuggestion(parseSuggestion(input, actionCalls));
+    } else {
+      setSuggestion('');
+    }
+  }, [input])
 
   //ANCHOR t and p troubleshoot
   useEffect(() => {
@@ -390,7 +398,6 @@ function Console() {
                     setMuted={setMuted}
                     canReply={canReply}
                     suggestion={suggestion}
-                    setSuggestion={setSuggestion}
                   />
                 </div>
               </div>

@@ -22,7 +22,6 @@ import processMove from './js/move';
 import runExamine from './js/examine';
 import eatItem from './js/eat';
 import runQuests from "./js/quests";
-import { parseSuggestion } from "../../clientUtilities/parsers"
 
 //set up index for current position in userCommandsHistory
 let inputHistoryIndex;
@@ -52,27 +51,24 @@ function InputPanel({
     setMuted,
     canReply,
     day,
-    suggestion,
-    setSuggestion
+    suggestion
 }) {
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
     const authUser = useAuth0().user;
 
     useEffect(() => {
-        isAuthenticated && socket.emit("log in", authUser.email);
+        isAuthenticated && socket.emit("log in", authUser.sub);
         // isAuthenticated && console.log(authUser.email);
         if (!(authUser === undefined)) {
+            console.log(authUser.sub);
             (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
         }
         // eslint-disable-next-line
     }, [isAuthenticated])
     //update currentMessage in gameinfo based on input bar change
     const onInputBarChange = (e) => {
-        setInput(e.target.value)
-        if (user.lastLocation !== "Start Room" && user.characterName && user.characterName !== 'newUser') {
-            setSuggestion(parseSuggestion(e.target.value, actionCalls));
-        }
+        setInput(e.target.value);
     }
 
     // console.log(user);
@@ -369,7 +365,8 @@ function InputPanel({
                     /////////////////////
                     let inputString = takeTheseOffThat(actionCalls.give, input);
                     let item = inputString.split(" to ")[0];
-                    let target = takeTheseOffThat([item + " to "], inputString);
+                    let target = takeTheseOffThat([item], inputString);
+                    target = takeTheseOffThat(["to"], target);
                     giveItem(socket, item, target, user, location);
 
                 } else if (findIn(input, actionCalls.attack)) {
@@ -402,7 +399,9 @@ function InputPanel({
                     /////////////////////
                     //       EAT       //
                     /////////////////////
-                    const eatMessage = takeTheseOffThat(actionCalls.eat, input);
+                    let eatMessage = takeTheseOffThat(actionCalls.eat, input);
+                    eatMessage = takeTheseOffThat(["a", "an", "my", "the"], eatMessage);
+
                     eatItem(socket, eatMessage, user, location.current.locationName);
 
                 } else {
@@ -452,29 +451,26 @@ function InputPanel({
     //display previous commands on key up, key down
     const keyDownResults = (event) => {
 
-        if (event.which === 9 && user.characterName && user.characterName !== 'newUser') {
+        if (event.which === 9 && user.characterName && user.characterName !== 'newUser' && suggestion) {
             event.preventDefault();
-            if (suggestion) {
-                setInput(suggestion)
-                setSuggestion(parseSuggestion(suggestion, actionCalls))
-            }
-        }
-
-        // only runs if the user has an inputHistory
-        if (inputHistory.length > 0) {
+            setInput(suggestion);
+        } // below only runs if the user has an inputHistory
+        else if (inputHistory.length > 0) {
             if (event.which === 38) { // up arrow
 
                 //prevents the inputHistoryIndex getting any lower than zero
                 inputHistoryIndex > 0 ? inputHistoryIndex -= 1 : inputHistoryIndex = 0;
                 setInput(inputHistory[inputHistoryIndex]);
-
             } else if (event.which === 40) { // down arrow
 
                 //stop at inputHistory length
                 inputHistoryIndex < inputHistory.length ? inputHistoryIndex += 1 : inputHistoryIndex = inputHistory.length;
                 //if inputHistoryIndex is less than length, show indexed message, otherwise show ""
-                inputHistoryIndex < inputHistory.length ? setInput(inputHistory[inputHistoryIndex]) : setInput('');
-
+                if (inputHistoryIndex < inputHistory.length) {
+                    setInput(inputHistory[inputHistoryIndex]);
+                } else {
+                    setInput('')
+                };
             } else if (event.which === 13) { // enter key
                 //reset inputHistoryIndex to end
                 inputHistoryIndex = inputHistory.length + 1;
@@ -573,6 +569,7 @@ function InputPanel({
                                 id="suggestionBar"
                                 className="form-control chat-input"
                                 autoComplete="off"
+                                readOnly={true}
                             />
                             <span className="input-group-btn">
                                 <button type="submit" id="submit-button" className="btn btn-default fa fa-arrow-right"></button>

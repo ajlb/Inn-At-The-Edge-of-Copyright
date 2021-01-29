@@ -48,7 +48,7 @@ function parseSuggestion(input, actionCalls) {
     let newSuggestion = arr.find(str => {
       if (str.startsWith(input) && str !== input) return true;
     })
-    suggestion = newSuggestion ? newSuggestion : '';
+    suggestion = newSuggestion || '';
     return newSuggestion;
   })
 
