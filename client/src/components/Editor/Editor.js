@@ -6,7 +6,7 @@ import Body from "./Body";
 import AdminInfo from "../../clientUtilities/AdminInfo";
 import { useAuth0 } from "@auth0/auth0-react";
 import socket from "../../clientUtilities/socket";
-import { Redirect } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 
 
@@ -34,7 +34,7 @@ function Editor() {
             console.log(user.sub);
             (!(user.characterName === undefined)) && console.log("user: " + user.characterName);
         }
-        // es-lint-ignore-next-line
+        // eslint-ignore-next-line
     }, [isAuthenticated])
     
     socket.off("roleAuthentication").on("roleAuthentication", accessArray => {
@@ -77,7 +77,6 @@ function Editor() {
         })
     }
 
-    if (accessPermissions === undefined){
         return (
             <div
                 id="wrapper"
@@ -86,48 +85,22 @@ function Editor() {
     
                 <AdminInfo.Provider value={initialAdminInfo}>
                     <header style={{ width: 100 + "vw" }} className="jumbotron">
-                        <h3>Determining Access Permissions</h3>
-                    </header>
-                    <div
-                        className={navState === "closed" ? "overlay visible" : "overlay invisible"}></div>
-    
-                    <Nav
-                        access={false}
-                    />
-                    <section id="page-content-wrapper">
-                        <button
-                            type="button"
-                            className={navState === "closed" ? "hamburger animated fadeInLeft is-closed" : "hamburger animated fadeInLeft is-open"}
-                            data-toggle="offcanvas"
-                            onClick={hamburgerCross}
-                            style={isClosed ? { marginLeft: 20 + "px" } : { marginLeft: 100 + "px" }}
-                        >
-                            <span className="hamb-top"></span>
-                            <span className="hamb-middle"></span>
-                            <span className="hamb-bottom"></span>
-                        </button>
-                        <Body
-                            destinationState={destinationState} />
-                    </section>
-                </AdminInfo.Provider>
-            </div>
-        )
-    } else {
-        return (
-            <div
-                id="wrapper"
-                className={navState === "closed" ? "" : "toggled"}
-            >
-    
-                <AdminInfo.Provider value={initialAdminInfo}>
-                    <header style={{ width: 100 + "vw" }} className="jumbotron">
+                        {accessPermissions ? 
                         <h1>{destinationState.collection === "" ? "Admin" : destinationState.collection + " - " + destinationState.action.replace(":", " ")}</h1>
+                        :
+                        <h3>Determining Access Permissions</h3>
+                    }
+                        
                     </header>
                     <div
                         className={navState === "closed" ? "overlay visible" : "overlay invisible"}></div>
     
                     <Nav
-                        onSubmenuItemClick={onSubmenuItemClick} access={accessPermissions.indexOf("admin") >= 0 ? true : false}
+                        onSubmenuItemClick={onSubmenuItemClick} access={
+                            accessPermissions ?
+                            accessPermissions.indexOf("admin") >= 0 ? true : false
+                            :
+                            false}
                     />
                     <section id="page-content-wrapper">
                         <button
@@ -148,6 +121,5 @@ function Editor() {
             </div>
         )
     }
-}
 
 export default Editor;
