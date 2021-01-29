@@ -12,7 +12,6 @@ function NPCChecks(NPCs, message) {
         // This runs three times!
         for (let i = 2; i >= 0; i--) {
             const NPCGuess = message.toLowerCase().split(' ').slice(0, i + 1).join(' ');
-            // eslint-disable-next-line
             NPCs.forEach(NPC => {
                 if (NPC.names.includes(NPCGuess)) {
                     startsWithNPC = true;

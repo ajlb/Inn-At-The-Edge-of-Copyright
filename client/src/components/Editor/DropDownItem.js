@@ -1,51 +1,46 @@
-import "./css/dropDownStyles.css";
+import React from 'react';
+
 
 function DropDownItem({ title, onClick }) {
     return (
-        <li
-            className="dropdown"
-            key={title}
-        >
+        <li className="dropdown" key={title}>
             <a
                 key={title + "link"}
-                href={"#" + title + "Submenu"}
+                
+                href={"#" + title.toLowerCase()}
                 className="dropdown-toggle"
                 data-toggle="dropdown"
-                aria-expanded="false"
             >
-                {title}
+                {title}<span className="caret"></span>
             </a>
-
             <ul
-                className="collapse list-unstyled dropdown-menu animated fadeInLeft"
+                className="dropdown-menu animated fadeInLeft"
                 key={title + "dropdown-menu"}
-                role="menu">
+                role="menu"
+            >
                 <div
                     key={title + "dropdownheader"}
                     className="dropdown-header"
                 >
                     Choose Action:
                     </div>
-                <li>
-                    <a
-                        href={"#" + title + "-View:All"}
-                        key={title + "-View:All"}>
-                        View All
-                    </a>
+                <li key={title + "View:All"}>
+                    <a 
+                    href={"#"+title+"-View:All"}
+                    onClick={onClick}
+                    >View All</a>
                 </li>
-                <li>
-                    <a
-                        href={"#" + title + "-Edit:One"}
-                        key={title + "-Edit:One"}>
-                        Edit One
-                    </a>
+                <li key={title + "Edit:One"}>
+                    <a 
+                    href={"#"+title+"-Edit:One"}
+                    onClick={onClick}
+                    >Edit One</a>
                 </li>
-                <li>
-                    <a
-                        href={"#" + title + "-Create:New"}
-                        key={title + "-Create:New"}>
-                        Create New
-                    </a>
+                <li key={title + "Create:New"}>
+                    <a 
+                    href={"#"+title+"-Create:New"}
+                    onClick={onClick}
+                    >Create New</a>
                 </li>
             </ul>
         </li>

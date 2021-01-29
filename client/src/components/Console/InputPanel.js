@@ -64,7 +64,7 @@ function InputPanel({
             console.log(authUser.sub);
             (!(authUser.characterName === undefined)) && console.log("authUser: " + authUser.characterName);
         }
-        // eslint-disable-next-line
+        // es-lint-ignore-next-line
     }, [isAuthenticated])
     //update currentMessage in gameinfo based on input bar change
     const onInputBarChange = (e) => {

@@ -18,7 +18,7 @@ socket.off('moveQueueForeward').on('moveQueueForeward', ({ chunk, characterName 
 function makeMove(socket, location, characterName, direction, allowed, quiet) {
     let moved = false;
     for (const param in location) {
-        if ((param === direction && !location[param].hidden) || (param === direction && allowed)) {
+        if ((param === direction && !location[param].hidden) || param === direction && allowed) {
             if (location[param] === null) {
                 socket.emit('failure', `Something seems to prevent you from moving ${direction}.`);
                 moveQueue.dequeue();
